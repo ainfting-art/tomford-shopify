@@ -1,0 +1,161 @@
+{%- liquid
+  assign block_settings = block.settings
+-%}
+
+<div class="custom-tabs-wrapper" {{ block.shopify_attributes }}>
+
+  <!-- Tabs -->
+<div class="custom-tabs-nav">
+  {% for i in (1..5) %}
+    {% assign key = "heading_" | append: i %}
+    {% assign heading = block_settings[key] %}
+
+    {% if heading != blank %}
+      <div class="custom-tab {% if forloop.first %}active{% endif %}" 
+           data-tab="tab-{{ block.id }}-{{ i }}">
+        {{ heading }}
+      </div>
+    {% endif %}
+  {% endfor %}
+</div>
+
+
+  <!-- Content -->
+<div class="custom-tabs-content">
+  {% for i in (1..5) %}
+    {% assign key_h = "heading_" | append: i %}
+    {% assign key_c = "content_" | append: i %}
+
+    {% assign heading = block_settings[key_h] %}
+    {% assign content = block_settings[key_c] %}
+    
+    {% if heading != blank %}
+      <div id="tab-{{ block.id }}-{{ i }}" 
+           class="custom-tab-panel {% if forloop.first %}active{% endif %}">
+        {{ content }}
+      </div>
+    {% endif %}
+  {% endfor %}
+</div>
+
+</div>
+
+<style>
+.custom-tabs-wrapper {
+  margin-top: 20px;
+}
+
+.custom-tabs-nav {
+  display: flex;
+  gap: 24px;
+  border-bottom: 1px solid #ddd;
+
+}
+
+.custom-tab {
+  cursor: pointer;
+  padding-bottom: 8px;
+  font-size: 18px;
+  line-height:22px;
+  letter-spacing:0px;
+  font-weight:500;
+  color: #1b1c19;
+  white-space: nowrap;
+  position: relative;
+}
+
+.custom-tab.active {
+  color: #2a2a2a;
+  font-weight: 600;
+}
+
+.custom-tab.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 100%;
+  height: 2px;
+  background: #000;
+}
+
+.custom-tabs-content {
+  margin-top: 16px;
+}
+
+.custom-tab-panel {
+  display: none;
+  font-size: 14px;
+  line-height: 22px;
+  letter-spacing:0px;
+  font-weight:400;
+  color: #2a2a2a;
+}
+
+.custom-tab-panel.active {
+  display: block;
+}
+
+@media screen and (max-width: 768px) {
+  .custom-tabs-nav {
+    flex-wrap: wrap;
+    gap: 8px 16px;
+  }
+
+  .custom-tab {
+    white-space: normal;
+  }
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll('.custom-tabs-wrapper').forEach(section => {
+
+    const tabs = section.querySelectorAll(".custom-tab");
+    const panels = section.querySelectorAll(".custom-tab-panel");
+
+    tabs.forEach(tab => {
+      tab.addEventListener("click", () => {
+
+        tabs.forEach(t => t.classList.remove("active"));
+        panels.forEach(p => p.classList.remove("active"));
+
+        tab.classList.add("active");
+        const target = tab.getAttribute("data-tab");
+        section.querySelector("#" + target).classList.add("active");
+
+      });
+    });
+
+  });
+});
+</script>
+
+{% schema %}
+{
+  "name": "Custom Tabs",
+  "tag": null,
+  "settings": [
+    { "type": "text", "id": "heading_1", "label": "Heading 1" },
+    { "type": "richtext", "id": "content_1", "label": "Content 1" },
+
+    { "type": "text", "id": "heading_2", "label": "Heading 2" },
+    { "type": "richtext", "id": "content_2", "label": "Content 2" },
+
+    { "type": "text", "id": "heading_3", "label": "Heading 3" },
+    { "type": "richtext", "id": "content_3", "label": "Content 3" },
+
+    { "type": "text", "id": "heading_4", "label": "Heading 4" },
+    { "type": "richtext", "id": "content_4", "label": "Content 4" },
+
+    { "type": "text", "id": "heading_5", "label": "Heading 5" },
+    { "type": "richtext", "id": "content_5", "label": "Content 5" }
+  ],
+  "presets": [
+    {
+      "name": "Custom Tabs"
+    }
+  ]
+}
+{% endschema %}

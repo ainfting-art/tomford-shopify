@@ -1,0 +1,617 @@
+{% comment %}
+  Maison Amiir — custom footer (Tom Ford style)
+  Hardened: no horizontal overflow / cropping, responsive side padding.
+{% endcomment %}
+
+{% stylesheet %}
+/* === MAISON AMIIR FOOTER — TOM FORD STYLE === */
+
+/* box-sizing + overflow guard so the footer can never be wider than the screen */
+.ma-footer, .ma-footer * { box-sizing: border-box; }
+
+.ma-footer {
+  background: #fff;
+  color: #000;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  border-top: 1px solid #e0e0e0;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* ── TOP INNER WRAPPER ── */
+.ma-footer__inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  /* responsive side padding — shrinks gracefully instead of overflowing */
+  padding: clamp(40px, 5vw, 80px) clamp(20px, 5vw, 80px) 0;
+}
+
+/* ── FOUR COLUMNS ROW (3 nav + 1 newsletter) ── */
+.ma-footer__columns {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;            /* allow columns to wrap before overflowing */
+  gap: clamp(24px, 3vw, 48px);
+  padding-bottom: clamp(40px, 5vw, 80px);
+}
+
+.ma-footer__col {
+  flex: 1 1 180px;           /* never narrower than 180px, wraps instead of clipping */
+  min-width: 0;
+}
+
+/* Newsletter column slightly wider */
+.ma-footer__col--subscribe {
+  flex: 1.2 1 260px;
+}
+
+.ma-footer__col-heading {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.4px;
+  text-transform: uppercase;
+  color: #000;
+  margin: 0 0 16px;
+  padding: 0;
+}
+
+.ma-footer__col ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ma-footer__col ul li a {
+  font-size: 13px;
+  color: #000;
+  text-decoration: none;
+  letter-spacing: -0.4px;
+  text-transform: uppercase;
+  line-height: 2.5;
+  display: block;
+}
+
+.ma-footer__col ul li a:hover {
+  text-decoration: underline;
+}
+
+/* ── NEWSLETTER (4th column, same row as nav) ── */
+.ma-footer__newsletter-subtext {
+  font-size: 13px;
+  color: #000;
+  letter-spacing: -0.4px;
+  line-height: 1.7;
+  margin: 0 0 10px;
+}
+
+.ma-footer__email-input {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  border: 0.83px solid #b7b7b7;
+  background: #fff;
+  font-size: 12px;
+  letter-spacing: -0.4px;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  color: #000;
+  padding: 12px 14px;
+  outline: none;
+  margin-bottom: 10px;
+}
+
+.ma-footer__email-input::placeholder {
+  color: #aaa;
+  text-transform: uppercase;
+  letter-spacing: -0.5px;
+}
+
+.ma-footer__consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.ma-footer__consent input[type="checkbox"] {
+  margin-top: 2px;
+  flex-shrink: 0;
+  accent-color: #000;
+  width: 13px;
+  height: 13px;
+  cursor: pointer;
+}
+
+.ma-footer__consent-label {
+  font-size: 11px;
+  color: #000;
+  letter-spacing: -0.4px;
+  line-height: 1.6;
+}
+
+.ma-footer__consent-label a {
+  color: #000;
+  text-decoration: underline;
+}
+
+.ma-footer__signup-btn {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  background: #000;
+  color: #fff;
+  border: none;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 14px;
+  cursor: pointer;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  transition: background 0.2s;
+}
+
+.ma-footer__signup-btn:hover {
+  background: #333;
+}
+
+/* ── BOTTOM BAR ── */
+.ma-footer__bottom-wrap {
+  border-top: 1px solid #e0e0e0;
+}
+
+.ma-footer__bottom {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 22px clamp(20px, 5vw, 60px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;           /* wrap instead of clipping on mid widths */
+  gap: 16px;
+}
+
+.ma-footer__brand {
+  font-family: 'Sinoreta', serif;
+  font-size: 25px;
+  font-weight: 700 !important;
+  color: #000 !important;
+  -webkit-text-fill-color: #000 !important;
+  letter-spacing: 0.12em;
+  text-decoration: none;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.ma-footer__bottom-right {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.ma-footer__social {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.ma-footer__social a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+  line-height: 1;
+  transition: opacity 0.2s;
+}
+
+.ma-footer__social a:hover {
+  opacity: 0.5;
+}
+
+.ma-footer__copyright {
+  font-size: 13px;
+  color: #000 !important;
+  -webkit-text-fill-color: #000 !important;
+  letter-spacing: -0.4px;
+  white-space: nowrap;
+}
+
+/* ── MOBILE ── */
+@media (max-width: 768px) {
+  .ma-footer__inner {
+    padding: 0;
+  }
+
+  .ma-footer__columns {
+    display: none;
+  }
+
+  /* Accordion items */
+  .ma-footer__accordion {
+    border-top: 1px solid #e0e0e0;
+  }
+
+  .ma-footer__accordion-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    background: none;
+    border: none;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 17px 20px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: -0.4px;
+    text-transform: uppercase;
+    color: #000;
+    cursor: pointer;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  }
+
+  .ma-footer__accordion-trigger[aria-expanded="true"] {
+    border-bottom-color: transparent;
+  }
+
+  .ma-acc-icon {
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 1;
+    display: inline-block;
+    transition: transform 0.25s ease;
+  }
+
+  .ma-footer__accordion-trigger[aria-expanded="true"] .ma-acc-icon {
+    transform: rotate(45deg);
+  }
+
+  .ma-footer__accordion-panel {
+    display: none;
+    padding: 4px 20px 18px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .ma-footer__accordion-panel.is-open {
+    display: block;
+  }
+
+  .ma-footer__accordion-panel ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .ma-footer__accordion-panel ul li a {
+    font-size: 12px;
+    color: #000;
+    text-decoration: none;
+    letter-spacing: -0.4px;
+    text-transform: uppercase;
+    line-height: 2.6;
+    display: block;
+  }
+
+  /* Newsletter on mobile */
+  .ma-footer__subscribe-mobile {
+    padding: 30px 20px 36px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .ma-footer__signup-btn {
+    width: 100%;
+    padding: 14px;
+  }
+
+  /* Bottom bar mobile */
+  .ma-footer__bottom {
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    padding: 26px 20px;
+    text-align: center;
+  }
+
+  .ma-footer__brand {
+    font-size: 17px;
+    color: #000 !important;
+    -webkit-text-fill-color: #000 !important;
+    font-weight: 700 !important;
+  }
+
+  .ma-footer__bottom-right {
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .ma-footer__copyright {
+    text-align: center;
+    color: #000 !important;
+    -webkit-text-fill-color: #000 !important;
+    white-space: normal;
+  }
+}
+{% endstylesheet %}
+
+<footer class="ma-footer" role="contentinfo">
+
+  <div class="ma-footer__inner">
+
+    <!-- ── DESKTOP: 3 NAV COLUMNS + NEWSLETTER AS 4TH COLUMN ── -->
+    <div class="ma-footer__columns">
+
+      <!-- Column 1: Explore House -->
+      <div class="ma-footer__col">
+        <p class="ma-footer__col-heading">Explore House</p>
+        <ul>
+          <li><a href="/collections/new-arrivals">New Arrivals</a></li>
+          <li><a href="/collections/masculine">Masculine</a></li>
+          <li><a href="/collections/feminine">Feminine</a></li>
+          <li><a href="/collections/unisex">Unisex</a></li>
+          <li><a href="/collections/summer-collection">Summer Collection</a></li>
+          <li><a href="/collections/winter-collection">Winter Collection</a></li>
+        </ul>
+      </div>
+
+      <!-- Column 2: Need Help? -->
+      <div class="ma-footer__col">
+        <p class="ma-footer__col-heading">Need Help?</p>
+        <ul>
+          <li><a href="/pages/faq">FAQs</a></li>
+          <li><a href="/pages/contact">Contact Us</a></li>
+          <li><a href="/account">My Account</a></li>
+          <li><a href="/account/orders">Track My Order</a></li>
+          <li><a href="/policies/shipping-policy">Shipping &amp; Returns</a></li>
+          <li><a href="/policies/refund-policy">Refund &amp; Replacement</a></li>
+        </ul>
+      </div>
+
+      <!-- Column 3: The House of Amiir -->
+      <div class="ma-footer__col">
+        <p class="ma-footer__col-heading">The House of Amiir</p>
+        <ul>
+          <li><a href="/policies/privacy-policy">Privacy Policy</a></li>
+          <li><a href="/policies/terms-of-service">Terms &amp; Conditions</a></li>
+          <li><a href="/pages/faq">Payment Methods</a></li>
+          <li><a href="/policies/shipping-policy">Shipping Policy</a></li>
+          <li><a href="/blogs/journal">Journal</a></li>
+        </ul>
+      </div>
+
+      <!-- Column 4: Stay in the Know (newsletter — same row as nav columns) -->
+      <div class="ma-footer__col ma-footer__col--subscribe">
+        <p class="ma-footer__col-heading">Stay in the Know</p>
+        <p class="ma-footer__newsletter-subtext">Receive new arrivals, exclusive offers, and stories from the House of Amiir.</p>
+        <form action="/contact#contact_form" method="post" accept-charset="UTF-8">
+          <input type="hidden" name="form_type" value="customer">
+          <input type="hidden" name="utf8" value="✓">
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          <input
+            class="ma-footer__email-input"
+            type="email"
+            name="contact[email]"
+            placeholder="Email Address"
+            required
+            autocomplete="email"
+          >
+          <div class="ma-footer__consent">
+            <input type="checkbox" id="ma-newsletter-consent-d" name="contact[consent]" required>
+            <label class="ma-footer__consent-label" for="ma-newsletter-consent-d">
+              Sign me up to hear from Maison Amiir. For more information, view our <a href="/policies/privacy-policy">Privacy Policy</a>.
+            </label>
+          </div>
+          <button class="ma-footer__signup-btn" type="submit">Sign Up</button>
+        </form>
+      </div>
+
+    </div>
+    <!-- /DESKTOP COLUMNS -->
+
+    <!-- ── MOBILE: ACCORDION + NEWSLETTER ── -->
+    <div class="ma-footer__accordion">
+      <button class="ma-footer__accordion-trigger" aria-expanded="false" aria-controls="ma-acc-explore">
+        Explore House <span class="ma-acc-icon">+</span>
+      </button>
+      <div class="ma-footer__accordion-panel" id="ma-acc-explore" role="region">
+        <ul>
+          <li><a href="/collections/new-arrivals">New Arrivals</a></li>
+          <li><a href="/collections/masculine">Masculine</a></li>
+          <li><a href="/collections/feminine">Feminine</a></li>
+          <li><a href="/collections/unisex">Unisex</a></li>
+          <li><a href="/collections/summer-collection">Summer Collection</a></li>
+          <li><a href="/collections/winter-collection">Winter Collection</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="ma-footer__accordion">
+      <button class="ma-footer__accordion-trigger" aria-expanded="false" aria-controls="ma-acc-help">
+        Need Help? <span class="ma-acc-icon">+</span>
+      </button>
+      <div class="ma-footer__accordion-panel" id="ma-acc-help" role="region">
+        <ul>
+          <li><a href="/pages/faq">FAQs</a></li>
+          <li><a href="/pages/contact">Contact Us</a></li>
+          <li><a href="/account">My Account</a></li>
+          <li><a href="/account/orders">Track My Order</a></li>
+          <li><a href="/policies/shipping-policy">Shipping &amp; Returns</a></li>
+          <li><a href="/policies/refund-policy">Refund &amp; Replacement</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="ma-footer__accordion">
+      <button class="ma-footer__accordion-trigger" aria-expanded="false" aria-controls="ma-acc-house">
+        The House of Amiir <span class="ma-acc-icon">+</span>
+      </button>
+      <div class="ma-footer__accordion-panel" id="ma-acc-house" role="region">
+        <ul>
+          <li><a href="/policies/privacy-policy">Privacy Policy</a></li>
+          <li><a href="/policies/terms-of-service">Terms &amp; Conditions</a></li>
+          <li><a href="/pages/faq">Payment Methods</a></li>
+          <li><a href="/policies/shipping-policy">Shipping Policy</a></li>
+          <li><a href="/blogs/journal">Journal</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Newsletter on mobile (below accordions) -->
+    <div class="ma-footer__subscribe-mobile">
+      <p class="ma-footer__col-heading">Stay in the Know</p>
+      <p class="ma-footer__newsletter-subtext">Receive new arrivals, exclusive offers, and stories from the House of Amiir.</p>
+      <form action="/contact#contact_form" method="post" accept-charset="UTF-8">
+        <input type="hidden" name="form_type" value="customer">
+        <input type="hidden" name="utf8" value="✓">
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        <input
+          class="ma-footer__email-input"
+          type="email"
+          name="contact[email]"
+          placeholder="Email Address"
+          required
+          autocomplete="email"
+        >
+        <div class="ma-footer__consent">
+          <input type="checkbox" id="ma-newsletter-consent-m" name="contact[consent]" required>
+          <label class="ma-footer__consent-label" for="ma-newsletter-consent-m">
+            Sign me up to hear from Maison Amiir. For more information, view our <a href="/policies/privacy-policy">Privacy Policy</a>.
+          </label>
+        </div>
+        <button class="ma-footer__signup-btn" type="submit">Sign Up</button>
+      </form>
+    </div>
+    <!-- /MOBILE ACCORDION -->
+
+  </div>
+  <!-- /INNER -->
+
+  <!-- ── BOTTOM BAR ── -->
+  <div class="ma-footer__bottom-wrap">
+    <div class="ma-footer__bottom">
+
+      <a href="/" class="ma-footer__brand" aria-label="Maison Amiir Home">Maison Amiir</a>
+
+      <div class="ma-footer__bottom-right">
+
+        <div class="ma-footer__social">
+          <!-- Facebook -->
+          <a href="https://www.facebook.com/maisonamiir" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M15.7044 5.32431H17.8321V2.14275C17.4635 2.09867 16.2013 2.0025 14.7308 2.0025C11.6614 2.0025 9.55766 3.6574 9.55766 6.69872V9.49963H6.16772V13.0538H9.55766V21.9975H13.7129V13.0538H16.9626L17.4796 9.49963H13.7129V7.05134C13.7129 6.02555 14.0335 5.32431 15.7044 5.32431Z" fill="#000"/>
+            </svg>
+          </a>
+
+          <!-- Instagram -->
+          <a href="https://www.instagram.com/maisonamiir" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="2.5" y="2.5" width="19" height="19" rx="5" ry="5" stroke="#000" stroke-width="2" fill="none"/>
+              <circle cx="12" cy="12" r="4.5" stroke="#000" stroke-width="2" fill="none"/>
+              <circle cx="17.2" cy="6.8" r="1.3" fill="#000"/>
+            </svg>
+          </a>
+
+          <!-- LinkedIn -->
+          <a href="https://www.linkedin.com/company/maisonamiir" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20.4472 2H3.5528C2.6953 2 2 2.6953 2 3.5528V20.4472C2 21.3047 2.6953 22 3.5528 22H20.4472C21.3047 22 22 21.3047 22 20.4472V3.5528C22 2.6953 21.3047 2 20.4472 2ZM8.2 18.4H5.4V9.8H8.2V18.4ZM6.8 8.56C5.92 8.56 5.2 7.84 5.2 6.96C5.2 6.08 5.92 5.36 6.8 5.36C7.68 5.36 8.4 6.08 8.4 6.96C8.4 7.84 7.68 8.56 6.8 8.56ZM18.8 18.4H16V14.24C16 13.24 15.98 11.96 14.6 11.96C13.2 11.96 12.98 13.04 12.98 14.16V18.4H10.18V9.8H12.86V10.96H12.9C13.28 10.22 14.24 9.44 15.64 9.44C18.46 9.44 19 11.28 19 13.68V18.4H18.8Z" fill="#000"/>
+            </svg>
+          </a>
+        </div>
+
+        <p class="ma-footer__copyright">&copy; {{ 'now' | date: '%Y' }} MAISON AMIIR. All Rights Reserved.</p>
+
+      </div>
+    </div>
+  </div>
+  <!-- /BOTTOM BAR -->
+
+</footer>
+
+<script>
+(function() {
+  'use strict';
+
+  var triggers = document.querySelectorAll('.ma-footer__accordion-trigger');
+  triggers.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var isOpen = this.getAttribute('aria-expanded') === 'true';
+      var panelId = this.getAttribute('aria-controls');
+      var panel = document.getElementById(panelId);
+      this.setAttribute('aria-expanded', String(!isOpen));
+      if (panel) panel.classList.toggle('is-open', !isOpen);
+    });
+  });
+
+  function applyLayout() {
+    var mobile = window.innerWidth <= 768;
+    var desktopCols = document.querySelector('.ma-footer__columns');
+    if (desktopCols) desktopCols.style.display = mobile ? 'none' : 'flex';
+    document.querySelectorAll('.ma-footer__accordion').forEach(function(el) {
+      el.style.display = mobile ? 'block' : 'none';
+    });
+    var subMobile = document.querySelector('.ma-footer__subscribe-mobile');
+    if (subMobile) subMobile.style.display = mobile ? 'block' : 'none';
+  }
+
+  applyLayout();
+  window.addEventListener('resize', applyLayout);
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Footer",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section width",
+      "options": [
+        { "value": "page-width", "label": "Page width" },
+        { "value": "full-width", "label": "Full width" }
+      ],
+      "default": "full-width"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Gap",
+      "default": 0
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 0
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,72 @@
+{%- doc -%}
+  Maison Amiir — recommendation / category card row (carousel).
+  @param {array} products - product array to render
+  @param {string} [title] - optional heading shown on the left
+  @param {number} [limit] - max products to show
+{%- enddoc -%}
+
+{%- liquid
+  assign row_limit = limit | default: 12
+-%}
+
+<div class="ma-rec">
+  <div class="ma-rec__header">
+    {%- if title != blank -%}
+      <h2 class="ma-rec__title">{{ title }}</h2>
+    {%- else -%}
+      <span class="ma-rec__title-spacer" aria-hidden="true"></span>
+    {%- endif -%}
+    <div class="ma-rec__nav">
+      <span class="ma-rec__counter" aria-hidden="true"></span>
+      <button class="ma-rec__arrow" type="button" data-dir="prev" aria-label="Previous">&lsaquo;</button>
+      <button class="ma-rec__arrow" type="button" data-dir="next" aria-label="Next">&rsaquo;</button>
+    </div>
+  </div>
+
+  <div class="ma-rec__track">
+    {%- for p in products limit: row_limit -%}
+      {%- liquid
+        assign rc = p.metafields.reviews.count.value | default: 0
+        assign ra = p.metafields.reviews.average.value | default: 0
+        assign interp = p.metafields.custom.interpretation.value
+        assign inspired = p.metafields.custom.inspired_by.value
+        assign praw = p.price | money_without_currency
+        if praw contains '.00'
+          assign pclean = praw | remove: '.00'
+        else
+          assign pclean = praw
+        endif
+        assign af = ra | floor
+      -%}
+      <a class="ma-rec-card" href="{{ p.url }}">
+        <div class="ma-rec-card__media">
+          {%- if p.featured_media -%}
+            {{ p.featured_media | image_url: width: 700 | image_tag: loading: 'lazy', widths: '300,400,500,700', class: 'ma-rec-card__img', alt: p.title }}
+          {%- endif -%}
+          {%- if inspired != blank -%}
+            <span class="ma-rec-card__badge">{{ inspired }}</span>
+          {%- endif -%}
+        </div>
+        <div class="ma-rec-card__info">
+          <h3 class="ma-rec-card__name">{{ p.title }}</h3>
+          {%- if interp != blank -%}
+            <p class="ma-rec-card__interp">{{ interp }}</p>
+          {%- endif -%}
+          <div class="ma-rec-card__rating">
+            <span class="ma-rec-card__stars" aria-hidden="true">
+              {%- for i in (1..5) -%}
+                {%- if af >= i -%}
+                  <svg class="full" viewBox="0 0 14 14"><path d="M7 0l1.803 4.329 4.614.399-3.479 3.042 1.038 4.587L7 9.884l-3.976 2.473 1.038-4.587L.583 4.728l4.614-.399z"/></svg>
+                {%- else -%}
+                  <svg class="empty" viewBox="0 0 14 14"><path d="M7 0l1.803 4.329 4.614.399-3.479 3.042 1.038 4.587L7 9.884l-3.976 2.473 1.038-4.587L.583 4.728l4.614-.399z"/></svg>
+                {%- endif -%}
+              {%- endfor -%}
+            </span>
+            {%- if rc > 0 -%}<span class="ma-rec-card__count">{{ rc }}</span>{%- endif -%}
+          </div>
+          <div class="ma-rec-card__price">&#8377;{{ pclean }}</div>
+        </div>
+      </a>
+    {%- endfor -%}
+  </div>
+</div>

@@ -1,0 +1,1272 @@
+{% liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign review_count    = product.metafields.reviews.rating_count.value | default: 0
+  assign review_average  = product.metafields.reviews.rating.value.rating | default: 0
+
+  assign mf_short_hook     = product.metafields.custom.short_hook.value
+  assign mf_interpretation = product.metafields.custom.interpretation.value
+  assign mf_feel           = product.metafields.custom.feel.value
+  assign mf_longevity      = product.metafields.custom.longevity.value
+  assign mf_silage         = product.metafields.custom.silage.value
+  assign mf_olfactory      = product.metafields.custom.olfactory_notes.value
+  assign mf_perfumer       = product.metafields.custom.perfumer_s_words.value
+  assign mf_notes_image    = product.metafields.custom.notes_image.value
+  assign mf_how_to_wear    = product.metafields.custom.when_to_wear.value
+  assign mf_who_is_it_for  = product.metafields.custom.who_is_it_for.value
+  assign mf_inspired_by    = product.metafields.custom.inspired_by.value
+
+  assign price_raw = current_variant.price | money_without_currency
+  if price_raw contains '.00'
+    assign price_clean = price_raw | remove: '.00'
+  else
+    assign price_clean = price_raw
+  endif
+%}
+
+<div class="ma-pdp" data-section-id="{{ section.id }}">
+
+  <nav class="ma-pdp__breadcrumb" aria-label="breadcrumb">
+    <a href="/" class="ma-pdp__bc-link">Home</a>
+    <span class="ma-pdp__bc-sep" aria-hidden="true">/</span>
+    {% if collection %}
+      <a href="{{ collection.url }}" class="ma-pdp__bc-link">{{ collection.title }}</a>
+      <span class="ma-pdp__bc-sep" aria-hidden="true">/</span>
+    {% endif %}
+    <span class="ma-pdp__bc-current">{{ product.title }}</span>
+  </nav>
+
+  {%- comment -%} MOBILE ONLY: Title / Stars / Tagline / Interpretation above gallery {%- endcomment -%}
+  <div class="ma-pdp__mobile-header">
+    <h1 class="ma-pdp__title">{{ product.title }}</h1>
+    <div class="ma-pdp__stars-row">
+      <div class="ma-pdp__stars" aria-label="{{ review_average }} out of 5 stars">
+        {% assign avg_floor = review_average | floor %}
+        {% for i in (1..5) %}
+          {% if avg_floor >= i %}
+            <svg class="ma-pdp__star ma-pdp__star--full" viewBox="0 0 14 14" aria-hidden="true"><path d="M7 0l1.803 4.329 4.614.399-3.479 3.042 1.038 4.587L7 9.884l-3.976 2.473 1.038-4.587L.583 4.728l4.614-.399z"/></svg>
+          {% else %}
+            <svg class="ma-pdp__star ma-pdp__star--empty" viewBox="0 0 14 14" aria-hidden="true"><path d="M7 0l1.803 4.329 4.614.399-3.479 3.042 1.038 4.587L7 9.884l-3.976 2.473 1.038-4.587L.583 4.728l4.614-.399z"/></svg>
+          {% endif %}
+        {% endfor %}
+      </div>
+      {% if review_count > 0 %}
+        <a href="#ma-reviews" class="ma-pdp__review-link">{{ review_average | round: 1 }} | {{ review_count }} Reviews</a>
+      {% else %}
+        <a href="#ma-reviews" class="ma-pdp__review-link">Reviews</a>
+      {% endif %}
+    </div>
+    {% if mf_short_hook != blank %}
+      <p class="ma-pdp__tagline">{{ mf_short_hook }}</p>
+    {% endif %}
+    {% if mf_interpretation != blank %}
+      <p class="ma-pdp__interpretation">{{ mf_interpretation }}</p>
+    {% endif %}
+  </div>
+
+  <div class="ma-pdp__grid">
+
+    {%- comment -%} COL 1: THUMBNAILS {%- endcomment -%}
+    <div class="ma-pdp__thumbs" id="ma-pdp-thumbs">
+      {% for image in product.images %}
+        <button
+          class="ma-pdp__thumb {% if forloop.first %}ma-pdp__thumb--active{% endif %}"
+          data-thumb-index="{{ forloop.index0 }}"
+          aria-label="View image {{ forloop.index }}"
+          type="button"
+        >
+          {{
+            image
+            | image_url: width: 160
+            | image_tag: width: 80, height: 80, loading: 'lazy', class: 'ma-pdp__thumb-img'
+          }}
+        </button>
+      {% endfor %}
+    </div>
+
+    {%- comment -%} COL 2: GALLERY {%- endcomment -%}
+    <div class="ma-pdp__gallery" id="ma-pdp-gallery">
+
+      <button class="ma-pdp__arrow ma-pdp__arrow--prev" id="ma-pdp-prev" type="button" aria-label="Previous image">
+        <svg width="40" height="40" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M13 3L7 10l6 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+
+      <button class="ma-pdp__arrow ma-pdp__arrow--next" id="ma-pdp-next" type="button" aria-label="Next image" {% if product.images.size <= 1 %}style="display:none"{% endif %}>
+        <svg width="40" height="40" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M7 3l6 7-6 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+
+      <div class="ma-pdp__gallery-track" id="ma-pdp-track">
+        {% for image in product.images %}
+          <div class="ma-pdp__slide {% if forloop.first %}ma-pdp__slide--active{% endif %}" data-slide-index="{{ forloop.index0 }}">
+            {{
+              image
+              | image_url: width: 1600
+              | image_tag:
+                widths: '600, 800, 1000, 1200, 1600',
+                loading: forloop.first | default: 'lazy',
+                fetchpriority: forloop.first | default: 'auto',
+                class: 'ma-pdp__slide-img',
+                alt: image.alt | default: product.title
+            }}
+            {% if forloop.first and mf_inspired_by != blank %}
+              <div class="ma-pdp__inspired-badge" aria-hidden="true">{{ mf_inspired_by }}</div>
+            {% endif %}
+          </div>
+        {% endfor %}
+        {% if product.images.size == 0 %}
+          {{ 'product-1' | placeholder_svg_tag: 'ma-pdp__placeholder-img' }}
+        {% endif %}
+      </div>
+
+      {%- comment -%} DOTS — absolute on the image, bottom centre {%- endcomment -%}
+      {% if product.images.size > 1 %}
+        <div class="ma-pdp__dots" id="ma-pdp-dots" aria-hidden="true">
+          {% for image in product.images %}
+            <button
+              class="ma-pdp__dot {% if forloop.first %}ma-pdp__dot--active{% endif %}"
+              data-dot-index="{{ forloop.index0 }}"
+              type="button"
+              aria-label="View image {{ forloop.index }}"
+            ></button>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+    </div>
+
+    {%- comment -%} COL 3: INFO PANEL {%- endcomment -%}
+    <div class="ma-pdp__info" id="ma-pdp-info">
+      <div class="ma-pdp__info-inner">
+
+        <h1 class="ma-pdp__title">{{ product.title }}</h1>
+
+        <div class="ma-pdp__stars-row">
+          <div class="ma-pdp__stars" aria-label="{{ review_average }} out of 5 stars">
+            {% assign avg_floor = review_average | floor %}
+            {% for i in (1..5) %}
+              {% if avg_floor >= i %}
+                <svg class="ma-pdp__star ma-pdp__star--full" viewBox="0 0 14 14" aria-hidden="true"><path d="M7 0l1.803 4.329 4.614.399-3.479 3.042 1.038 4.587L7 9.884l-3.976 2.473 1.038-4.587L.583 4.728l4.614-.399z"/></svg>
+              {% else %}
+                <svg class="ma-pdp__star ma-pdp__star--empty" viewBox="0 0 14 14" aria-hidden="true"><path d="M7 0l1.803 4.329 4.614.399-3.479 3.042 1.038 4.587L7 9.884l-3.976 2.473 1.038-4.587L.583 4.728l4.614-.399z"/></svg>
+              {% endif %}
+            {% endfor %}
+          </div>
+          {% if review_count > 0 %}
+            <a href="#ma-reviews" class="ma-pdp__review-link">{{ review_average | round: 1 }} | {{ review_count }} Reviews</a>
+          {% else %}
+            <a href="#ma-reviews" class="ma-pdp__review-link">Reviews</a>
+          {% endif %}
+        </div>
+
+        {% if mf_short_hook != blank %}
+          <p class="ma-pdp__tagline">{{ mf_short_hook }}</p>
+        {% endif %}
+
+        {% if mf_interpretation != blank %}
+          <p class="ma-pdp__interpretation">{{ mf_interpretation }}</p>
+        {% endif %}
+
+        <div class="ma-pdp__price-row">
+          <span class="ma-pdp__price">₹{{ price_clean }}</span>
+          <span class="ma-pdp__price-sep" aria-hidden="true">|</span>
+          <span class="ma-pdp__volume">100.0 ML</span>
+        </div>
+
+        {%- comment -%}
+          Uses Horizon's native <product-form-component> + <add-to-cart-component>
+          custom elements (same as the rest of the store) so the AJAX add fires,
+          the cart count updates, and the cart drawer auto-opens.
+          NOTE: cart drawer only opens if Theme Settings → Cart → Cart type = "Drawer".
+        {%- endcomment -%}
+        <product-form-component
+          data-section-id="{{ section.id }}"
+          data-product-id="{{ product.id }}"
+          data-product-url="{{ product.url }}"
+          on:submit="/handleSubmit"
+          data-quantity-default="1"
+          data-quantity-error-max="{{ 'products.product.quantity_error_max' | t }}"
+        >
+          <div class="visually-hidden" aria-live="assertive" role="status" aria-atomic="true" ref="liveRegion"></div>
+
+          {% form 'product', product, id: 'ma-pdp-form', class: 'ma-pdp__form', data-type: 'add-to-cart-form' %}
+            <input type="hidden" name="id" value="{{ current_variant.id }}" id="ma-pdp-variant-id" ref="variantId">
+
+            <div class="ma-pdp__atc-row">
+              <div class="ma-pdp__qty">
+                <button type="button" class="ma-pdp__qty-btn" id="ma-pdp-minus" aria-label="Decrease quantity">
+                  <svg width="12" height="2" viewBox="0 0 12 2" aria-hidden="true"><rect width="12" height="2" fill="currentColor"/></svg>
+                </button>
+                <input type="number" name="quantity" id="ma-pdp-qty" value="1" min="1" class="ma-pdp__qty-input" aria-label="Quantity">
+                <button type="button" class="ma-pdp__qty-btn" id="ma-pdp-plus" aria-label="Increase quantity">
+                  <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><rect x="5" width="2" height="12" fill="currentColor"/><rect y="5" width="12" height="2" fill="currentColor"/></svg>
+                </button>
+              </div>
+
+              <add-to-cart-component
+                class="ma-pdp__atc-wrap"
+                ref="addToCartButtonContainer"
+                data-product-variant-media="{{ current_variant.featured_media.preview_image | image_url: width: 100 }}"
+                data-add-to-cart-animation="{{ settings.add_to_cart_animation }}"
+              >
+                <button
+                  type="submit"
+                  name="add"
+                  id="ma-pdp-atc"
+                  ref="addToCartButton"
+                  on:click="/handleClick"
+                  class="ma-pdp__atc-btn"
+                  {% unless current_variant.available %}disabled{% endunless %}
+                >
+                  <span id="ma-pdp-atc-text">
+                    {% if current_variant.available %}ADD TO BAG{% else %}SOLD OUT{% endif %}
+                  </span>
+                </button>
+              </add-to-cart-component>
+            </div>
+          {% endform %}
+        </product-form-component>
+
+        <div class="ma-pdp__delivery-row">
+          <span class="ma-pdp__delivery-item">
+            <svg class="ma-pdp__del-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M1 3h15v13H1V3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+              <path d="M16 8h4l3 3v5h-7V8z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+              <circle cx="5.5" cy="18.5" r="1.5" stroke="currentColor" stroke-width="1.5"/>
+              <circle cx="18.5" cy="18.5" r="1.5" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+            Complimentary Delivery Across India
+          </span>
+          <span class="ma-pdp__delivery-pipe" aria-hidden="true">|</span>
+          <span class="ma-pdp__delivery-item">
+            7-Day Returns
+            <svg class="ma-pdp__del-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M12 7v5l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </div>
+
+        {% if product.description != blank %}
+          <div class="ma-pdp__description">
+            <p class="ma-pdp__description-label">Description</p>
+            <div class="ma-pdp__description-body">{{ product.description }}</div>
+          </div>
+        {% endif %}
+
+        <div class="ma-pdp__accordions">
+
+          {% assign has_details = false %}
+          {% if mf_olfactory != blank or mf_feel != blank or mf_silage != blank or mf_longevity != blank or mf_notes_image != blank %}
+            {% assign has_details = true %}
+          {% endif %}
+          {% if has_details %}
+            <details class="ma-pdp__accordion">
+              <summary class="ma-pdp__acc-trigger">
+                <span>Product Details</span>
+                <span class="ma-acc-plus" aria-hidden="true">+</span>
+                <span class="ma-acc-minus" aria-hidden="true">−</span>
+              </summary>
+              <div class="ma-pdp__acc-body">
+                {% if mf_olfactory != blank %}
+                  <div class="ma-pdp__detail-row">
+                    <span class="ma-pdp__detail-label">Olfactory Family</span>
+                    <span class="ma-pdp__detail-value">{{ mf_olfactory }}</span>
+                  </div>
+                {% endif %}
+                {% if mf_notes_image != blank %}
+                  <div class="ma-pdp__notes-image-wrap">
+                    {{ mf_notes_image | image_url: width: 800 | image_tag: class: 'ma-pdp__notes-image', loading: 'lazy', alt: 'Fragrance Notes' }}
+                  </div>
+                {% endif %}
+                {% if mf_feel != blank %}
+                  <div class="ma-pdp__detail-row">
+                    <span class="ma-pdp__detail-label">Feel</span>
+                    <span class="ma-pdp__detail-value">{{ mf_feel }}</span>
+                  </div>
+                {% endif %}
+                {% if mf_silage != blank %}
+                  <div class="ma-pdp__detail-row">
+                    <span class="ma-pdp__detail-label">Sillage</span>
+                    <span class="ma-pdp__detail-value">{{ mf_silage }}</span>
+                  </div>
+                {% endif %}
+                {% if mf_longevity != blank %}
+                  <div class="ma-pdp__detail-row">
+                    <span class="ma-pdp__detail-label">Longevity</span>
+                    <span class="ma-pdp__detail-value">{{ mf_longevity }}</span>
+                  </div>
+                {% endif %}
+              </div>
+            </details>
+          {% endif %}
+
+          {% if mf_who_is_it_for != blank %}
+            <details class="ma-pdp__accordion">
+              <summary class="ma-pdp__acc-trigger">
+                <span>Who Is It For</span>
+                <span class="ma-acc-plus" aria-hidden="true">+</span>
+                <span class="ma-acc-minus" aria-hidden="true">−</span>
+              </summary>
+              <div class="ma-pdp__acc-body">{{ mf_who_is_it_for | newline_to_br }}</div>
+            </details>
+          {% endif %}
+
+          {% if mf_perfumer != blank %}
+            <details class="ma-pdp__accordion">
+              <summary class="ma-pdp__acc-trigger">
+                <span>Perfumer's Words</span>
+                <span class="ma-acc-plus" aria-hidden="true">+</span>
+                <span class="ma-acc-minus" aria-hidden="true">−</span>
+              </summary>
+              <div class="ma-pdp__acc-body">{{ mf_perfumer | newline_to_br }}</div>
+            </details>
+          {% endif %}
+
+          {% if mf_how_to_wear != blank %}
+            <details class="ma-pdp__accordion">
+              <summary class="ma-pdp__acc-trigger">
+                <span>How To / When To Wear</span>
+                <span class="ma-acc-plus" aria-hidden="true">+</span>
+                <span class="ma-acc-minus" aria-hidden="true">−</span>
+              </summary>
+              <div class="ma-pdp__acc-body">{{ mf_how_to_wear | newline_to_br }}</div>
+            </details>
+          {% endif %}
+
+          <details class="ma-pdp__accordion">
+            <summary class="ma-pdp__acc-trigger">
+              <span>Shipping Information</span>
+              <span class="ma-acc-plus" aria-hidden="true">+</span>
+              <span class="ma-acc-minus" aria-hidden="true">−</span>
+            </summary>
+            <div class="ma-pdp__acc-body">
+              <p>Complimentary standard delivery across India on all orders.</p>
+              <p>Standard Delivery: 5–7 business days.<br>Express Delivery: 2–3 business days.</p>
+              <p>Orders are shipped in discreet, luxury packaging.<br>7-day hassle-free returns on all fragrances.</p>
+            </div>
+          </details>
+
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{%- comment -%} FULLSCREEN LIGHTBOX {%- endcomment -%}
+<div class="ma-pdp__lb" id="ma-pdp-lb" role="dialog" aria-modal="true" aria-label="Image viewer">
+  <button class="ma-pdp__lb-close" id="ma-pdp-lb-close" type="button" aria-label="Close">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+  </button>
+  <button class="ma-pdp__lb-nav ma-pdp__lb-prev" id="ma-pdp-lb-prev" type="button" aria-label="Previous">
+    <svg width="36" height="36" viewBox="0 0 20 20" fill="none"><path d="M13 3L7 10l6 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+  <div class="ma-pdp__lb-stage">
+    <img class="ma-pdp__lb-img" id="ma-pdp-lb-img" src="" alt="">
+  </div>
+  <button class="ma-pdp__lb-nav ma-pdp__lb-next" id="ma-pdp-lb-next" type="button" aria-label="Next">
+    <svg width="36" height="36" viewBox="0 0 20 20" fill="none"><path d="M7 3l6 7-6 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+  <div class="ma-pdp__lb-counter" id="ma-pdp-lb-counter"></div>
+</div>
+
+{%- comment -%} STICKY ADD TO BAG — slides up when main ATC leaves viewport {%- endcomment -%}
+<div class="ma-sticky-atc" id="ma-sticky-atc" aria-hidden="true">
+  <span class="ma-sticky-atc__price">₹{{ price_clean }}</span>
+  <button class="ma-sticky-atc__btn" id="ma-sticky-atc-btn" type="button">ADD TO BAG</button>
+</div>
+<!-- TRUST BANNER · Concept 1 — 3D Perspective Carousel -->
+<section class="ma-c1" aria-label="Why Maison Amiir">
+  <div class="ma-c1__stage">
+      <div class="ma-c1__slide" style="--i:0">
+        <div class="ma-c1__cell">
+          <span class="ma-c1__icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2.5C12 2.5 5 10 5 15a7 7 0 0014 0c0-5-7-12.5-7-12.5z" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/><path d="M9 15a3 3 0 003 3" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></svg></span>
+          <span class="ma-c1__txt"><span class="ma-c1__l1">30% Perfume Oil</span><span class="ma-c1__l2">Extrait Concentration</span></span>
+        </div>
+        <span class="ma-c1__div" aria-hidden="true"></span>
+        <div class="ma-c1__cell">
+          <span class="ma-c1__icon"><svg viewBox="0 0 24 24" fill="none"><path d="M9 2h6v3l-1 1.5V9l3.2 9.5A2 2 0 0114.3 21H9.7a2 2 0 01-1.9-2.5L11 9V6.5L10 5V2z" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/><path d="M8.5 14h7" stroke="currentColor" stroke-width="1.1"/></svg></span>
+          <span class="ma-c1__txt"><span class="ma-c1__l1">Handcrafted</span><span class="ma-c1__l2">In Small Batches</span></span>
+        </div>
+      </div>
+      <div class="ma-c1__slide" style="--i:1">
+        <div class="ma-c1__cell">
+          <span class="ma-c1__icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-4.5-7-10a4 4 0 017-2.6A4 4 0 0119 11c0 5.5-7 10-7 10z" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/></svg></span>
+          <span class="ma-c1__txt"><span class="ma-c1__l1">Cruelty-Free</span><span class="ma-c1__l2">Conscious Luxury</span></span>
+        </div>
+        <span class="ma-c1__div" aria-hidden="true"></span>
+        <div class="ma-c1__cell">
+          <span class="ma-c1__icon"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9.3" stroke="currentColor" stroke-width="1.1"/><ellipse cx="12" cy="12" rx="3.7" ry="9.3" stroke="currentColor" stroke-width="1.1"/><path d="M2.7 12h18.6" stroke="currentColor" stroke-width="1.1"/></svg></span>
+          <span class="ma-c1__txt"><span class="ma-c1__l1">International</span><span class="ma-c1__l2">Fragrance Oils</span></span>
+        </div>
+      </div>
+      <div class="ma-c1__slide" style="--i:2">
+        <div class="ma-c1__cell">
+          <span class="ma-c1__icon"><svg viewBox="0 0 24 24" fill="none"><path d="M1.5 4h13v11h-13V4z" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/><path d="M14.5 8h4l3.5 3.5V15h-7.5V8z" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/><circle cx="5.5" cy="18" r="1.6" stroke="currentColor" stroke-width="1.1"/><circle cx="18" cy="18" r="1.6" stroke="currentColor" stroke-width="1.1"/></svg></span>
+          <span class="ma-c1__txt"><span class="ma-c1__l1">Complimentary</span><span class="ma-c1__l2">Delivery Across India</span></span>
+        </div>
+        <span class="ma-c1__div" aria-hidden="true"></span>
+        <div class="ma-c1__cell">
+          <span class="ma-c1__icon"><svg viewBox="0 0 24 24" fill="none"><path d="M3.5 8A9 9 0 1112 21" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/><path d="M3 3.5V8h4.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 8v4.2l3 1.8" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="ma-c1__txt"><span class="ma-c1__l1">7-Day</span><span class="ma-c1__l2">Effortless Returns</span></span>
+        </div>
+      </div>
+  </div>
+  <div class="ma-c1__dots" aria-hidden="true"><span></span><span></span><span></span></div>
+</section>
+
+{% stylesheet %}
+/* =============================================
+   MAISON AMIIR — PRODUCT PAGE
+   ============================================= */
+
+.ma-pdp {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+/* Breadcrumb */
+.ma-pdp__breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 20px 0 28px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #888;
+}
+.ma-pdp__bc-link { color: #888; text-decoration: none; }
+.ma-pdp__bc-link:hover { color: #000; }
+.ma-pdp__bc-sep { color: #ccc; }
+.ma-pdp__bc-current { color: #1a1a1a; }
+
+/* Grid */
+.ma-pdp__grid {
+  display: grid;
+  grid-template-columns: 80px 1fr 460px;
+  gap: 0 28px;
+  align-items: start;
+}
+
+/* Thumbnails */
+.ma-pdp__thumbs {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: sticky;
+  top: 120px;
+  align-self: start;
+}
+.ma-pdp__thumb {
+  width: 80px; height: 80px;
+  padding: 0;
+  background: #f2f0ee;
+  border: 1px solid transparent;
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color 0.15s;
+  flex-shrink: 0;
+}
+.ma-pdp__thumb--active { border-color: #1a1a1a; }
+.ma-pdp__thumb:hover:not(.ma-pdp__thumb--active) { border-color: #bbb; }
+.ma-pdp__thumb-img { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+/* Gallery — position: relative so arrows + dots (position:absolute) stay inside */
+.ma-pdp__gallery {
+  position: sticky;
+  top: 60px;
+  align-self: start;
+  background: #f2f0ee;
+  line-height: 0;
+  font-size: 0;
+}
+.ma-pdp__gallery-track {
+  position: relative;
+  width: 100%;
+  line-height: 0;
+  font-size: 0;
+}
+.ma-pdp__slide {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  line-height: 0;
+}
+.ma-pdp__slide--active {
+  position: relative;
+  opacity: 1;
+  pointer-events: auto;
+}
+.ma-pdp__slide-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  max-height: 80vh;
+  cursor: zoom-in;
+}
+.ma-pdp__placeholder-img { width: 100%; height: 600px; display: block; }
+
+/* INSPIRED BY badge */
+.ma-pdp__inspired-badge {
+  position: absolute;
+  top: 16px; left: 0;
+  background: rgba(255,255,255,0.92);
+  padding: 8px 16px 8px 12px;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #1a1a1a;
+  font-family: var(--font-body--family, sans-serif);
+  font-weight: 500;
+  line-height: 1;
+  pointer-events: none;
+}
+
+/* ARROWS — dark so they stay visible on the light beige gallery.
+   Visible by default (subtle), full opacity on hover. */
+.ma-pdp__arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 4;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #1a1a1a;
+  padding: 16px 12px;
+  line-height: 0;
+  opacity: 0.55;
+  transition: opacity 0.2s;
+  filter: drop-shadow(0 1px 3px rgba(255,255,255,0.7));
+}
+.ma-pdp__gallery:hover .ma-pdp__arrow { opacity: 1; }
+.ma-pdp__arrow:hover,
+.ma-pdp__arrow:focus { opacity: 1; }
+.ma-pdp__arrow--prev { left: 4px; }
+.ma-pdp__arrow--next { right: 4px; }
+
+/* DOTS — absolute on image, bottom centre */
+.ma-pdp__dots {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  line-height: 1;
+  font-size: 0;
+}
+.ma-pdp__dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.45);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+.ma-pdp__dot--active {
+  background: #fff;
+  transform: scale(1.4);
+}
+
+/* FULLSCREEN LIGHTBOX */
+.ma-pdp__lb {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0,0,0,0.96);
+  align-items: center;
+  justify-content: center;
+}
+.ma-pdp__lb--open { display: flex; }
+.ma-pdp__lb-stage {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: calc(100vw - 180px);
+  max-height: 100vh;
+  padding: 60px 0;
+}
+.ma-pdp__lb-img {
+  max-width: 100%;
+  max-height: calc(100vh - 120px);
+  object-fit: contain;
+  display: block;
+  user-select: none;
+}
+.ma-pdp__lb-close {
+  position: absolute;
+  top: 20px; right: 20px;
+  background: none; border: none;
+  color: rgba(255,255,255,0.7);
+  cursor: pointer; padding: 10px;
+  line-height: 0;
+  transition: color 0.15s;
+  z-index: 1;
+}
+.ma-pdp__lb-close:hover { color: #fff; }
+.ma-pdp__lb-nav {
+  flex-shrink: 0;
+  width: 90px; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  background: none; border: none;
+  color: rgba(255,255,255,0.55);
+  cursor: pointer;
+  transition: color 0.15s;
+}
+.ma-pdp__lb-nav:hover { color: #fff; }
+.ma-pdp__lb-counter {
+  position: absolute;
+  bottom: 22px; left: 50%;
+  transform: translateX(-50%);
+  color: rgba(255,255,255,0.4);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  font-family: var(--font-body--family, sans-serif);
+}
+
+/* Info panel */
+.ma-pdp__info {
+  position: sticky;
+  top: 60px;
+  align-self: start;
+}
+.ma-pdp__info-inner { padding: 0 0 60px 8px; }
+
+/* Title */
+.ma-pdp__title {
+  font-family: var(--font-heading--family, var(--font-primary--family, serif));
+  font-size: 32px; font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1.15;
+  margin: 0 0 18px;
+  color: #1a1a1a;
+}
+
+/* Stars */
+.ma-pdp__stars-row { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.ma-pdp__stars { display: flex; gap: 5px; }
+.ma-pdp__star { width: 18px; height: 18px; }
+.ma-pdp__star--full path { fill: #1a1a1a; }
+.ma-pdp__star--empty path { fill: none; stroke: #1a1a1a; stroke-width: 1; }
+
+.ma-pdp__review-link {
+  font-size: 13px; letter-spacing: 0.05em;
+  color: #555; text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.ma-pdp__review-link:hover { color: #000; }
+
+.ma-pdp__tagline {
+  font-size: 12px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: #888;
+  margin: 0 0 10px;
+  font-family: var(--font-body--family, sans-serif);
+}
+
+.ma-pdp__interpretation {
+  font-size: 18px; line-height: 1.7;
+  color: #444; margin: 0 0 24px;
+  font-family: var(--font-body--family, sans-serif);
+}
+
+/* Price */
+.ma-pdp__price-row { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+.ma-pdp__price { font-size: 20px; letter-spacing: 0.04em; color: #1a1a1a; }
+.ma-pdp__price-sep { color: #bbb; font-size: 16px; }
+.ma-pdp__volume { font-size: 15px; letter-spacing: 0.06em; color: #777; }
+
+.ma-pdp__form { margin-bottom: 0; }
+
+/* ATC row */
+.ma-pdp__atc-row { display: flex; gap: 12px; height: 52px; margin-bottom: 14px; }
+.ma-pdp__qty { display: flex; align-items: center; border: 1px solid #1a1a1a; background: #fff; flex-shrink: 0; }
+.ma-pdp__qty-btn {
+  width: 44px; height: 100%;
+  background: none; border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: #1a1a1a; transition: background 0.15s;
+}
+.ma-pdp__qty-btn:hover { background: #f5f5f5; }
+.ma-pdp__qty-input {
+  width: 48px; height: 100%;
+  text-align: center;
+  border: none;
+  border-left: 1px solid #e0e0e0;
+  border-right: 1px solid #e0e0e0;
+  font-size: 15px; color: #1a1a1a;
+  background: #fff;
+  -moz-appearance: textfield;
+}
+.ma-pdp__qty-input::-webkit-inner-spin-button,
+.ma-pdp__qty-input::-webkit-outer-spin-button { -webkit-appearance: none; }
+.ma-pdp__atc-wrap { flex: 1; display: flex; }
+.ma-pdp__atc-btn {
+  flex: 1; width: 100%;
+  background: #1a1a1a; color: #fff;
+  border: 1px solid #1a1a1a;
+  font-size: 12px; letter-spacing: 0.18em;
+  text-transform: uppercase; cursor: pointer;
+  transition: background 0.2s;
+  font-family: var(--font-body--family, sans-serif);
+}
+.ma-pdp__atc-btn:hover:not(:disabled) { background: #2a2a2a; }
+.ma-pdp__atc-btn:disabled { background: #bbb; border-color: #bbb; cursor: not-allowed; }
+.ma-pdp__atc-btn[aria-disabled="true"] { opacity: 0.75; cursor: wait; }
+
+/* Delivery row — desktop: single line */
+.ma-pdp__delivery-row {
+  display: flex; align-items: center;
+  flex-wrap: nowrap; gap: 10px;
+  background: #f7f7f5;
+  padding: 13px 16px; margin-bottom: 28px;
+}
+.ma-pdp__delivery-item {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 11px; letter-spacing: 0.07em;
+  text-transform: uppercase; color: #555;
+  white-space: nowrap; flex-shrink: 0;
+}
+.ma-pdp__del-icon { flex-shrink: 0; color: #666; }
+.ma-pdp__delivery-pipe { color: #ccc; font-size: 13px; flex-shrink: 0; }
+
+/* Description */
+.ma-pdp__description { margin-bottom: 4px; padding-top: 26px; border-top: 1px solid #e8e8e8; }
+.ma-pdp__description-label {
+  font-size: 13px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: #1a1a1a;
+  margin: 0 0 14px; padding-bottom: 14px;
+  border-bottom: 1px solid #e8e8e8;
+  font-weight: 700;
+}
+.ma-pdp__description-body {
+  font-size: 15px; line-height: 1.85; color: #555;
+  font-family: var(--font-body--family, sans-serif);
+  padding-bottom: 4px;
+}
+.ma-pdp__description-body p { margin: 0 0 8px; }
+.ma-pdp__description-body p:last-child { margin-bottom: 0; }
+
+/* Accordions */
+.ma-pdp__accordions { border-top: 1px solid #e8e8e8; }
+.ma-pdp__accordion { border-bottom: 1px solid #e8e8e8; }
+.ma-pdp__acc-trigger {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 18px 0; cursor: pointer;
+  font-size: 13px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: #1a1a1a;
+  list-style: none; user-select: none; gap: 12px;
+  font-weight: 700;
+}
+.ma-pdp__acc-trigger::-webkit-details-marker { display: none; }
+.ma-pdp__acc-trigger > span:first-child { flex: 1; }
+.ma-acc-plus  { display: block; font-size: 20px; line-height: 1; font-weight: 300; color: #555; flex-shrink: 0; }
+.ma-acc-minus { display: none;  font-size: 20px; line-height: 1; font-weight: 300; color: #555; flex-shrink: 0; }
+.ma-pdp__accordion[open] .ma-acc-plus  { display: none; }
+.ma-pdp__accordion[open] .ma-acc-minus { display: block; }
+.ma-pdp__acc-body {
+  padding: 0 0 24px;
+  font-size: 15px; line-height: 1.85; color: #555;
+  font-family: var(--font-body--family, sans-serif);
+  font-weight: 600;
+  animation: maAccOpen 0.25s ease;
+}
+@keyframes maAccOpen {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.ma-pdp__acc-body p { margin: 0 0 10px; }
+.ma-pdp__acc-body p:last-child { margin-bottom: 0; }
+.ma-pdp__acc-body strong { font-weight: 700; color: #1a1a1a; }
+.ma-pdp__detail-row { display: flex; gap: 16px; margin-bottom: 14px; align-items: baseline; }
+.ma-pdp__detail-label { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #999; min-width: 130px; flex-shrink: 0; }
+.ma-pdp__detail-value { font-size: 15px; color: #333; font-weight: 600; }
+.ma-pdp__notes-image-wrap { margin: 12px 0 20px; }
+.ma-pdp__notes-image { width: 100%; height: auto; display: block; }
+
+/* Mobile header — hidden on desktop */
+.ma-pdp__mobile-header { display: none; }
+
+/* =============================================
+   STICKY ADD TO BAG BAR — desktop + mobile
+   ============================================= */
+.ma-sticky-atc {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  position: fixed; bottom: 0; left: 0; right: 0;
+  z-index: 900;
+  background: #fff;
+  border-top: 1px solid #e0e0e0;
+  padding: 12px 48px;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+  gap: 20px;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.07);
+}
+.ma-sticky-atc.ma-sticky-atc--visible { transform: translateY(0); }
+.ma-sticky-atc__price {
+  font-size: 20px; letter-spacing: 0.03em;
+  color: #1a1a1a; white-space: nowrap; flex-shrink: 0;
+}
+.ma-sticky-atc__btn {
+  height: 50px; padding: 0 40px;
+  background: #1a1a1a; color: #fff; border: none;
+  font-size: 11px; letter-spacing: 0.18em;
+  text-transform: uppercase; cursor: pointer;
+  font-family: var(--font-body--family, sans-serif);
+  transition: background 0.2s; flex-shrink: 0;
+}
+.ma-sticky-atc__btn:hover { background: #2a2a2a; }
+
+/* =============================================
+   TABLET
+   ============================================= */
+/* =============================================
+   MOBILE ≤ 749px
+   ============================================= */
+@media screen and (max-width: 749px) {
+
+  .ma-pdp { padding: 0 16px; }
+  .ma-pdp__breadcrumb { padding: 8px 0 6px; font-size: 10px; }
+
+  /* Mobile header: compact so image starts high enough to show dots */
+  .ma-pdp__mobile-header { display: block; padding: 0; margin-bottom: 0; }
+  .ma-pdp__mobile-header .ma-pdp__title { font-size: 20px; letter-spacing: -0.01em; margin: 0 0 6px; line-height: 1.1; }
+  .ma-pdp__mobile-header .ma-pdp__stars-row { margin-bottom: 5px; }
+  .ma-pdp__mobile-header .ma-pdp__star { width: 13px; height: 13px; }
+  .ma-pdp__mobile-header .ma-pdp__review-link { font-size: 15px; }
+  .ma-pdp__mobile-header .ma-pdp__tagline { font-size: 12px; margin: 0 0 4px; letter-spacing: 0.08em; }
+  .ma-pdp__mobile-header .ma-pdp__interpretation { font-size: 14px; line-height: 1.5; margin: 0; }
+
+  /* Grid: flex column */
+  .ma-pdp__grid { display: flex; flex-direction: column; }
+
+  /* Thumbnails: hidden on mobile */
+  .ma-pdp__thumbs { display: none !important; }
+
+  /* Gallery: full-bleed swipeable. position:relative keeps dots inside gallery.
+     top:0 cancels the desktop `top:60px` that was leaving a white gap above. */
+  .ma-pdp__gallery {
+    order: 1; position: relative; top: 0;
+    width: calc(100% + 32px);
+    margin-left: -16px; margin-right: -16px; margin-top: 0;
+    background: #f2f0ee;
+    overflow: hidden; touch-action: pan-y;
+  }
+  .ma-pdp__gallery-track {
+    display: flex; width: 100%;
+    will-change: transform;
+    transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .ma-pdp__gallery-track.ma-mobile-strip .ma-pdp__slide {
+    position: relative; opacity: 1; pointer-events: auto;
+    flex: 0 0 100%; width: 100%; min-width: 100%; transition: none;
+  }
+  /* Image placement — matches file 7: fills the gallery box, no white gap. */
+  .ma-pdp__slide-img { max-height: 92vw; object-fit: cover; }
+
+  /* Arrows: always visible on mobile, dark for contrast on light gallery */
+  .ma-pdp__arrow { opacity: 1; background: transparent; color: #1a1a1a; padding: 12px 8px; filter: drop-shadow(0 1px 3px rgba(255,255,255,0.7)); }
+
+  /* Info: order 2 */
+  .ma-pdp__info { order: 2; position: static; }
+  .ma-pdp__info-inner { padding: 14px 0 0; }
+
+  /* Hide desktop title/stars/tagline/interpretation in info panel */
+  .ma-pdp__info .ma-pdp__title,
+  .ma-pdp__info .ma-pdp__stars-row,
+  .ma-pdp__info .ma-pdp__tagline,
+  .ma-pdp__info .ma-pdp__interpretation { display: none; }
+
+  /* Typography */
+  .ma-pdp__price { font-size: 18px; }
+  .ma-pdp__volume { font-size: 13px; }
+  .ma-pdp__price-row { margin-bottom: 14px; }
+  .ma-pdp__atc-row { height: 50px; }
+  .ma-pdp__atc-btn { font-size: 11px; letter-spacing: 0.15em; }
+  .ma-pdp__description-body { font-size: 14px; }
+  .ma-pdp__acc-trigger { font-size: 12px; padding: 15px 0; }
+  .ma-pdp__acc-body { font-size: 14px; }
+
+  /* Delivery: stacked with thin separator line */
+  .ma-pdp__delivery-row {
+    flex-direction: column; align-items: stretch;
+    gap: 0; padding: 0; margin-bottom: 20px;
+  }
+  .ma-pdp__delivery-pipe { display: none; }
+  .ma-pdp__delivery-item { font-size: 11px; white-space: normal; padding: 9px 14px; }
+  .ma-pdp__delivery-item:first-child { border-bottom: 1px solid #e0e0e0; }
+
+  /* Lightbox */
+  .ma-pdp__lb-stage { max-width: 100vw; padding: 52px 0 44px; }
+  .ma-pdp__lb-nav { width: 52px; }
+
+  /* Sticky ATC mobile sizing */
+  .ma-sticky-atc { padding: 10px 16px; gap: 12px; }
+  .ma-sticky-atc__price { font-size: 16px; }
+  .ma-sticky-atc__btn { height: 46px; padding: 0 20px; font-size: 10px; flex: 1; }
+
+}
+/* ===== TRUST BANNER · CONCEPT 1 — 3D PERSPECTIVE CAROUSEL ===== */
+.ma-c1{position:relative;width:100%;background:#0e0e0e;margin:48px 0 0;padding:0;overflow:hidden;}
+.ma-c1::before,.ma-c1::after{content:'';position:absolute;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,#c9a96e 12%,#c9a96e 88%,transparent);z-index:3;}
+.ma-c1::before{top:0;}.ma-c1::after{bottom:0;}
+.ma-c1__stage{position:relative;height:128px;perspective:1300px;}
+.ma-c1__slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:0;padding:0;opacity:0;transform-style:preserve-3d;animation:maC1cycle 16.5s cubic-bezier(.6,.01,.3,1) infinite;animation-delay:calc(var(--i) * -5.5s);}
+@keyframes maC1cycle{
+ 0%{opacity:0;transform:perspective(1300px) rotateY(38deg) translateZ(-130px);}
+ 4%{opacity:1;transform:perspective(1300px) rotateY(0) translateZ(0);}
+ 27%{opacity:1;transform:perspective(1300px) rotateY(0) translateZ(0);}
+ 33.33%{opacity:0;transform:perspective(1300px) rotateY(-38deg) translateZ(-130px);}
+ 100%{opacity:0;transform:perspective(1300px) rotateY(-38deg) translateZ(-130px);}
+}
+.ma-c1__cell{display:flex;flex-direction:column;align-items:center;gap:13px;width:240px;text-align:center;}
+.ma-c1__icon{width:40px;height:40px;color:#c9a96e;display:block;}
+.ma-c1__icon svg{width:100%;height:100%;display:block;}
+.ma-c1__txt{display:flex;flex-direction:column;gap:5px;}
+.ma-c1__l1{color:#f3eee2;font-family:var(--font-heading--family,serif);font-size:20px;letter-spacing:.14em;text-transform:uppercase;}
+.ma-c1__l2{color:#9c8a6a;font-family:var(--font-body--family,sans-serif);font-size:12px;letter-spacing:.22em;text-transform:uppercase;}
+.ma-c1__div{width:1px;height:58px;margin:0 80px;background:linear-gradient(to bottom,transparent,#c9a96e,transparent);opacity:.5;}
+.ma-c1__dots{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:7px;z-index:3;}
+.ma-c1__dots span{width:5px;height:5px;border-radius:50%;background:#c9a96e;opacity:.25;animation:maC1dot 16.5s linear infinite;}
+.ma-c1__dots span:nth-child(2){animation-delay:-5.5s;}
+.ma-c1__dots span:nth-child(3){animation-delay:-11s;}
+@keyframes maC1dot{0%,33%{opacity:.9;}34%,100%{opacity:.25;}}
+@media screen and (max-width:749px){
+ .ma-c1{margin:0;}
+ .ma-c1__stage{height:130px;}
+ .ma-c1__slide{padding:0 14px;}
+ .ma-c1__cell{width:auto;max-width:42%;gap:10px;}
+ .ma-c1__icon{width:30px;height:30px;}
+ .ma-c1__l1{font-size:14px;letter-spacing:.1em;}
+ .ma-c1__l2{font-size:10px;letter-spacing:.16em;}
+ .ma-c1__div{height:50px;margin:0 8px;}
+}
+
+{% endstylesheet %}
+
+<script>
+(function() {
+
+  /* =============================================
+     DISABLE HEADER SCROLL HIDE
+     ============================================= */
+  function freezeHeader() {
+    var sh = document.querySelector('sticky-header');
+    if (!sh) return;
+    sh.onScroll     = function() {};
+    sh.hideHeader   = function() {};
+    sh.revealHeader = function() {};
+    var h = sh.querySelector('header') || sh;
+    h.style.transform = 'translateY(0)';
+    h.style.transition = 'none';
+    document.documentElement.classList.remove('scroll-up', 'scroll-down', 'header-hidden');
+    document.body.classList.remove('scroll-up', 'scroll-down', 'header-hidden');
+  }
+
+  /* =============================================
+     GALLERY NAVIGATION (desktop thumbnails + arrows)
+     ============================================= */
+  var slides, thumbs, dotsAll, prevBtn, nextBtn, current, total;
+
+  function goTo(idx) {
+    if (!slides) return;
+    slides[current].classList.remove('ma-pdp__slide--active');
+    if (thumbs[current]) thumbs[current].classList.remove('ma-pdp__thumb--active');
+    if (dotsAll[current]) dotsAll[current].classList.remove('ma-pdp__dot--active');
+    current = idx;
+    slides[current].classList.add('ma-pdp__slide--active');
+    if (thumbs[current]) thumbs[current].classList.add('ma-pdp__thumb--active');
+    if (dotsAll[current]) dotsAll[current].classList.add('ma-pdp__dot--active');
+    if (prevBtn) prevBtn.style.display = current === 0 ? 'none' : '';
+    if (nextBtn) nextBtn.style.display = current === total - 1 ? 'none' : '';
+  }
+
+  function initGallery() {
+    slides  = document.querySelectorAll('.ma-pdp__slide');
+    thumbs  = document.querySelectorAll('.ma-pdp__thumb');
+    dotsAll = document.querySelectorAll('.ma-pdp__dot');
+    prevBtn = document.getElementById('ma-pdp-prev');
+    nextBtn = document.getElementById('ma-pdp-next');
+    current = 0; total = slides.length;
+    if (!total) return;
+
+    /* Hide prev on first load */
+    if (prevBtn) prevBtn.style.display = 'none';
+
+    thumbs.forEach(function(btn) {
+      btn.addEventListener('click', function() { goTo(parseInt(this.dataset.thumbIndex, 10)); });
+    });
+    dotsAll.forEach(function(btn) {
+      btn.addEventListener('click', function() { goTo(parseInt(this.dataset.dotIndex, 10)); });
+    });
+    if (prevBtn) prevBtn.addEventListener('click', function() { if (current > 0) goTo(current - 1); });
+    if (nextBtn) nextBtn.addEventListener('click', function() { if (current < total - 1) goTo(current + 1); });
+  }
+
+  /* =============================================
+     MOBILE SWIPE GALLERY
+     ============================================= */
+  function initMobileGallery() {
+    if (window.innerWidth > 749) return;
+    var track   = document.getElementById('ma-pdp-track');
+    var gallery = document.getElementById('ma-pdp-gallery');
+    if (!track || !slides || slides.length < 2) return;
+
+    track.classList.add('ma-mobile-strip');
+    var mCurrent = 0;
+
+    function mGoTo(idx) {
+      if (idx < 0 || idx >= total) return;
+      if (dotsAll[mCurrent]) dotsAll[mCurrent].classList.remove('ma-pdp__dot--active');
+      mCurrent = idx; current = idx;
+      track.style.transform = 'translateX(-' + (idx * 100) + '%)';
+      if (dotsAll[mCurrent]) dotsAll[mCurrent].classList.add('ma-pdp__dot--active');
+      if (prevBtn) prevBtn.style.display = idx === 0 ? 'none' : '';
+      if (nextBtn) nextBtn.style.display = idx === total - 1 ? 'none' : '';
+    }
+
+    mGoTo(0);
+
+    dotsAll.forEach(function(btn) {
+      btn.addEventListener('click', function() { mGoTo(parseInt(this.dataset.dotIndex, 10)); });
+    });
+    if (prevBtn) prevBtn.addEventListener('click', function() { if (mCurrent > 0) mGoTo(mCurrent - 1); });
+    if (nextBtn) nextBtn.addEventListener('click', function() { if (mCurrent < total - 1) mGoTo(mCurrent + 1); });
+
+    var startX = 0, startY = 0, didMove = false;
+    gallery.addEventListener('touchstart', function(e) {
+      startX = e.touches[0].clientX; startY = e.touches[0].clientY; didMove = false;
+    }, { passive: true });
+    gallery.addEventListener('touchmove', function() { didMove = true; }, { passive: true });
+    gallery.addEventListener('touchend', function(e) {
+      if (!didMove) return;
+      var dx = e.changedTouches[0].clientX - startX;
+      var dy = e.changedTouches[0].clientY - startY;
+      if (Math.abs(dx) < Math.abs(dy) || Math.abs(dx) < 30) return;
+      if (dx < 0 && mCurrent < total - 1) mGoTo(mCurrent + 1);
+      if (dx > 0 && mCurrent > 0) mGoTo(mCurrent - 1);
+    }, { passive: true });
+  }
+
+  /* =============================================
+     QUANTITY STEPPER
+     ============================================= */
+  function initQty() {
+    var minus = document.getElementById('ma-pdp-minus');
+    var plus  = document.getElementById('ma-pdp-plus');
+    var input = document.getElementById('ma-pdp-qty');
+    if (!minus || !plus || !input) return;
+    minus.addEventListener('click', function() { var v = parseInt(input.value, 10); if (v > 1) input.value = v - 1; });
+    plus.addEventListener('click',  function() { input.value = parseInt(input.value, 10) + 1; });
+  }
+
+  /* =============================================
+     ADD TO BAG FEEDBACK — "ADDING…" then "ADDED"
+     Text only. The native <product-form-component> still handles the
+     real AJAX add and auto-opens the drawer; this just reflects state on
+     the button so it feels like a luxury store. Robust: time fallback so
+     the label can never get stuck on "ADDING…".
+     ============================================= */
+  function initAtcFeedback() {
+    var btn       = document.getElementById('ma-pdp-atc');
+    var txt       = document.getElementById('ma-pdp-atc-text');
+    var stickyBtn = document.getElementById('ma-sticky-atc-btn');
+    if (!btn || !txt) return;
+
+    var resetTimer, addedTimer, busy = false;
+    function set(s) {
+      txt.textContent = s;
+      if (stickyBtn) stickyBtn.textContent = s;
+    }
+    function idle() { set(btn.disabled ? 'SOLD OUT' : 'ADD TO BAG'); }
+
+    function showAdding() {
+      if (btn.disabled) return;
+      set('ADDING…');
+      clearTimeout(addedTimer);
+      clearTimeout(resetTimer);
+      /* Fallback in case we miss the native state change */
+      addedTimer = setTimeout(function() {
+        if (txt.textContent === 'ADDING…') { set('ADDED'); }
+        resetTimer = setTimeout(idle, 1400);
+      }, 1600);
+    }
+    function showAdded() {
+      set('ADDED');
+      clearTimeout(addedTimer);
+      clearTimeout(resetTimer);
+      resetTimer = setTimeout(idle, 1400);
+    }
+
+    btn.addEventListener('click', showAdding);
+
+    /* The native flow toggles aria-disabled on the button while the
+       request is in flight; true→false means the add just succeeded. */
+    new MutationObserver(function() {
+      var nowBusy = btn.getAttribute('aria-disabled') === 'true';
+      if (nowBusy) { busy = true; set('ADDING…'); }
+      else if (busy) { busy = false; showAdded(); }
+    }).observe(btn, { attributes: true, attributeFilter: ['aria-disabled'] });
+  }
+
+
+  /* =============================================
+     FULLSCREEN LIGHTBOX
+     Click any image to open. Swipe / keyboard navigate.
+     ============================================= */
+  function initLightbox() {
+    var lb      = document.getElementById('ma-pdp-lb');
+    var lbImg   = document.getElementById('ma-pdp-lb-img');
+    var lbClose = document.getElementById('ma-pdp-lb-close');
+    var lbPrev  = document.getElementById('ma-pdp-lb-prev');
+    var lbNext  = document.getElementById('ma-pdp-lb-next');
+    var lbCtr   = document.getElementById('ma-pdp-lb-counter');
+    if (!lb || !lbImg) return;
+
+    var lbCurrent = 0;
+    var imgUrls = [];
+    document.querySelectorAll('.ma-pdp__slide-img').forEach(function(img) {
+      var src = img.src;
+      if (img.srcset) {
+        var parts = img.srcset.split(',');
+        var best  = parts[parts.length - 1].trim().split(' ')[0];
+        if (best) src = best;
+      }
+      imgUrls.push(src);
+    });
+
+    function lbOpen(idx) {
+      if (!imgUrls.length) return;
+      lbCurrent = Math.max(0, Math.min(idx, imgUrls.length - 1));
+      lbImg.src = imgUrls[lbCurrent];
+      if (lbCtr) lbCtr.textContent = (lbCurrent + 1) + ' / ' + imgUrls.length;
+      if (lbPrev) lbPrev.style.display = lbCurrent === 0 ? 'none' : '';
+      if (lbNext) lbNext.style.display = lbCurrent === imgUrls.length - 1 ? 'none' : '';
+      lb.classList.add('ma-pdp__lb--open');
+      document.body.style.overflow = 'hidden';
+    }
+    function lbClose2() {
+      lb.classList.remove('ma-pdp__lb--open');
+      document.body.style.overflow = '';
+    }
+
+    if (lbClose) lbClose.addEventListener('click', lbClose2);
+    if (lbPrev)  lbPrev.addEventListener('click',  function() { lbOpen(lbCurrent - 1); });
+    if (lbNext)  lbNext.addEventListener('click',  function() { lbOpen(lbCurrent + 1); });
+
+    /* Click on the gallery image opens lightbox.
+       Delegation from the gallery handles pointer-events inheritance correctly. */
+    var galleryEl = document.getElementById('ma-pdp-gallery');
+    if (galleryEl) {
+      galleryEl.addEventListener('click', function(e) {
+        var img = e.target.closest ? e.target.closest('.ma-pdp__slide-img') : null;
+        if (!img) return;
+        lbOpen(typeof current !== 'undefined' ? current : 0);
+      });
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (!lb.classList.contains('ma-pdp__lb--open')) return;
+      if (e.key === 'Escape')     lbClose2();
+      if (e.key === 'ArrowLeft')  lbOpen(lbCurrent - 1);
+      if (e.key === 'ArrowRight') lbOpen(lbCurrent + 1);
+    });
+    lb.addEventListener('click', function(e) { if (e.target === lb) lbClose2(); });
+
+    var lbSX = 0, lbMoved = false;
+    lb.addEventListener('touchstart', function(e) { lbSX = e.touches[0].clientX; lbMoved = false; }, { passive: true });
+    lb.addEventListener('touchmove',  function()  { lbMoved = true; }, { passive: true });
+    lb.addEventListener('touchend',   function(e) {
+      if (!lbMoved) return;
+      var dx = e.changedTouches[0].clientX - lbSX;
+      if (Math.abs(dx) < 40) return;
+      if (dx < 0) lbOpen(lbCurrent + 1);
+      else lbOpen(lbCurrent - 1);
+    }, { passive: true });
+  }
+
+  /* =============================================
+     STICKY ATC VISIBILITY  (desktop + mobile)
+     SHOW: only after the customer scrolls past the shipping / delivery row.
+     HIDE: as the footer area (discover collection / footer) approaches.
+     ============================================= */
+  function initStickyAtc() {
+    var bar     = document.getElementById('ma-sticky-atc');
+    var mainBtn = document.getElementById('ma-pdp-atc');
+    /* Trigger element = the shipping/delivery details row */
+    var trigger = document.querySelector('.ma-pdp__delivery-row') || mainBtn;
+    if (!bar || !trigger) return;
+
+    var scrolledPast  = false;   /* delivery row has scrolled above the viewport */
+    var footerNear    = false;   /* footer is approaching */
+
+    function updateStickyBar() {
+      var show = scrolledPast && !footerNear;
+      bar.classList.toggle('ma-sticky-atc--visible', show);
+      bar.setAttribute('aria-hidden', show ? 'false' : 'true');
+    }
+
+    /* SHOW once the shipping row is fully above the viewport top */
+    var triggerObs = new IntersectionObserver(function(entries) {
+      var e = entries[0];
+      scrolledPast = !e.isIntersecting && e.boundingClientRect.top < 0;
+      updateStickyBar();
+    }, { threshold: 0 });
+    triggerObs.observe(trigger);
+
+    /* HIDE before the footer is reached. The 400px bottom rootMargin makes the
+       footer count as "near" while it is still ~400px below the viewport,
+       so the bar clears the discover-collection / footer area in advance. */
+    var footer = document.querySelector('footer');
+    if (footer) {
+      var footerObs = new IntersectionObserver(function(entries) {
+        footerNear = entries[0].isIntersecting;
+        updateStickyBar();
+      }, { threshold: 0, rootMargin: '0px 0px 400px 0px' });
+      footerObs.observe(footer);
+    }
+
+    /* Sticky button triggers the real ATC button (native add-to-cart flow) */
+    var stickyBtn = document.getElementById('ma-sticky-atc-btn');
+    if (stickyBtn && mainBtn) {
+      stickyBtn.addEventListener('click', function() { mainBtn.click(); });
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    freezeHeader();
+    initGallery();
+    initMobileGallery();
+    initQty();
+    initAtcFeedback();
+    initLightbox();
+    initStickyAtc();
+  });
+
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Product Page",
+  "tag": "div",
+  "class": "ma-product-section",
+  "settings": [],
+  "blocks": [],
+  "presets": []
+}
+{% endschema %}

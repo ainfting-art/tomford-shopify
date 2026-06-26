@@ -1,0 +1,117 @@
+{%- liquid
+  assign block_settings = block.settings
+  assign product_resource = closest.product
+-%}
+
+{% if product_resource != blank and product_resource.tags.size > 0 %}
+  <div
+    class="product-tags text-block spacing-style"
+    style="
+      {% render 'spacing-style', settings: block_settings %}
+      width: {{ block_settings.width }};
+    "
+    {{ block.shopify_attributes }}
+  >
+    {% for tag in product_resource.tags %}
+      {% comment %} Changed from <a> to <span> tag to make it unclickable {% endcomment %}
+      <span class="product-tag">
+        {{ tag }}
+      </span>
+    {% endfor %}
+  </div>
+{% endif %}
+
+{% stylesheet %}
+.product-tag:hover {
+  background: #2a2a2a !important;
+}
+.product-tags {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  gap: 8px;
+  align-items: center;
+}
+
+/* Override theme forcing width 100% */
+.product-tags > * {
+  width: auto !important;
+  max-width: fit-content !important;
+}
+
+.product-tag {
+  display: inline-flex !important;
+  width: auto !important;
+  font-size: 16px;
+  padding: 4px 10px;
+  border-radius: 5px;
+  border: 1px solid rgb(var(--color-foreground-rgb) / 0.2);
+  text-decoration: none;
+  background-color: #2a2a2a;
+  color: #FFFBEF;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  {% comment %} Added cursor default to indicate it's not clickable {% endcomment %}
+  cursor: default;
+  text-transform: capitalize;
+  
+}
+
+{% comment %} Remove hover effect or keep it for visual feedback only {% endcomment %}
+.product-tag:hover {
+  background: rgb(var(--color-foreground-rgb) / 0.08);
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Product tags",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Width",
+      "options": [
+        { "value": "fit-content", "label": "Fit content" },
+        { "value": "100%", "label": "Full width" }
+      ],
+      "default": "fit-content"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product tags",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}

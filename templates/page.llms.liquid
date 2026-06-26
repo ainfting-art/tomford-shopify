@@ -1,0 +1,35 @@
+{% layout none %}Content-Type: text/plain
+
+# MAISON AMIIR
+
+> MAISON AMIIR is a Paris-inspired luxury perfume house with its Creative Studio in India. We blend French artistry,
+> French sophistication, and Indian heritage into small-batch signature fragrances
+> We do not create perfumes. We create signatures.
+> Shop at https://maisonamiir.com
+
+## About
+- Founded to restore perfumery to its true essence
+- Small-batch blends using premium-grade oils
+- Long-lasting performance with soft, refined presence
+- Philosophy: Quiet luxury — subtle, elegant, deeply personal
+- Independent fragrance house — not affiliated with any designer brand
+
+## Contact & Pages
+- Website: https://maisonamiir.com
+- About: https://maisonamiir.com/pages/about-us
+- Contact: https://maisonamiir.com/pages/contact
+- All Perfumes: https://maisonamiir.com/collections/all-perfumes
+
+## Collections
+- [Masculine Collection](https://maisonamiir.com/collections/mens-collection): Bold, refined fragrances for men
+- [Feminine Collection](https://maisonamiir.com/collections/womens-collection): Elegant, floral and sweet fragrances for women
+- [Unisex Collection](https://maisonamiir.com/collections/unisex-collection): Shared signatures for everyone
+- [Summer Collection](https://maisonamiir.com/collections/summer-collection): Fresh, light and airy summer scents
+- [Winter Collection](https://maisonamiir.com/collections/winter-collection): Deep, warm and rich winter fragrances
+- [New Arrivals](https://maisonamiir.com/collections/new-arrivals): Latest releases from Maison Amiir
+- [All Perfumes](https://maisonamiir.com/collections/all-perfumes): Complete collection of all 37 fragrances
+
+## Products
+{% for product in collections.all.products %}
+- [{{ product.title }}](https://maisonamiir.com/products/{{ product.handle }}): {{ product.description | strip_html | truncate: 150 }} Price: INR {{ product.price | money_without_currency }}. {% if product.available %}In stock.{% else %}Out of stock.{% endif %}
+{% endfor %}

@@ -1,0 +1,295 @@
+{%- comment -%}
+  MAISON AMIIR — PRODUCT EXTRAS
+  Section 1: "You May Also Like" (Shopify smart recommendations)
+  Section 2: "Shop Other Products In The Category" (Masculine / Unisex / Feminine tabs)
+  Place this section in the PRODUCT template, directly AFTER your main product page
+  section so it renders right below the trust banner.
+{%- endcomment -%}
+
+{%- liquid
+  assign ma_default = 'm'
+  for c in product.collections
+    if c.handle == 'mens-collection'
+      assign ma_default = 'm'
+    elsif c.handle == 'womens-collection'
+      assign ma_default = 'f'
+    elsif c.handle == 'unisex-collection'
+      assign ma_default = 'u'
+    endif
+  endfor
+-%}
+
+{%- if product != blank -%}
+<div class="ma-rec-wrap">
+
+  {%- comment -%} ===== SECTION 1 — RECOMMENDATIONS ===== {%- endcomment -%}
+  <ma-recommendations
+    class="ma-rec-reco"
+    data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ section.settings.rec_limit }}&intent=related"
+    {% if recommendations.performed %}data-performed="true"{% endif %}
+  >
+    {%- if recommendations.performed -%}
+      {%- if recommendations.products_count > 0 -%}
+        {% render 'ma-rec-row',
+          products: recommendations.products,
+          title: section.settings.rec_heading,
+          limit: section.settings.rec_limit
+        %}
+      {%- endif -%}
+    {%- else -%}
+      <div class="ma-rec__header">
+        <h2 class="ma-rec__title">{{ section.settings.rec_heading }}</h2>
+      </div>
+      <div class="ma-rec__skeleton" aria-hidden="true">
+        <span></span><span></span><span></span><span></span>
+      </div>
+    {%- endif -%}
+  </ma-recommendations>
+
+  {%- comment -%} ===== SECTION 2 — SHOP BY CATEGORY / GENDER ===== {%- endcomment -%}
+  <div class="ma-rec-cat">
+    <h2 class="ma-rec__title ma-rec__title--center">{{ section.settings.cat_heading }}</h2>
+
+    <div class="ma-rec-tabs" role="tablist">
+      <button class="ma-rec-tabs__btn{% if ma_default == 'm' %} is-active{% endif %}" type="button" data-tab="m" role="tab">Masculine</button>
+      <button class="ma-rec-tabs__btn{% if ma_default == 'u' %} is-active{% endif %}" type="button" data-tab="u" role="tab">Unisex</button>
+      <button class="ma-rec-tabs__btn{% if ma_default == 'f' %} is-active{% endif %}" type="button" data-tab="f" role="tab">Feminine</button>
+    </div>
+
+    <div class="ma-rec-panels">
+      <div class="ma-rec-panel{% if ma_default == 'm' %} is-active{% endif %}" data-panel="m">
+        {% render 'ma-rec-row', products: collections['mens-collection'].products, limit: section.settings.cat_limit %}
+      </div>
+      <div class="ma-rec-panel{% if ma_default == 'u' %} is-active{% endif %}" data-panel="u">
+        {% render 'ma-rec-row', products: collections['unisex-collection'].products, limit: section.settings.cat_limit %}
+      </div>
+      <div class="ma-rec-panel{% if ma_default == 'f' %} is-active{% endif %}" data-panel="f">
+        {% render 'ma-rec-row', products: collections['womens-collection'].products, limit: section.settings.cat_limit %}
+      </div>
+    </div>
+  </div>
+
+</div>
+{%- endif -%}
+
+{% stylesheet %}
+/* ===== MAISON AMIIR — PRODUCT EXTRAS ===== */
+.ma-rec-wrap { max-width: 1440px; margin: 0 auto; padding: 48px 48px 24px; }
+
+.ma-rec { margin: 0 0 8px; }
+.ma-rec__header { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 20px; }
+.ma-rec__title { font-family: var(--font-heading--family, serif); font-size: 22px; letter-spacing: .08em; text-transform: uppercase; color: #1a1a1a; margin: 0; line-height: 1.2; }
+.ma-rec__title--center { text-align: center; }
+.ma-rec__title-spacer { display: block; }
+
+.ma-rec__nav { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.ma-rec__counter { font-size: 13px; color: #777; letter-spacing: .05em; min-width: 52px; text-align: right; }
+.ma-rec__arrow { width: 36px; height: 36px; border: 1px solid #ddd; background: #fff; cursor: pointer; font-size: 18px; line-height: 1; color: #1a1a1a; display: flex; align-items: center; justify-content: center; transition: background .15s, border-color .15s, color .15s; }
+.ma-rec__arrow:hover:not(:disabled) { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+.ma-rec__arrow:disabled { opacity: .3; cursor: default; }
+
+.ma-rec__track { display: flex; gap: 24px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -ms-overflow-style: none; padding-bottom: 4px; }
+.ma-rec__track::-webkit-scrollbar { display: none; }
+.ma-rec__track > .ma-rec-card { flex: 0 0 calc((100% - 72px) / 4); scroll-snap-align: start; }
+
+/* Card */
+.ma-rec-card { display: block; text-decoration: none; color: inherit; }
+.ma-rec-card__media { position: relative; background: #f2f0ee; aspect-ratio: 1 / 1; overflow: hidden; }
+.ma-rec-card__img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s ease; }
+.ma-rec-card:hover .ma-rec-card__img { transform: scale(1.04); }
+.ma-rec-card__badge { position: absolute; top: 10px; left: 10px; background: rgba(255,255,255,.92); color: #1a1a1a; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; padding: 5px 10px; line-height: 1; font-family: var(--font-body--family, sans-serif); font-weight: 500; pointer-events: none; }
+.ma-rec-card__info { padding: 14px 4px 0; }
+.ma-rec-card__name { font-family: var(--font-heading--family, serif); font-size: 15px; letter-spacing: .04em; text-transform: uppercase; color: #1a1a1a; margin: 0 0 6px; line-height: 1.2; }
+.ma-rec-card__interp { font-size: 13px; line-height: 1.5; color: #666; margin: 0 0 8px; font-family: var(--font-body--family, sans-serif); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 39px; }
+.ma-rec-card__rating { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+.ma-rec-card__stars { display: inline-flex; gap: 2px; }
+.ma-rec-card__stars svg { width: 12px; height: 12px; }
+.ma-rec-card__stars .full path { fill: #1a1a1a; }
+.ma-rec-card__stars .empty path { fill: none; stroke: #1a1a1a; stroke-width: 1; }
+.ma-rec-card__count { font-size: 12px; color: #777; }
+.ma-rec-card__price { font-size: 14px; color: #1a1a1a; letter-spacing: .03em; }
+
+/* Skeleton (while recommendations load) */
+.ma-rec__skeleton { display: flex; gap: 24px; }
+.ma-rec__skeleton span { flex: 0 0 calc((100% - 72px) / 4); aspect-ratio: 1 / 1; background: linear-gradient(90deg, #f2f0ee 25%, #ece9e4 37%, #f2f0ee 63%); background-size: 400% 100%; animation: maRecShim 1.4s ease infinite; }
+@keyframes maRecShim { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
+
+/* Category tabs */
+.ma-rec-cat { margin-top: 28px; }
+.ma-rec-tabs { display: flex; justify-content: center; gap: 0; margin: 18px 0 28px; border-bottom: 1px solid #e8e8e8; }
+.ma-rec-tabs__btn { background: none; border: none; cursor: pointer; font-family: var(--font-body--family, sans-serif); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: #999; padding: 12px 22px; position: relative; transition: color .2s; }
+.ma-rec-tabs__btn.is-active { color: #1a1a1a; }
+.ma-rec-tabs__btn.is-active::after { content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: #1a1a1a; }
+.ma-rec-panel { display: none; }
+.ma-rec-panel.is-active { display: block; }
+
+/* Mobile */
+@media screen and (max-width: 749px) {
+  .ma-rec-wrap { padding: 32px 16px 16px; }
+  .ma-rec__title { font-size: 16px; letter-spacing: .05em; }
+  .ma-rec__header { margin-bottom: 14px; }
+  .ma-rec__arrow { display: none; }
+  .ma-rec__counter { min-width: auto; font-size: 12px; }
+  .ma-rec__track { gap: 14px; }
+  .ma-rec__track > .ma-rec-card { flex: 0 0 calc((100% - 14px) / 2); }
+  .ma-rec__skeleton { gap: 14px; }
+  .ma-rec__skeleton span { flex: 0 0 calc((100% - 14px) / 2); }
+  .ma-rec-card__name { font-size: 13px; }
+  .ma-rec-card__interp { font-size: 12px; line-height: 1.45; min-height: 35px; }
+  .ma-rec-card__badge { top: 7px; left: 7px; font-size: 9px; padding: 4px 7px; }
+  .ma-rec-tabs__btn { padding: 11px 14px; font-size: 11px; letter-spacing: .1em; }
+}
+{% endstylesheet %}
+
+<script>
+(function () {
+  /* Carousel init — arrows + mobile counter */
+  function maInitRec(root) {
+    (root || document).querySelectorAll('.ma-rec').forEach(function (sec) {
+      var track = sec.querySelector('.ma-rec__track');
+      if (!track) return;
+
+      function cardW() {
+        var c = track.querySelector('.ma-rec-card');
+        if (!c) return track.clientWidth || 1;
+        var cs = getComputedStyle(track);
+        var gap = parseFloat(cs.columnGap || cs.gap || 0) || 0;
+        return c.getBoundingClientRect().width + gap;
+      }
+      function total() { return track.querySelectorAll('.ma-rec-card').length; }
+
+      function update() {
+        var counter = sec.querySelector('.ma-rec__counter');
+        var prev = sec.querySelector('[data-dir="prev"]');
+        var next = sec.querySelector('[data-dir="next"]');
+        var w = cardW();
+        var t = total();
+        var idx = Math.round(track.scrollLeft / w);
+        if (counter) counter.textContent = t ? (Math.min(idx + 1, t) + ' / ' + t) : '';
+        if (prev) prev.disabled = track.scrollLeft <= 2;
+        if (next) next.disabled = track.scrollLeft + track.clientWidth >= track.scrollWidth - 2;
+      }
+      sec._maUpdate = update;
+
+      if (!sec.dataset.maBound) {
+        sec.dataset.maBound = '1';
+        var prev = sec.querySelector('[data-dir="prev"]');
+        var next = sec.querySelector('[data-dir="next"]');
+        function page(dir) {
+          var w = cardW();
+          var per = Math.max(1, Math.round(track.clientWidth / w));
+          track.scrollBy({ left: dir * w * per, behavior: 'smooth' });
+        }
+        if (prev) prev.addEventListener('click', function () { page(-1); });
+        if (next) next.addEventListener('click', function () { page(1); });
+        track.addEventListener('scroll', function () { window.requestAnimationFrame(update); }, { passive: true });
+        window.addEventListener('resize', function () { window.requestAnimationFrame(update); });
+      }
+      update();
+    });
+  }
+  window.maInitRec = maInitRec;
+
+  /* Tabs */
+  function maInitTabs() {
+    document.querySelectorAll('.ma-rec-cat').forEach(function (cat) {
+      var btns = cat.querySelectorAll('.ma-rec-tabs__btn');
+      var panels = cat.querySelectorAll('.ma-rec-panel');
+      btns.forEach(function (b) {
+        b.addEventListener('click', function () {
+          btns.forEach(function (x) { x.classList.remove('is-active'); });
+          panels.forEach(function (x) { x.classList.remove('is-active'); });
+          b.classList.add('is-active');
+          var p = cat.querySelector('.ma-rec-panel[data-panel="' + b.dataset.tab + '"]');
+          if (p) {
+            p.classList.add('is-active');
+            var sec = p.querySelector('.ma-rec');
+            if (sec && sec._maUpdate) sec._maUpdate();
+          }
+        });
+      });
+    });
+  }
+
+  /* Shopify recommendations fetch */
+  if (!customElements.get('ma-recommendations')) {
+    customElements.define('ma-recommendations', class extends HTMLElement {
+      connectedCallback() {
+        if (this.dataset.performed === 'true' || this.dataset.loading === 'true') {
+          maInitRec(this);
+          return;
+        }
+        var url = this.dataset.url;
+        if (!url) return;
+        this.dataset.loading = 'true';
+        var self = this;
+        fetch(url)
+          .then(function (r) { return r.text(); })
+          .then(function (text) {
+            var doc = new DOMParser().parseFromString(text, 'text/html');
+            var el = doc.querySelector('ma-recommendations');
+            self.innerHTML = el ? el.innerHTML : '';
+            maInitRec(self);
+          })
+          .catch(function () { self.innerHTML = ''; });
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    maInitRec();
+    maInitTabs();
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Product Extras",
+  "tag": "section",
+  "class": "ma-product-extras-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "You May Also Like"
+    },
+    {
+      "type": "text",
+      "id": "rec_heading",
+      "label": "Recommendations heading",
+      "default": "You May Also Like"
+    },
+    {
+      "type": "range",
+      "id": "rec_limit",
+      "label": "Max recommendations",
+      "min": 4,
+      "max": 10,
+      "step": 1,
+      "default": 10
+    },
+    {
+      "type": "header",
+      "content": "Shop Other Products In The Category"
+    },
+    {
+      "type": "text",
+      "id": "cat_heading",
+      "label": "Category heading",
+      "default": "Shop Other Products In The Category"
+    },
+    {
+      "type": "range",
+      "id": "cat_limit",
+      "label": "Products per gender",
+      "min": 4,
+      "max": 12,
+      "step": 1,
+      "default": 8
+    }
+  ],
+  "presets": [
+    { "name": "Product Extras" }
+  ]
+}
+{% endschema %}
