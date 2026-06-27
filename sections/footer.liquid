@@ -1,6 +1,7 @@
 {% comment %}
   Maison Amiir — custom footer (Tom Ford style)
   Hardened: no horizontal overflow / cropping, responsive side padding.
+  Zones: 1) nav columns + newsletter  2) trust + payment bar  3) bottom bar
 {% endcomment %}
 
 {% stylesheet %}
@@ -29,21 +30,14 @@
 
 /* ── FOUR COLUMNS ROW (3 nav + 1 newsletter) ── */
 .ma-footer__columns {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;            /* allow columns to wrap before overflowing */
-  gap: clamp(24px, 3vw, 48px);
+  display: grid;
+  grid-template-columns: 1.1fr 1fr 1fr 1.35fr;
+  gap: 44px;
   padding-bottom: clamp(40px, 5vw, 80px);
 }
 
 .ma-footer__col {
-  flex: 1 1 180px;           /* never narrower than 180px, wraps instead of clipping */
   min-width: 0;
-}
-
-/* Newsletter column slightly wider */
-.ma-footer__col--subscribe {
-  flex: 1.2 1 260px;
 }
 
 .ma-footer__col-heading {
@@ -156,6 +150,90 @@
   background: #333;
 }
 
+/* ── ZONE 2: TRUST + PAYMENT BAR (white-theme adaptation) ── */
+.ma-footer__trust-wrap {
+  border-top: 1px solid #e0e0e0;
+  background: #fafafa;
+}
+
+.ma-footer__trust {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 14px clamp(20px, 5vw, 60px);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.ma-footer__trust-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ma-footer__lock {
+  color: #9b111e;
+  flex-shrink: 0;
+  display: block;
+}
+
+.ma-footer__trust-text {
+  font-size: 10px;
+  color: #555;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.ma-footer__trust-div {
+  width: 1px;
+  height: 14px;
+  background: #d8d8d8;
+  flex-shrink: 0;
+}
+
+.ma-footer__pay {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+.ma-footer__pay-pill {
+  background: #fff;
+  border: 1px solid #d8d8d8;
+  border-radius: 3px;
+  padding: 3px 9px;
+  font-size: 9px;
+  font-weight: 700;
+  color: #555;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1.7;
+}
+
+.ma-footer__pay-pill--rz {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.ma-footer__rz-dot {
+  width: 6px;
+  height: 6px;
+  background: #9b111e;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.ma-footer__ssl {
+  font-size: 10px;
+  color: #888;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-left: auto;
+}
+
 /* ── BOTTOM BAR ── */
 .ma-footer__bottom-wrap {
   border-top: 1px solid #e0e0e0;
@@ -173,6 +251,8 @@
 }
 
 .ma-footer__brand {
+  display: inline-flex;
+  align-items: center;
   font-family: 'Sinoreta', serif;
   font-size: 25px;
   font-weight: 700 !important;
@@ -184,11 +264,22 @@
   flex-shrink: 0;
 }
 
+.ma-footer__logo-img {
+  display: block;
+  height: 38px;
+  width: auto;
+  max-width: 100%;
+}
+
 .ma-footer__bottom-right {
   display: flex;
   align-items: center;
   gap: 30px;
   flex-wrap: wrap;
+}
+
+.ma-footer__bottom-text {
+  text-align: right;
 }
 
 .ma-footer__social {
@@ -216,6 +307,14 @@
   -webkit-text-fill-color: #000 !important;
   letter-spacing: -0.4px;
   white-space: nowrap;
+}
+
+.ma-footer__crafted {
+  font-size: 10px;
+  color: #888;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 4px 0 0;
 }
 
 /* ── MOBILE ── */
@@ -304,6 +403,27 @@
     padding: 14px;
   }
 
+  /* Trust bar mobile — stacks vertically, sits between newsletter and bottom bar */
+  .ma-footer__trust {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    text-align: center;
+    padding: 18px 20px;
+  }
+
+  .ma-footer__trust-div {
+    display: none;
+  }
+
+  .ma-footer__pay {
+    justify-content: center;
+  }
+
+  .ma-footer__ssl {
+    margin-left: 0;
+  }
+
   /* Bottom bar mobile */
   .ma-footer__bottom {
     flex-direction: column;
@@ -320,10 +440,18 @@
     font-weight: 700 !important;
   }
 
+  .ma-footer__logo-img {
+    height: 32px;
+  }
+
   .ma-footer__bottom-right {
     flex-direction: column;
     align-items: center;
     gap: 16px;
+  }
+
+  .ma-footer__bottom-text {
+    text-align: center;
   }
 
   .ma-footer__copyright {
@@ -331,6 +459,10 @@
     color: #000 !important;
     -webkit-text-fill-color: #000 !important;
     white-space: normal;
+  }
+
+  .ma-footer__crafted {
+    text-align: center;
   }
 }
 {% endstylesheet %}
@@ -361,10 +493,11 @@
         <ul>
           <li><a href="/pages/faq">FAQs</a></li>
           <li><a href="/pages/contact">Contact Us</a></li>
-          <li><a href="/account">My Account</a></li>
-          <li><a href="/account/orders">Track My Order</a></li>
+          <li><a href="https://wa.me/971586458135" target="_blank" rel="noopener noreferrer">WhatsApp Us</a></li>
           <li><a href="/policies/shipping-policy">Shipping &amp; Returns</a></li>
           <li><a href="/policies/refund-policy">Refund &amp; Replacement</a></li>
+          <li><a href="{{ routes.account_url }}/orders">Track My Order</a></li>
+          <li><a href="{{ routes.account_url }}">My Account</a></li>
         </ul>
       </div>
 
@@ -372,11 +505,12 @@
       <div class="ma-footer__col">
         <p class="ma-footer__col-heading">The House of Amiir</p>
         <ul>
+          <li><a href="/pages/about-us">Our Story</a></li>
+          <li><a href="/blogs/journal">Journal</a></li>
           <li><a href="/policies/privacy-policy">Privacy Policy</a></li>
           <li><a href="/policies/terms-of-service">Terms &amp; Conditions</a></li>
           <li><a href="/pages/faq">Payment Methods</a></li>
           <li><a href="/policies/shipping-policy">Shipping Policy</a></li>
-          <li><a href="/blogs/journal">Journal</a></li>
         </ul>
       </div>
 
@@ -397,7 +531,7 @@
             autocomplete="email"
           >
           <div class="ma-footer__consent">
-            <input type="checkbox" id="ma-newsletter-consent-d" name="contact[consent]" required>
+            <input type="checkbox" id="ma-newsletter-consent-d" name="contact[consent]" checked required>
             <label class="ma-footer__consent-label" for="ma-newsletter-consent-d">
               Sign me up to hear from Maison Amiir. For more information, view our <a href="/policies/privacy-policy">Privacy Policy</a>.
             </label>
@@ -434,10 +568,11 @@
         <ul>
           <li><a href="/pages/faq">FAQs</a></li>
           <li><a href="/pages/contact">Contact Us</a></li>
-          <li><a href="/account">My Account</a></li>
-          <li><a href="/account/orders">Track My Order</a></li>
+          <li><a href="https://wa.me/971586458135" target="_blank" rel="noopener noreferrer">WhatsApp Us</a></li>
           <li><a href="/policies/shipping-policy">Shipping &amp; Returns</a></li>
           <li><a href="/policies/refund-policy">Refund &amp; Replacement</a></li>
+          <li><a href="{{ routes.account_url }}/orders">Track My Order</a></li>
+          <li><a href="{{ routes.account_url }}">My Account</a></li>
         </ul>
       </div>
     </div>
@@ -448,11 +583,12 @@
       </button>
       <div class="ma-footer__accordion-panel" id="ma-acc-house" role="region">
         <ul>
+          <li><a href="/pages/about-us">Our Story</a></li>
+          <li><a href="/blogs/journal">Journal</a></li>
           <li><a href="/policies/privacy-policy">Privacy Policy</a></li>
           <li><a href="/policies/terms-of-service">Terms &amp; Conditions</a></li>
           <li><a href="/pages/faq">Payment Methods</a></li>
           <li><a href="/policies/shipping-policy">Shipping Policy</a></li>
-          <li><a href="/blogs/journal">Journal</a></li>
         </ul>
       </div>
     </div>
@@ -474,7 +610,7 @@
           autocomplete="email"
         >
         <div class="ma-footer__consent">
-          <input type="checkbox" id="ma-newsletter-consent-m" name="contact[consent]" required>
+          <input type="checkbox" id="ma-newsletter-consent-m" name="contact[consent]" checked required>
           <label class="ma-footer__consent-label" for="ma-newsletter-consent-m">
             Sign me up to hear from Maison Amiir. For more information, view our <a href="/policies/privacy-policy">Privacy Policy</a>.
           </label>
@@ -487,24 +623,62 @@
   </div>
   <!-- /INNER -->
 
-  <!-- ── BOTTOM BAR ── -->
+  <!-- ── ZONE 2: TRUST + PAYMENT BAR ── -->
+  <div class="ma-footer__trust-wrap">
+    <div class="ma-footer__trust">
+
+      <div class="ma-footer__trust-left">
+        <svg class="ma-footer__lock" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="11" width="18" height="11" rx="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+        <span class="ma-footer__trust-text">Secure Checkout via Razorpay</span>
+      </div>
+
+      <span class="ma-footer__trust-div" aria-hidden="true"></span>
+
+      <div class="ma-footer__pay">
+        <span class="ma-footer__pay-pill">Visa</span>
+        <span class="ma-footer__pay-pill">MC</span>
+        <span class="ma-footer__pay-pill">RuPay</span>
+        <span class="ma-footer__pay-pill">UPI</span>
+        <span class="ma-footer__pay-pill">Amex</span>
+        <span class="ma-footer__pay-pill">EMI</span>
+        <span class="ma-footer__pay-pill ma-footer__pay-pill--rz"><span class="ma-footer__rz-dot" aria-hidden="true"></span>Razorpay</span>
+      </div>
+
+      <span class="ma-footer__trust-div" aria-hidden="true"></span>
+
+      <span class="ma-footer__ssl">256-bit SSL Encrypted</span>
+
+    </div>
+  </div>
+  <!-- /TRUST BAR -->
+
+  <!-- ── ZONE 3: BOTTOM BAR ── -->
   <div class="ma-footer__bottom-wrap">
     <div class="ma-footer__bottom">
 
-      <a href="/" class="ma-footer__brand" aria-label="Maison Amiir Home">Maison Amiir</a>
+      {% if settings.logo != blank %}
+        <a href="{{ routes.root_url }}" class="ma-footer__brand" aria-label="{{ shop.name | escape }} home">
+          {{ settings.logo | image_url: height: 80 | image_tag: alt: shop.name, height: 38, class: 'ma-footer__logo-img', loading: 'lazy' }}
+        </a>
+      {% else %}
+        <a href="{{ routes.root_url }}" class="ma-footer__brand" aria-label="{{ shop.name | escape }} home">Maison Amiir</a>
+      {% endif %}
 
       <div class="ma-footer__bottom-right">
 
         <div class="ma-footer__social">
           <!-- Facebook -->
-          <a href="https://www.facebook.com/maisonamiir" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+          <a href="https://www.facebook.com/people/Maison-Amiir-perfumes/61589124503108/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M15.7044 5.32431H17.8321V2.14275C17.4635 2.09867 16.2013 2.0025 14.7308 2.0025C11.6614 2.0025 9.55766 3.6574 9.55766 6.69872V9.49963H6.16772V13.0538H9.55766V21.9975H13.7129V13.0538H16.9626L17.4796 9.49963H13.7129V7.05134C13.7129 6.02555 14.0335 5.32431 15.7044 5.32431Z" fill="#000"/>
             </svg>
           </a>
 
           <!-- Instagram -->
-          <a href="https://www.instagram.com/maisonamiir" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+          <a href="https://www.instagram.com/maisonamiirperfumes" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <rect x="2.5" y="2.5" width="19" height="19" rx="5" ry="5" stroke="#000" stroke-width="2" fill="none"/>
               <circle cx="12" cy="12" r="4.5" stroke="#000" stroke-width="2" fill="none"/>
@@ -513,14 +687,17 @@
           </a>
 
           <!-- LinkedIn -->
-          <a href="https://www.linkedin.com/company/maisonamiir" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+          <a href="https://www.linkedin.com/company/maison-amiir/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M20.4472 2H3.5528C2.6953 2 2 2.6953 2 3.5528V20.4472C2 21.3047 2.6953 22 3.5528 22H20.4472C21.3047 22 22 21.3047 22 20.4472V3.5528C22 2.6953 21.3047 2 20.4472 2ZM8.2 18.4H5.4V9.8H8.2V18.4ZM6.8 8.56C5.92 8.56 5.2 7.84 5.2 6.96C5.2 6.08 5.92 5.36 6.8 5.36C7.68 5.36 8.4 6.08 8.4 6.96C8.4 7.84 7.68 8.56 6.8 8.56ZM18.8 18.4H16V14.24C16 13.24 15.98 11.96 14.6 11.96C13.2 11.96 12.98 13.04 12.98 14.16V18.4H10.18V9.8H12.86V10.96H12.9C13.28 10.22 14.24 9.44 15.64 9.44C18.46 9.44 19 11.28 19 13.68V18.4H18.8Z" fill="#000"/>
             </svg>
           </a>
         </div>
 
-        <p class="ma-footer__copyright">&copy; {{ 'now' | date: '%Y' }} MAISON AMIIR. All Rights Reserved.</p>
+        <div class="ma-footer__bottom-text">
+          <p class="ma-footer__copyright">&copy; {{ 'now' | date: '%Y' }} MAISON AMIIR. All Rights Reserved.</p>
+          <p class="ma-footer__crafted">Crafted in India &nbsp;·&nbsp; Inspired by the World</p>
+        </div>
 
       </div>
     </div>
@@ -547,7 +724,7 @@
   function applyLayout() {
     var mobile = window.innerWidth <= 768;
     var desktopCols = document.querySelector('.ma-footer__columns');
-    if (desktopCols) desktopCols.style.display = mobile ? 'none' : 'flex';
+    if (desktopCols) desktopCols.style.display = mobile ? 'none' : 'grid';
     document.querySelectorAll('.ma-footer__accordion').forEach(function(el) {
       el.style.display = mobile ? 'block' : 'none';
     });
