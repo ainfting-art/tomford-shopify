@@ -262,10 +262,17 @@
             {%- endif -%}
 
             {%- if product.featured_image -%}
-              <img
-                src="{{ product.featured_image | image_url: width: 800 }}"
-                alt="{{ product.title | escape }}"
-                loading="lazy">
+              {{
+                product.featured_image
+                | image_url: width: 800
+                | image_tag:
+                  loading: 'lazy',
+                  widths: '300, 400, 600, 800',
+                  sizes: '(max-width: 767px) 72vw, 25vw',
+                  width: product.featured_image.width,
+                  height: product.featured_image.height,
+                  alt: product.title | escape
+              }}
             {%- endif -%}
 
             <div class="ma-picks__overlay">
