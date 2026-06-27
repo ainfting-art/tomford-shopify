@@ -969,22 +969,6 @@
 (function() {
 
   /* =============================================
-     DISABLE HEADER SCROLL HIDE
-     ============================================= */
-  function freezeHeader() {
-    var sh = document.querySelector('sticky-header');
-    if (!sh) return;
-    sh.onScroll     = function() {};
-    sh.hideHeader   = function() {};
-    sh.revealHeader = function() {};
-    var h = sh.querySelector('header') || sh;
-    h.style.transform = 'translateY(0)';
-    h.style.transition = 'none';
-    document.documentElement.classList.remove('scroll-up', 'scroll-down', 'header-hidden');
-    document.body.classList.remove('scroll-up', 'scroll-down', 'header-hidden');
-  }
-
-  /* =============================================
      GALLERY NAVIGATION (desktop thumbnails + arrows)
      ============================================= */
   var slides, thumbs, dotsAll, prevBtn, nextBtn, current, total;
@@ -1255,7 +1239,6 @@
   }
 
   document.addEventListener('DOMContentLoaded', function() {
-    freezeHeader();
     initGallery();
     initMobileGallery();
     initQty();
