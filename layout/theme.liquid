@@ -52,7 +52,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     {% endif %}
 
     {%- render 'meta-tags' -%}
-    <style>.header-section{height:0!important;min-height:0!important;padding:0!important;margin:0!important;border:0!important;overflow:hidden!important}body{visibility:hidden}</style>
+    <style>.header-section{height:0!important;min-height:0!important;padding:0!important;margin:0!important;border:0!important;overflow:hidden!important}body{visibility:hidden}body{animation:ma-reveal-body 0s linear 4s forwards}@keyframes ma-reveal-body{to{visibility:visible}}</style>
+    <noscript><style>body{visibility:visible!important}</style></noscript>
     {%- render 'stylesheets' -%}
     {{ 'dev-styles.css' | asset_url | stylesheet_tag }}
     <link rel="preload" as="font" href="{{ 'OFLGoudyStM.woff2' | asset_url }}" type="font/woff2" crossorigin>
