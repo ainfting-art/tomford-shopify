@@ -210,7 +210,7 @@
         <div class="ma-pdp__price-row">
           <span class="ma-pdp__price">₹{{ price_clean }}</span>
           <span class="ma-pdp__price-sep" aria-hidden="true">|</span>
-          <span class="ma-pdp__volume">100.0 ML</span>
+          <span class="ma-pdp__volume">{{ product.metafields.custom.volume.value | default: '100.0 ML' }}</span>
         </div>
 
         {%- comment -%}
