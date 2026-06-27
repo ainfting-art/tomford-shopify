@@ -96,14 +96,21 @@
 
       <div class="ma-pdp__gallery-track" id="ma-pdp-track">
         {% for image in product.images %}
+          {%- if forloop.first -%}
+            {%- assign img_loading = 'eager' -%}
+            {%- assign img_priority = 'high' -%}
+          {%- else -%}
+            {%- assign img_loading = 'lazy' -%}
+            {%- assign img_priority = 'auto' -%}
+          {%- endif -%}
           <div class="ma-pdp__slide {% if forloop.first %}ma-pdp__slide--active{% endif %}" data-slide-index="{{ forloop.index0 }}">
             {{
               image
               | image_url: width: 1600
               | image_tag:
                 widths: '600, 800, 1000, 1200, 1600',
-                loading: forloop.first | default: 'lazy',
-                fetchpriority: forloop.first | default: 'auto',
+                loading: img_loading,
+                fetchpriority: img_priority,
                 class: 'ma-pdp__slide-img',
                 alt: image.alt | default: product.title
             }}
