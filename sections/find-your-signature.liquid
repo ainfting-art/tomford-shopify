@@ -474,7 +474,7 @@
     {%- if section.settings.bg_video != blank -%}
       {{ section.settings.bg_video | video_tag: autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'metadata' }}
     {%- elsif maq_bg_url != '' -%}
-      <img src="{{ maq_bg_url }}" alt="" loading="lazy">
+      <img src="{{ maq_bg_url }}" alt="" loading="eager" fetchpriority="high">
     {%- endif -%}
   </div>
 
