@@ -26,8 +26,8 @@
   <div class="ma-rec__track">
     {%- for p in products limit: row_limit -%}
       {%- liquid
-        assign rc = p.metafields.reviews.count.value | default: 0
-        assign ra = p.metafields.reviews.average.value | default: 0
+        assign rc = p.metafields.reviews.rating_count.value | default: 0
+        assign ra = p.metafields.reviews.rating.value.rating | default: 0
         assign interp = p.metafields.custom.interpretation.value
         assign inspired = p.metafields.custom.inspired_by.value
         assign praw = p.price | money_without_currency
