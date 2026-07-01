@@ -309,6 +309,28 @@
   white-space: nowrap;
 }
 
+.ma-footer__locale {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ma-footer__locale-select {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #000;
+  background: transparent;
+  border: 1px solid #e0e0e0;
+  padding: 8px 12px;
+  cursor: pointer;
+  appearance: auto;
+}
+
+.ma-footer__locale-select:hover {
+  border-color: #000;
+}
+
 .ma-footer__crafted {
   font-size: 10px;
   color: #888;
@@ -340,8 +362,8 @@
     background: none;
     border: none;
     border-bottom: 1px solid #e0e0e0;
-    padding: 17px 20px;
-    font-size: 12px;
+    padding: 22px 20px;
+    font-size: 17px;
     font-weight: 700;
     letter-spacing: -0.4px;
     text-transform: uppercase;
@@ -383,7 +405,7 @@
   }
 
   .ma-footer__accordion-panel ul li a {
-    font-size: 12px;
+    font-size: 13px;
     color: #000;
     text-decoration: none;
     letter-spacing: -0.4px;
@@ -394,8 +416,24 @@
 
   /* Newsletter on mobile */
   .ma-footer__subscribe-mobile {
-    padding: 30px 20px 36px;
+    padding: 36px 20px 44px;
     border-bottom: 1px solid #e0e0e0;
+  }
+
+  .ma-footer__subscribe-mobile .ma-footer__col-heading {
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+
+  .ma-footer__subscribe-mobile .ma-footer__newsletter-subtext {
+    font-size: 15px;
+    line-height: 1.7;
+    margin-bottom: 18px;
+  }
+
+  .ma-footer__subscribe-mobile .ma-footer__consent-label {
+    font-size: 13px;
+    line-height: 1.6;
   }
 
   .ma-footer__signup-btn {
@@ -434,14 +472,14 @@
   }
 
   .ma-footer__brand {
-    font-size: 17px;
+    font-size: 22px;
     color: #000 !important;
     -webkit-text-fill-color: #000 !important;
     font-weight: 700 !important;
   }
 
   .ma-footer__logo-img {
-    height: 32px;
+    height: 44px;
   }
 
   .ma-footer__bottom-right {
@@ -494,6 +532,7 @@
           <li><a href="/pages/faq">FAQs</a></li>
           <li><a href="/pages/contact">Contact Us</a></li>
           <li><a href="https://wa.me/971586458135" target="_blank" rel="noopener noreferrer">WhatsApp Us</a></li>
+          <li><a href="/pages/find-your-signature">Find Your Signature</a></li>
           <li><a href="/policies/shipping-policy">Shipping &amp; Returns</a></li>
           <li><a href="/policies/refund-policy">Refund &amp; Replacement</a></li>
           <li><a href="{{ routes.account_url }}/orders">Track My Order</a></li>
@@ -506,7 +545,8 @@
         <p class="ma-footer__col-heading">The House of Amiir</p>
         <ul>
           <li><a href="/pages/about-us">Our Story</a></li>
-          <li><a href="/blogs/journal">Journal</a></li>
+          <li><a href="/blogs/journal">Blogs</a></li>
+          <li><a href="/pages/careers-and-collab">Careers &amp; Brand Collab</a></li>
           <li><a href="/policies/privacy-policy">Privacy Policy</a></li>
           <li><a href="/policies/terms-of-service">Terms &amp; Conditions</a></li>
           <li><a href="/pages/faq">Payment Methods</a></li>
@@ -569,6 +609,7 @@
           <li><a href="/pages/faq">FAQs</a></li>
           <li><a href="/pages/contact">Contact Us</a></li>
           <li><a href="https://wa.me/971586458135" target="_blank" rel="noopener noreferrer">WhatsApp Us</a></li>
+          <li><a href="/pages/find-your-signature">Find Your Signature</a></li>
           <li><a href="/policies/shipping-policy">Shipping &amp; Returns</a></li>
           <li><a href="/policies/refund-policy">Refund &amp; Replacement</a></li>
           <li><a href="{{ routes.account_url }}/orders">Track My Order</a></li>
@@ -584,7 +625,8 @@
       <div class="ma-footer__accordion-panel" id="ma-acc-house" role="region">
         <ul>
           <li><a href="/pages/about-us">Our Story</a></li>
-          <li><a href="/blogs/journal">Journal</a></li>
+          <li><a href="/blogs/journal">Blogs</a></li>
+          <li><a href="/pages/careers-and-collab">Careers &amp; Brand Collab</a></li>
           <li><a href="/policies/privacy-policy">Privacy Policy</a></li>
           <li><a href="/policies/terms-of-service">Terms &amp; Conditions</a></li>
           <li><a href="/pages/faq">Payment Methods</a></li>
@@ -666,6 +708,41 @@
       {% else %}
         <a href="{{ routes.root_url }}" class="ma-footer__brand" aria-label="{{ shop.name | escape }} home">Maison Amiir</a>
       {% endif %}
+
+      {%- liquid
+        assign show_footer_country = false
+        if localization.available_countries.size > 1
+          assign show_footer_country = true
+        endif
+        assign show_footer_language = false
+        if localization.available_languages.size > 1
+          assign show_footer_language = true
+        endif
+      -%}
+      {%- if show_footer_country or show_footer_language -%}
+        <div class="ma-footer__locale">
+          {%- form 'localization', id: 'FooterLocalizationForm' -%}
+            {%- if show_footer_country -%}
+              <select name="country_code" class="ma-footer__locale-select" onchange="this.form.submit()">
+                {%- for country in localization.available_countries -%}
+                  <option value="{{ country.iso_code }}"{% if country.iso_code == localization.country.iso_code %} selected{% endif %}>
+                    {{ country.name }} ({{ country.currency.iso_code }})
+                  </option>
+                {%- endfor -%}
+              </select>
+            {%- endif -%}
+            {%- if show_footer_language -%}
+              <select name="language_code" class="ma-footer__locale-select" onchange="this.form.submit()">
+                {%- for language in localization.available_languages -%}
+                  <option value="{{ language.iso_code }}" lang="{{ language.iso_code }}"{% if language.iso_code == localization.language.iso_code %} selected{% endif %}>
+                    {{ language.endonym_name | capitalize }}
+                  </option>
+                {%- endfor -%}
+              </select>
+            {%- endif -%}
+          {%- endform -%}
+        </div>
+      {%- endif -%}
 
       <div class="ma-footer__bottom-right">
 
