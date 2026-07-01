@@ -3,91 +3,323 @@
 </div>
 
 {% stylesheet %}
-  .ma-reviews-wrapper {
-    max-width: 1440px;
-    margin: 80px auto;
-    padding: 64px 48px 80px;
-    border-top: 1px solid #e8e8e8;
-  }
 
-  @media screen and (max-width: 749px) {
-    .ma-reviews-wrapper {
-      padding: 40px 16px 80px;
-      margin-top: 40px;
-    }
+/* ── Wrapper ── */
+html body .ma-reviews-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 80px 48px 100px;
+  border-top: 1px solid #e8e8e8;
+}
+
+/* ── "REVIEWS" heading ── */
+html body .jdgm-rev-widg__title {
+  font-size: 36px !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  font-weight: 400 !important;
+  color: #1a1a1a !important;
+  text-align: center !important;
+  margin: 0 0 52px !important;
+  padding: 0 !important;
+  line-height: 1.2 !important;
+}
+
+/* ── Summary row ── */
+html body .jdgm-rev-widg__summary {
+  display: flex !important;
+  align-items: center !important;
+  gap: 24px !important;
+  flex-wrap: wrap !important;
+  border-top: 1px solid #e8e8e8 !important;
+  border-bottom: 1px solid #e8e8e8 !important;
+  padding: 28px 0 !important;
+  margin: 0 0 36px !important;
+}
+html body .jdgm-rev-widg__summary-average {
+  font-size: 48px !important;
+  font-weight: 300 !important;
+  color: #1a1a1a !important;
+  line-height: 1 !important;
+}
+html body .jdgm-rev-widg__summary-stars .jdgm-star {
+  font-size: 20px !important;
+}
+html body .jdgm-rev-widg__summary-text {
+  font-size: 11px !important;
+  letter-spacing: 0.10em !important;
+  text-transform: uppercase !important;
+  color: #888 !important;
+}
+
+/* ── Write a Review — outline ── */
+html body .jdgm-write-rev-link {
+  background: transparent !important;
+  color: #1a1a1a !important;
+  border: 1px solid #1a1a1a !important;
+  border-radius: 0 !important;
+  padding: 18px 56px !important;
+  font-size: 11px !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  font-weight: 400 !important;
+  text-decoration: none !important;
+  display: inline-block !important;
+  text-align: center !important;
+  margin-left: auto !important;
+}
+html body .jdgm-write-rev-link:hover {
+  background: #1a1a1a !important;
+  color: #fff !important;
+}
+
+/* ── Hide icon filter + sort buttons ── */
+html body .jdgm-sort-btn,
+html body .jdgm-filter-btn {
+  display: none !important;
+}
+
+/* ── Sort + Search ── */
+html body .jdgm-rev-widg__sort-wrapper {
+  margin-bottom: 16px !important;
+}
+html body .jdgm-rev-widg__sort-wrapper select {
+  border: 1px solid #e0e0e0 !important;
+  border-radius: 0 !important;
+  font-size: 11px !important;
+  color: #1a1a1a !important;
+  padding: 12px 18px !important;
+  background: #fff !important;
+}
+html body .jdgm-search-rev {
+  margin-bottom: 36px !important;
+}
+html body .jdgm-search-rev__input {
+  border: 1px solid #e0e0e0 !important;
+  border-radius: 0 !important;
+  font-size: 12px !important;
+  color: #1a1a1a !important;
+  padding: 12px 18px !important;
+  background: #fff !important;
+  width: 100% !important;
+  max-width: 420px !important;
+}
+
+/* ── No avatar circles ── */
+html body .jdgm-rev__author-pic,
+html body .jdgm-rev__author-pic-wrapper,
+html body .jdgm-rev__author-pic-container {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+/* ── Review cards ── */
+html body .jdgm-rev {
+  border-top: 1px solid #e8e8e8 !important;
+  border-bottom: none !important;
+  padding: 40px 0 !important;
+  margin: 0 !important;
+}
+
+/* ── Header: stars left, date right ── */
+html body .jdgm-rev__header {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  margin-bottom: 14px !important;
+}
+
+/* ── Stars ── */
+html body .jdgm-star,
+html body .jdgm-star.jdgm--on {
+  color: #1a1a1a !important;
+  font-size: 17px !important;
+}
+html body .jdgm-star.jdgm--off {
+  color: #d8d8d8 !important;
+  font-size: 17px !important;
+}
+
+/* ── Date ── */
+html body .jdgm-rev__timestamp {
+  font-size: 11px !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  color: #aaa !important;
+}
+
+/* ── Name ── */
+html body .jdgm-rev__author {
+  font-size: 15px !important;
+  color: #1a1a1a !important;
+  font-weight: 600 !important;
+  display: block !important;
+  margin-bottom: 4px !important;
+}
+
+/* ── Location ── */
+html body .jdgm-rev__location {
+  font-size: 11px !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  color: #888 !important;
+  display: block !important;
+  margin-bottom: 16px !important;
+}
+
+/* ── Review title ── */
+html body .jdgm-rev__title {
+  font-size: 13px !important;
+  letter-spacing: 0.16em !important;
+  text-transform: uppercase !important;
+  color: #1a1a1a !important;
+  font-weight: 700 !important;
+  margin: 0 0 14px !important;
+  display: block !important;
+}
+
+/* ── Review body ── */
+html body .jdgm-rev__body p,
+html body .jdgm-rev__body {
+  font-size: 15px !important;
+  line-height: 1.85 !important;
+  color: #444 !important;
+  margin: 0 0 10px !important;
+}
+
+/* ── Recommend badge ── */
+html body .jdgm-rev__buyer-badge {
+  color: #888 !important;
+  font-size: 11px !important;
+  letter-spacing: 0.06em !important;
+  margin-top: 14px !important;
+  display: block !important;
+}
+
+/* ── Helpful buttons ── */
+html body .jdgm-rev__helpful-btns span {
+  color: #ccc !important;
+  font-size: 11px !important;
+}
+
+/* ── Load more ── */
+html body .jdgm-paginate__load-more {
+  border: 1px solid #1a1a1a !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  color: #1a1a1a !important;
+  font-size: 10px !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+  padding: 14px 40px !important;
+  display: block !important;
+  margin: 40px auto 0 !important;
+}
+html body .jdgm-paginate__load-more:hover {
+  background: #1a1a1a !important;
+  color: #fff !important;
+}
+html body .jdgm-paginate__page {
+  border: 1px solid #e0e0e0 !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  color: #1a1a1a !important;
+  font-size: 10px !important;
+  letter-spacing: 0.14em !important;
+  text-transform: uppercase !important;
+  padding: 10px 20px !important;
+}
+html body .jdgm-paginate__page.jdgm-curt {
+  background: #1a1a1a !important;
+  color: #fff !important;
+  border-color: #1a1a1a !important;
+}
+
+/* ── Modal form ── */
+html body .jdgm-form__title {
+  font-size: 20px !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+  font-weight: 400 !important;
+  color: #1a1a1a !important;
+}
+html body .jdgm-form input[type="text"],
+html body .jdgm-form input[type="email"],
+html body .jdgm-form textarea {
+  border: 1px solid #d5d5d5 !important;
+  border-radius: 0 !important;
+  font-size: 13px !important;
+  padding: 12px 14px !important;
+}
+html body .jdgm-form__submit-button {
+  background: #1a1a1a !important;
+  color: #fff !important;
+  border: 1px solid #1a1a1a !important;
+  border-radius: 0 !important;
+  font-size: 11px !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+  font-weight: 400 !important;
+  padding: 16px 44px !important;
+}
+html body .jdgm-form__submit-button:hover {
+  background: #fff !important;
+  color: #1a1a1a !important;
+}
+
+/* ── Mobile ── */
+@media screen and (max-width: 749px) {
+  html body .ma-reviews-wrapper {
+    padding: 56px 20px 80px;
   }
+  html body .jdgm-rev-widg__title {
+    font-size: 24px !important;
+    text-align: left !important;
+    margin-bottom: 36px !important;
+  }
+  html body .jdgm-rev-widg__summary {
+    gap: 16px !important;
+    padding: 22px 0 !important;
+    margin-bottom: 28px !important;
+  }
+  html body .jdgm-rev-widg__summary-average {
+    font-size: 36px !important;
+  }
+  html body .jdgm-write-rev-link {
+    width: 100% !important;
+    margin-left: 0 !important;
+    padding: 16px 24px !important;
+    margin-top: 8px !important;
+  }
+  html body .jdgm-rev {
+    padding: 28px 0 !important;
+  }
+  html body .jdgm-rev__body p,
+  html body .jdgm-rev__body {
+    font-size: 14px !important;
+  }
+  html body .jdgm-search-rev__input {
+    max-width: 100% !important;
+  }
+}
+
 {% endstylesheet %}
 
 <script>
 (function () {
-  var css = [
-    /* ---- Widget shell ---- */
-    '.jdgm-widget, .jdgm-rev-widg { font-family: inherit; color: #1a1a1a; }',
-
-    /* ---- Heading "Customer Reviews" ---- */
-    '.jdgm-rev-widg__title { font-size: 22px !important; letter-spacing: 0.14em !important; text-transform: uppercase !important; font-weight: 400 !important; color: #1a1a1a !important; text-align: left !important; }',
-
-    /* ---- Summary (avg rating) ---- */
-    '.jdgm-rev-widg__summary { border-top: 1px solid #e8e8e8 !important; border-bottom: 1px solid #e8e8e8 !important; padding: 24px 0 !important; margin: 24px 0 32px !important; }',
-    '.jdgm-rev-widg__summary-average { font-size: 36px !important; font-weight: 300 !important; color: #1a1a1a !important; }',
-    '.jdgm-rev-widg__summary-text { font-size: 11px !important; letter-spacing: 0.08em !important; text-transform: uppercase !important; color: #888 !important; }',
-
-    /* ---- Stars: filled = black, empty = light grey ---- */
-    '.jdgm-star, .jdgm-star.jdgm--on { color: #1a1a1a !important; font-size: 15px !important; }',
-    '.jdgm-star.jdgm--off { color: #d0d0d0 !important; }',
-
-    /* ---- "Write a review" button ---- */
-    '.jdgm-write-rev-link { display: inline-block !important; background: #1a1a1a !important; color: #fff !important; border: 1px solid #1a1a1a !important; border-radius: 0 !important; padding: 13px 36px !important; font-size: 11px !important; letter-spacing: 0.16em !important; text-transform: uppercase !important; font-weight: 400 !important; text-decoration: none !important; transition: background 0.25s, color 0.25s !important; }',
-    '.jdgm-write-rev-link:hover { background: #fff !important; color: #1a1a1a !important; }',
-
-    /* ---- Sort / search controls ---- */
-    '.jdgm-rev-widg__sort-wrapper select, .jdgm-search-rev__input { border: 1px solid #d5d5d5 !important; border-radius: 0 !important; font-size: 11px !important; letter-spacing: 0.06em !important; text-transform: uppercase !important; color: #1a1a1a !important; padding: 10px 14px !important; background: #fff !important; }',
-
-    /* ---- Review cards ---- */
-    '.jdgm-rev { border-top: none !important; border-bottom: 1px solid #ececec !important; padding: 28px 0 !important; }',
-    '.jdgm-rev__author { font-size: 15px !important; letter-spacing: 0.03em !important; color: #1a1a1a !important; font-weight: 400 !important; }',
-    '.jdgm-rev__location, .jdgm-rev__timestamp { font-size: 10px !important; letter-spacing: 0.08em !important; text-transform: uppercase !important; color: #999 !important; }',
-    '.jdgm-rev__title { font-size: 14px !important; letter-spacing: 0.02em !important; color: #1a1a1a !important; font-weight: 400 !important; margin-top: 8px !important; }',
-    '.jdgm-rev__body p, .jdgm-rev__body { font-size: 14px !important; line-height: 1.75 !important; color: #555 !important; }',
-
-    /* ---- Verified / recommend badges ---- */
-    '.jdgm-rev__buyer-badge { color: #888 !important; font-size: 11px !important; letter-spacing: 0.04em !important; }',
-
-    /* ---- Helpful / not helpful ---- */
-    '.jdgm-rev__helpful-btns span { color: #aaa !important; font-size: 11px !important; letter-spacing: 0.04em !important; }',
-
-    /* ---- Load more / pagination ---- */
-    '.jdgm-paginate__page, .jdgm-paginate__load-more { border: 1px solid #1a1a1a !important; border-radius: 0 !important; background: #fff !important; color: #1a1a1a !important; font-size: 10px !important; letter-spacing: 0.16em !important; text-transform: uppercase !important; padding: 12px 28px !important; }',
-    '.jdgm-paginate__page.jdgm-curt, .jdgm-paginate__load-more:hover { background: #1a1a1a !important; color: #fff !important; }',
-
-    /* ---- Write-a-review modal ---- */
-    '.jdgm-modal__content { font-family: inherit !important; }',
-    '.jdgm-form__title { font-size: 18px !important; letter-spacing: 0.12em !important; text-transform: uppercase !important; font-weight: 400 !important; color: #1a1a1a !important; }',
-    '.jdgm-form input[type="text"], .jdgm-form input[type="email"], .jdgm-form textarea { border: 1px solid #d5d5d5 !important; border-radius: 0 !important; font-size: 13px !important; }',
-    '.jdgm-form input:focus, .jdgm-form textarea:focus { border-color: #1a1a1a !important; outline: none !important; box-shadow: none !important; }',
-    '.jdgm-form__submit-button { background: #1a1a1a !important; color: #fff !important; border: 1px solid #1a1a1a !important; border-radius: 0 !important; font-size: 11px !important; letter-spacing: 0.16em !important; text-transform: uppercase !important; font-weight: 400 !important; padding: 14px 36px !important; }',
-    '.jdgm-form__submit-button:hover { background: #fff !important; color: #1a1a1a !important; }',
-
-    /* ---- Modal close button ---- */
-    '.jdgm-modal__close-btn { color: #1a1a1a !important; font-size: 22px !important; }'
-  ].join('\n');
-
-  function inject() {
-    var existing = document.getElementById('ma-jdgm-override');
-    if (existing) existing.remove();
-    var style = document.createElement('style');
-    style.id = 'ma-jdgm-override';
-    style.textContent = css;
-    document.head.appendChild(style);
+  function renameHeading() {
+    var el = document.querySelector('.jdgm-rev-widg__title');
+    if (el && el.textContent.trim().toLowerCase() !== 'reviews') {
+      el.textContent = 'Reviews';
+    }
   }
-
-  /* Inject immediately, on window load, on any Judge.me event, and after 1.5s safety net */
-  inject();
-  window.addEventListener('load', inject);
-  document.addEventListener('jdgm:all:done', inject);
-  document.addEventListener('jdgm:loadMore:finished', inject);
-  setTimeout(inject, 1500);
-  setTimeout(inject, 3000);
+  document.addEventListener('jdgm:all:done', renameHeading);
+  setTimeout(renameHeading, 800);
+  setTimeout(renameHeading, 2500);
 })();
 </script>
 
