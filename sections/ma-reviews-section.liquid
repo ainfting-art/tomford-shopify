@@ -4,15 +4,16 @@
 
 {% stylesheet %}
   .ma-reviews-wrapper {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 80px 48px 100px;
+    max-width: 1440px;
+    margin: 80px auto;
+    padding: 64px 48px 80px;
     border-top: 1px solid #e8e8e8;
   }
 
   @media screen and (max-width: 749px) {
     .ma-reviews-wrapper {
-      padding: 56px 20px 80px;
+      padding: 40px 16px 80px;
+      margin-top: 40px;
     }
   }
 {% endstylesheet %}
@@ -20,92 +21,55 @@
 <script>
 (function () {
   var css = [
-    /* ── Shell ── */
+    /* ---- Widget shell ---- */
     '.jdgm-widget, .jdgm-rev-widg { font-family: inherit; color: #1a1a1a; }',
 
-    /* ── "REVIEWS" heading ── */
-    '.jdgm-rev-widg__title { font-size: 36px !important; letter-spacing: 0.22em !important; text-transform: uppercase !important; font-weight: 400 !important; color: #1a1a1a !important; text-align: center !important; margin: 0 0 52px !important; padding: 0 !important; line-height: 1.2 !important; }',
+    /* ---- Heading "Customer Reviews" ---- */
+    '.jdgm-rev-widg__title { font-size: 22px !important; letter-spacing: 0.14em !important; text-transform: uppercase !important; font-weight: 400 !important; color: #1a1a1a !important; text-align: left !important; }',
 
-    /* ── Summary row: big rating left, outline button right ── */
-    '.jdgm-rev-widg__summary { display: flex !important; align-items: center !important; gap: 24px !important; flex-wrap: wrap !important; border-top: 1px solid #e8e8e8 !important; border-bottom: 1px solid #e8e8e8 !important; padding: 28px 0 !important; margin: 0 0 36px !important; }',
-    '.jdgm-rev-widg__summary-average { font-size: 48px !important; font-weight: 300 !important; color: #1a1a1a !important; line-height: 1 !important; }',
-    '.jdgm-rev-widg__summary-stars .jdgm-star { font-size: 20px !important; }',
-    '.jdgm-rev-widg__summary-text { font-size: 11px !important; letter-spacing: 0.10em !important; text-transform: uppercase !important; color: #888 !important; }',
+    /* ---- Summary (avg rating) ---- */
+    '.jdgm-rev-widg__summary { border-top: 1px solid #e8e8e8 !important; border-bottom: 1px solid #e8e8e8 !important; padding: 24px 0 !important; margin: 24px 0 32px !important; }',
+    '.jdgm-rev-widg__summary-average { font-size: 36px !important; font-weight: 300 !important; color: #1a1a1a !important; }',
+    '.jdgm-rev-widg__summary-text { font-size: 11px !important; letter-spacing: 0.08em !important; text-transform: uppercase !important; color: #888 !important; }',
 
-    /* ── Write a Review — outline, Tom Ford style ── */
-    '.jdgm-write-rev-link { background: transparent !important; color: #1a1a1a !important; border: 1px solid #1a1a1a !important; border-radius: 0 !important; padding: 18px 56px !important; font-size: 11px !important; letter-spacing: 0.22em !important; text-transform: uppercase !important; font-weight: 400 !important; text-decoration: none !important; display: inline-block !important; text-align: center !important; transition: background 0.25s, color 0.25s !important; margin-left: auto !important; }',
-    '.jdgm-write-rev-link:hover { background: #1a1a1a !important; color: #fff !important; }',
+    /* ---- Stars: filled = black, empty = light grey ---- */
+    '.jdgm-star, .jdgm-star.jdgm--on { color: #1a1a1a !important; font-size: 15px !important; }',
+    '.jdgm-star.jdgm--off { color: #d0d0d0 !important; }',
 
-    /* ── Hide the icon-style filter + sort buttons ── */
-    '.jdgm-sort-btn, .jdgm-filter-btn, [class*="jdgm-rev-widg__sort-icon"], [class*="jdgm-rev-widg__filter-icon"] { display: none !important; }',
+    /* ---- "Write a review" button ---- */
+    '.jdgm-write-rev-link { display: inline-block !important; background: #1a1a1a !important; color: #fff !important; border: 1px solid #1a1a1a !important; border-radius: 0 !important; padding: 13px 36px !important; font-size: 11px !important; letter-spacing: 0.16em !important; text-transform: uppercase !important; font-weight: 400 !important; text-decoration: none !important; transition: background 0.25s, color 0.25s !important; }',
+    '.jdgm-write-rev-link:hover { background: #fff !important; color: #1a1a1a !important; }',
 
-    /* ── Sort + Search ── */
-    '.jdgm-rev-widg__sort-wrapper { margin-bottom: 16px !important; }',
-    '.jdgm-rev-widg__sort-wrapper label { font-size: 11px !important; letter-spacing: 0.12em !important; text-transform: uppercase !important; color: #888 !important; margin-right: 10px !important; }',
-    '.jdgm-rev-widg__sort-wrapper select { border: 1px solid #e0e0e0 !important; border-radius: 0 !important; font-size: 11px !important; letter-spacing: 0.10em !important; text-transform: uppercase !important; color: #1a1a1a !important; padding: 12px 18px !important; background: #fff !important; appearance: auto !important; }',
-    '.jdgm-search-rev { margin-bottom: 36px !important; }',
-    '.jdgm-search-rev__input { border: 1px solid #e0e0e0 !important; border-radius: 0 !important; font-size: 12px !important; letter-spacing: 0.06em !important; color: #1a1a1a !important; padding: 12px 18px !important; background: #fff !important; width: 100% !important; max-width: 420px !important; }',
+    /* ---- Sort / search controls ---- */
+    '.jdgm-rev-widg__sort-wrapper select, .jdgm-search-rev__input { border: 1px solid #d5d5d5 !important; border-radius: 0 !important; font-size: 11px !important; letter-spacing: 0.06em !important; text-transform: uppercase !important; color: #1a1a1a !important; padding: 10px 14px !important; background: #fff !important; }',
 
-    /* ── No avatar circles ── */
-    '.jdgm-rev__author-pic, .jdgm-rev__author-pic-wrapper, .jdgm-rev__author-pic-container { display: none !important; width: 0 !important; height: 0 !important; margin: 0 !important; padding: 0 !important; overflow: hidden !important; }',
+    /* ---- Review cards ---- */
+    '.jdgm-rev { border-top: none !important; border-bottom: 1px solid #ececec !important; padding: 28px 0 !important; }',
+    '.jdgm-rev__author { font-size: 15px !important; letter-spacing: 0.03em !important; color: #1a1a1a !important; font-weight: 400 !important; }',
+    '.jdgm-rev__location, .jdgm-rev__timestamp { font-size: 10px !important; letter-spacing: 0.08em !important; text-transform: uppercase !important; color: #999 !important; }',
+    '.jdgm-rev__title { font-size: 14px !important; letter-spacing: 0.02em !important; color: #1a1a1a !important; font-weight: 400 !important; margin-top: 8px !important; }',
+    '.jdgm-rev__body p, .jdgm-rev__body { font-size: 14px !important; line-height: 1.75 !important; color: #555 !important; }',
 
-    /* ── Review cards ── */
-    '.jdgm-rev { border-top: 1px solid #e8e8e8 !important; border-bottom: none !important; padding: 40px 0 !important; margin: 0 !important; }',
+    /* ---- Verified / recommend badges ---- */
+    '.jdgm-rev__buyer-badge { color: #888 !important; font-size: 11px !important; letter-spacing: 0.04em !important; }',
 
-    /* ── Header row: stars left, date right ── */
-    '.jdgm-rev__header { display: flex !important; justify-content: space-between !important; align-items: center !important; margin-bottom: 14px !important; }',
+    /* ---- Helpful / not helpful ---- */
+    '.jdgm-rev__helpful-btns span { color: #aaa !important; font-size: 11px !important; letter-spacing: 0.04em !important; }',
 
-    /* ── Stars ── */
-    '.jdgm-star, .jdgm-star.jdgm--on { color: #1a1a1a !important; font-size: 17px !important; }',
-    '.jdgm-star.jdgm--off { color: #d8d8d8 !important; font-size: 17px !important; }',
+    /* ---- Load more / pagination ---- */
+    '.jdgm-paginate__page, .jdgm-paginate__load-more { border: 1px solid #1a1a1a !important; border-radius: 0 !important; background: #fff !important; color: #1a1a1a !important; font-size: 10px !important; letter-spacing: 0.16em !important; text-transform: uppercase !important; padding: 12px 28px !important; }',
+    '.jdgm-paginate__page.jdgm-curt, .jdgm-paginate__load-more:hover { background: #1a1a1a !important; color: #fff !important; }',
 
-    /* ── Date ── */
-    '.jdgm-rev__timestamp { font-size: 11px !important; letter-spacing: 0.08em !important; text-transform: uppercase !important; color: #aaa !important; }',
-
-    /* ── Reviewer name ── */
-    '.jdgm-rev__author { font-size: 15px !important; letter-spacing: 0.04em !important; color: #1a1a1a !important; font-weight: 600 !important; display: block !important; margin-bottom: 4px !important; }',
-
-    /* ── Location ── */
-    '.jdgm-rev__location { font-size: 11px !important; letter-spacing: 0.08em !important; text-transform: uppercase !important; color: #888 !important; display: block !important; margin-bottom: 16px !important; }',
-
-    /* ── Review title — uppercase bold like Tom Ford ── */
-    '.jdgm-rev__title { font-size: 13px !important; letter-spacing: 0.16em !important; text-transform: uppercase !important; color: #1a1a1a !important; font-weight: 700 !important; margin: 0 0 14px !important; display: block !important; }',
-
-    /* ── Review body ── */
-    '.jdgm-rev__body p, .jdgm-rev__body { font-size: 15px !important; line-height: 1.85 !important; color: #444 !important; margin: 0 0 10px !important; }',
-
-    /* ── "Yes, I would recommend" ── */
-    '.jdgm-rev__buyer-badge { color: #888 !important; font-size: 11px !important; letter-spacing: 0.06em !important; margin-top: 14px !important; display: block !important; }',
-
-    /* ── Helpful ── */
-    '.jdgm-rev__helpful-btns span { color: #ccc !important; font-size: 11px !important; letter-spacing: 0.04em !important; }',
-
-    /* ── Load more ── */
-    '.jdgm-paginate__load-more { border: 1px solid #1a1a1a !important; border-radius: 0 !important; background: #fff !important; color: #1a1a1a !important; font-size: 10px !important; letter-spacing: 0.18em !important; text-transform: uppercase !important; padding: 14px 40px !important; display: block !important; margin: 40px auto 0 !important; }',
-    '.jdgm-paginate__load-more:hover { background: #1a1a1a !important; color: #fff !important; }',
-    '.jdgm-paginate__page { border: 1px solid #e0e0e0 !important; border-radius: 0 !important; background: #fff !important; color: #1a1a1a !important; font-size: 10px !important; letter-spacing: 0.14em !important; text-transform: uppercase !important; padding: 10px 20px !important; }',
-    '.jdgm-paginate__page.jdgm-curt { background: #1a1a1a !important; color: #fff !important; border-color: #1a1a1a !important; }',
-
-    /* ── Write-a-review modal ── */
+    /* ---- Write-a-review modal ---- */
     '.jdgm-modal__content { font-family: inherit !important; }',
-    '.jdgm-form__title { font-size: 20px !important; letter-spacing: 0.18em !important; text-transform: uppercase !important; font-weight: 400 !important; color: #1a1a1a !important; margin-bottom: 28px !important; }',
-    '.jdgm-form input[type="text"], .jdgm-form input[type="email"], .jdgm-form textarea { border: 1px solid #d5d5d5 !important; border-radius: 0 !important; font-size: 13px !important; padding: 12px 14px !important; }',
+    '.jdgm-form__title { font-size: 18px !important; letter-spacing: 0.12em !important; text-transform: uppercase !important; font-weight: 400 !important; color: #1a1a1a !important; }',
+    '.jdgm-form input[type="text"], .jdgm-form input[type="email"], .jdgm-form textarea { border: 1px solid #d5d5d5 !important; border-radius: 0 !important; font-size: 13px !important; }',
     '.jdgm-form input:focus, .jdgm-form textarea:focus { border-color: #1a1a1a !important; outline: none !important; box-shadow: none !important; }',
-    '.jdgm-form__submit-button { background: #1a1a1a !important; color: #fff !important; border: 1px solid #1a1a1a !important; border-radius: 0 !important; font-size: 11px !important; letter-spacing: 0.18em !important; text-transform: uppercase !important; font-weight: 400 !important; padding: 16px 44px !important; }',
+    '.jdgm-form__submit-button { background: #1a1a1a !important; color: #fff !important; border: 1px solid #1a1a1a !important; border-radius: 0 !important; font-size: 11px !important; letter-spacing: 0.16em !important; text-transform: uppercase !important; font-weight: 400 !important; padding: 14px 36px !important; }',
     '.jdgm-form__submit-button:hover { background: #fff !important; color: #1a1a1a !important; }',
-    '.jdgm-modal__close-btn { color: #1a1a1a !important; font-size: 24px !important; }',
 
-    /* ── Mobile ── */
-    '@media (max-width: 749px) {',
-    '  .jdgm-rev-widg__title { font-size: 24px !important; letter-spacing: 0.16em !important; text-align: left !important; margin-bottom: 36px !important; }',
-    '  .jdgm-rev-widg__summary { gap: 16px !important; padding: 22px 0 !important; margin-bottom: 28px !important; }',
-    '  .jdgm-rev-widg__summary-average { font-size: 36px !important; }',
-    '  .jdgm-write-rev-link { width: 100% !important; margin-left: 0 !important; padding: 16px 24px !important; margin-top: 8px !important; }',
-    '  .jdgm-rev { padding: 28px 0 !important; }',
-    '  .jdgm-rev__body p, .jdgm-rev__body { font-size: 14px !important; line-height: 1.75 !important; }',
-    '  .jdgm-rev__title { font-size: 12px !important; }',
-    '  .jdgm-search-rev__input { max-width: 100% !important; }',
-    '}'
+    /* ---- Modal close button ---- */
+    '.jdgm-modal__close-btn { color: #1a1a1a !important; font-size: 22px !important; }'
   ].join('\n');
 
   function inject() {
@@ -117,33 +81,13 @@
     document.head.appendChild(style);
   }
 
-  /* Rename heading from "Customer Reviews" → "Reviews" (CSS uppercases it) */
-  function renameHeading() {
-    var el = document.querySelector('.jdgm-rev-widg__title');
-    if (el && el.textContent.trim().toLowerCase() !== 'reviews') {
-      el.textContent = 'Reviews';
-    }
-  }
-
-  /* Re-inject every time Judge.me adds any style/link to <head> */
-  var obs = new MutationObserver(function(mutations) {
-    for (var i = 0; i < mutations.length; i++) {
-      var nodes = mutations[i].addedNodes;
-      for (var j = 0; j < nodes.length; j++) {
-        if (nodes[j].id !== 'ma-jdgm-override') { inject(); break; }
-      }
-    }
-    renameHeading();
-  });
-  obs.observe(document.head, { childList: true });
-
+  /* Inject immediately, on window load, on any Judge.me event, and after 1.5s safety net */
   inject();
-  window.addEventListener('load', function() { inject(); renameHeading(); });
-  document.addEventListener('jdgm:all:done', function() { inject(); renameHeading(); });
+  window.addEventListener('load', inject);
+  document.addEventListener('jdgm:all:done', inject);
   document.addEventListener('jdgm:loadMore:finished', inject);
-  setTimeout(function() { inject(); renameHeading(); }, 800);
-  setTimeout(function() { inject(); renameHeading(); }, 3000);
-  setTimeout(function() { inject(); renameHeading(); }, 6000);
+  setTimeout(inject, 1500);
+  setTimeout(inject, 3000);
 })();
 </script>
 
