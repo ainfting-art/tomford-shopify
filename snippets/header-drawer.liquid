@@ -113,7 +113,11 @@
           {% if linklist.levels < 3 %}
             {% assign first_accordion_open = false %}
             {% assign animation_index = 0 %}
+            {% assign ma_seen_handles = '' %}
             {%- for link in linklist.links -%}
+              {% assign ma_link_key = link.handle | append: '|' %}
+              {% if ma_seen_handles contains ma_link_key %}{% continue %}{% endif %}
+              {% assign ma_seen_handles = ma_seen_handles | append: ma_link_key %}
               {% assign animation_index = animation_index | plus: 1 %}
               <li
                 style="--menu-drawer-animation-index: {{ animation_index }};"
@@ -266,7 +270,11 @@
               Handle menus with 3 levels of links
             {%- endcomment -%}
             {% assign animation_index = 0 %}
+            {% assign ma_seen_handles = '' %}
             {%- for link in linklist.links -%}
+              {% assign ma_link_key = link.handle | append: '|' %}
+              {% if ma_seen_handles contains ma_link_key %}{% continue %}{% endif %}
+              {% assign ma_seen_handles = ma_seen_handles | append: ma_link_key %}
               {% assign animation_index = animation_index | plus: 1 %}
               <li
                 class="menu-drawer__list-item"
@@ -712,6 +720,42 @@
               </details>
             </drawer-localization-component>
           {% endif %}
+        {%- endif -%}
+
+        {%- comment -%} Simple direct localization selector — bypasses JS component {%- endcomment -%}
+        {%- liquid
+          assign _has_countries = false
+          if localization.available_countries.size > 1
+            assign _has_countries = true
+          endif
+          assign _has_languages = false
+          if localization.available_languages.size > 1
+            assign _has_languages = true
+          endif
+        -%}
+        {%- if _has_countries or _has_languages -%}
+          <div class="ma-drawer-locale">
+            {%- form 'localization', id: 'DrawerLocalizationForm' -%}
+              {%- if _has_countries -%}
+                <select name="country_code" class="ma-drawer-locale__select" onchange="this.form.submit()">
+                  {%- for country in localization.available_countries -%}
+                    <option value="{{ country.iso_code }}"{% if country.iso_code == localization.country.iso_code %} selected{% endif %}>
+                      {{ country.name }} ({{ country.currency.iso_code }})
+                    </option>
+                  {%- endfor -%}
+                </select>
+              {%- endif -%}
+              {%- if _has_languages -%}
+                <select name="language_code" class="ma-drawer-locale__select" onchange="this.form.submit()">
+                  {%- for language in localization.available_languages -%}
+                    <option value="{{ language.iso_code }}" lang="{{ language.iso_code }}"{% if language.iso_code == localization.language.iso_code %} selected{% endif %}>
+                      {{ language.endonym_name | capitalize }}
+                    </option>
+                  {%- endfor -%}
+                </select>
+              {%- endif -%}
+            {%- endform -%}
+          </div>
         {%- endif -%}
       </div>
 
@@ -1451,5 +1495,26 @@
 
 .menu-drawer__search-button:hover {
   color: var(--color-foreground-muted);
+}
+
+.ma-drawer-locale {
+  padding: 16px var(--drawer-padding, 20px) 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-top: 1px solid var(--color-border);
+}
+
+.ma-drawer-locale__select {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-foreground);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  padding: 10px 14px;
+  width: 100%;
+  cursor: pointer;
+  appearance: auto;
 }
 {% endstylesheet %}
