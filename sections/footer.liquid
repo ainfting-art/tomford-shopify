@@ -309,6 +309,28 @@
   white-space: nowrap;
 }
 
+.ma-footer__locale {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ma-footer__locale-select {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #000;
+  background: transparent;
+  border: 1px solid #e0e0e0;
+  padding: 8px 12px;
+  cursor: pointer;
+  appearance: auto;
+}
+
+.ma-footer__locale-select:hover {
+  border-color: #000;
+}
+
 .ma-footer__crafted {
   font-size: 10px;
   color: #888;
@@ -686,6 +708,41 @@
       {% else %}
         <a href="{{ routes.root_url }}" class="ma-footer__brand" aria-label="{{ shop.name | escape }} home">Maison Amiir</a>
       {% endif %}
+
+      {%- liquid
+        assign show_footer_country = false
+        if localization.available_countries.size > 1
+          assign show_footer_country = true
+        endif
+        assign show_footer_language = false
+        if localization.available_languages.size > 1
+          assign show_footer_language = true
+        endif
+      -%}
+      {%- if show_footer_country or show_footer_language -%}
+        <div class="ma-footer__locale">
+          {%- form 'localization', id: 'FooterLocalizationForm' -%}
+            {%- if show_footer_country -%}
+              <select name="country_code" class="ma-footer__locale-select" onchange="this.form.submit()">
+                {%- for country in localization.available_countries -%}
+                  <option value="{{ country.iso_code }}"{% if country.iso_code == localization.country.iso_code %} selected{% endif %}>
+                    {{ country.name }} ({{ country.currency.iso_code }})
+                  </option>
+                {%- endfor -%}
+              </select>
+            {%- endif -%}
+            {%- if show_footer_language -%}
+              <select name="language_code" class="ma-footer__locale-select" onchange="this.form.submit()">
+                {%- for language in localization.available_languages -%}
+                  <option value="{{ language.iso_code }}" lang="{{ language.iso_code }}"{% if language.iso_code == localization.language.iso_code %} selected{% endif %}>
+                    {{ language.endonym_name | capitalize }}
+                  </option>
+                {%- endfor -%}
+              </select>
+            {%- endif -%}
+          {%- endform -%}
+        </div>
+      {%- endif -%}
 
       <div class="ma-footer__bottom-right">
 
