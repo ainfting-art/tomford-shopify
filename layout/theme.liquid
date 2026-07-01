@@ -303,5 +303,39 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         }
       }
     </style>
+    <style>
+.ma-reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.75s cubic-bezier(0.4, 0, 0.2, 1), transform 0.75s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.ma-reveal.ma-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>
+
+<script>
+(function () {
+  function init() {
+    var sections = Array.prototype.slice.call(document.querySelectorAll('.shopify-section'));
+    sections.forEach(function (s) {
+      if (s.querySelector('.ma-drawer, .ma-search, .ma-header-wrap, .custom-hero-video')) return;
+      s.classList.add('ma-reveal');
+    });
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          e.target.classList.add('ma-in');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -32px 0px' });
+    document.querySelectorAll('.ma-reveal').forEach(function (el) { io.observe(el); });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
   </body>
 </html>
