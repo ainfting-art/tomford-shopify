@@ -140,6 +140,66 @@ h2 {
 }
 
 /* ============================================
+   HOMEPAGE PRODUCT CARDS — Tasks 22 & 23
+   ============================================ */
+
+/* Task 22: Breathing room — more padding and gap between elements */
+[data-template="index"] .product-card .product-card__content {
+  padding-block-start: 16px !important;
+  padding-block-end: 20px !important;
+  padding-inline-start: 4px !important;
+  padding-inline-end: 4px !important;
+  gap: 6px !important;
+}
+
+/* Task 23: Typographic hierarchy */
+/* Product name — stronger, clearer */
+[data-template="index"] .product-card__content > a:nth-child(3) > div > p {
+  font-size: 14px;
+  line-height: 1.35;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: #1a1a1a;
+  text-transform: uppercase;
+}
+
+/* Tagline/description — lighter, subdued */
+[data-template="index"] .product-card__content > div:nth-child(4) > p {
+  font-size: 11px;
+  line-height: 1.55;
+  font-weight: 400;
+  color: #888;
+  letter-spacing: 0.04em;
+}
+
+/* Price — clean, lighter weight */
+[data-template="index"] .product-card__content > product-price > div > div > .price {
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: #1a1a1a;
+}
+
+/* Discover link — extra breathing room above */
+[data-template="index"] .ma-discover-link {
+  margin-top: 10px;
+}
+
+@media screen and (max-width: 749px) {
+  [data-template="index"] .product-card .product-card__content {
+    padding-block-start: 12px !important;
+    padding-block-end: 16px !important;
+    gap: 4px !important;
+  }
+  [data-template="index"] .product-card__content > a:nth-child(3) > div > p {
+    font-size: 12px;
+  }
+  [data-template="index"] .product-card__content > product-price > div > div > .price {
+    font-size: 12px;
+  }
+}
+
+/* ============================================
    PRODUCT PAGE
    ============================================ */
 
@@ -228,7 +288,7 @@ footer {
   letter-spacing: 0.7px;
   font-weight: 600;
   text-transform: uppercase;
-  font-family: Montserrat;
+  font-family: var(--font-body--family);
 }
 
 .foot .menu__heading.h3 {
@@ -243,7 +303,7 @@ footer {
   letter-spacing: 0.7px;
   font-weight: 400;
   text-transform: uppercase;
-  font-family: Montserrat;
+  font-family: var(--font-body--family);
 }
 
 .copyright > div > div > p {
@@ -251,11 +311,11 @@ footer {
   letter-spacing: 0.6px;
   font-weight: 500;
   text-transform: uppercase;
-  font-family: Montserrat;
+  font-family: var(--font-body--family);
 }
 
 .signi-coll h4 {
-  font-family: Montserrat;
+  font-family: var(--font-body--family);
 }
 
 .footy strong {
