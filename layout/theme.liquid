@@ -223,6 +223,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     {% endif %}
     <script>document.body.style.visibility='visible'</script>
 
+    {% if template.name == 'index' %}
     <a
       href="https://wa.me/971586458135"
       class="ma-whatsapp-btn"
@@ -235,6 +236,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </svg>
       <span class="ma-whatsapp-btn__label">WHATSAPP</span>
     </a>
+    {% endif %}
 
     <style>
       .ma-whatsapp-btn {
@@ -285,9 +287,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         .ma-whatsapp-btn {
           bottom: 20px;
           right: 16px;
-          height: 44px;
-          padding: 0 14px;
+          width: 40px;
+          height: 40px;
+          padding: 0;
+          border-radius: 50%;
+          justify-content: center;
           gap: 0;
+        }
+        .ma-whatsapp-btn__icon {
+          width: 18px;
+          height: 18px;
         }
         .ma-whatsapp-btn__label {
           display: none;
