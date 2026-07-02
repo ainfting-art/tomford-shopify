@@ -2512,6 +2512,16 @@
         "cta_link": "shopify://collections/womens-collection",
         "cta_label": "Shop Now"
       }
+    },
+    "ma_most_wanted_JMH4Mt": {
+      "type": "ma-most-wanted",
+      "name": "Most Wanted Grid",
+      "settings": {
+        "heading": "For Him",
+        "collection": "mens-collection",
+        "cta_link": "shopify://collections/mens-collection",
+        "cta_label": "Shop Now"
+      }
     }
   },
   "order": [
@@ -2530,6 +2540,7 @@
     "custom_liquid_h3icnB",
     "section_Rrah97",
     "custom_liquid_BJfMpc",
-    "ma_most_wanted_edUXRw"
+    "ma_most_wanted_edUXRw",
+    "ma_most_wanted_JMH4Mt"
   ]
 }
