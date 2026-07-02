@@ -9,49 +9,6 @@
  */
 {
   "sections": {
-    "ma_value_story": {
-      "type": "ma-value-story",
-      "name": "MA Value Story",
-      "blocks": {
-        "pillar_1": { "type": "pillar", "settings": { "icon": "◈", "title": "30% Extrait Oil", "text": "The same concentration tier as the houses that inspire us." } },
-        "pillar_2": { "type": "pillar", "settings": { "icon": "✦", "title": "International Fragrance Oils", "text": "Sourced from the same global suppliers as luxury perfumery." } },
-        "pillar_3": { "type": "pillar", "settings": { "icon": "⬡", "title": "Small Batch Crafted", "text": "Made to order, never mass-warehoused." } },
-        "pillar_4": { "type": "pillar", "settings": { "icon": "◎", "title": "No Boutique Markup", "text": "You pay for the scent, not the storefront." } }
-      },
-      "block_order": ["pillar_1", "pillar_2", "pillar_3", "pillar_4"],
-      "settings": {
-        "overline": "The Maison Amiir Difference",
-        "heading": "Luxury, Without the Markup",
-        "lede": "A great fragrance is mostly oil and intention — not the marble store or the magazine campaign. We put the money where you smell it: 30% extrait concentration, international fragrance oils, made in small batches.",
-        "closing": "Extrait Concentration · From ₹2,200"
-      }
-    },
-    "ma_brand_story": {
-      "type": "ma-brand-story",
-      "name": "MA Brand Story",
-      "settings": {
-        "image_tag": "Atelier",
-        "overline": "The House of Amiir",
-        "heading": "Perfume is the most intense form of memory.",
-        "body": "Each Maison Amiir fragrance is crafted in limited batches at extrait concentration — every drop carrying the weight of its intention. Luxury, made to be lived in rather than locked away.",
-        "link_label": "Our Story",
-        "link_url": "/pages/our-story"
-      }
-    },
-    "ma_social_proof": {
-      "type": "ma-social-proof",
-      "name": "MA Social Proof",
-      "blocks": {
-        "review_1": { "type": "review", "settings": { "stars": 5, "quote": "Beast mode longevity. Exactly what a good oud should be — I could still smell it the next morning.", "author": "Siddharth M.", "product": "Desert Velvet Oud" } },
-        "review_2": { "type": "review", "settings": { "stars": 5, "quote": "The amber and oud on skin is incredible. Very long lasting — I'm obsessed.", "author": "Ananya T.", "product": "Desert Velvet Oud" } },
-        "review_3": { "type": "review", "settings": { "stars": 4, "quote": "A fragrance that rewards patience. Now I wear it every time I want to feel luxurious.", "author": "Dev S.", "product": "Desert Velvet Oud" } }
-      },
-      "block_order": ["review_1", "review_2", "review_3"],
-      "settings": {
-        "heading": "What Our Clients Say",
-        "aggregate": "4.3 · Verified Buyers"
-      }
-    },
     "section_wQqHde": {
       "type": "section",
       "blocks": {
@@ -503,6 +460,70 @@
         "color_scheme": "scheme-4",
         "padding-block-start": 48,
         "padding-block-end": 48
+      }
+    },
+    "ma_value_story": {
+      "type": "ma-value-story",
+      "blocks": {
+        "pillar_1": {
+          "type": "pillar",
+          "settings": {
+            "icon": "◈",
+            "title": "30% Extrait Oil",
+            "text": "The same concentration tier as the houses that inspire us."
+          }
+        },
+        "pillar_2": {
+          "type": "pillar",
+          "settings": {
+            "icon": "✦",
+            "title": "International Fragrance Oils",
+            "text": "Sourced from the same global suppliers as luxury perfumery."
+          }
+        },
+        "pillar_3": {
+          "type": "pillar",
+          "settings": {
+            "icon": "⬡",
+            "title": "Small Batch Crafted",
+            "text": "Made to order, never mass-warehoused."
+          }
+        },
+        "pillar_4": {
+          "type": "pillar",
+          "settings": {
+            "icon": "◎",
+            "title": "No Boutique Markup",
+            "text": "You pay for the scent, not the storefront."
+          }
+        }
+      },
+      "block_order": [
+        "pillar_1",
+        "pillar_2",
+        "pillar_3",
+        "pillar_4"
+      ],
+      "name": "MA Value Story",
+      "settings": {
+        "bg_image": "shopify://shop_images/8K_extreme_macro__202604281913.jpg",
+        "overlay": 65,
+        "overline": "The Maison Amiir Difference",
+        "heading": "Luxury, Without the Markup",
+        "lede": "A great fragrance is mostly oil and intention — not the marble store or the magazine campaign. We put the money where you smell it: 30% extrait concentration, international fragrance oils, made in small batches.",
+        "closing": "Extrait Concentration · From ₹2,200"
+      }
+    },
+    "ma_brand_story": {
+      "type": "ma-brand-story",
+      "name": "MA Brand Story",
+      "settings": {
+        "image_tag": "Atelier",
+        "overline": "The House of Amiir",
+        "heading": "Perfume is the most intense form of memory.",
+        "body": "Each Maison Amiir fragrance is crafted in limited batches at extrait concentration — every drop carrying the weight of its intention. Luxury, made to be lived in rather than locked away.",
+        "link_label": "Our Story",
+        "link_url": "/pages/our-story"
       }
     },
     "section_FXJXr3": {
@@ -1862,6 +1883,48 @@
         "color_scheme": "scheme-4",
         "padding-block-start": 48,
         "padding-block-end": 20
+      }
+    },
+    "ma_social_proof": {
+      "type": "ma-social-proof",
+      "blocks": {
+        "review_1": {
+          "type": "review",
+          "settings": {
+            "stars": 5,
+            "quote": "Beast mode longevity. Exactly what a good oud should be — I could still smell it the next morning.",
+            "author": "Siddharth M.",
+            "product": "Desert Velvet Oud"
+          }
+        },
+        "review_2": {
+          "type": "review",
+          "settings": {
+            "stars": 5,
+            "quote": "The amber and oud on skin is incredible. Very long lasting — I'm obsessed.",
+            "author": "Ananya T.",
+            "product": "Desert Velvet Oud"
+          }
+        },
+        "review_3": {
+          "type": "review",
+          "settings": {
+            "stars": 4,
+            "quote": "A fragrance that rewards patience. Now I wear it every time I want to feel luxurious.",
+            "author": "Dev S.",
+            "product": "Desert Velvet Oud"
+          }
+        }
+      },
+      "block_order": [
+        "review_1",
+        "review_2",
+        "review_3"
+      ],
+      "name": "MA Social Proof",
+      "settings": {
+        "heading": "What Our Clients Say",
+        "aggregate": "4.3 · Verified Buyers"
       }
     },
     "1775472317723a194f": {
