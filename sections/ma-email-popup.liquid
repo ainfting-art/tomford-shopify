@@ -4,7 +4,6 @@
 <div class="ma-popup"
      id="ma-popup"
      data-delay="{{ section.settings.delay | default: 5 }}"
-     data-days="{{ section.settings.frequency_days | default: 7 }}"
      hidden>
   <div class="ma-popup__overlay" data-ma-popup-close></div>
 
@@ -35,6 +34,8 @@
           <span class="ma-popup__code-copy">Copy</span>
         </button>
       </div>
+
+      <p class="ma-popup__thanks">You are already on the list — enjoy.</p>
 
       <p class="ma-popup__or">Prefer it in your inbox?</p>
 
@@ -80,6 +81,12 @@
   .ma-popup__or { font-size: .78rem; font-weight: 300; letter-spacing: .2em; text-indent: .2em; text-transform: uppercase; color: rgba(23,20,16,.55); margin: 0 0 .8rem; }
   .ma-popup__code-wrap { margin-bottom: 1.5rem; }
 
+  /* subscribed visitors keep the code, never the ask */
+  .ma-popup__thanks { display: none; font-size: .82rem; font-weight: 300; letter-spacing: .16em; text-transform: uppercase; color: #A8894E; margin: 0 0 1.2rem; }
+  .ma-popup--subscribed .ma-popup__thanks { display: block; }
+  .ma-popup--subscribed .ma-popup__or,
+  .ma-popup--subscribed .ma-popup__form { display: none; }
+
   .ma-popup__form { margin: 0 0 1.4rem; }
   .ma-popup__email { display: block; width: 100%; background: transparent; border: 0; border-bottom: 1px solid rgba(23,20,16,.4); padding: .7em 0; font-size: 16px; font-weight: 300; color: #171410; font-family: inherit; border-radius: 0; -webkit-appearance: none; appearance: none; text-align: center; margin-bottom: 1rem; }
   .ma-popup__email:focus { outline: none; border-bottom-color: #A8894E; }
@@ -120,8 +127,7 @@
     { "type": "text", "id": "headline", "label": "Headline", "default": "Receive 15% Off" },
     { "type": "textarea", "id": "subtext", "label": "Text", "default": "Join the Maison and enjoy 15% off your first order — with stories, launches, and private previews to follow." },
     { "type": "text", "id": "code", "label": "Discount code", "default": "WELCOME15" },
-    { "type": "range", "id": "delay", "label": "Delay before showing (seconds)", "min": 1, "max": 30, "step": 1, "default": 5 },
-    { "type": "range", "id": "frequency_days", "label": "Days before showing again", "min": 1, "max": 60, "step": 1, "default": 7 }
+    { "type": "range", "id": "delay", "label": "Delay before showing (seconds)", "min": 1, "max": 30, "step": 1, "default": 5 }
   ],
   "enabled_on": { "groups": ["footer"] },
   "presets": [{ "name": "MA Email Popup" }]

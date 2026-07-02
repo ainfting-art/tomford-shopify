@@ -1,6 +1,9 @@
-/* MAISON AMIIR — welcome email popup */
+/* MAISON AMIIR — welcome email popup
+   Shows once per visit (browser session), on every visit.
+   After subscribing (persistent, per device) the subscribe form is
+   hidden forever — the popup keeps offering the welcome code only. */
 (function () {
-  var KEY_SEEN = 'ma_popup_last_seen';
+  var KEY_SEEN = 'ma_popup_seen_session';
   var KEY_DONE = 'ma_popup_subscribed';
 
   function init() {
@@ -8,17 +11,14 @@
     if (!root || root.dataset.maPopupInit) return;
     root.dataset.maPopupInit = '1';
 
-    var store;
-    try { store = window.localStorage; } catch (e) { store = null; }
+    function get(store, k) { try { return window[store].getItem(k); } catch (e) { return null; } }
+    function set(store, k, v) { try { window[store].setItem(k, v); } catch (e) {} }
 
-    function get(k) { try { return store ? store.getItem(k) : null; } catch (e) { return null; } }
-    function set(k, v) { try { if (store) store.setItem(k, v); } catch (e) {} }
+    /* once per visit: sessionStorage dies when the browser/tab closes */
+    if (get('sessionStorage', KEY_SEEN) === '1') return;
 
-    /* never show again once subscribed; respect frequency window otherwise */
-    if (get(KEY_DONE) === '1') return;
-    var days = parseInt(root.dataset.days, 10) || 7;
-    var last = parseInt(get(KEY_SEEN), 10) || 0;
-    if (last && (Date.now() - last) < days * 864e5) return;
+    /* subscribed before (this device): keep the code, drop the ask */
+    if (get('localStorage', KEY_DONE) === '1') root.classList.add('ma-popup--subscribed');
 
     /* don't interrupt checkout or cart */
     if (/^\/(cart|checkouts?)\b/.test(location.pathname)) return;
@@ -29,7 +29,7 @@
       requestAnimationFrame(function () {
         requestAnimationFrame(function () { root.classList.add('is-open'); });
       });
-      set(KEY_SEEN, String(Date.now()));
+      set('sessionStorage', KEY_SEEN, '1');
       document.addEventListener('keydown', onKey);
     }
 
@@ -70,9 +70,9 @@
       });
     }
 
-    /* mark subscribed so it never returns */
+    /* mark subscribed so the form never returns on this device */
     var form = root.querySelector('.ma-popup__form');
-    if (form) form.addEventListener('submit', function () { set(KEY_DONE, '1'); });
+    if (form) form.addEventListener('submit', function () { set('localStorage', KEY_DONE, '1'); });
 
     var delay = (parseInt(root.dataset.delay, 10) || 5) * 1000;
     setTimeout(open, delay);
