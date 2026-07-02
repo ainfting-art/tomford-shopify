@@ -1,5 +1,15 @@
 {% comment %} Find Your Signature — Maison Amiir fragrance quiz {% endcomment %}
 
+{%- comment %} On the shared default page template, only render on the quiz page itself.
+    Keeps the quiz off FAQ/other pages while it lives in page.json. {% endcomment -%}
+{%- assign maq_hide = false -%}
+{%- if request.page_type == 'page' and page.handle != 'find-your-signature' -%}
+  {%- unless template.suffix contains 'find-your-signature' -%}
+    {%- assign maq_hide = true -%}
+  {%- endunless -%}
+{%- endif -%}
+{%- unless maq_hide -%}
+
 {%- comment %} Only lock the page (hide header/nav) on a dedicated page template, NEVER on the homepage {% endcomment -%}
 {%- assign maq_is_page = false -%}
 {%- if request.page_type == 'page' -%}{%- assign maq_is_page = true -%}{%- endif -%}
@@ -916,6 +926,7 @@
 
 </section>
 </div>
+{%- endunless -%}
 
 {% schema %}
 {
