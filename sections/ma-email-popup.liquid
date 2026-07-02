@@ -1,0 +1,122 @@
+{% comment %} MAISON AMIIR — welcome email popup (Clive Christian style split modal) {% endcomment %}
+
+{%- if section.settings.enabled -%}
+<div class="ma-popup"
+     id="ma-popup"
+     data-delay="{{ section.settings.delay | default: 5 }}"
+     data-days="{{ section.settings.frequency_days | default: 7 }}"
+     hidden>
+  <div class="ma-popup__overlay" data-ma-popup-close></div>
+
+  <div class="ma-popup__modal" role="dialog" aria-modal="true" aria-label="Welcome offer">
+    <button class="ma-popup__close" type="button" aria-label="Close" data-ma-popup-close>&times;</button>
+
+    <div class="ma-popup__media">
+      {%- if section.settings.image != blank -%}
+        {{ section.settings.image | image_url: width: 900 | image_tag: loading: 'lazy', alt: 'Maison Amiir', class: 'ma-popup__img' }}
+      {%- else -%}
+        <div class="ma-popup__media-fallback">
+          {%- if settings.logo != blank -%}
+            {{ settings.logo | image_url: width: 420 | image_tag: loading: 'lazy', alt: 'Maison Amiir emblem' }}
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="ma-popup__panel">
+      <p class="ma-popup__eyebrow">Maison Amiir</p>
+      <h2 class="ma-popup__headline">{{ section.settings.headline | default: 'Receive 15% Off' }}</h2>
+      <p class="ma-popup__text">{{ section.settings.subtext | default: 'Join the Maison and enjoy 15% off your first order — with stories, launches, and private previews to follow.' }}</p>
+
+      <form class="ma-popup__form" action="/contact#contact_form" method="post" accept-charset="UTF-8">
+        <input type="hidden" name="form_type" value="customer">
+        <input type="hidden" name="utf8" value="✓">
+        <input type="hidden" name="contact[tags]" value="newsletter,popup">
+        <input class="ma-popup__email" type="email" name="contact[email]" placeholder="Email address" required autocomplete="email" aria-label="Email address">
+        <button class="ma-popup__submit" type="submit">Subscribe</button>
+      </form>
+
+      <div class="ma-popup__code-wrap">
+        <p class="ma-popup__code-label">Your welcome code</p>
+        <button class="ma-popup__code" type="button" data-ma-popup-code="{{ section.settings.code | default: 'WELCOME15' }}" aria-label="Copy discount code">
+          <span class="ma-popup__code-value">{{ section.settings.code | default: 'WELCOME15' }}</span>
+          <span class="ma-popup__code-copy">Copy</span>
+        </button>
+      </div>
+
+      <button class="ma-popup__dismiss" type="button" data-ma-popup-close>No thank you</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  #shopify-section-{{ section.id }} { opacity: 1 !important; }
+
+  .ma-popup { position: fixed; inset: 0; z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 1.2rem; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+  .ma-popup[hidden] { display: none; }
+  .ma-popup *, .ma-popup *::before, .ma-popup *::after { box-sizing: border-box; }
+
+  .ma-popup__overlay { position: absolute; inset: 0; background: rgba(15, 13, 10, .58); opacity: 0; transition: opacity .5s ease; }
+  .ma-popup.is-open .ma-popup__overlay { opacity: 1; }
+
+  .ma-popup__modal { position: relative; display: grid; grid-template-columns: 1fr 1fr; width: min(880px, 100%); max-height: min(640px, 92vh); background: #F7F3EA; color: #171410; overflow: hidden; opacity: 0; transform: translateY(26px); transition: opacity .6s cubic-bezier(.16,1,.3,1), transform .6s cubic-bezier(.16,1,.3,1); }
+  .ma-popup.is-open .ma-popup__modal { opacity: 1; transform: none; }
+
+  .ma-popup__close { position: absolute; top: .6rem; right: .9rem; z-index: 2; background: none; border: none; font-size: 2rem; font-weight: 200; line-height: 1; color: #171410; cursor: pointer; padding: .4rem; }
+  .ma-popup__media { position: relative; min-height: 100%; background: #171410; }
+  .ma-popup__img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .ma-popup__media-fallback { display: flex; align-items: center; justify-content: center; height: 100%; background: #F1EBDD; }
+  .ma-popup__media-fallback img { width: 70%; height: auto; }
+
+  .ma-popup__panel { padding: clamp(1.8rem, 4vw, 3rem) clamp(1.4rem, 3.5vw, 2.6rem); text-align: center; display: flex; flex-direction: column; justify-content: center; overflow-y: auto; }
+  .ma-popup__eyebrow { font-size: .72rem; letter-spacing: .45em; text-indent: .45em; text-transform: uppercase; color: #A8894E; margin: 0 0 1rem; }
+  .ma-popup__headline { font-size: clamp(1.5rem, 3.2vw, 2.1rem); font-weight: 250; letter-spacing: .14em; text-indent: .14em; text-transform: uppercase; line-height: 1.3; margin: 0 0 .9rem; }
+  .ma-popup__text { font-size: .98rem; font-weight: 300; line-height: 1.85; margin: 0 0 1.5rem; color: rgba(23,20,16,.85); }
+
+  .ma-popup__form { margin: 0 0 1.4rem; }
+  .ma-popup__email { display: block; width: 100%; background: transparent; border: 0; border-bottom: 1px solid rgba(23,20,16,.4); padding: .7em 0; font-size: 16px; font-weight: 300; color: #171410; font-family: inherit; border-radius: 0; -webkit-appearance: none; appearance: none; text-align: center; margin-bottom: 1rem; }
+  .ma-popup__email:focus { outline: none; border-bottom-color: #A8894E; }
+  .ma-popup__email::placeholder { color: rgba(23,20,16,.45); letter-spacing: .1em; text-transform: uppercase; font-size: .82rem; }
+  .ma-popup__submit { display: block; width: 100%; padding: 1em; background: #171410; color: #F7F3EA; border: 1px solid #171410; font-family: inherit; font-size: .82rem; letter-spacing: .34em; text-indent: .34em; text-transform: uppercase; cursor: pointer; transition: background .3s, color .3s; }
+  .ma-popup__submit:hover { background: transparent; color: #171410; }
+
+  .ma-popup__code-wrap { margin: 0 0 1.2rem; }
+  .ma-popup__code-label { font-size: .7rem; letter-spacing: .3em; text-indent: .3em; text-transform: uppercase; color: rgba(23,20,16,.55); margin: 0 0 .5rem; }
+  .ma-popup__code { display: inline-flex; align-items: center; gap: 1rem; background: transparent; border: 1px dashed #A8894E; padding: .65em 1.3em; cursor: pointer; font-family: inherit; }
+  .ma-popup__code-value { font-size: 1.02rem; letter-spacing: .3em; text-indent: .3em; font-weight: 400; color: #171410; }
+  .ma-popup__code-copy { font-size: .68rem; letter-spacing: .22em; text-transform: uppercase; color: #A8894E; border-bottom: 1px solid currentColor; }
+
+  .ma-popup__dismiss { background: none; border: none; font-family: inherit; font-size: .78rem; font-weight: 300; letter-spacing: .12em; color: rgba(23,20,16,.55); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; padding: .2rem; }
+
+  @media (max-width: 649px) {
+    .ma-popup { padding: .9rem; }
+    .ma-popup__modal { grid-template-columns: 1fr; max-height: 92vh; width: min(420px, 100%); }
+    .ma-popup__media { height: 200px; min-height: 0; }
+    .ma-popup__panel { padding: 1.6rem 1.3rem 1.8rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ma-popup__overlay, .ma-popup__modal { transition: none; }
+  }
+</style>
+
+<script src="{{ 'ma-email-popup.js' | asset_url }}" defer></script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "MA Email Popup",
+  "tag": "section",
+  "settings": [
+    { "type": "checkbox", "id": "enabled", "label": "Enable popup", "default": true },
+    { "type": "image_picker", "id": "image", "label": "Image (left panel)" },
+    { "type": "text", "id": "headline", "label": "Headline", "default": "Receive 15% Off" },
+    { "type": "textarea", "id": "subtext", "label": "Text", "default": "Join the Maison and enjoy 15% off your first order — with stories, launches, and private previews to follow." },
+    { "type": "text", "id": "code", "label": "Discount code", "default": "WELCOME15" },
+    { "type": "range", "id": "delay", "label": "Delay before showing (seconds)", "min": 1, "max": 30, "step": 1, "default": 5 },
+    { "type": "range", "id": "frequency_days", "label": "Days before showing again", "min": 1, "max": 60, "step": 1, "default": 7 }
+  ],
+  "enabled_on": { "groups": ["footer"] },
+  "presets": [{ "name": "MA Email Popup" }]
+}
+{% endschema %}
