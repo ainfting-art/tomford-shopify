@@ -846,6 +846,7 @@
       "block_order": [
         "group_iW39dz"
       ],
+      "disabled": true,
       "name": "2 - Signature Scent",
       "settings": {
         "content_direction": "column",
@@ -1289,6 +1290,7 @@
       "block_order": [
         "group_gLTyrn"
       ],
+      "disabled": true,
       "name": "2 - Signature Scent",
       "settings": {
         "content_direction": "column",
@@ -1859,7 +1861,8 @@
         "group_mtynnb",
         "group_bFnRwy"
       ],
-      "name": "4 - Story You Wear",
+      "disabled": true,
+      "name": "BEST SELLERS ",
       "settings": {
         "collection_list": [
           "mens-collection",
