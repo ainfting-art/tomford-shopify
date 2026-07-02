@@ -1,6 +1,6 @@
 {% comment %} MAISON AMIIR — welcome email popup (Clive Christian style split modal) {% endcomment %}
 
-{%- if section.settings.enabled -%}
+{%- if section.settings.enabled and request.page_type == 'index' -%}
 <div class="ma-popup"
      id="ma-popup"
      data-delay="{{ section.settings.delay | default: 5 }}"
@@ -28,14 +28,6 @@
       <h2 class="ma-popup__headline">{{ section.settings.headline | default: 'Receive 15% Off' }}</h2>
       <p class="ma-popup__text">{{ section.settings.subtext | default: 'Join the Maison and enjoy 15% off your first order — with stories, launches, and private previews to follow.' }}</p>
 
-      <form class="ma-popup__form" action="/contact#contact_form" method="post" accept-charset="UTF-8">
-        <input type="hidden" name="form_type" value="customer">
-        <input type="hidden" name="utf8" value="✓">
-        <input type="hidden" name="contact[tags]" value="newsletter,popup">
-        <input class="ma-popup__email" type="email" name="contact[email]" placeholder="Email address" required autocomplete="email" aria-label="Email address">
-        <button class="ma-popup__submit" type="submit">Subscribe</button>
-      </form>
-
       <div class="ma-popup__code-wrap">
         <p class="ma-popup__code-label">Your welcome code</p>
         <button class="ma-popup__code" type="button" data-ma-popup-code="{{ section.settings.code | default: 'WELCOME15' }}" aria-label="Copy discount code">
@@ -43,6 +35,16 @@
           <span class="ma-popup__code-copy">Copy</span>
         </button>
       </div>
+
+      <p class="ma-popup__or">Prefer it in your inbox?</p>
+
+      <form class="ma-popup__form" action="/contact#contact_form" method="post" accept-charset="UTF-8">
+        <input type="hidden" name="form_type" value="customer">
+        <input type="hidden" name="utf8" value="✓">
+        <input type="hidden" name="contact[tags]" value="newsletter,popup">
+        <input class="ma-popup__email" type="email" name="contact[email]" placeholder="Email address" required autocomplete="email" aria-label="Email address">
+        <button class="ma-popup__submit" type="submit">Send the code &amp; subscribe</button>
+      </form>
 
       <button class="ma-popup__dismiss" type="button" data-ma-popup-close>No thank you</button>
     </div>
@@ -72,6 +74,9 @@
   .ma-popup__eyebrow { font-size: .72rem; letter-spacing: .45em; text-indent: .45em; text-transform: uppercase; color: #A8894E; margin: 0 0 1rem; }
   .ma-popup__headline { font-size: clamp(1.5rem, 3.2vw, 2.1rem); font-weight: 250; letter-spacing: .14em; text-indent: .14em; text-transform: uppercase; line-height: 1.3; margin: 0 0 .9rem; }
   .ma-popup__text { font-size: .98rem; font-weight: 300; line-height: 1.85; margin: 0 0 1.5rem; color: rgba(23,20,16,.85); }
+
+  .ma-popup__or { font-size: .78rem; font-weight: 300; letter-spacing: .2em; text-indent: .2em; text-transform: uppercase; color: rgba(23,20,16,.55); margin: 0 0 .8rem; }
+  .ma-popup__code-wrap { margin-bottom: 1.5rem; }
 
   .ma-popup__form { margin: 0 0 1.4rem; }
   .ma-popup__email { display: block; width: 100%; background: transparent; border: 0; border-bottom: 1px solid rgba(23,20,16,.4); padding: .7em 0; font-size: 16px; font-weight: 300; color: #171410; font-family: inherit; border-radius: 0; -webkit-appearance: none; appearance: none; text-align: center; margin-bottom: 1rem; }
