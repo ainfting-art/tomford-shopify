@@ -1,1 +1,41 @@
-{"type":"footer","name":"Footer","sections":{"footer_m9NzUG":{"type":"footer","name":"t:names.footer","settings":{"section_width":"full-width","gap":0,"color_scheme":"scheme-1","padding-block-start":0,"padding-block-end":0}},"ma_email_popup":{"type":"ma-email-popup","name":"MA Email Popup","settings":{"enabled":true,"headline":"Receive 15% Off","code":"WELCOME15","delay":5}}},"order":["footer_m9NzUG","ma_email_popup"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "footer",
+  "name": "Footer",
+  "sections": {
+    "footer_m9NzUG": {
+      "type": "footer",
+      "name": "t:names.footer",
+      "settings": {
+        "section_width": "full-width",
+        "gap": 0,
+        "color_scheme": "scheme-1",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "ma_email_popup": {
+      "type": "ma-email-popup",
+      "name": "MA Email Popup",
+      "settings": {
+        "enabled": true,
+        "headline": "Receive 15% Off",
+        "subtext": "Join the Maison and enjoy 15% off your first order — with stories, launches, and private previews to follow.",
+        "code": "WELCOME15",
+        "delay": 2
+      }
+    }
+  },
+  "order": [
+    "footer_m9NzUG",
+    "ma_email_popup"
+  ]
+}
