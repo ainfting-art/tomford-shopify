@@ -811,6 +811,7 @@
     },
     "ma_most_wanted_edUXRw": {
       "type": "ma-most-wanted",
+      "custom_css": [],
       "name": "Most Wanted Grid",
       "settings": {
         "heading": "For Her",
@@ -2472,6 +2473,7 @@
       "block_order": [
         "group_AfAKnE"
       ],
+      "disabled": true,
       "name": "t:names.rich_text_section",
       "settings": {
         "content_direction": "column",
