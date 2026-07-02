@@ -9,6 +9,23 @@
  */
 {
   "sections": {
+    "ma_value_story": {
+      "type": "ma-value-story",
+      "name": "MA Value Story",
+      "blocks": {
+        "pillar_1": { "type": "pillar", "settings": { "icon": "◈", "title": "30% Extrait Oil", "text": "The same concentration tier as the houses that inspire us." } },
+        "pillar_2": { "type": "pillar", "settings": { "icon": "✦", "title": "International Fragrance Oils", "text": "Sourced from the same global suppliers as luxury perfumery." } },
+        "pillar_3": { "type": "pillar", "settings": { "icon": "⬡", "title": "Small Batch Crafted", "text": "Made to order, never mass-warehoused." } },
+        "pillar_4": { "type": "pillar", "settings": { "icon": "◎", "title": "No Boutique Markup", "text": "You pay for the scent, not the storefront." } }
+      },
+      "block_order": ["pillar_1", "pillar_2", "pillar_3", "pillar_4"],
+      "settings": {
+        "overline": "The Maison Amiir Difference",
+        "heading": "Luxury, Without the Markup",
+        "lede": "A great fragrance is mostly oil and intention — not the marble store or the magazine campaign. We put the money where you smell it: 30% extrait concentration, international fragrance oils, made in small batches.",
+        "closing": "Extrait Concentration · From ₹2,200"
+      }
+    },
     "section_wQqHde": {
       "type": "section",
       "blocks": {
@@ -2522,6 +2539,7 @@
     "custom_liquid_hmfTtV",
     "ma_most_wanted_3eDjHb",
     "product_list_nrNjhj",
+    "ma_value_story",
     "section_FXJXr3",
     "ma_quiz_invite_J9337a",
     "ma_most_wanted_edUXRw",
