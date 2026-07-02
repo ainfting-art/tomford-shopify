@@ -44,7 +44,10 @@
           "blocks": {}
         }
       },
-      "block_order": ["heading", "page-content"],
+      "block_order": [
+        "heading",
+        "page-content"
+      ],
       "settings": {
         "content_direction": "column",
         "gap": 32,
@@ -52,7 +55,35 @@
         "padding-block-start": 40,
         "padding-block-end": 80
       }
+    },
+    "find_your_signature_RhyWck": {
+      "type": "find-your-signature",
+      "name": "Find Your Signature",
+      "settings": {
+        "page_brand": "Maison Amiir",
+        "collection": "all-perfumes",
+        "bg_image": "shopify://shop_images/Pi7_GIF_CMP_2.gif",
+        "media_opacity": 100,
+        "eyebrow": "Maison Amiir",
+        "headline": "Find Your Signature",
+        "subtext": "Six questions. The house already knows you — let it choose your scent.",
+        "begin_label": "Begin",
+        "accent_color": "#ffffff",
+        "q2_img1": "shopify://shop_images/Pi7_GIF_CMP_4.gif",
+        "q2_img3": "shopify://shop_images/Pi7_GIF_CMP_1_69c27a98-fe0a-46fa-8903-b2c0cf3c3483.gif",
+        "q2_img4": "shopify://shop_images/Pi7_GIF_CMP_3.gif",
+        "q2_img5": "shopify://shop_images/Pi7_GIF_CMP_11.gif",
+        "q6_img1": "shopify://shop_images/Pi7_GIF_CMP_8.gif",
+        "q6_img2": "shopify://shop_images/Pi7_GIF_CMP_6.gif",
+        "result_eyebrow": "Your Signature",
+        "result_title": "We found your scent.",
+        "save_text": "Save your result — we’ll send it to your inbox.",
+        "explore_link": ""
+      }
     }
   },
-  "order": ["main"]
+  "order": [
+    "main",
+    "find_your_signature_RhyWck"
+  ]
 }
