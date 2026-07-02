@@ -52,7 +52,9 @@
 </div>
 
 <style>
-  #shopify-section-{{ section.id }} { opacity: 1 !important; }
+  /* Horizon leaves opacity/transform on section wrappers for its reveal
+     system; a transformed ancestor would trap this position:fixed modal. */
+  #shopify-section-{{ section.id }} { opacity: 1 !important; transform: none !important; }
 
   .ma-popup { position: fixed; inset: 0; z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 1.2rem; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
   .ma-popup[hidden] { display: none; }
