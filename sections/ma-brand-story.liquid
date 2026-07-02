@@ -1,0 +1,75 @@
+{% comment %} MAISON AMIIR — §5 Brand Story: 2-column editorial, image + narrative {% endcomment %}
+
+<div class="ma-bstory">
+  <div class="ma-bstory__img ma-home-reveal">
+    {%- if section.settings.image != blank -%}
+      {{ section.settings.image | image_url: width: 1400 | image_tag: loading: 'lazy', alt: section.settings.image.alt | default: 'The Maison Amiir atelier', class: 'ma-bstory__photo' }}
+    {%- else -%}
+      <div class="ma-bstory__placeholder" aria-hidden="true"><div class="ma-bstory__bottle"></div></div>
+    {%- endif -%}
+    {%- if section.settings.image_tag != blank -%}
+      <span class="ma-bstory__imgtag">{{ section.settings.image_tag }}</span>
+    {%- endif -%}
+  </div>
+
+  <div class="ma-bstory__text">
+    <p class="ma-bstory__overline ma-home-reveal">{{ section.settings.overline }}</p>
+    <h2 class="ma-bstory__h2 ma-home-reveal">{{ section.settings.heading }}</h2>
+    <p class="ma-bstory__body ma-home-reveal">{{ section.settings.body }}</p>
+    {%- if section.settings.link_label != blank -%}
+      <a class="ma-bstory__link ma-home-reveal" href="{{ section.settings.link_url | default: '/pages/our-story' }}">{{ section.settings.link_label }} &rarr;</a>
+    {%- endif -%}
+  </div>
+</div>
+
+<style>
+  #shopify-section-{{ section.id }} { opacity: 1 !important; transform: none !important; }
+
+  .ma-bstory {
+    display: grid;
+    grid-template-columns: 55% 45%;
+    min-height: clamp(380px, 46vw, 540px);
+    background: #fff;
+    color: rgba(0,0,0,.81);
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  }
+  .ma-bstory *, .ma-bstory *::before, .ma-bstory *::after { box-sizing: border-box; }
+
+  .ma-bstory__img { position: relative; overflow: hidden; background: #0e0a06; }
+  .ma-bstory__photo { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .ma-bstory__placeholder { position: absolute; inset: 0; background: linear-gradient(135deg, #1a1208 0%, #2d2010 50%, #0a0806 100%); display: flex; align-items: center; justify-content: center; }
+  .ma-bstory__bottle { width: 120px; height: 200px; background: linear-gradient(160deg, #c8a060 0%, #6b4a1e 40%, #1a0e05 100%); border-radius: 4px; opacity: .7; }
+  .ma-bstory__imgtag { position: absolute; bottom: 1.7rem; left: 1.7rem; font-size: .68rem; letter-spacing: .3em; text-transform: uppercase; color: rgba(255,255,255,.65); }
+
+  .ma-bstory__text { padding: clamp(2.6rem, 5.5vw, 4rem) clamp(1.5rem, 4.5vw, 3.3rem); display: flex; flex-direction: column; justify-content: center; align-items: flex-start; }
+  .ma-bstory__overline { font-size: .72rem; letter-spacing: .28em; text-transform: uppercase; color: rgba(0,0,0,.4); margin: 0 0 1.2rem; }
+  .ma-bstory__h2 { font-family: 'Sinoreta', Georgia, serif; font-size: clamp(1.7rem, 3.4vw, 2.35rem); font-weight: 300; line-height: 1.28; color: rgba(0,0,0,.85); margin: 0 0 1.2rem; }
+  .ma-bstory__body { font-size: clamp(.95rem, 1.35vw, 1.05rem); font-weight: 300; color: rgba(0,0,0,.6); line-height: 1.9; max-width: 42ch; margin: 0 0 1.6rem; }
+  .ma-bstory__link { font-size: .74rem; letter-spacing: .16em; text-transform: uppercase; color: rgba(0,0,0,.81); text-decoration: none; border-bottom: 1px solid rgba(0,0,0,.35); padding-bottom: .35em; transition: border-color .3s; }
+  .ma-bstory__link:hover { border-color: rgba(0,0,0,.85); }
+
+  @media (max-width: 749px) {
+    .ma-bstory { grid-template-columns: 1fr; }
+    .ma-bstory__img { height: 260px; }
+    .ma-bstory__text { padding: 2.2rem 1.3rem 2.8rem; }
+  }
+</style>
+
+<script src="{{ 'ma-home-sections.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "MA Brand Story",
+  "tag": "section",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "text", "id": "image_tag", "label": "Image corner tag", "default": "Atelier" },
+    { "type": "text", "id": "overline", "label": "Overline", "default": "The House of Amiir" },
+    { "type": "textarea", "id": "heading", "label": "Heading", "default": "Perfume is the most intense form of memory." },
+    { "type": "textarea", "id": "body", "label": "Body", "default": "Each Maison Amiir fragrance is crafted in limited batches at extrait concentration — every drop carrying the weight of its intention. Luxury, made to be lived in rather than locked away." },
+    { "type": "text", "id": "link_label", "label": "Link label", "default": "Our Story" },
+    { "type": "url", "id": "link_url", "label": "Link URL" }
+  ],
+  "presets": [{ "name": "MA Brand Story" }]
+}
+{% endschema %}
