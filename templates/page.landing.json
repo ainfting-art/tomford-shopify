@@ -12,7 +12,12 @@
     "main": {
       "type": "main-page",
       "settings": {}
+    },
+    "ma_connect": {
+      "type": "ma-connect",
+      "name": "MA Careers & Collab",
+      "settings": {}
     }
   },
-  "order": ["main"]
+  "order": ["main", "ma_connect"]
 }

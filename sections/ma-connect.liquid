@@ -1,0 +1,170 @@
+{% comment %} MAISON AMIIR — Careers & Brand Collaborations (single enquiry form)
+   Lives in page.landing.json; renders only on the page with handle 'connect'. {% endcomment %}
+
+{%- if request.page_type == 'page' and page.handle == 'connect' -%}
+
+<div class="ma-connect">
+
+  <header class="ma-connect__hero">
+    <p class="ma-connect__eyebrow">Careers &amp; Collaborations</p>
+    <h1 class="ma-connect__title">Join the Maison</h1>
+    <p class="ma-connect__lede">Great houses are built by rare hands — and rarer partnerships. If you believe in quiet luxury, precise craft, and stories told through scent, we would like to hear from you.</p>
+  </header>
+
+  <div class="ma-connect__paths">
+    <div class="ma-connect__path">
+      <p class="ma-connect__path-title">Careers</p>
+      <p class="ma-connect__path-text">For those who wish to build the house from within — perfumery, design, operations, and everything between.</p>
+    </div>
+    <div class="ma-connect__path">
+      <p class="ma-connect__path-title">Brand Collaborations</p>
+      <p class="ma-connect__path-text">For creators, curators, and houses whose world complements our own.</p>
+    </div>
+  </div>
+
+  <div class="ma-connect__form-wrap">
+
+    <div class="ma-connect__success" id="ma-connect-success" hidden>
+      <p class="ma-connect__success-title">Received with thanks.</p>
+      <p>Your enquiry has reached the Maison. If there is a shared future, we will write to you.</p>
+    </div>
+
+    <form class="ma-connect__form" action="https://formsubmit.co/collab@maisonamiir.com" method="POST" enctype="multipart/form-data">
+      <input type="hidden" name="_subject" value="New enquiry — maisonamiir.com">
+      <input type="hidden" name="_template" value="table">
+      <input type="hidden" name="_captcha" value="false">
+      <input type="hidden" name="_next" value="https://maisonamiir.com/pages/connect?sent=1">
+      <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+
+      <div class="ma-connect__row">
+        <div class="ma-connect__field">
+          <label for="ma-c-name">Full name</label>
+          <input type="text" id="ma-c-name" name="name" required autocomplete="name">
+        </div>
+        <div class="ma-connect__field">
+          <label for="ma-c-email">Email</label>
+          <input type="email" id="ma-c-email" name="email" required autocomplete="email">
+        </div>
+      </div>
+
+      <div class="ma-connect__row">
+        <div class="ma-connect__field">
+          <label for="ma-c-phone">Phone <span class="ma-connect__optional">(optional)</span></label>
+          <input type="tel" id="ma-c-phone" name="phone" autocomplete="tel">
+        </div>
+        <div class="ma-connect__field">
+          <label for="ma-c-type">I am writing about</label>
+          <select id="ma-c-type" name="enquiry_type" required>
+            <option value="Career Opportunity">A career opportunity</option>
+            <option value="Brand Collaboration">A brand collaboration</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="ma-connect__field">
+        <label for="ma-c-message">Your message</label>
+        <textarea id="ma-c-message" name="message" rows="6" required placeholder="Tell us who you are, and what we could create together."></textarea>
+      </div>
+
+      <div class="ma-connect__field ma-connect__field--file">
+        <label for="ma-c-file">Résumé / portfolio <span class="ma-connect__optional">(PDF or Word, up to 10&nbsp;MB)</span></label>
+        <input type="file" id="ma-c-file" name="attachment" accept=".pdf,.doc,.docx">
+      </div>
+
+      <button type="submit" class="ma-connect__submit">Submit Enquiry</button>
+
+      <p class="ma-connect__alt">Prefer email? Write to <a href="mailto:collab@maisonamiir.com">collab@maisonamiir.com</a></p>
+    </form>
+  </div>
+
+</div>
+
+<style>
+  #shopify-section-{{ section.id }} { opacity: 1 !important; }
+
+  .ma-connect {
+    --mc-ink: #171410;
+    --mc-cream: #F7F3EA;
+    --mc-accent: #A8894E;
+    background: var(--mc-cream);
+    color: var(--mc-ink);
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    padding: clamp(4rem, 9vw, 7.5rem) 1.5rem clamp(5rem, 10vw, 8rem);
+  }
+  .ma-connect *, .ma-connect *::before, .ma-connect *::after { box-sizing: border-box; }
+
+  .ma-connect__hero, .ma-connect__paths, .ma-connect__form-wrap { max-width: 720px; margin: 0 auto; }
+
+  .ma-connect__hero { text-align: center; animation: maConnectIn 1.1s cubic-bezier(.16,1,.3,1) both; }
+  .ma-connect__eyebrow { font-size: .78rem; letter-spacing: .5em; text-indent: .5em; text-transform: uppercase; color: var(--mc-accent); margin: 0 0 1.6rem; }
+  .ma-connect__title { font-size: clamp(2.3rem, 6vw, 3.9rem); font-weight: 200; letter-spacing: .16em; text-indent: .16em; text-transform: uppercase; line-height: 1.15; margin: 0 0 1.2rem; }
+  .ma-connect__lede { font-size: clamp(1.13rem, 1.6vw, 1.3rem); font-weight: 300; line-height: 2; margin: 0 auto; max-width: 620px; }
+
+  .ma-connect__paths { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1.5rem, 4vw, 3rem); margin-top: clamp(2.6rem, 6vw, 4.2rem); text-align: center; animation: maConnectIn 1.1s .15s cubic-bezier(.16,1,.3,1) both; }
+  .ma-connect__path { border-top: 1px solid var(--mc-accent); padding-top: 1.4rem; }
+  .ma-connect__path-title { font-size: clamp(1rem, 1.6vw, 1.15rem); font-weight: 400; letter-spacing: .26em; text-indent: .26em; text-transform: uppercase; margin: 0 0 .7rem; }
+  .ma-connect__path-text { font-size: clamp(.98rem, 1.4vw, 1.1rem); font-weight: 300; line-height: 1.9; margin: 0; color: rgba(23,20,16,.78); }
+
+  .ma-connect__form-wrap { margin-top: clamp(2.8rem, 6vw, 4.5rem); animation: maConnectIn 1.1s .3s cubic-bezier(.16,1,.3,1) both; }
+
+  .ma-connect__success { text-align: center; border: 1px solid var(--mc-accent); background: rgba(255,255,255,.55); padding: 2.2rem 1.6rem; margin-bottom: 2.4rem; font-size: 1.08rem; font-weight: 300; line-height: 1.9; }
+  .ma-connect__success-title { letter-spacing: .3em; text-indent: .3em; text-transform: uppercase; font-size: .95rem; color: var(--mc-accent); margin: 0 0 .8rem; }
+  .ma-connect__success p:last-child { margin: 0; }
+
+  .ma-connect__row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; }
+  .ma-connect__field { margin-bottom: 1.6rem; text-align: left; }
+  .ma-connect__field label { display: block; font-size: .8rem; letter-spacing: .28em; text-transform: uppercase; margin-bottom: .6rem; color: rgba(23,20,16,.85); }
+  .ma-connect__optional { text-transform: none; letter-spacing: .05em; color: rgba(23,20,16,.5); }
+  .ma-connect__field input[type="text"],
+  .ma-connect__field input[type="email"],
+  .ma-connect__field input[type="tel"],
+  .ma-connect__field select,
+  .ma-connect__field textarea {
+    width: 100%; background: transparent; border: 0; border-bottom: 1px solid rgba(23,20,16,.35);
+    padding: .65em 0; font-size: 1.05rem; font-weight: 300; color: var(--mc-ink);
+    font-family: inherit; border-radius: 0; -webkit-appearance: none; appearance: none; transition: border-color .3s;
+  }
+  .ma-connect__field select { cursor: pointer; background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M6 9l6 6 6-6' stroke='%23171410' stroke-width='1.2'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right .2em center; background-size: 1em; }
+  .ma-connect__field textarea { resize: vertical; min-height: 120px; line-height: 1.8; }
+  .ma-connect__field input:focus, .ma-connect__field select:focus, .ma-connect__field textarea:focus { outline: none; border-bottom-color: var(--mc-accent); }
+
+  .ma-connect__field--file input[type="file"] { display: block; width: 100%; font-size: .95rem; font-weight: 300; padding: .8em 0; color: rgba(23,20,16,.75); }
+  .ma-connect__field--file input[type="file"]::file-selector-button {
+    font-family: inherit; font-size: .78rem; letter-spacing: .22em; text-transform: uppercase;
+    background: transparent; color: var(--mc-ink); border: 1px solid rgba(23,20,16,.45);
+    padding: .8em 1.6em; margin-right: 1.2em; cursor: pointer; transition: all .3s;
+  }
+  .ma-connect__field--file input[type="file"]::file-selector-button:hover { border-color: var(--mc-accent); color: var(--mc-accent); }
+
+  .ma-connect__submit {
+    display: block; width: 100%; margin-top: .6rem; padding: 1.15em 2em; cursor: pointer;
+    background: var(--mc-ink); color: var(--mc-cream); border: 1px solid var(--mc-ink);
+    font-family: inherit; font-size: .88rem; letter-spacing: .38em; text-indent: .38em; text-transform: uppercase;
+    transition: background .35s, color .35s;
+  }
+  .ma-connect__submit:hover { background: transparent; color: var(--mc-ink); }
+
+  .ma-connect__alt { text-align: center; font-size: .92rem; font-weight: 300; letter-spacing: .04em; margin: 1.8rem 0 0; color: rgba(23,20,16,.65); }
+  .ma-connect__alt a { color: var(--mc-accent); text-decoration: none; border-bottom: 1px solid currentColor; }
+
+  @keyframes maConnectIn { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .ma-connect__hero, .ma-connect__paths, .ma-connect__form-wrap { animation: none; } }
+
+  @media (max-width: 649px) {
+    .ma-connect__row { grid-template-columns: 1fr; gap: 0; }
+    .ma-connect__paths { grid-template-columns: 1fr; }
+  }
+</style>
+
+<script src="{{ 'ma-connect.js' | asset_url }}" defer></script>
+
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "MA Careers & Collab",
+  "tag": "section",
+  "settings": [],
+  "presets": [{ "name": "MA Careers & Collab" }]
+}
+{% endschema %}
