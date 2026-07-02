@@ -809,6 +809,26 @@
         "accent_color": "#b89766"
       }
     },
+    "ma_most_wanted_edUXRw": {
+      "type": "ma-most-wanted",
+      "name": "Most Wanted Grid",
+      "settings": {
+        "heading": "For Her",
+        "collection": "womens-collection",
+        "cta_link": "shopify://collections/womens-collection",
+        "cta_label": "Shop Now"
+      }
+    },
+    "ma_most_wanted_JMH4Mt": {
+      "type": "ma-most-wanted",
+      "name": "Most Wanted Grid",
+      "settings": {
+        "heading": "For Him",
+        "collection": "mens-collection",
+        "cta_link": "shopify://collections/mens-collection",
+        "cta_label": "Shop Now"
+      }
+    },
     "section_VhLBpg": {
       "type": "section",
       "blocks": {
@@ -1774,6 +1794,7 @@
         "group_mtynnb",
         "group_bFnRwy"
       ],
+      "disabled": true,
       "name": "4 - Story You Wear",
       "settings": {
         "collection_list": [
@@ -2319,17 +2340,6 @@
         "padding-block-end": 40
       }
     },
-    "custom_liquid_h3icnB": {
-      "type": "custom-liquid",
-      "name": "WAVE LIQUID",
-      "settings": {
-        "custom_liquid": "<style>\n/* ===== Wave Statement — light, minimal hook below the hero (NO black) ===== */\n.ma-wave{position:relative;overflow:hidden;background:linear-gradient(to bottom,#ececea 0%,#f7f5f1 26%,#f7f5f1 100%);padding:66px 24px 64px;text-align:center}\n\n/* Soft flowing wave line-art behind the text */\n.ma-wave__lines{position:absolute;left:0;top:50%;transform:translateY(-50%);width:200%;height:220px;pointer-events:none;z-index:1;animation:maWaveDrift 22s linear infinite}\n.ma-wave__lines path{fill:none;stroke:#9a8f7c}\n.ma-wave__lines .l1{stroke-opacity:.18;stroke-width:1.2}\n.ma-wave__lines .l2{stroke-opacity:.11;stroke-width:1}\n.ma-wave__lines .l3{stroke-opacity:.07;stroke-width:1.4}\n@keyframes maWaveDrift{from{transform:translate(0,-50%)}to{transform:translate(-50%,-50%)}}\n@media(prefers-reduced-motion:reduce){.ma-wave__lines{animation:none}}\n\n.ma-wave__inner{position:relative;z-index:2;max-width:680px;margin:0 auto}\n.ma-wave__words{font-size:10.5px;letter-spacing:.26em;text-transform:uppercase;color:#9a9088;margin:0 0 18px}\n.ma-wave__line{font-family:var(--font-primary--family),'Bodoni Moda',Didot,'Times New Roman',serif;font-style:italic;font-weight:400;font-size:30px;line-height:1.3;letter-spacing:.01em;color:#1f1d1a;margin:0 0 26px}\n.ma-wave__cta{display:inline-block;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:#1a1a1a;text-decoration:none;border-bottom:1px solid #1a1a1a;padding-bottom:4px;transition:opacity .25s ease}\n.ma-wave__cta:hover{opacity:.55}\n\n@media(max-width:770px){\n  .ma-wave{padding:48px 22px 46px}\n  .ma-wave__lines{height:170px}\n  .ma-wave__words{font-size:9.5px;letter-spacing:.22em;margin-bottom:14px}\n  .ma-wave__line{font-size:22px;margin-bottom:22px}\n}\n</style>\n\n<div class=\"ma-wave\">\n  <svg class=\"ma-wave__lines\" viewBox=\"0 0 2880 220\" preserveAspectRatio=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n    <path class=\"l3\" d=\"M0,95 C120,45 240,45 360,95 C480,145 600,145 720,95 C840,45 960,45 1080,95 C1200,145 1320,145 1440,95 C1560,45 1680,45 1800,95 C1920,145 2040,145 2160,95 C2280,45 2400,45 2520,95 C2640,145 2760,145 2880,95\"/>\n    <path class=\"l1\" d=\"M0,110 C120,70 240,70 360,110 C480,150 600,150 720,110 C840,70 960,70 1080,110 C1200,150 1320,150 1440,110 C1560,70 1680,70 1800,110 C1920,150 2040,150 2160,110 C2280,70 2400,70 2520,110 C2640,150 2760,150 2880,110\"/>\n    <path class=\"l2\" d=\"M0,130 C120,102 240,102 360,130 C480,158 600,158 720,130 C840,102 960,102 1080,130 C1200,158 1320,158 1440,130 C1560,102 1680,102 1800,130 C1920,158 2040,158 2160,130 C2280,102 2400,102 2520,130 C2640,158 2760,158 2880,130\"/>\n  </svg>\n\n  <div class=\"ma-wave__inner\">\n    <p class=\"ma-wave__words\">Extrait &middot; Limited Batches &middot; Made to Linger</p>\n    <p class=\"ma-wave__line\">The quiet luxury of being remembered.</p>\n    <a href=\"/collections/all\" class=\"ma-wave__cta\">Explore the Collection</a>\n  </div>\n</div>",
-        "color_scheme": "",
-        "section_width": "page-width",
-        "padding-block-start": 0,
-        "padding-block-end": 0
-      }
-    },
     "section_Rrah97": {
       "type": "section",
       "blocks": {
@@ -2502,26 +2512,6 @@
         "padding-block-start": 0,
         "padding-block-end": 0
       }
-    },
-    "ma_most_wanted_edUXRw": {
-      "type": "ma-most-wanted",
-      "name": "Most Wanted Grid",
-      "settings": {
-        "heading": "For Her",
-        "collection": "womens-collection",
-        "cta_link": "shopify://collections/womens-collection",
-        "cta_label": "Shop Now"
-      }
-    },
-    "ma_most_wanted_JMH4Mt": {
-      "type": "ma-most-wanted",
-      "name": "Most Wanted Grid",
-      "settings": {
-        "heading": "For Him",
-        "collection": "mens-collection",
-        "cta_link": "shopify://collections/mens-collection",
-        "cta_label": "Shop Now"
-      }
     }
   },
   "order": [
@@ -2532,15 +2522,14 @@
     "product_list_nrNjhj",
     "section_FXJXr3",
     "ma_quiz_invite_J9337a",
+    "ma_most_wanted_edUXRw",
+    "ma_most_wanted_JMH4Mt",
     "section_VhLBpg",
     "collection_list_TdwDkz",
     "1775472317723a194f",
     "section_TjeAEm",
     "section_8fVQtQ",
-    "custom_liquid_h3icnB",
     "section_Rrah97",
-    "custom_liquid_BJfMpc",
-    "ma_most_wanted_edUXRw",
-    "ma_most_wanted_JMH4Mt"
+    "custom_liquid_BJfMpc"
   ]
 }
