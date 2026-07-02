@@ -1,0 +1,88 @@
+{% comment %} MAISON AMIIR — §7 Social Proof: aggregate rating + 3 review cards {% endcomment %}
+
+<div class="ma-sproof">
+  <h2 class="ma-sproof__h2 ma-home-reveal">{{ section.settings.heading }}</h2>
+
+  <div class="ma-sproof__agg ma-home-reveal">
+    <div class="ma-sproof__agg-stars" aria-hidden="true">★★★★★</div>
+    <p class="ma-sproof__agg-label">{{ section.settings.aggregate }}</p>
+  </div>
+
+  <div class="ma-sproof__grid">
+    {%- for block in section.blocks -%}
+      <figure class="ma-sproof__card ma-home-reveal" {{ block.shopify_attributes }}>
+        <div class="ma-sproof__stars" aria-label="{{ block.settings.stars }} out of 5 stars">
+          {%- assign full = block.settings.stars -%}
+          {%- for i in (1..5) -%}{%- if i <= full -%}★{%- else -%}☆{%- endif -%}{%- endfor -%}
+        </div>
+        <blockquote class="ma-sproof__quote">&ldquo;{{ block.settings.quote }}&rdquo;</blockquote>
+        <figcaption class="ma-sproof__attr">{{ block.settings.author }} &nbsp;·&nbsp; {{ block.settings.product }}</figcaption>
+      </figure>
+    {%- endfor -%}
+  </div>
+</div>
+
+<style>
+  #shopify-section-{{ section.id }} { opacity: 1 !important; transform: none !important; }
+
+  .ma-sproof {
+    background: #fff;
+    color: rgba(0,0,0,.81);
+    text-align: center;
+    padding: clamp(3.5rem, 8vw, 5.5rem) clamp(1.2rem, 5vw, 3.5rem);
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  }
+  .ma-sproof *, .ma-sproof *::before, .ma-sproof *::after { box-sizing: border-box; }
+
+  .ma-sproof__h2 { font-family: 'Sinoreta', Georgia, serif; font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 300; letter-spacing: .02em; color: rgba(0,0,0,.85); margin: 0 0 1.8rem; }
+
+  .ma-sproof__agg { margin-bottom: clamp(2rem, 4.5vw, 2.8rem); }
+  .ma-sproof__agg-stars { font-size: 1.15rem; letter-spacing: 2px; color: rgba(0,0,0,.85); margin-bottom: .45rem; }
+  .ma-sproof__agg-label { font-size: .74rem; letter-spacing: .14em; text-transform: uppercase; color: rgba(0,0,0,.4); margin: 0; }
+
+  .ma-sproof__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; max-width: 1080px; margin: 0 auto; }
+  .ma-sproof__card { border: 1px solid rgba(0,0,0,.08); padding: clamp(1.6rem, 3vw, 1.9rem) 1.5rem; margin: 0; text-align: center; }
+  .ma-sproof__stars { font-size: .85rem; letter-spacing: 2px; color: rgba(0,0,0,.85); margin-bottom: .95rem; }
+  .ma-sproof__quote { font-family: 'Sinoreta', Georgia, serif; font-size: clamp(1.02rem, 1.5vw, 1.14rem); font-weight: 300; font-style: italic; color: rgba(0,0,0,.8); line-height: 1.7; margin: 0 0 1.1rem; }
+  .ma-sproof__attr { font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: rgba(0,0,0,.4); }
+
+  @media (max-width: 849px) {
+    .ma-sproof__grid { grid-template-columns: 1fr; max-width: 460px; }
+  }
+</style>
+
+<script src="{{ 'ma-home-sections.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "MA Social Proof",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "What Our Clients Say" },
+    { "type": "text", "id": "aggregate", "label": "Aggregate line", "default": "4.3 · Verified Buyers" }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        { "type": "range", "id": "stars", "label": "Stars", "min": 1, "max": 5, "step": 1, "default": 5 },
+        { "type": "textarea", "id": "quote", "label": "Quote" },
+        { "type": "text", "id": "author", "label": "Customer name" },
+        { "type": "text", "id": "product", "label": "Product" }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "MA Social Proof",
+      "blocks": [
+        { "type": "review", "settings": { "stars": 5, "quote": "Beast mode longevity. Exactly what a good oud should be — I could still smell it the next morning.", "author": "Siddharth M.", "product": "Desert Velvet Oud" } },
+        { "type": "review", "settings": { "stars": 5, "quote": "The amber and oud on skin is incredible. Very long lasting — I'm obsessed.", "author": "Ananya T.", "product": "Desert Velvet Oud" } },
+        { "type": "review", "settings": { "stars": 4, "quote": "A fragrance that rewards patience. Now I wear it every time I want to feel luxurious.", "author": "Dev S.", "product": "Desert Velvet Oud" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

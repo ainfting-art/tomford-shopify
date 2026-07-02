@@ -38,6 +38,20 @@
         "link_url": "/pages/our-story"
       }
     },
+    "ma_social_proof": {
+      "type": "ma-social-proof",
+      "name": "MA Social Proof",
+      "blocks": {
+        "review_1": { "type": "review", "settings": { "stars": 5, "quote": "Beast mode longevity. Exactly what a good oud should be — I could still smell it the next morning.", "author": "Siddharth M.", "product": "Desert Velvet Oud" } },
+        "review_2": { "type": "review", "settings": { "stars": 5, "quote": "The amber and oud on skin is incredible. Very long lasting — I'm obsessed.", "author": "Ananya T.", "product": "Desert Velvet Oud" } },
+        "review_3": { "type": "review", "settings": { "stars": 4, "quote": "A fragrance that rewards patience. Now I wear it every time I want to feel luxurious.", "author": "Dev S.", "product": "Desert Velvet Oud" } }
+      },
+      "block_order": ["review_1", "review_2", "review_3"],
+      "settings": {
+        "heading": "What Our Clients Say",
+        "aggregate": "4.3 · Verified Buyers"
+      }
+    },
     "section_wQqHde": {
       "type": "section",
       "blocks": {
@@ -2559,6 +2573,7 @@
     "ma_most_wanted_JMH4Mt",
     "section_VhLBpg",
     "collection_list_TdwDkz",
+    "ma_social_proof",
     "1775472317723a194f",
     "section_8fVQtQ",
     "section_TjeAEm",
