@@ -1,80 +1,480 @@
 {% comment %}
   Maison Amiir — custom footer (Tom Ford style)
+  Hardened: no horizontal overflow / cropping, responsive side padding.
+  Zones: 1) nav columns + newsletter  2) trust + payment bar  3) bottom bar
 {% endcomment %}
 
 {% stylesheet %}
+/* === MAISON AMIIR FOOTER — TOM FORD STYLE === */
+
+/* box-sizing + overflow guard so the footer can never be wider than the screen */
 .ma-footer, .ma-footer * { box-sizing: border-box; }
-.ma-footer { background: #fff; color: #000; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; border-top: 1px solid #e0e0e0; width: 100%; max-width: 100%; overflow-x: hidden; }
-.ma-footer__inner { max-width: 1400px; margin: 0 auto; padding: clamp(40px, 5vw, 80px) clamp(20px, 5vw, 80px) 0; }
-.ma-footer__columns { display: grid; grid-template-columns: 1.1fr 1fr 1fr 1.35fr; gap: 44px; padding-bottom: clamp(40px, 5vw, 80px); }
-.ma-footer__col { min-width: 0; }
-.ma-footer__col-heading { font-size: 15px; font-weight: 700; letter-spacing: -0.4px; text-transform: uppercase; color: #000; margin: 0 0 16px; padding: 0; }
-.ma-footer__col ul { list-style: none; margin: 0; padding: 0; }
-.ma-footer__col ul li a { font-size: 13px; color: #000; text-decoration: none; letter-spacing: -0.4px; text-transform: uppercase; line-height: 2.5; display: block; }
-.ma-footer__col ul li a:hover { text-decoration: underline; }
-.ma-footer__newsletter-subtext { font-size: 13px; color: #000; letter-spacing: -0.4px; line-height: 1.7; margin: 0 0 10px; }
-.ma-footer__email-input { display: block; width: 100%; max-width: 100%; box-sizing: border-box; border: 0.83px solid #b7b7b7; background: #fff; font-size: 12px; letter-spacing: -0.4px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #000; padding: 12px 14px; outline: none; margin-bottom: 10px; }
-.ma-footer__email-input::placeholder { color: #aaa; text-transform: uppercase; letter-spacing: -0.5px; }
-.ma-footer__consent { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 18px; }
-.ma-footer__consent input[type="checkbox"] { margin-top: 2px; flex-shrink: 0; accent-color: #000; width: 13px; height: 13px; cursor: pointer; }
-.ma-footer__consent-label { font-size: 11px; color: #000; letter-spacing: -0.4px; line-height: 1.6; }
-.ma-footer__consent-label a { color: #000; text-decoration: underline; }
-.ma-footer__signup-btn { display: block; width: 100%; max-width: 100%; background: #000; color: #fff; border: none; font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 14px; cursor: pointer; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; transition: background 0.2s; }
-.ma-footer__signup-btn:hover { background: #333; }
-.ma-footer__trust-wrap { border-top: 1px solid #e0e0e0; background: #fafafa; }
-.ma-footer__trust { max-width: 1400px; margin: 0 auto; padding: 14px clamp(20px, 5vw, 60px); display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
-.ma-footer__trust-left { display: flex; align-items: center; gap: 8px; }
-.ma-footer__lock { color: #9b111e; flex-shrink: 0; display: block; }
-.ma-footer__trust-text { font-size: 10px; color: #555; letter-spacing: 0.1em; text-transform: uppercase; }
-.ma-footer__trust-div { width: 1px; height: 14px; background: #d8d8d8; flex-shrink: 0; }
-.ma-footer__pay { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
-.ma-footer__pay-pill { background: #fff; border: 1px solid #d8d8d8; border-radius: 3px; padding: 3px 9px; font-size: 9px; font-weight: 700; color: #555; letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.7; }
-.ma-footer__pay-pill--rz { display: flex; align-items: center; gap: 5px; }
-.ma-footer__rz-dot { width: 6px; height: 6px; background: #9b111e; border-radius: 50%; flex-shrink: 0; }
-.ma-footer__ssl { font-size: 10px; color: #888; letter-spacing: 0.1em; text-transform: uppercase; margin-left: auto; }
-.ma-footer__bottom-wrap { border-top: 1px solid #e0e0e0; }
-.ma-footer__bottom { max-width: 1400px; margin: 0 auto; padding: 22px clamp(20px, 5vw, 60px); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
-.ma-footer__brand { display: inline-flex; align-items: center; font-family: 'Sinoreta', serif; font-size: 25px; font-weight: 700 !important; color: #000 !important; -webkit-text-fill-color: #000 !important; letter-spacing: 0.12em; text-decoration: none; text-transform: uppercase; flex-shrink: 0; }
-.ma-footer__logo-img { display: block; height: 38px; width: auto; max-width: 100%; }
-.ma-footer__bottom-right { display: flex; align-items: center; gap: 30px; flex-wrap: wrap; }
-.ma-footer__bottom-text { text-align: right; }
-.ma-footer__social { display: flex; align-items: center; gap: 18px; }
-.ma-footer__social a { display: flex; align-items: center; justify-content: center; color: #000; line-height: 1; transition: opacity 0.2s; }
-.ma-footer__social a:hover { opacity: 0.5; }
-.ma-footer__copyright { font-size: 13px; color: #000 !important; -webkit-text-fill-color: #000 !important; letter-spacing: -0.4px; white-space: nowrap; }
-.ma-footer__crafted { font-size: 10px; color: #888; letter-spacing: 0.1em; text-transform: uppercase; margin: 4px 0 0; }
+
+.ma-footer {
+  background: #fff;
+  color: #000;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  border-top: 1px solid #e0e0e0;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* ── TOP INNER WRAPPER ── */
+.ma-footer__inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  /* responsive side padding — shrinks gracefully instead of overflowing */
+  padding: clamp(40px, 5vw, 80px) clamp(20px, 5vw, 80px) 0;
+}
+
+/* ── FOUR COLUMNS ROW (3 nav + 1 newsletter) ── */
+.ma-footer__columns {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr 1fr 1.35fr;
+  gap: 44px;
+  padding-bottom: clamp(40px, 5vw, 80px);
+}
+
+.ma-footer__col {
+  min-width: 0;
+}
+
+.ma-footer__col-heading {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.4px;
+  text-transform: uppercase;
+  color: #000;
+  margin: 0 0 16px;
+  padding: 0;
+}
+
+.ma-footer__col ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ma-footer__col ul li a {
+  font-size: 13px;
+  color: #000;
+  text-decoration: none;
+  letter-spacing: -0.4px;
+  text-transform: uppercase;
+  line-height: 2.5;
+  display: block;
+}
+
+.ma-footer__col ul li a:hover {
+  text-decoration: underline;
+}
+
+/* ── NEWSLETTER (4th column, same row as nav) ── */
+.ma-footer__newsletter-subtext {
+  font-size: 13px;
+  color: #000;
+  letter-spacing: -0.4px;
+  line-height: 1.7;
+  margin: 0 0 10px;
+}
+
+.ma-footer__email-input {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  border: 0.83px solid #b7b7b7;
+  background: #fff;
+  font-size: 12px;
+  letter-spacing: -0.4px;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  color: #000;
+  padding: 12px 14px;
+  outline: none;
+  margin-bottom: 10px;
+}
+
+.ma-footer__email-input::placeholder {
+  color: #aaa;
+  text-transform: uppercase;
+  letter-spacing: -0.5px;
+}
+
+.ma-footer__consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.ma-footer__consent input[type="checkbox"] {
+  margin-top: 2px;
+  flex-shrink: 0;
+  accent-color: #000;
+  width: 13px;
+  height: 13px;
+  cursor: pointer;
+}
+
+.ma-footer__consent-label {
+  font-size: 11px;
+  color: #000;
+  letter-spacing: -0.4px;
+  line-height: 1.6;
+}
+
+.ma-footer__consent-label a {
+  color: #000;
+  text-decoration: underline;
+}
+
+.ma-footer__signup-btn {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  background: #000;
+  color: #fff;
+  border: none;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 14px;
+  cursor: pointer;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  transition: background 0.2s;
+}
+
+.ma-footer__signup-btn:hover {
+  background: #333;
+}
+
+/* ── ZONE 2: TRUST + PAYMENT BAR (white-theme adaptation) ── */
+.ma-footer__trust-wrap {
+  border-top: 1px solid #e0e0e0;
+  background: #fafafa;
+}
+
+.ma-footer__trust {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 14px clamp(20px, 5vw, 60px);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.ma-footer__trust-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ma-footer__lock {
+  color: #9b111e;
+  flex-shrink: 0;
+  display: block;
+}
+
+.ma-footer__trust-text {
+  font-size: 10px;
+  color: #555;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.ma-footer__trust-div {
+  width: 1px;
+  height: 14px;
+  background: #d8d8d8;
+  flex-shrink: 0;
+}
+
+.ma-footer__pay {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+.ma-footer__pay-pill {
+  background: #fff;
+  border: 1px solid #d8d8d8;
+  border-radius: 3px;
+  padding: 3px 9px;
+  font-size: 9px;
+  font-weight: 700;
+  color: #555;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1.7;
+}
+
+.ma-footer__pay-pill--rz {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.ma-footer__rz-dot {
+  width: 6px;
+  height: 6px;
+  background: #9b111e;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.ma-footer__ssl {
+  font-size: 10px;
+  color: #888;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-left: auto;
+}
+
+/* ── BOTTOM BAR ── */
+.ma-footer__bottom-wrap {
+  border-top: 1px solid #e0e0e0;
+}
+
+.ma-footer__bottom {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 22px clamp(20px, 5vw, 60px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;           /* wrap instead of clipping on mid widths */
+  gap: 16px;
+}
+
+.ma-footer__brand {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'Sinoreta', serif;
+  font-size: 25px;
+  font-weight: 700 !important;
+  color: #000 !important;
+  -webkit-text-fill-color: #000 !important;
+  letter-spacing: 0.12em;
+  text-decoration: none;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.ma-footer__logo-img {
+  display: block;
+  height: 38px;
+  width: auto;
+  max-width: 100%;
+}
+
+.ma-footer__bottom-right {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.ma-footer__bottom-text {
+  text-align: right;
+}
+
+.ma-footer__social {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.ma-footer__social a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+  line-height: 1;
+  transition: opacity 0.2s;
+}
+
+.ma-footer__social a:hover {
+  opacity: 0.5;
+}
+
+.ma-footer__copyright {
+  font-size: 13px;
+  color: #000 !important;
+  -webkit-text-fill-color: #000 !important;
+  letter-spacing: -0.4px;
+  white-space: nowrap;
+}
+
+.ma-footer__crafted {
+  font-size: 10px;
+  color: #888;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 4px 0 0;
+}
+
+/* ── MOBILE ── */
 @media (max-width: 768px) {
-  .ma-footer__inner { padding: 0; }
-  .ma-footer__columns { display: none; }
-  .ma-footer__accordion { border-top: 1px solid #e0e0e0; }
-  .ma-footer__accordion-trigger { display: flex; align-items: center; justify-content: space-between; width: 100%; background: none; border: none; border-bottom: 1px solid #e0e0e0; padding: 17px 20px; font-size: 12px; font-weight: 700; letter-spacing: -0.4px; text-transform: uppercase; color: #000; cursor: pointer; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
-  .ma-footer__accordion-trigger[aria-expanded="true"] { border-bottom-color: transparent; }
-  .ma-acc-icon { font-size: 20px; font-weight: 300; line-height: 1; display: inline-block; transition: transform 0.25s ease; }
-  .ma-footer__accordion-trigger[aria-expanded="true"] .ma-acc-icon { transform: rotate(45deg); }
-  .ma-footer__accordion-panel { display: none; padding: 4px 20px 18px; border-bottom: 1px solid #e0e0e0; }
-  .ma-footer__accordion-panel.is-open { display: block; }
-  .ma-footer__accordion-panel ul { list-style: none; margin: 0; padding: 0; }
-  .ma-footer__accordion-panel ul li a { font-size: 12px; color: #000; text-decoration: none; letter-spacing: -0.4px; text-transform: uppercase; line-height: 2.6; display: block; }
-  .ma-footer__subscribe-mobile { padding: 30px 20px 36px; border-bottom: 1px solid #e0e0e0; }
-  .ma-footer__signup-btn { width: 100%; padding: 14px; }
-  .ma-footer__trust { flex-direction: column; align-items: center; gap: 12px; text-align: center; padding: 18px 20px; }
-  .ma-footer__trust-div { display: none; }
-  .ma-footer__pay { justify-content: center; }
-  .ma-footer__ssl { margin-left: 0; }
-  .ma-footer__bottom { flex-direction: column; align-items: center; gap: 18px; padding: 26px 20px; text-align: center; }
-  .ma-footer__brand { font-size: 17px; color: #000 !important; -webkit-text-fill-color: #000 !important; font-weight: 700 !important; }
-  .ma-footer__logo-img { height: 32px; }
-  .ma-footer__bottom-right { flex-direction: column; align-items: center; gap: 16px; }
-  .ma-footer__bottom-text { text-align: center; }
-  .ma-footer__copyright { text-align: center; color: #000 !important; -webkit-text-fill-color: #000 !important; white-space: normal; }
-  .ma-footer__crafted { text-align: center; }
+  .ma-footer__inner {
+    padding: 0;
+  }
+
+  .ma-footer__columns {
+    display: none;
+  }
+
+  /* Accordion items */
+  .ma-footer__accordion {
+    border-top: 1px solid #e0e0e0;
+  }
+
+  .ma-footer__accordion-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    background: none;
+    border: none;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 17px 20px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: -0.4px;
+    text-transform: uppercase;
+    color: #000;
+    cursor: pointer;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  }
+
+  .ma-footer__accordion-trigger[aria-expanded="true"] {
+    border-bottom-color: transparent;
+  }
+
+  .ma-acc-icon {
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 1;
+    display: inline-block;
+    transition: transform 0.25s ease;
+  }
+
+  .ma-footer__accordion-trigger[aria-expanded="true"] .ma-acc-icon {
+    transform: rotate(45deg);
+  }
+
+  .ma-footer__accordion-panel {
+    display: none;
+    padding: 4px 20px 18px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .ma-footer__accordion-panel.is-open {
+    display: block;
+  }
+
+  .ma-footer__accordion-panel ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .ma-footer__accordion-panel ul li a {
+    font-size: 12px;
+    color: #000;
+    text-decoration: none;
+    letter-spacing: -0.4px;
+    text-transform: uppercase;
+    line-height: 2.6;
+    display: block;
+  }
+
+  /* Newsletter on mobile */
+  .ma-footer__subscribe-mobile {
+    padding: 30px 20px 36px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .ma-footer__signup-btn {
+    width: 100%;
+    padding: 14px;
+  }
+
+  /* Trust bar mobile — stacks vertically, sits between newsletter and bottom bar */
+  .ma-footer__trust {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    text-align: center;
+    padding: 18px 20px;
+  }
+
+  .ma-footer__trust-div {
+    display: none;
+  }
+
+  .ma-footer__pay {
+    justify-content: center;
+  }
+
+  .ma-footer__ssl {
+    margin-left: 0;
+  }
+
+  /* Bottom bar mobile */
+  .ma-footer__bottom {
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    padding: 26px 20px;
+    text-align: center;
+  }
+
+  .ma-footer__brand {
+    font-size: 17px;
+    color: #000 !important;
+    -webkit-text-fill-color: #000 !important;
+    font-weight: 700 !important;
+  }
+
+  .ma-footer__logo-img {
+    height: 32px;
+  }
+
+  .ma-footer__bottom-right {
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .ma-footer__bottom-text {
+    text-align: center;
+  }
+
+  .ma-footer__copyright {
+    text-align: center;
+    color: #000 !important;
+    -webkit-text-fill-color: #000 !important;
+    white-space: normal;
+  }
+
+  .ma-footer__crafted {
+    text-align: center;
+  }
 }
 {% endstylesheet %}
 
 <footer class="ma-footer" role="contentinfo">
+
   <div class="ma-footer__inner">
 
+    <!-- ── DESKTOP: 3 NAV COLUMNS + NEWSLETTER AS 4TH COLUMN ── -->
     <div class="ma-footer__columns">
+
+      <!-- Column 1: Explore House -->
       <div class="ma-footer__col">
         <p class="ma-footer__col-heading">Explore House</p>
         <ul>
@@ -87,13 +487,13 @@
         </ul>
       </div>
 
+      <!-- Column 2: Need Help? -->
       <div class="ma-footer__col">
         <p class="ma-footer__col-heading">Need Help?</p>
         <ul>
           <li><a href="/pages/faq">FAQs</a></li>
           <li><a href="/pages/contact">Contact Us</a></li>
           <li><a href="https://wa.me/971586458135" target="_blank" rel="noopener noreferrer">WhatsApp Us</a></li>
-          <li><a href="/pages/find-your-signature">Find Your Signature</a></li>
           <li><a href="/pages/shipping-policy">Shipping &amp; Returns</a></li>
           <li><a href="/pages/refund-policy">Refund &amp; Replacement</a></li>
           <li><a href="{{ routes.account_url }}/orders">Track My Order</a></li>
@@ -101,12 +501,12 @@
         </ul>
       </div>
 
+      <!-- Column 3: The House of Amiir -->
       <div class="ma-footer__col">
         <p class="ma-footer__col-heading">The House of Amiir</p>
         <ul>
           <li><a href="/pages/about-us">Our Story</a></li>
-          <li><a href="/blogs/blogs">Blog</a></li>
-          <!-- Enable after page is created: <li><a href="/pages/careers-and-collab">Careers &amp; Brand Collab</a></li> -->
+          <li><a href="/blogs/blogs">Blogs</a></li>
           <li><a href="/pages/privacy-policy">Privacy Policy</a></li>
           <li><a href="/pages/terms-conditions">Terms &amp; Conditions</a></li>
           <li><a href="/pages/faq">Payment Methods</a></li>
@@ -114,6 +514,7 @@
         </ul>
       </div>
 
+      <!-- Column 4: Stay in the Know (newsletter — same row as nav columns) -->
       <div class="ma-footer__col ma-footer__col--subscribe">
         <p class="ma-footer__col-heading">Stay in the Know</p>
         <p class="ma-footer__newsletter-subtext">Receive new arrivals, exclusive offers, and stories from the House of Amiir.</p>
@@ -121,18 +522,32 @@
           <input type="hidden" name="form_type" value="customer">
           <input type="hidden" name="utf8" value="✓">
           <input type="hidden" name="contact[tags]" value="newsletter">
-          <input class="ma-footer__email-input" type="email" name="contact[email]" placeholder="Email Address" required autocomplete="email">
+          <input
+            class="ma-footer__email-input"
+            type="email"
+            name="contact[email]"
+            placeholder="Email Address"
+            required
+            autocomplete="email"
+          >
           <div class="ma-footer__consent">
             <input type="checkbox" id="ma-newsletter-consent-d" name="contact[consent]" checked required>
-            <label class="ma-footer__consent-label" for="ma-newsletter-consent-d">Sign me up to hear from Maison Amiir. For more information, view our <a href="/pages/privacy-policy">Privacy Policy</a>.</label>
+            <label class="ma-footer__consent-label" for="ma-newsletter-consent-d">
+              Sign me up to hear from Maison Amiir. For more information, view our <a href="/pages/privacy-policy">Privacy Policy</a>.
+            </label>
           </div>
           <button class="ma-footer__signup-btn" type="submit">Sign Up</button>
         </form>
       </div>
-    </div>
 
+    </div>
+    <!-- /DESKTOP COLUMNS -->
+
+    <!-- ── MOBILE: ACCORDION + NEWSLETTER ── -->
     <div class="ma-footer__accordion">
-      <button class="ma-footer__accordion-trigger" aria-expanded="false" aria-controls="ma-acc-explore">Explore House <span class="ma-acc-icon">+</span></button>
+      <button class="ma-footer__accordion-trigger" aria-expanded="false" aria-controls="ma-acc-explore">
+        Explore House <span class="ma-acc-icon">+</span>
+      </button>
       <div class="ma-footer__accordion-panel" id="ma-acc-explore" role="region">
         <ul>
           <li><a href="/collections/new-arrivals">New Arrivals</a></li>
@@ -146,13 +561,14 @@
     </div>
 
     <div class="ma-footer__accordion">
-      <button class="ma-footer__accordion-trigger" aria-expanded="false" aria-controls="ma-acc-help">Need Help? <span class="ma-acc-icon">+</span></button>
+      <button class="ma-footer__accordion-trigger" aria-expanded="false" aria-controls="ma-acc-help">
+        Need Help? <span class="ma-acc-icon">+</span>
+      </button>
       <div class="ma-footer__accordion-panel" id="ma-acc-help" role="region">
         <ul>
           <li><a href="/pages/faq">FAQs</a></li>
           <li><a href="/pages/contact">Contact Us</a></li>
           <li><a href="https://wa.me/971586458135" target="_blank" rel="noopener noreferrer">WhatsApp Us</a></li>
-          <li><a href="/pages/find-your-signature">Find Your Signature</a></li>
           <li><a href="/pages/shipping-policy">Shipping &amp; Returns</a></li>
           <li><a href="/pages/refund-policy">Refund &amp; Replacement</a></li>
           <li><a href="{{ routes.account_url }}/orders">Track My Order</a></li>
@@ -162,12 +578,13 @@
     </div>
 
     <div class="ma-footer__accordion">
-      <button class="ma-footer__accordion-trigger" aria-expanded="false" aria-controls="ma-acc-house">The House of Amiir <span class="ma-acc-icon">+</span></button>
+      <button class="ma-footer__accordion-trigger" aria-expanded="false" aria-controls="ma-acc-house">
+        The House of Amiir <span class="ma-acc-icon">+</span>
+      </button>
       <div class="ma-footer__accordion-panel" id="ma-acc-house" role="region">
         <ul>
           <li><a href="/pages/about-us">Our Story</a></li>
-          <li><a href="/blogs/blogs">Blog</a></li>
-          <!-- Enable after page is created: <li><a href="/pages/careers-and-collab">Careers &amp; Brand Collab</a></li> -->
+          <li><a href="/blogs/journal">Journal</a></li>
           <li><a href="/pages/privacy-policy">Privacy Policy</a></li>
           <li><a href="/pages/terms-conditions">Terms &amp; Conditions</a></li>
           <li><a href="/pages/faq">Payment Methods</a></li>
@@ -176,6 +593,7 @@
       </div>
     </div>
 
+    <!-- Newsletter on mobile (below accordions) -->
     <div class="ma-footer__subscribe-mobile">
       <p class="ma-footer__col-heading">Stay in the Know</p>
       <p class="ma-footer__newsletter-subtext">Receive new arrivals, exclusive offers, and stories from the House of Amiir.</p>
@@ -183,24 +601,42 @@
         <input type="hidden" name="form_type" value="customer">
         <input type="hidden" name="utf8" value="✓">
         <input type="hidden" name="contact[tags]" value="newsletter">
-        <input class="ma-footer__email-input" type="email" name="contact[email]" placeholder="Email Address" required autocomplete="email">
+        <input
+          class="ma-footer__email-input"
+          type="email"
+          name="contact[email]"
+          placeholder="Email Address"
+          required
+          autocomplete="email"
+        >
         <div class="ma-footer__consent">
           <input type="checkbox" id="ma-newsletter-consent-m" name="contact[consent]" checked required>
-          <label class="ma-footer__consent-label" for="ma-newsletter-consent-m">Sign me up to hear from Maison Amiir. For more information, view our <a href="/pages/privacy-policy">Privacy Policy</a>.</label>
+          <label class="ma-footer__consent-label" for="ma-newsletter-consent-m">
+            Sign me up to hear from Maison Amiir. For more information, view our <a href="/pages/privacy-policy">Privacy Policy</a>.
+          </label>
         </div>
         <button class="ma-footer__signup-btn" type="submit">Sign Up</button>
       </form>
     </div>
+    <!-- /MOBILE ACCORDION -->
 
   </div>
+  <!-- /INNER -->
 
+  <!-- ── ZONE 2: TRUST + PAYMENT BAR ── -->
   <div class="ma-footer__trust-wrap">
     <div class="ma-footer__trust">
+
       <div class="ma-footer__trust-left">
-        <svg class="ma-footer__lock" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <svg class="ma-footer__lock" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="11" width="18" height="11" rx="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
         <span class="ma-footer__trust-text">Secure Checkout via Razorpay</span>
       </div>
+
       <span class="ma-footer__trust-div" aria-hidden="true"></span>
+
       <div class="ma-footer__pay">
         <span class="ma-footer__pay-pill">Visa</span>
         <span class="ma-footer__pay-pill">MC</span>
@@ -210,53 +646,92 @@
         <span class="ma-footer__pay-pill">EMI</span>
         <span class="ma-footer__pay-pill ma-footer__pay-pill--rz"><span class="ma-footer__rz-dot" aria-hidden="true"></span>Razorpay</span>
       </div>
+
       <span class="ma-footer__trust-div" aria-hidden="true"></span>
+
       <span class="ma-footer__ssl">256-bit SSL Encrypted</span>
+
     </div>
   </div>
+  <!-- /TRUST BAR -->
 
+  <!-- ── ZONE 3: BOTTOM BAR ── -->
   <div class="ma-footer__bottom-wrap">
     <div class="ma-footer__bottom">
+
       {% if settings.logo != blank %}
-        <a href="{{ routes.root_url }}" class="ma-footer__brand" aria-label="{{ shop.name | escape }} home">{{ settings.logo | image_url: height: 80 | image_tag: alt: shop.name, height: 38, class: 'ma-footer__logo-img', loading: 'lazy' }}</a>
+        <a href="{{ routes.root_url }}" class="ma-footer__brand" aria-label="{{ shop.name | escape }} home">
+          {{ settings.logo | image_url: height: 80 | image_tag: alt: shop.name, height: 38, class: 'ma-footer__logo-img', loading: 'lazy' }}
+        </a>
       {% else %}
         <a href="{{ routes.root_url }}" class="ma-footer__brand" aria-label="{{ shop.name | escape }} home">Maison Amiir</a>
       {% endif %}
+
       <div class="ma-footer__bottom-right">
+
         <div class="ma-footer__social">
-          <a href="https://www.facebook.com/people/Maison-Amiir-perfumes/61589124503108/" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15.7044 5.32431H17.8321V2.14275C17.4635 2.09867 16.2013 2.0025 14.7308 2.0025C11.6614 2.0025 9.55766 3.6574 9.55766 6.69872V9.49963H6.16772V13.0538H9.55766V21.9975H13.7129V13.0538H16.9626L17.4796 9.49963H13.7129V7.05134C13.7129 6.02555 14.0335 5.32431 15.7044 5.32431Z" fill="#000"/></svg></a>
-          <a href="https://www.instagram.com/maisonamiirperfumes" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2.5" y="2.5" width="19" height="19" rx="5" ry="5" stroke="#000" stroke-width="2" fill="none"/><circle cx="12" cy="12" r="4.5" stroke="#000" stroke-width="2" fill="none"/><circle cx="17.2" cy="6.8" r="1.3" fill="#000"/></svg></a>
-          <a href="https://www.linkedin.com/company/maison-amiir/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20.4472 2H3.5528C2.6953 2 2 2.6953 2 3.5528V20.4472C2 21.3047 2.6953 22 3.5528 22H20.4472C21.3047 22 22 21.3047 22 20.4472V3.5528C22 2.6953 21.3047 2 20.4472 2ZM8.2 18.4H5.4V9.8H8.2V18.4ZM6.8 8.56C5.92 8.56 5.2 7.84 5.2 6.96C5.2 6.08 5.92 5.36 6.8 5.36C7.68 5.36 8.4 6.08 8.4 6.96C8.4 7.84 7.68 8.56 6.8 8.56ZM18.8 18.4H16V14.24C16 13.24 15.98 11.96 14.6 11.96C13.2 11.96 12.98 13.04 12.98 14.16V18.4H10.18V9.8H12.86V10.96H12.9C13.28 10.22 14.24 9.44 15.64 9.44C18.46 9.44 19 11.28 19 13.68V18.4H18.8Z" fill="#000"/></svg></a>
+          <!-- Facebook -->
+          <a href="https://www.facebook.com/people/Maison-Amiir-perfumes/61589124503108/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M15.7044 5.32431H17.8321V2.14275C17.4635 2.09867 16.2013 2.0025 14.7308 2.0025C11.6614 2.0025 9.55766 3.6574 9.55766 6.69872V9.49963H6.16772V13.0538H9.55766V21.9975H13.7129V13.0538H16.9626L17.4796 9.49963H13.7129V7.05134C13.7129 6.02555 14.0335 5.32431 15.7044 5.32431Z" fill="#000"/>
+            </svg>
+          </a>
+
+          <!-- Instagram -->
+          <a href="https://www.instagram.com/maisonamiirperfumes" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="2.5" y="2.5" width="19" height="19" rx="5" ry="5" stroke="#000" stroke-width="2" fill="none"/>
+              <circle cx="12" cy="12" r="4.5" stroke="#000" stroke-width="2" fill="none"/>
+              <circle cx="17.2" cy="6.8" r="1.3" fill="#000"/>
+            </svg>
+          </a>
+
+          <!-- LinkedIn -->
+          <a href="https://www.linkedin.com/company/maison-amiir/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20.4472 2H3.5528C2.6953 2 2 2.6953 2 3.5528V20.4472C2 21.3047 2.6953 22 3.5528 22H20.4472C21.3047 22 22 21.3047 22 20.4472V3.5528C22 2.6953 21.3047 2 20.4472 2ZM8.2 18.4H5.4V9.8H8.2V18.4ZM6.8 8.56C5.92 8.56 5.2 7.84 5.2 6.96C5.2 6.08 5.92 5.36 6.8 5.36C7.68 5.36 8.4 6.08 8.4 6.96C8.4 7.84 7.68 8.56 6.8 8.56ZM18.8 18.4H16V14.24C16 13.24 15.98 11.96 14.6 11.96C13.2 11.96 12.98 13.04 12.98 14.16V18.4H10.18V9.8H12.86V10.96H12.9C13.28 10.22 14.24 9.44 15.64 9.44C18.46 9.44 19 11.28 19 13.68V18.4H18.8Z" fill="#000"/>
+            </svg>
+          </a>
         </div>
+
         <div class="ma-footer__bottom-text">
           <p class="ma-footer__copyright">&copy; {{ 'now' | date: '%Y' }} MAISON AMIIR. All Rights Reserved.</p>
           <p class="ma-footer__crafted">Crafted in India &nbsp;·&nbsp; Inspired by the World</p>
         </div>
+
       </div>
     </div>
   </div>
+  <!-- /BOTTOM BAR -->
+
 </footer>
 
 <script>
 (function() {
   'use strict';
+
   var triggers = document.querySelectorAll('.ma-footer__accordion-trigger');
   triggers.forEach(function(btn) {
     btn.addEventListener('click', function() {
       var isOpen = this.getAttribute('aria-expanded') === 'true';
-      var panel = document.getElementById(this.getAttribute('aria-controls'));
+      var panelId = this.getAttribute('aria-controls');
+      var panel = document.getElementById(panelId);
       this.setAttribute('aria-expanded', String(!isOpen));
       if (panel) panel.classList.toggle('is-open', !isOpen);
     });
   });
+
   function applyLayout() {
     var mobile = window.innerWidth <= 768;
     var desktopCols = document.querySelector('.ma-footer__columns');
     if (desktopCols) desktopCols.style.display = mobile ? 'none' : 'grid';
-    document.querySelectorAll('.ma-footer__accordion').forEach(function(el) { el.style.display = mobile ? 'block' : 'none'; });
+    document.querySelectorAll('.ma-footer__accordion').forEach(function(el) {
+      el.style.display = mobile ? 'block' : 'none';
+    });
     var subMobile = document.querySelector('.ma-footer__subscribe-mobile');
     if (subMobile) subMobile.style.display = mobile ? 'block' : 'none';
   }
+
   applyLayout();
   window.addEventListener('resize', applyLayout);
 })();
@@ -268,11 +743,52 @@
   "tag": "section",
   "class": "section",
   "settings": [
-    { "type": "select", "id": "section_width", "label": "Section width", "options": [ { "value": "page-width", "label": "Page width" }, { "value": "full-width", "label": "Full width" } ], "default": "full-width" },
-    { "type": "range", "id": "gap", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Gap", "default": 0 },
-    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" },
-    { "type": "range", "id": "padding-block-start", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Top padding", "default": 0 },
-    { "type": "range", "id": "padding-block-end", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Bottom padding", "default": 0 }
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section width",
+      "options": [
+        { "value": "page-width", "label": "Page width" },
+        { "value": "full-width", "label": "Full width" }
+      ],
+      "default": "full-width"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Gap",
+      "default": 0
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 0
+    }
   ]
 }
 {% endschema %}
