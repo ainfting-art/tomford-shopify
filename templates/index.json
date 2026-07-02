@@ -1890,43 +1890,26 @@
     "ma_social_proof": {
       "type": "ma-social-proof",
       "blocks": {
-        "review_1": {
-          "type": "review",
-          "settings": {
-            "stars": 5,
-            "quote": "Beast mode longevity. Exactly what a good oud should be — I could still smell it the next morning.",
-            "author": "Siddharth M.",
-            "product": "Desert Velvet Oud"
-          }
-        },
-        "review_2": {
-          "type": "review",
-          "settings": {
-            "stars": 5,
-            "quote": "The amber and oud on skin is incredible. Very long lasting — I'm obsessed.",
-            "author": "Ananya T.",
-            "product": "Desert Velvet Oud"
-          }
-        },
-        "review_3": {
-          "type": "review",
-          "settings": {
-            "stars": 4,
-            "quote": "A fragrance that rewards patience. Now I wear it every time I want to feel luxurious.",
-            "author": "Dev S.",
-            "product": "Desert Velvet Oud"
-          }
-        }
+        "review_1": { "type": "review", "settings": { "product": "desert-velvet-oud", "stars": 5, "quote": "My boyfriend bought this and honestly I want to wear it myself. The amber and oud combination smells incredible on skin. Very long lasting.", "author": "Ananya T." } },
+        "review_2": { "type": "review", "settings": { "product": "desert-velvet-oud", "stars": 5, "quote": "I've tried many oud fragrances over the years and Desert Velvet Oud has quickly become one of my favourites. The smoky and warmth combo is exactly what a good oud should be.", "author": "Siddharth M." } },
+        "review_3": { "type": "review", "settings": { "product": "desert-velvet-oud", "stars": 4, "quote": "Long lasting is good, smell unique — sometimes velvet, sometimes oud, sometimes rose. Crazy perfume.", "author": "Tamana" } },
+        "review_4": { "type": "review", "settings": { "product": "horizon-valley", "stars": 5, "quote": "Fresh opening that dries down to a beautiful woody base. Colleagues at my architecture firm have noticed and commented. Very versatile.", "author": "Dev S." } },
+        "review_5": { "type": "review", "settings": { "product": "horizon-valley", "stars": 4, "quote": "The longevity is excellent, the projection is moderate but consistent, and the scent profile is very well composed. Very impressed.", "author": "Tejal M." } },
+        "review_6": { "type": "review", "settings": { "product": "horizon-valley", "stars": 3, "quote": "Smells good. Really it does. Safe, wearable, easy fresh woody. Which is fine if that's what you need. Reliable fragrance.", "author": "Arjun P." } },
+        "review_7": { "type": "review", "settings": { "product": "hash-night", "stars": 5, "quote": "Hash Night is not your everyday office fragrance. This is dark, artistic, and makes a statement. I personally love it.", "author": "Farhan K." } },
+        "review_8": { "type": "review", "settings": { "product": "hash-night", "stars": 5, "quote": "Dark, resinous, a little smoky. Polarising yes but memorable always.", "author": "Swati N." } },
+        "review_9": { "type": "review", "settings": { "product": "vanille-roses", "stars": 4, "quote": "Rose fragrances can go very wrong — either too sharp or too soapy. This one gets it right. The vanilla softens the rose and makes it feel modern and warm.", "author": "Pooja V." } },
+        "review_10": { "type": "review", "settings": { "product": "vanille-roses", "stars": 5, "quote": "Roses but not in a sharp old-fashioned way. Sweet warm gourmand roses. Really beautiful.", "author": "Sonal R." } },
+        "review_11": { "type": "review", "settings": { "product": "marine-aqua", "stars": 5, "quote": "It keeps smelling fresh all day without becoming sour in the heat. The marine notes work perfectly in humid coastal weather.", "author": "Nikhil A." } },
+        "review_12": { "type": "review", "settings": { "product": "marine-aqua", "stars": 3, "quote": "Very safe aquatic fresh scent. Nothing unique or surprising. If you want reliable and inoffensive this is great.", "author": "Karan J." } }
       },
-      "block_order": [
-        "review_1",
-        "review_2",
-        "review_3"
-      ],
+      "block_order": ["review_1", "review_2", "review_3", "review_4", "review_5", "review_6", "review_7", "review_8", "review_9", "review_10", "review_11", "review_12"],
       "name": "MA Social Proof",
       "settings": {
         "heading": "What Our Clients Say",
-        "aggregate": "4.3 · Verified Buyers"
+        "rating": 4.3,
+        "aggregate": "4.3 · Verified Buyers",
+        "rotate_seconds": 6
       }
     },
     "1775472317723a194f": {
