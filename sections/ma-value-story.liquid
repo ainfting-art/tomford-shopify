@@ -1,6 +1,18 @@
 {% comment %} MAISON AMIIR — §4 Value Story: solid black band, 4 pillars {% endcomment %}
 
 <div class="ma-value">
+  {%- if section.settings.bg_video != null -%}
+    <div class="ma-value__media" aria-hidden="true">
+      {{ section.settings.bg_video | video_tag: autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'metadata' }}
+    </div>
+  {%- elsif section.settings.bg_image != blank -%}
+    <div class="ma-value__media" aria-hidden="true">
+      {{ section.settings.bg_image | image_url: width: 2400 | image_tag: loading: 'lazy', alt: '' }}
+    </div>
+  {%- endif -%}
+  <div class="ma-value__scrim" aria-hidden="true"></div>
+
+  <div class="ma-value__inner">
   <p class="ma-value__overline ma-home-reveal">{{ section.settings.overline }}</p>
   <h2 class="ma-value__h2 ma-home-reveal">{{ section.settings.heading }}</h2>
   <p class="ma-value__lede ma-home-reveal">{{ section.settings.lede }}</p>
@@ -18,12 +30,15 @@
   {%- if section.settings.closing != blank -%}
     <p class="ma-value__closing ma-home-reveal">{{ section.settings.closing }}</p>
   {%- endif -%}
+  </div>
 </div>
 
 <style>
   #shopify-section-{{ section.id }} { opacity: 1 !important; transform: none !important; }
 
   .ma-value {
+    position: relative;
+    overflow: hidden;
     background: #0A0A0A;
     color: #fff;
     text-align: center;
@@ -31,6 +46,12 @@
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   }
   .ma-value *, .ma-value *::before, .ma-value *::after { box-sizing: border-box; }
+
+  .ma-value__media { position: absolute; inset: 0; z-index: 0; }
+  .ma-value__media video, .ma-value__media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .ma-value__scrim { position: absolute; inset: 0; z-index: 1; background: rgba(0,0,0, {{ section.settings.overlay | default: 65 | divided_by: 100.0 }}); }
+  .ma-value__inner { position: relative; z-index: 2; }
+  .ma-value__media ~ .ma-value__inner .ma-value__pillar { background: rgba(10,10,10, .55); }
 
   .ma-value__overline { font-size: .72rem; letter-spacing: .32em; text-indent: .32em; text-transform: uppercase; color: rgba(255,255,255,.45); margin: 0 0 1.1rem; }
   .ma-value__h2 { font-family: 'Sinoreta', Georgia, serif; font-size: clamp(1.9rem, 4.4vw, 2.75rem); font-weight: 300; letter-spacing: .03em; line-height: 1.25; margin: 0 0 1.2rem; color: #fff; }
@@ -69,6 +90,9 @@
   "name": "MA Value Story",
   "tag": "section",
   "settings": [
+    { "type": "video", "id": "bg_video", "label": "Background video (wins over image)" },
+    { "type": "image_picker", "id": "bg_image", "label": "Background image" },
+    { "type": "range", "id": "overlay", "label": "Dark overlay %", "min": 0, "max": 95, "step": 5, "default": 65 },
     { "type": "text", "id": "overline", "label": "Overline", "default": "The Maison Amiir Difference" },
     { "type": "text", "id": "heading", "label": "Heading", "default": "Luxury, Without the Markup" },
     { "type": "textarea", "id": "lede", "label": "Lede", "default": "A great fragrance is mostly oil and intention — not the marble store or the magazine campaign. We put the money where you smell it: 30% extrait concentration, international fragrance oils, made in small batches." },
