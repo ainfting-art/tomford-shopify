@@ -2502,6 +2502,16 @@
         "padding-block-start": 0,
         "padding-block-end": 0
       }
+    },
+    "ma_most_wanted_edUXRw": {
+      "type": "ma-most-wanted",
+      "name": "Most Wanted Grid",
+      "settings": {
+        "heading": "For Her",
+        "collection": "womens-collection",
+        "cta_link": "shopify://collections/womens-collection",
+        "cta_label": "Shop Now"
+      }
     }
   },
   "order": [
@@ -2519,6 +2529,7 @@
     "section_8fVQtQ",
     "custom_liquid_h3icnB",
     "section_Rrah97",
-    "custom_liquid_BJfMpc"
+    "custom_liquid_BJfMpc",
+    "ma_most_wanted_edUXRw"
   ]
 }
