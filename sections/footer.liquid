@@ -266,7 +266,7 @@
 
 .ma-footer__logo-img {
   display: block;
-  height: 38px;
+  height: 64px;
   width: auto;
   max-width: 100%;
 }
@@ -458,7 +458,7 @@
   }
 
   .ma-footer__logo-img {
-    height: 32px;
+    height: 56px;
   }
 
   .ma-footer__bottom-right {
@@ -682,7 +682,7 @@
 
       {% if settings.logo != blank %}
         <a href="{{ routes.root_url }}" class="ma-footer__brand" aria-label="{{ shop.name | escape }} home">
-          {{ settings.logo | image_url: height: 80 | image_tag: alt: shop.name, height: 38, class: 'ma-footer__logo-img', loading: 'lazy' }}
+          {{ settings.logo | image_url: height: 160 | image_tag: alt: shop.name, height: 64, class: 'ma-footer__logo-img', loading: 'lazy' }}
         </a>
       {% else %}
         <a href="{{ routes.root_url }}" class="ma-footer__brand" aria-label="{{ shop.name | escape }} home">Maison Amiir</a>
