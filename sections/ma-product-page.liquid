@@ -534,12 +534,15 @@
 .ma-pdp__thumb:hover:not(.ma-pdp__thumb--active) { border-color: #bbb; }
 .ma-pdp__thumb-img { width: 100%; height: 100%; object-fit: contain; display: block; }
 
-/* Gallery — position: relative so arrows + dots (position:absolute) stay inside */
+/* Gallery — position: relative so arrows + dots (position:absolute) stay inside.
+   touch-action: pan-y keeps vertical page scroll native while reserving
+   horizontal gestures for the swipe handler (all widths, incl. touch laptops). */
 .ma-pdp__gallery {
   position: sticky;
   top: 60px;
   align-self: start;
   background: #f2f0ee;
+  touch-action: pan-y;
   line-height: 0;
   font-size: 0;
 }
@@ -1168,19 +1171,48 @@
     if (prevBtn) prevBtn.addEventListener('click', function() { if (mCurrent > 0) mGoTo(mCurrent - 1); });
     if (nextBtn) nextBtn.addEventListener('click', function() { if (mCurrent < total - 1) mGoTo(mCurrent + 1); });
 
-    var startX = 0, startY = 0, didMove = false;
-    gallery.addEventListener('touchstart', function(e) {
-      startX = e.touches[0].clientX; startY = e.touches[0].clientY; didMove = false;
-    }, { passive: true });
-    gallery.addEventListener('touchmove', function() { didMove = true; }, { passive: true });
-    gallery.addEventListener('touchend', function(e) {
-      if (!didMove) return;
-      var dx = e.changedTouches[0].clientX - startX;
-      var dy = e.changedTouches[0].clientY - startY;
-      if (Math.abs(dx) < Math.abs(dy) || Math.abs(dx) < 30) return;
-      if (dx < 0 && mCurrent < total - 1) mGoTo(mCurrent + 1);
-      if (dx > 0 && mCurrent > 0) mGoTo(mCurrent - 1);
-    }, { passive: true });
+    /* Legacy touch path — only for browsers without Pointer Events
+       (initSwipe handles modern devices; both firing would double-advance) */
+    if (!window.PointerEvent) {
+      var startX = 0, startY = 0, didMove = false;
+      gallery.addEventListener('touchstart', function(e) {
+        startX = e.touches[0].clientX; startY = e.touches[0].clientY; didMove = false;
+      }, { passive: true });
+      gallery.addEventListener('touchmove', function() { didMove = true; }, { passive: true });
+      gallery.addEventListener('touchend', function(e) {
+        if (!didMove) return;
+        var dx = e.changedTouches[0].clientX - startX;
+        var dy = e.changedTouches[0].clientY - startY;
+        if (Math.abs(dx) < Math.abs(dy) || Math.abs(dx) < 30) return;
+        if (dx < 0 && mCurrent < total - 1) mGoTo(mCurrent + 1);
+        if (dx > 0 && mCurrent > 0) mGoTo(mCurrent - 1);
+      }, { passive: true });
+    }
+  }
+
+  /* =============================================
+     FINGER SWIPE — all widths, all devices.
+     Pointer events cover phones, tablets and touch-screen laptops even when
+     the page loads at desktop width; navigation reuses the arrows' own
+     handlers so desktop fade mode and mobile strip mode both just work.
+     ============================================= */
+  function initSwipe() {
+    var gallery = document.getElementById('ma-pdp-gallery');
+    if (!gallery || !window.PointerEvent || !slides || slides.length < 2) return;
+    var x0 = null, y0 = null, pid = null;
+    gallery.addEventListener('pointerdown', function(e) {
+      if (e.pointerType === 'mouse') return;
+      x0 = e.clientX; y0 = e.clientY; pid = e.pointerId;
+    });
+    gallery.addEventListener('pointerup', function(e) {
+      if (x0 === null || e.pointerId !== pid) return;
+      var dx = e.clientX - x0, dy = e.clientY - y0;
+      x0 = null; pid = null;
+      if (Math.abs(dx) < 30 || Math.abs(dx) < Math.abs(dy)) return;
+      var btn = dx < 0 ? nextBtn : prevBtn;
+      if (btn) btn.click();
+    });
+    gallery.addEventListener('pointercancel', function() { x0 = null; pid = null; });
   }
 
   /* =============================================
@@ -1371,6 +1403,7 @@
   document.addEventListener('DOMContentLoaded', function() {
     initGallery();
     initMobileGallery();
+    initSwipe();
     initQty();
     initAtcFeedback();
     initLightbox();
