@@ -1,9 +1,10 @@
 {% comment %}
-  MAISON AMIIR — launch veil, shown on EVERY page load (Neesh-style).
-  Cream overlay + logo paints before content, hides when the DOM is ready
-  (min 800ms so it never blinks, max 2600ms so it never traps), and rises
-  again the instant a same-origin link is clicked so the browser's white
-  flash between pages is always covered.
+  MAISON AMIIR — launch veil with zoom reveal.
+  Cream overlay + logo on every navigation. The logo appears ONCE per
+  navigation: when a link is clicked the veil rises with the logo already
+  visible, a sessionStorage handoff tells the next page to skip the
+  entrance animation (no double-show), and the reveal is the logo zooming
+  up to fill the screen while the veil dissolves into the page.
   Must stay inline in the layout: it has to paint before anything else.
 {% endcomment %}
 {%- unless request.design_mode -%}
@@ -28,37 +29,49 @@
   }
   #ma-splash.is-hidden {
     opacity: 0; visibility: hidden; pointer-events: none;
-    transition: opacity .5s ease, visibility 0s linear .5s;
+    transition: opacity .4s ease, visibility 0s linear .4s;
   }
   #ma-splash.is-fast { transition: opacity .22s ease; }
   html.ma-splash-lock { overflow: hidden; }
 
   .ma-splash__inner { text-align: center; padding: 0 1.5rem; }
-  .ma-splash__logo {
-    display: block; margin: 0 auto; width: min(210px, 52vw); height: auto;
-    opacity: 0;
-    animation: maSplashIn .55s ease .05s forwards;
+  .ma-splash__logo, .ma-splash__word {
+    opacity: 0; transform: scale(.97);
+    transition: opacity .55s ease, transform .55s ease;
+    will-change: transform, opacity;
   }
+  .ma-splash__logo { display: block; margin: 0 auto; width: min(210px, 52vw); height: auto; }
   .ma-splash__word {
     margin: 0;
     font-family: 'Sinoreta', Georgia, serif; font-weight: 300;
     font-size: clamp(1.7rem, 5vw, 2.4rem); letter-spacing: .22em; text-indent: .22em;
     color: #171410;
-    opacity: 0;
-    animation: maSplashIn .55s ease .05s forwards;
   }
   .ma-splash__line {
     width: 0; height: 1px; margin: 1.4rem auto 0;
     background: linear-gradient(90deg, transparent, #A8894E 30%, #E7C98B 50%, #A8894E 70%, transparent);
-    animation: maSplashLine 1s ease .25s forwards;
+    transition: width .9s ease .2s, opacity .2s ease;
   }
-  @keyframes maSplashIn { to { opacity: 1; } }
-  @keyframes maSplashLine { to { width: min(170px, 42vw); } }
+
+  /* entrance (fresh load only) */
+  #ma-splash.is-in .ma-splash__logo, #ma-splash.is-in .ma-splash__word { opacity: 1; transform: scale(1); }
+  #ma-splash.is-in .ma-splash__line { width: min(170px, 42vw); }
+
+  /* continuation after a link click — logo is already on screen, no re-entrance */
+  #ma-splash.is-cont .ma-splash__logo, #ma-splash.is-cont .ma-splash__word { opacity: 1; transform: scale(1); transition: none; }
+  #ma-splash.is-cont .ma-splash__line { width: min(170px, 42vw); transition: none; }
+
+  /* reveal — the logo zooms to fill the page while the veil dissolves */
+  #ma-splash.is-out { pointer-events: none; opacity: 0; transition: opacity .45s ease .3s; }
+  #ma-splash.is-out .ma-splash__logo, #ma-splash.is-out .ma-splash__word {
+    opacity: 0; transform: scale(8);
+    transition: transform .85s cubic-bezier(.5, 0, .75, .35), opacity .5s ease .2s;
+  }
+  #ma-splash.is-out .ma-splash__line { opacity: 0; width: min(170px, 42vw); }
 
   @media (prefers-reduced-motion: reduce) {
-    .ma-splash__logo, .ma-splash__word { animation: none; opacity: 1; }
-    .ma-splash__line { animation: none; width: min(170px, 42vw); }
-    #ma-splash { transition-duration: .25s; }
+    .ma-splash__logo, .ma-splash__word, .ma-splash__line, #ma-splash { transition-duration: .25s !important; transition-delay: 0s !important; }
+    #ma-splash.is-out .ma-splash__logo, #ma-splash.is-out .ma-splash__word { transform: none; }
   }
 </style>
 <script>
@@ -68,26 +81,51 @@
     var html = document.documentElement;
     html.classList.add('ma-splash-lock');
 
+    /* did we arrive here from an internal click? then the logo is mid-flight — don't replay the entrance */
+    var cont = false;
+    try {
+      var ts = parseInt(sessionStorage.getItem('ma_veil_nav') || '0', 10);
+      sessionStorage.removeItem('ma_veil_nav');
+      cont = (Date.now() - ts) < 5000;
+    } catch (e) {}
+
+    if (cont) { el.classList.add('is-cont'); }
+    else { requestAnimationFrame(function () { requestAnimationFrame(function () { el.classList.add('is-in'); }); }); }
+
     var t0 = Date.now();
-    var MIN = 800;  /* never a blink */
-    var MAX = 2600; /* never a trap */
+    var MIN = cont ? 420 : 900; /* never a blink */
+    var MAX = 2600;             /* never a trap */
     var done = false;
     var hideTimer = null;
 
-    function reallyHide() {
-      el.classList.add('is-hidden');
+    function reveal() {
+      el.classList.add('is-out');
       html.classList.remove('ma-splash-lock');
+      setTimeout(function () {
+        el.classList.add('is-hidden');
+        el.classList.remove('is-out', 'is-in', 'is-cont');
+      }, 950);
     }
     function hide() {
       if (done) return;
       done = true;
-      hideTimer = setTimeout(reallyHide, Math.max(0, MIN - (Date.now() - t0)));
+      hideTimer = setTimeout(reveal, Math.max(0, MIN - (Date.now() - t0)));
+    }
+    function instantOff() {
+      done = true;
+      if (hideTimer) clearTimeout(hideTimer);
+      el.style.transition = 'none';
+      el.classList.add('is-hidden');
+      el.classList.remove('is-out');
+      html.classList.remove('ma-splash-lock');
+      requestAnimationFrame(function () { el.style.transition = ''; });
     }
     function cover() { /* rise again before the browser leaves this page */
       done = true;
       if (hideTimer) clearTimeout(hideTimer);
-      el.classList.add('is-fast');
-      el.classList.remove('is-hidden');
+      try { sessionStorage.setItem('ma_veil_nav', String(Date.now())); } catch (e) {}
+      el.classList.add('is-fast', 'is-cont');
+      el.classList.remove('is-hidden', 'is-out');
       html.classList.add('ma-splash-lock');
     }
 
@@ -118,14 +156,7 @@
     });
 
     /* back/forward from bfcache restores the old DOM — drop the veil instantly */
-    window.addEventListener('pageshow', function (ev) {
-      if (!ev.persisted) return;
-      done = true;
-      if (hideTimer) clearTimeout(hideTimer);
-      el.style.transition = 'none';
-      reallyHide();
-      requestAnimationFrame(function () { el.style.transition = ''; });
-    });
+    window.addEventListener('pageshow', function (ev) { if (ev.persisted) instantOff(); });
   })();
 </script>
 {%- endunless -%}
