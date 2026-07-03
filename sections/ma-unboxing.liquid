@@ -69,7 +69,7 @@
 
   .ma-unbox__grid { display: grid; grid-template-columns: 52% 48%; gap: clamp(1.8rem, 4.5vw, 3.6rem); align-items: center; max-width: 1140px; margin: 0 auto; }
 
-  .ma-unbox__stage { position: relative; overflow: hidden; aspect-ratio: 5 / 4; background: #171410; }
+  .ma-unbox__stage { position: relative; overflow: hidden; aspect-ratio: 1 / 1; background: #171410; }
   .ma-unbox__frame { position: absolute; inset: 0; opacity: 0; transition: opacity 1.1s ease; }
   .ma-unbox__frame.is-on { opacity: 1; }
   .ma-unbox__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -114,7 +114,7 @@
 
   @media (max-width: 749px) {
     .ma-unbox__grid { grid-template-columns: 1fr; gap: 1.6rem; }
-    .ma-unbox__stage { aspect-ratio: 4 / 3; touch-action: pan-y; }
+    .ma-unbox__stage { aspect-ratio: 1 / 1; touch-action: pan-y; }
     .ma-unbox__text { text-align: center; }
     .ma-unbox__body { margin-left: auto; margin-right: auto; }
     .ma-unbox__segs { justify-content: center; }
