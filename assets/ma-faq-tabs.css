@@ -1,0 +1,14 @@
+/* MAISON AMIIR — FAQ tab styling (applies only once JS upgrades the nav) */
+.ma-faq--tabs .ma-faq__nav a {
+  cursor: pointer;
+  text-decoration: none !important;
+  opacity: .5;
+  border-bottom: 1px solid transparent;
+  padding-bottom: .55em;
+  transition: opacity .3s ease, border-color .3s ease;
+}
+.ma-faq--tabs .ma-faq__nav a:hover { opacity: .85; }
+.ma-faq--tabs .ma-faq__nav a.is-active {
+  opacity: 1;
+  border-bottom-color: #171410;
+}
