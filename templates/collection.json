@@ -389,7 +389,7 @@
       },
       "settings": {
         "layout_type": "grid",
-        "product_card_size": "medium",
+        "product_card_size": "large",
         "mobile_product_card_size": "large",
         "enable_infinite_scroll": true,
         "products_per_page": 24,
@@ -399,7 +399,7 @@
         "columns_gap_vertical": 24,
         "padding-inline-start": 0,
         "padding-inline-end": 0,
-        "color_scheme": "scheme-4",
+        "color_scheme": "scheme-1",
         "padding-block-start": 0,
         "padding-block-end": 32
       }
