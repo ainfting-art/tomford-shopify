@@ -1750,6 +1750,55 @@
         "default": true
       },
       {
+        "type": "header",
+        "content": "Cart promo offers"
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_offers_enabled",
+        "label": "Show \"Available offers\" in cart",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "cart_offers_heading",
+        "label": "Offers heading",
+        "default": "Available offers"
+      },
+      {
+        "type": "text",
+        "id": "cart_offer_1_code",
+        "label": "Offer 1 — code",
+        "info": "Must match a discount code created in Settings → Discounts exactly.",
+        "default": "WELCOME15"
+      },
+      {
+        "type": "text",
+        "id": "cart_offer_1_label",
+        "label": "Offer 1 — description",
+        "default": "15% off your first order"
+      },
+      {
+        "type": "text",
+        "id": "cart_offer_2_code",
+        "label": "Offer 2 — code"
+      },
+      {
+        "type": "text",
+        "id": "cart_offer_2_label",
+        "label": "Offer 2 — description"
+      },
+      {
+        "type": "text",
+        "id": "cart_offer_3_code",
+        "label": "Offer 3 — code"
+      },
+      {
+        "type": "text",
+        "id": "cart_offer_3_label",
+        "label": "Offer 3 — description"
+      },
+      {
         "type": "checkbox",
         "id": "show_installments",
         "label": "t:settings.installments",
