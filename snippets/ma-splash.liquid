@@ -1,70 +1,68 @@
 {% comment %}
-  MAISON AMIIR — page loader veil, typographic treatment (Tom Ford / LV style).
-  Ink-black veil, the house wordmark in gold serif caps whose letterspacing
-  settles as it fades in, and a liquid-gold hairline that shimmers only
-  while a slow page is still loading. One object, one event: the whole veil
-  fades out as a single piece. No crest raster (it smears at small sizes),
-  no zoom, no scroll lock, no layout shift.
+  MAISON AMIIR — page loader veil: the logo only.
+  Cream veil, the crest centered large and served high-res so the engraving
+  stays crisp. One object, one event: the crest fades in once, breathes
+  gently only while a slow page loads, then the WHOLE veil fades out as a
+  single piece. No text, no hairline, no zoom, no scroll lock, no shift.
   Shows on every navigation; a sessionStorage handoff after link clicks
-  skips the entrance so the wordmark reads as one continuous moment across
+  skips the entrance so the crest reads as one continuous moment across
   the page change. Must stay inline in the layout: it has to paint first.
 {% endcomment %}
 {%- unless request.design_mode -%}
 <div id="ma-splash" aria-hidden="true">
   <div class="ma-splash__inner">
-    <p class="ma-splash__word">MAISON&nbsp;AMIIR</p>
-    <div class="ma-splash__line"></div>
+    {%- if settings.logo != blank -%}
+      <img class="ma-splash__logo"
+           src="{{ settings.logo | image_url: width: 640 }}"
+           srcset="{{ settings.logo | image_url: width: 640 }} 1x, {{ settings.logo | image_url: width: 1280 }} 2x"
+           alt="{{ shop.name | escape }}" width="280" height="auto">
+    {%- else -%}
+      <p class="ma-splash__word">MAISON&nbsp;AMIIR</p>
+    {%- endif -%}
   </div>
 </div>
 <noscript><style>#ma-splash { display: none !important; }</style></noscript>
 <style>
   #ma-splash {
     position: fixed; inset: 0; z-index: 100000;
-    background: #0A0A0A;
+    background: #F7F3EA;
     display: flex; align-items: center; justify-content: center;
     opacity: 1;
-    transition: opacity .55s ease;
+    transition: opacity .5s ease;
   }
   #ma-splash.is-hidden {
     opacity: 0; visibility: hidden; pointer-events: none;
-    transition: opacity .55s ease, visibility 0s linear .55s;
+    transition: opacity .5s ease, visibility 0s linear .5s;
   }
   #ma-splash.is-fast { transition: opacity .18s ease; }
 
-  .ma-splash__inner { text-align: center; padding: 0 1.5rem; transform: translateY(-2vh); }
+  .ma-splash__inner {
+    text-align: center; padding: 0 1.5rem;
+    transform: translateY(-2vh);
+    opacity: 0;
+    transition: opacity .6s ease;
+  }
+  #ma-splash.is-in .ma-splash__inner,
+  #ma-splash.is-cont .ma-splash__inner { opacity: 1; }
+  #ma-splash.is-cont .ma-splash__inner { transition: none; }
 
+  .ma-splash__logo {
+    display: block; margin: 0 auto;
+    width: min(280px, 62vw); height: auto;
+    animation: maSplashBreathe 2.6s ease-in-out 1.2s infinite;
+  }
   .ma-splash__word {
     margin: 0;
-    font-family: 'Sinoreta', Georgia, 'Times New Roman', serif;
-    font-weight: 300;
-    font-size: clamp(1.5rem, 4.2vw, 2.1rem);
-    color: #E7C98B;
-    letter-spacing: .5em; text-indent: .5em;
-    opacity: 0;
-    transition: opacity .9s cubic-bezier(.22, 1, .36, 1), letter-spacing .9s cubic-bezier(.22, 1, .36, 1);
-    white-space: nowrap;
+    font-family: 'Sinoreta', Georgia, serif; font-weight: 300;
+    font-size: clamp(1.5rem, 4.2vw, 2rem); letter-spacing: .34em; text-indent: .34em;
+    color: #171410;
+    animation: maSplashBreathe 2.6s ease-in-out 1.2s infinite;
   }
-  .ma-splash__line {
-    width: 0; height: 1px; margin: 1.5rem auto 0;
-    background: linear-gradient(90deg, transparent, #A8894E 25%, #F1DCA8 50%, #A8894E 75%, transparent);
-    background-size: 200% 100%;
-    transition: width .9s ease .35s;
-    animation: maSplashShimmer 2.2s linear 1.4s infinite;
-  }
-  @keyframes maSplashShimmer { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
-
-  /* entrance (fresh load): letters settle in */
-  #ma-splash.is-in .ma-splash__word { opacity: 1; letter-spacing: .34em; text-indent: .34em; }
-  #ma-splash.is-in .ma-splash__line { width: min(200px, 46vw); }
-
-  /* continuation after a link click — wordmark is already on screen, no re-entrance */
-  #ma-splash.is-cont .ma-splash__word { opacity: 1; letter-spacing: .34em; text-indent: .34em; transition: none; }
-  #ma-splash.is-cont .ma-splash__line { width: min(200px, 46vw); transition: none; }
+  @keyframes maSplashBreathe { 0%, 100% { opacity: 1; } 50% { opacity: .72; } }
 
   @media (prefers-reduced-motion: reduce) {
-    .ma-splash__word { transition: opacity .25s ease; letter-spacing: .34em; text-indent: .34em; }
-    .ma-splash__line { animation: none; transition: none; width: min(200px, 46vw); }
-    #ma-splash { transition-duration: .25s; }
+    .ma-splash__logo, .ma-splash__word { animation: none; }
+    #ma-splash, .ma-splash__inner { transition-duration: .2s !important; }
   }
 </style>
 <script>
@@ -72,7 +70,7 @@
     var el = document.getElementById('ma-splash');
     if (!el) return;
 
-    /* arrived via an internal click? the wordmark is already on screen — no re-entrance */
+    /* arrived via an internal click? the crest is already on screen — no re-entrance */
     var cont = false;
     try {
       var ts = parseInt(sessionStorage.getItem('ma_veil_nav') || '0', 10);
@@ -84,8 +82,8 @@
     else { requestAnimationFrame(function () { requestAnimationFrame(function () { el.classList.add('is-in'); }); }); }
 
     var t0 = Date.now();
-    var MIN = cont ? 500 : 1000; /* never a blink */
-    var MAX = 2600;              /* never a trap */
+    var MIN = cont ? 500 : 900; /* never a blink */
+    var MAX = 2600;             /* never a trap */
     var done = false;
     var hideTimer = null;
 
