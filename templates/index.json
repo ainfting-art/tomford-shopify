@@ -914,18 +914,19 @@
       "name": "Quiz Invite",
       "settings": {
         "bg_image": "shopify://shop_images/gif.gif",
+        "bg_video": "shopify://files/videos/0626 (1)(1).mp4",
         "media_opacity": 95,
-        "brand_line": "The Fragrance Finder",
-        "eyebrow": "Maison Amiir",
+        "brand_line": "Maison Amiir",
+        "eyebrow": "The Fragrance Finder",
         "headline": "Not Sure Which Scent Is Yours?",
         "subtext": "Answer 6 questions about your style, mood and the world you carry with you. Our AI-powered quiz will match you with your perfect signature scent.",
         "pill1": "6 Questions",
         "pill2": "Under 2 Minutes",
-        "pill3": "AI Matched",
+        "pill3": "",
         "hint": "No account required",
         "cta_label": "Find My Signature",
         "quiz_url": "/pages/find-your-signature",
-        "accent_color": "#b89766"
+        "accent_color": "#000000"
       }
     },
     "section_VhLBpg": {
