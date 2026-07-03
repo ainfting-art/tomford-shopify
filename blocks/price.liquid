@@ -47,11 +47,15 @@
   "
   {{ block.shopify_attributes }}
 >
-  {% render 'price',
-    show_unit_price: true,
-    product_resource: product_resource,
-    show_sale_price_first: block_settings.show_sale_price_first
-  %}
+  {%- comment -%} Shop money format prints "Rs." — the site standard is the ₹ symbol {%- endcomment -%}
+  {%- capture ma_price_html -%}
+    {% render 'price',
+      show_unit_price: true,
+      product_resource: product_resource,
+      show_sale_price_first: block_settings.show_sale_price_first
+    %}
+  {%- endcapture -%}
+  {{ ma_price_html | replace: 'Rs. ', '₹' | replace: 'Rs.', '₹' }}
 
   {% if block_settings.show_tax_info %}
     <div class="tax-note">
