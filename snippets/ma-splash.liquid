@@ -1,17 +1,19 @@
 {% comment %}
-  MAISON AMIIR — launch veil with zoom reveal.
-  Cream overlay + logo on every navigation. The logo appears ONCE per
-  navigation: when a link is clicked the veil rises with the logo already
-  visible, a sessionStorage handoff tells the next page to skip the
-  entrance animation (no double-show), and the reveal is the logo zooming
-  up to fill the screen while the veil dissolves into the page.
-  Must stay inline in the layout: it has to paint before anything else.
+  MAISON AMIIR — page loader veil, final treatment.
+  Cream veil with the crest at seal scale. One object, one event: the crest
+  and gold hairline fade in together, hold while the page loads (gentle
+  opacity breathing on slow loads only), then the WHOLE veil fades out as a
+  single piece — the logo never detaches from the veil, nothing zooms,
+  scroll is never locked so the scrollbar (and layout) never shifts.
+  Shows on every navigation; a sessionStorage handoff after link clicks
+  skips the entrance so the crest reads as one continuous moment across
+  the page change. Must stay inline in the layout: it has to paint first.
 {% endcomment %}
 {%- unless request.design_mode -%}
 <div id="ma-splash" aria-hidden="true">
   <div class="ma-splash__inner">
     {%- if settings.logo != blank -%}
-      <img class="ma-splash__logo" src="{{ settings.logo | image_url: width: 480 }}" alt="{{ shop.name | escape }}" width="240" height="auto">
+      <img class="ma-splash__logo" src="{{ settings.logo | image_url: width: 360 }}" alt="{{ shop.name | escape }}" width="150" height="auto">
     {%- else -%}
       <p class="ma-splash__word">MAISON&nbsp;AMIIR</p>
     {%- endif -%}
@@ -25,63 +27,52 @@
     background: #F7F3EA;
     display: flex; align-items: center; justify-content: center;
     opacity: 1;
-    transition: opacity .5s ease;
+    transition: opacity .45s ease;
   }
   #ma-splash.is-hidden {
     opacity: 0; visibility: hidden; pointer-events: none;
-    transition: opacity .4s ease, visibility 0s linear .4s;
+    transition: opacity .45s ease, visibility 0s linear .45s;
   }
-  #ma-splash.is-fast { transition: opacity .22s ease; }
-  html.ma-splash-lock { overflow: hidden; }
+  #ma-splash.is-fast { transition: opacity .18s ease; }
 
-  .ma-splash__inner { text-align: center; padding: 0 1.5rem; }
-  .ma-splash__logo, .ma-splash__word {
-    opacity: 0; transform: scale(.97);
-    transition: opacity .55s ease, transform .55s ease;
-    will-change: transform, opacity;
+  .ma-splash__inner {
+    text-align: center; padding: 0 1.5rem;
+    transform: translateY(-2vh);
+    opacity: 0;
+    transition: opacity .45s ease;
   }
-  .ma-splash__logo { display: block; margin: 0 auto; width: min(210px, 52vw); height: auto; }
+  #ma-splash.is-in .ma-splash__inner,
+  #ma-splash.is-cont .ma-splash__inner { opacity: 1; }
+  #ma-splash.is-cont .ma-splash__inner { transition: none; }
+
+  .ma-splash__logo {
+    display: block; margin: 0 auto; width: min(150px, 40vw); height: auto;
+    animation: maSplashBreathe 2.4s ease-in-out 1s infinite;
+  }
   .ma-splash__word {
     margin: 0;
     font-family: 'Sinoreta', Georgia, serif; font-weight: 300;
-    font-size: clamp(1.7rem, 5vw, 2.4rem); letter-spacing: .22em; text-indent: .22em;
+    font-size: clamp(1.5rem, 4.5vw, 2rem); letter-spacing: .22em; text-indent: .22em;
     color: #171410;
+    animation: maSplashBreathe 2.4s ease-in-out 1s infinite;
   }
   .ma-splash__line {
-    width: 0; height: 1px; margin: 1.4rem auto 0;
+    width: min(120px, 32vw); height: 1px; margin: 1.3rem auto 0;
     background: linear-gradient(90deg, transparent, #A8894E 30%, #E7C98B 50%, #A8894E 70%, transparent);
-    transition: width .9s ease .2s, opacity .2s ease;
   }
-
-  /* entrance (fresh load only) */
-  #ma-splash.is-in .ma-splash__logo, #ma-splash.is-in .ma-splash__word { opacity: 1; transform: scale(1); }
-  #ma-splash.is-in .ma-splash__line { width: min(170px, 42vw); }
-
-  /* continuation after a link click — logo is already on screen, no re-entrance */
-  #ma-splash.is-cont .ma-splash__logo, #ma-splash.is-cont .ma-splash__word { opacity: 1; transform: scale(1); transition: none; }
-  #ma-splash.is-cont .ma-splash__line { width: min(170px, 42vw); transition: none; }
-
-  /* reveal — the logo zooms to fill the page while the veil dissolves */
-  #ma-splash.is-out { pointer-events: none; opacity: 0; transition: opacity .45s ease .3s; }
-  #ma-splash.is-out .ma-splash__logo, #ma-splash.is-out .ma-splash__word {
-    opacity: 0; transform: scale(8);
-    transition: transform .85s cubic-bezier(.5, 0, .75, .35), opacity .5s ease .2s;
-  }
-  #ma-splash.is-out .ma-splash__line { opacity: 0; width: min(170px, 42vw); }
+  @keyframes maSplashBreathe { 0%, 100% { opacity: 1; } 50% { opacity: .62; } }
 
   @media (prefers-reduced-motion: reduce) {
-    .ma-splash__logo, .ma-splash__word, .ma-splash__line, #ma-splash { transition-duration: .25s !important; transition-delay: 0s !important; }
-    #ma-splash.is-out .ma-splash__logo, #ma-splash.is-out .ma-splash__word { transform: none; }
+    .ma-splash__logo, .ma-splash__word { animation: none; }
+    #ma-splash, .ma-splash__inner { transition-duration: .2s !important; }
   }
 </style>
 <script>
   (function () {
     var el = document.getElementById('ma-splash');
     if (!el) return;
-    var html = document.documentElement;
-    html.classList.add('ma-splash-lock');
 
-    /* did we arrive here from an internal click? then the logo is mid-flight — don't replay the entrance */
+    /* arrived via an internal click? the crest is already on screen — no re-entrance */
     var cont = false;
     try {
       var ts = parseInt(sessionStorage.getItem('ma_veil_nav') || '0', 10);
@@ -93,19 +84,12 @@
     else { requestAnimationFrame(function () { requestAnimationFrame(function () { el.classList.add('is-in'); }); }); }
 
     var t0 = Date.now();
-    var MIN = cont ? 420 : 900; /* never a blink */
+    var MIN = cont ? 500 : 900; /* never a blink */
     var MAX = 2600;             /* never a trap */
     var done = false;
     var hideTimer = null;
 
-    function reveal() {
-      el.classList.add('is-out');
-      html.classList.remove('ma-splash-lock');
-      setTimeout(function () {
-        el.classList.add('is-hidden');
-        el.classList.remove('is-out', 'is-in', 'is-cont');
-      }, 950);
-    }
+    function reveal() { el.classList.remove('is-fast'); el.classList.add('is-hidden'); }
     function hide() {
       if (done) return;
       done = true;
@@ -116,8 +100,6 @@
       if (hideTimer) clearTimeout(hideTimer);
       el.style.transition = 'none';
       el.classList.add('is-hidden');
-      el.classList.remove('is-out');
-      html.classList.remove('ma-splash-lock');
       requestAnimationFrame(function () { el.style.transition = ''; });
     }
     function cover() { /* rise again before the browser leaves this page */
@@ -125,8 +107,7 @@
       if (hideTimer) clearTimeout(hideTimer);
       try { sessionStorage.setItem('ma_veil_nav', String(Date.now())); } catch (e) {}
       el.classList.add('is-fast', 'is-cont');
-      el.classList.remove('is-hidden', 'is-out');
-      html.classList.add('ma-splash-lock');
+      el.classList.remove('is-hidden');
     }
 
     if (document.readyState === 'interactive' || document.readyState === 'complete') { hide(); }
