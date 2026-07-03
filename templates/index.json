@@ -1545,9 +1545,9 @@
       "name": "MA Social Proof",
       "settings": {
         "heading": "What Our Clients Say",
-        "rating": 4.3,
+        "rating": 4.1,
         "aggregate": "4.3 · Verified Buyers",
-        "rotate_seconds": 6
+        "rotate_seconds": 5
       }
     },
     "1775472317723a194f": {
