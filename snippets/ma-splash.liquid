@@ -49,9 +49,20 @@
   }
   @keyframes maSplashBreathe { 0%, 100% { opacity: 1; } 50% { opacity: .72; } }
 
+  /* reveal — the crest zooms to fill the page and dissolves BEFORE the veil
+     finishes fading, so it never floats over readable content */
+  #ma-splash.is-out { opacity: 0; pointer-events: none; transition: opacity .5s ease .22s; }
+  #ma-splash.is-out .ma-splash__logo {
+    animation: none;
+    transform: scale(6); opacity: 0;
+    transition: transform .7s cubic-bezier(.5, 0, .85, .4), opacity .42s ease .12s;
+    will-change: transform, opacity;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .ma-splash__logo { animation: none; }
     #ma-splash, .ma-splash__inner { transition-duration: .2s !important; }
+    #ma-splash.is-out .ma-splash__logo { transform: none; }
   }
 </style>
 <script>
@@ -76,7 +87,14 @@
     var done = false;
     var hideTimer = null;
 
-    function reveal() { el.classList.remove('is-fast'); el.classList.add('is-hidden'); }
+    function reveal() {
+      el.classList.remove('is-fast');
+      el.classList.add('is-out');
+      setTimeout(function () {
+        el.classList.add('is-hidden');
+        el.classList.remove('is-out', 'is-in', 'is-cont');
+      }, 820);
+    }
     function hide() {
       if (done) return;
       done = true;
@@ -87,6 +105,7 @@
       if (hideTimer) clearTimeout(hideTimer);
       el.style.transition = 'none';
       el.classList.add('is-hidden');
+      el.classList.remove('is-out');
       requestAnimationFrame(function () { el.style.transition = ''; });
     }
     function cover() { /* rise again before the browser leaves this page */
@@ -94,7 +113,7 @@
       if (hideTimer) clearTimeout(hideTimer);
       try { sessionStorage.setItem('ma_veil_nav', String(Date.now())); } catch (e) {}
       el.classList.add('is-fast', 'is-cont');
-      el.classList.remove('is-hidden');
+      el.classList.remove('is-hidden', 'is-out');
     }
 
     if (document.readyState === 'interactive' || document.readyState === 'complete') { hide(); }
