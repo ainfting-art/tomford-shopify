@@ -550,6 +550,26 @@
         "link_url": "/pages/our-story"
       }
     },
+    "ma_unboxing": {
+      "type": "ma-unboxing",
+      "name": "MA Unboxing",
+      "settings": {
+        "image_1": "shopify://shop_images/29.jpg",
+        "image_2": "shopify://shop_images/26.jpg",
+        "image_3": "shopify://shop_images/12.jpg",
+        "image_4": "shopify://shop_images/27.jpg",
+        "cap_1": "The Coffret",
+        "cap_2": "The Reveal",
+        "cap_3": "The Bottle",
+        "cap_4": "The Note",
+        "eyebrow": "The Maison Amiir Coffret",
+        "heading": "Every order arrives as a gift.",
+        "body": "Our coffrets are crafted with premium materials, subtle texture, and clean lines — the purity of French design and the sophistication of Dubai. Every bottle is placed with intention.",
+        "gift_line": "Gift-ready, always. No wrapping required.",
+        "button_label": "Explore the Collection",
+        "button_link": "/collections/all-perfumes"
+      }
+    },
     "ma_most_wanted_JMH4Mt": {
       "type": "ma-most-wanted",
       "name": "Most Wanted Grid",
@@ -1332,33 +1352,63 @@
         "padding-block-end": 60
       }
     },
-    "ma_unboxing": {
-      "type": "ma-unboxing",
-      "name": "MA Unboxing",
-      "settings": {
-        "eyebrow": "The Maison Amiir Coffret",
-        "heading": "Every order arrives as a gift.",
-        "body": "Our coffrets are crafted with premium materials, subtle texture, and clean lines — the purity of French design and the sophistication of Dubai. Every bottle is placed with intention.",
-        "gift_line": "Gift-ready, always. No wrapping required.",
-        "button_label": "Explore the Collection",
-        "button_link": "/collections/all-perfumes",
-        "cap_1": "The Coffret",
-        "cap_2": "The Reveal",
-        "cap_3": "The Bottle",
-        "cap_4": "The Note"
-      }
-    },
     "ma_explore_maison": {
       "type": "ma-explore-maison",
-      "name": "MA Explore the Maison",
       "blocks": {
-        "tile_masculine": { "type": "tile", "settings": { "collection": "mens-collection", "label": "Masculine", "subline": "" } },
-        "tile_feminine": { "type": "tile", "settings": { "collection": "womens-collection", "label": "Feminine", "subline": "" } },
-        "tile_unisex": { "type": "tile", "settings": { "collection": "unisex-collection", "label": "Unisex", "subline": "" } },
-        "tile_summer": { "type": "tile", "settings": { "collection": "summer-collection", "label": "Summer", "subline": "Light yet unforgettable" } },
-        "tile_winter": { "type": "tile", "settings": { "collection": "winter-collection", "label": "Winter", "subline": "Deep, enveloping, intimate" } }
+        "tile_masculine": {
+          "type": "tile",
+          "settings": {
+            "collection": "mens-collection",
+            "link": "",
+            "label": "Masculine",
+            "subline": ""
+          }
+        },
+        "tile_feminine": {
+          "type": "tile",
+          "settings": {
+            "collection": "womens-collection",
+            "link": "",
+            "label": "Feminine",
+            "subline": ""
+          }
+        },
+        "tile_unisex": {
+          "type": "tile",
+          "settings": {
+            "collection": "unisex-collection",
+            "link": "",
+            "label": "Unisex",
+            "subline": ""
+          }
+        },
+        "tile_summer": {
+          "type": "tile",
+          "settings": {
+            "collection": "summer-collection",
+            "link": "",
+            "label": "Summer",
+            "subline": "Light yet unforgettable"
+          }
+        },
+        "tile_winter": {
+          "type": "tile",
+          "settings": {
+            "collection": "winter-collection",
+            "link": "",
+            "label": "Winter",
+            "subline": "Deep, enveloping, intimate"
+          }
+        }
       },
-      "block_order": ["tile_masculine", "tile_feminine", "tile_unisex", "tile_summer", "tile_winter"],
+      "block_order": [
+        "tile_masculine",
+        "tile_feminine",
+        "tile_unisex",
+        "tile_summer",
+        "tile_winter"
+      ],
+      "name": "MA Explore the Maison",
       "settings": {
         "heading": "Explore the Maison",
         "subtext": "We don't just sell scents; we archive moments of elegance, capturing the ephemeral and making it eternal."
@@ -1367,20 +1417,129 @@
     "ma_social_proof": {
       "type": "ma-social-proof",
       "blocks": {
-        "review_1": { "type": "review", "settings": { "product": "desert-velvet-oud", "stars": 5, "quote": "My boyfriend bought this and honestly I want to wear it myself. The amber and oud combination smells incredible on skin. Very long lasting.", "author": "Ananya T." } },
-        "review_2": { "type": "review", "settings": { "product": "desert-velvet-oud", "stars": 5, "quote": "I've tried many oud fragrances over the years and Desert Velvet Oud has quickly become one of my favourites. The smoky and warmth combo is exactly what a good oud should be.", "author": "Siddharth M." } },
-        "review_3": { "type": "review", "settings": { "product": "desert-velvet-oud", "stars": 4, "quote": "Long lasting is good, smell unique — sometimes velvet, sometimes oud, sometimes rose. Crazy perfume.", "author": "Tamana" } },
-        "review_4": { "type": "review", "settings": { "product": "horizon-valley", "stars": 5, "quote": "Fresh opening that dries down to a beautiful woody base. Colleagues at my architecture firm have noticed and commented. Very versatile.", "author": "Dev S." } },
-        "review_5": { "type": "review", "settings": { "product": "horizon-valley", "stars": 4, "quote": "The longevity is excellent, the projection is moderate but consistent, and the scent profile is very well composed. Very impressed.", "author": "Tejal M." } },
-        "review_6": { "type": "review", "settings": { "product": "horizon-valley", "stars": 3, "quote": "Smells good. Really it does. Safe, wearable, easy fresh woody. Which is fine if that's what you need. Reliable fragrance.", "author": "Arjun P." } },
-        "review_7": { "type": "review", "settings": { "product": "hash-night", "stars": 5, "quote": "Hash Night is not your everyday office fragrance. This is dark, artistic, and makes a statement. I personally love it.", "author": "Farhan K." } },
-        "review_8": { "type": "review", "settings": { "product": "hash-night", "stars": 5, "quote": "Dark, resinous, a little smoky. Polarising yes but memorable always.", "author": "Swati N." } },
-        "review_9": { "type": "review", "settings": { "product": "vanille-roses", "stars": 4, "quote": "Rose fragrances can go very wrong — either too sharp or too soapy. This one gets it right. The vanilla softens the rose and makes it feel modern and warm.", "author": "Pooja V." } },
-        "review_10": { "type": "review", "settings": { "product": "vanille-roses", "stars": 5, "quote": "Roses but not in a sharp old-fashioned way. Sweet warm gourmand roses. Really beautiful.", "author": "Sonal R." } },
-        "review_11": { "type": "review", "settings": { "product": "marine-aqua", "stars": 5, "quote": "It keeps smelling fresh all day without becoming sour in the heat. The marine notes work perfectly in humid coastal weather.", "author": "Nikhil A." } },
-        "review_12": { "type": "review", "settings": { "product": "marine-aqua", "stars": 3, "quote": "Very safe aquatic fresh scent. Nothing unique or surprising. If you want reliable and inoffensive this is great.", "author": "Karan J." } }
+        "review_1": {
+          "type": "review",
+          "settings": {
+            "product": "desert-velvet-oud",
+            "stars": 5,
+            "quote": "My boyfriend bought this and honestly I want to wear it myself. The amber and oud combination smells incredible on skin. Very long lasting.",
+            "author": "Ananya T."
+          }
+        },
+        "review_2": {
+          "type": "review",
+          "settings": {
+            "product": "desert-velvet-oud",
+            "stars": 5,
+            "quote": "I've tried many oud fragrances over the years and Desert Velvet Oud has quickly become one of my favourites. The smoky and warmth combo is exactly what a good oud should be.",
+            "author": "Siddharth M."
+          }
+        },
+        "review_3": {
+          "type": "review",
+          "settings": {
+            "product": "desert-velvet-oud",
+            "stars": 4,
+            "quote": "Long lasting is good, smell unique — sometimes velvet, sometimes oud, sometimes rose. Crazy perfume.",
+            "author": "Tamana"
+          }
+        },
+        "review_4": {
+          "type": "review",
+          "settings": {
+            "product": "horizon-valley",
+            "stars": 5,
+            "quote": "Fresh opening that dries down to a beautiful woody base. Colleagues at my architecture firm have noticed and commented. Very versatile.",
+            "author": "Dev S."
+          }
+        },
+        "review_5": {
+          "type": "review",
+          "settings": {
+            "product": "horizon-valley",
+            "stars": 4,
+            "quote": "The longevity is excellent, the projection is moderate but consistent, and the scent profile is very well composed. Very impressed.",
+            "author": "Tejal M."
+          }
+        },
+        "review_6": {
+          "type": "review",
+          "settings": {
+            "product": "horizon-valley",
+            "stars": 3,
+            "quote": "Smells good. Really it does. Safe, wearable, easy fresh woody. Which is fine if that's what you need. Reliable fragrance.",
+            "author": "Arjun P."
+          }
+        },
+        "review_7": {
+          "type": "review",
+          "settings": {
+            "product": "hash-night",
+            "stars": 5,
+            "quote": "Hash Night is not your everyday office fragrance. This is dark, artistic, and makes a statement. I personally love it.",
+            "author": "Farhan K."
+          }
+        },
+        "review_8": {
+          "type": "review",
+          "settings": {
+            "product": "hash-night",
+            "stars": 5,
+            "quote": "Dark, resinous, a little smoky. Polarising yes but memorable always.",
+            "author": "Swati N."
+          }
+        },
+        "review_9": {
+          "type": "review",
+          "settings": {
+            "product": "vanille-roses",
+            "stars": 4,
+            "quote": "Rose fragrances can go very wrong — either too sharp or too soapy. This one gets it right. The vanilla softens the rose and makes it feel modern and warm.",
+            "author": "Pooja V."
+          }
+        },
+        "review_10": {
+          "type": "review",
+          "settings": {
+            "product": "vanille-roses",
+            "stars": 5,
+            "quote": "Roses but not in a sharp old-fashioned way. Sweet warm gourmand roses. Really beautiful.",
+            "author": "Sonal R."
+          }
+        },
+        "review_11": {
+          "type": "review",
+          "settings": {
+            "product": "marine-aqua",
+            "stars": 5,
+            "quote": "It keeps smelling fresh all day without becoming sour in the heat. The marine notes work perfectly in humid coastal weather.",
+            "author": "Nikhil A."
+          }
+        },
+        "review_12": {
+          "type": "review",
+          "settings": {
+            "product": "marine-aqua",
+            "stars": 3,
+            "quote": "Very safe aquatic fresh scent. Nothing unique or surprising. If you want reliable and inoffensive this is great.",
+            "author": "Karan J."
+          }
+        }
       },
-      "block_order": ["review_1", "review_2", "review_3", "review_4", "review_5", "review_6", "review_7", "review_8", "review_9", "review_10", "review_11", "review_12"],
+      "block_order": [
+        "review_1",
+        "review_2",
+        "review_3",
+        "review_4",
+        "review_5",
+        "review_6",
+        "review_7",
+        "review_8",
+        "review_9",
+        "review_10",
+        "review_11",
+        "review_12"
+      ],
       "name": "MA Social Proof",
       "settings": {
         "heading": "What Our Clients Say",
