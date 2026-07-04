@@ -178,6 +178,9 @@
                         {{- item.product.title -}}
                       </a>
                     </p>
+                    {%- assign ma_size = item.variant.title | default: '' -%}
+                    {%- if ma_size == 'Default Title' or ma_size == '' -%}{%- assign ma_size = item.product.metafields.custom.size | default: '100 ml' -%}{%- endif -%}
+                    <p class="ma-cart-size">{{ ma_size }}</p>
                     {% if item.product.vendor and block_settings.vendor %}
                       <p>
                         {{ item.product.vendor }}
@@ -379,19 +382,29 @@
           </tbody>
         </table>
       </div>
+      {% render 'ma-cart-testers' %}
     </form>
   {%- endif -%}
 </div>
 
 {% stylesheet %}
   .cart-items {
-    --cart-item-media-width-min: 2.5rem;
-    --cart-item-media-width-max: 7.5rem;
+    --cart-item-media-width-min: 4.25rem;
+    --cart-item-media-width-max: 8rem;
 
     container-name: cart-items;
     container-type: inline-size;
     width: 100%;
   }
+  .ma-cart-size {
+    margin: 3px 0 0 !important;
+    font-size: var(--font-size--2xs);
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: rgb(var(--color-foreground-rgb) / var(--opacity-subdued-text));
+  }
+  /* single price on the right only — hide the duplicate unit price under the name */
+  .cart-items__unit-price-wrapper { display: none; }
 
   .cart-items-disabled {
     pointer-events: none;

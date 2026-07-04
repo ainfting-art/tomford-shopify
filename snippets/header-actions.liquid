@@ -201,7 +201,7 @@
                   class="cart-drawer__heading h4"
                   id="cart-drawer-heading"
                 >
-                  {{ 'content.cart_title' | t }}
+                  Shopping bag
                   {% render 'cart-bubble' %}
                 </h2>
 
@@ -216,6 +216,8 @@
                   </span>
                 </button>
               </div>
+
+              <p class="ma-cart-tagline">Complimentary shipping and samples on every order</p>
 
               <scroll-hint
                 class="cart-drawer__content"
@@ -266,6 +268,34 @@
 ></script>
 
 {% stylesheet %}
+  /* MAISON AMIIR cart drawer refinements */
+  .cart-drawer__heading { text-transform: uppercase; }
+  .ma-cart-tagline {
+    margin: 0;
+    padding-inline: var(--padding-lg);
+    padding-block: 0 var(--padding-md);
+    font-size: var(--font-size--2xs);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: #A8894E;
+  }
+  @media screen and (min-width: 750px) {
+    .ma-cart-tagline { padding-inline: var(--padding-2xl); }
+  }
+  /* transparent quantity stepper (no grey fill) */
+  .cart-items__quantity .quantity-selector,
+  .cart-items__quantity .quantity-selector-wrapper {
+    background: transparent !important;
+  }
+  .cart-items__quantity .quantity-selector {
+    border: 1px solid var(--color-border);
+  }
+  .cart-items__quantity .quantity-selector .quantity-minus,
+  .cart-items__quantity .quantity-selector .quantity-plus,
+  .cart-items__quantity .quantity-selector input {
+    background: transparent !important;
+  }
+
   .header {
     --account-offset-top: calc(
       var(--header-group-height) + (var(--header-height) * var(--transparent-header-offset-boolean))

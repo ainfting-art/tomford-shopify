@@ -1,0 +1,129 @@
+{%- comment -%} MAISON AMIIR — Try Before You Buy: free 2 ml samples. Rendered in the
+  SCROLLING cart area (below the items), so the sticky checkout summary stays pinned.
+  Own sample per product (qty-matched, category image) + one cross-category discovery
+  per category present (deduped, capped at 2). Not real line items — the sample list is
+  written to the "Testers to pack" order attribute by a hidden cart-form field. {%- endcomment -%}
+{%- if settings.cart_testers_enabled and cart != empty -%}
+  {%- liquid
+    assign m_coll = settings.tester_collection_masculine | default: 'mens-collection'
+    assign f_coll = settings.tester_collection_feminine | default: 'womens-collection'
+    assign u_coll = settings.tester_collection_unisex | default: 'unisex-collection'
+    assign has_m = false
+    assign has_f = false
+    assign has_u = false
+    assign own_handles = ''
+    assign tester_summary = ''
+  -%}
+  <div class="ma-testers">
+    <p class="ma-testers__title">{{ settings.cart_testers_heading | default: 'Try Before You Buy' }}</p>
+    <p class="ma-testers__sub">{{ settings.cart_testers_subtext | default: 'Experience your fragrance with a tester first. Not convinced? Enjoy a 7-day return.' }}</p>
+
+    {%- for line in cart.items -%}
+      {%- assign p = line.product -%}
+      {%- assign cat = '' -%}
+      {%- for c in p.collections -%}
+        {%- if c.handle == m_coll -%}{%- assign cat = 'm' -%}{%- endif -%}
+        {%- if c.handle == f_coll -%}{%- assign cat = 'f' -%}{%- endif -%}
+        {%- if c.handle == u_coll -%}{%- assign cat = 'u' -%}{%- endif -%}
+      {%- endfor -%}
+      {%- assign timg = blank -%}
+      {%- if cat == 'm' -%}{%- assign has_m = true -%}{%- assign timg = settings.tester_img_masculine -%}
+      {%- elsif cat == 'f' -%}{%- assign has_f = true -%}{%- assign timg = settings.tester_img_feminine -%}
+      {%- elsif cat == 'u' -%}{%- assign has_u = true -%}{%- assign timg = settings.tester_img_unisex -%}{%- endif -%}
+      {%- assign own_handles = own_handles | append: '|' | append: p.handle -%}
+      {%- assign tester_summary = tester_summary | append: p.title | append: ' 2ml x' | append: line.quantity | append: '; ' -%}
+      <div class="ma-testers__row">
+        <span class="ma-testers__thumb">{%- if timg != blank -%}{{ timg | image_url: width: 160 | image_tag: loading: 'lazy', alt: p.title, class: 'ma-testers__img' }}{%- else -%}<span class="ma-testers__img ma-testers__img--ph"></span>{%- endif -%}</span>
+        <span class="ma-testers__meta">
+          <span class="ma-testers__name">{{ p.title }} &mdash; Sample</span>
+          <span class="ma-testers__size">2 ml &nbsp;&middot;&nbsp; own sample</span>
+        </span>
+        <span class="ma-testers__right"><span class="ma-testers__free">FREE</span><span class="ma-testers__qty">Qty {{ line.quantity }}</span></span>
+      </div>
+    {%- endfor -%}
+
+    {%- liquid
+      assign cand = ''
+      if has_m
+        assign cand = cand | append: 'm,'
+      endif
+      if has_f
+        assign cand = cand | append: 'f,'
+      endif
+      if has_u
+        assign cand = cand | append: 'u,'
+      endif
+      assign cand_arr = cand | split: ','
+      assign cross_count = 0
+      assign cross_handles = ''
+    -%}
+    {%- for cc in cand_arr -%}
+      {%- if cross_count >= 2 -%}{%- break -%}{%- endif -%}
+      {%- assign xhandle = '' -%}
+      {%- if cc == 'm' -%}{%- assign xhandle = settings.tester_cross_for_masculine | default: 'life-s-belle' -%}
+      {%- elsif cc == 'f' -%}{%- assign xhandle = settings.tester_cross_for_feminine | default: 'dao-spirit' -%}
+      {%- elsif cc == 'u' -%}{%- assign xhandle = settings.tester_cross_for_unisex | default: 'life-s-belle' -%}{%- endif -%}
+      {%- assign dup_key = '|' | append: xhandle -%}
+      {%- unless own_handles contains dup_key or cross_handles contains dup_key -%}
+        {%- assign xp = all_products[xhandle] -%}
+        {%- if xp != blank -%}
+          {%- assign xcat = '' -%}
+          {%- for c in xp.collections -%}
+            {%- if c.handle == m_coll -%}{%- assign xcat = 'm' -%}{%- endif -%}
+            {%- if c.handle == f_coll -%}{%- assign xcat = 'f' -%}{%- endif -%}
+            {%- if c.handle == u_coll -%}{%- assign xcat = 'u' -%}{%- endif -%}
+          {%- endfor -%}
+          {%- assign ximg = settings.tester_img_unisex -%}
+          {%- if xcat == 'm' -%}{%- assign ximg = settings.tester_img_masculine -%}{%- elsif xcat == 'f' -%}{%- assign ximg = settings.tester_img_feminine -%}{%- endif -%}
+          {%- assign cross_handles = cross_handles | append: '|' | append: xhandle -%}
+          {%- assign cross_count = cross_count | plus: 1 -%}
+          {%- assign tester_summary = tester_summary | append: xp.title | append: ' 2ml x1 (discovery); ' -%}
+          <div class="ma-testers__row">
+            <span class="ma-testers__thumb">{%- if ximg != blank -%}{{ ximg | image_url: width: 160 | image_tag: loading: 'lazy', alt: xp.title, class: 'ma-testers__img' }}{%- else -%}<span class="ma-testers__img ma-testers__img--ph"></span>{%- endif -%}</span>
+            <span class="ma-testers__meta">
+              <span class="ma-testers__name">{{ xp.title }} &mdash; Sample</span>
+              <span class="ma-testers__size">2 ml &nbsp;&middot;&nbsp; complimentary discovery</span>
+            </span>
+            <span class="ma-testers__right"><span class="ma-testers__free">FREE</span></span>
+          </div>
+        {%- endif -%}
+      {%- endunless -%}
+    {%- endfor -%}
+
+    {%- comment -%} Passive order flag: submits with the cart form at checkout only. {%- endcomment -%}
+    <input type="hidden" name="attributes[Testers to pack]" value="{{ tester_summary | strip | escape }}" form="cart-form">
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .ma-testers {
+    border-block-start: var(--style-border-width, 1px) solid var(--color-border);
+    padding-block: var(--padding-md) var(--padding-lg);
+  }
+  .ma-testers__title {
+    margin: 0; font-size: var(--font-size--sm); font-weight: 600;
+    text-decoration: underline; text-underline-offset: 3px; color: var(--color-foreground);
+  }
+  .ma-testers__sub {
+    margin: 5px 0 12px; font-family: Georgia, 'Times New Roman', serif; font-style: italic;
+    font-size: var(--font-size--2xs); line-height: 1.5;
+    color: rgb(var(--color-foreground-rgb) / var(--opacity-subdued-text));
+  }
+  .ma-testers__row {
+    display: flex; align-items: center; gap: 13px;
+    padding-block: 9px; border-block-start: var(--style-border-width, 1px) solid var(--color-border);
+  }
+  .ma-testers__thumb { flex-shrink: 0; }
+  .ma-testers__img { width: 58px; height: 58px; object-fit: cover; display: block; }
+  .ma-testers__img--ph { background: rgb(var(--color-foreground-rgb) / .08); }
+  .ma-testers__meta { flex: 1; min-width: 0; }
+  .ma-testers__name { display: block; font-size: var(--font-size--sm); color: var(--color-foreground); }
+  .ma-testers__size {
+    display: block; margin-top: 3px; font-size: var(--font-size--2xs);
+    letter-spacing: .08em; text-transform: uppercase;
+    color: rgb(var(--color-foreground-rgb) / var(--opacity-subdued-text));
+  }
+  .ma-testers__right { flex-shrink: 0; text-align: right; }
+  .ma-testers__free { display: block; font-size: var(--font-size--2xs); letter-spacing: .22em; color: #A8894E; }
+  .ma-testers__qty { display: block; margin-top: 2px; font-size: var(--font-size--2xs); color: rgb(var(--color-foreground-rgb) / var(--opacity-subdued-text)); }
+{% endstylesheet %}
