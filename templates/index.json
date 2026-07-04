@@ -1412,6 +1412,7 @@
           "settings": {
             "product": "desert-velvet-oud",
             "stars": 5,
+            "heading": "My boyfriend wears it and I'm obsessed",
             "quote": "My boyfriend bought this and honestly I want to wear it myself. The amber and oud combination smells incredible on skin. Very long lasting.",
             "author": "Ananya T."
           }
@@ -1421,17 +1422,9 @@
           "settings": {
             "product": "desert-velvet-oud",
             "stars": 5,
+            "heading": "This oud is special",
             "quote": "I've tried many oud fragrances over the years and Desert Velvet Oud has quickly become one of my favourites. The smoky and warmth combo is exactly what a good oud should be.",
             "author": "Siddharth M."
-          }
-        },
-        "review_3": {
-          "type": "review",
-          "settings": {
-            "product": "desert-velvet-oud",
-            "stars": 4,
-            "quote": "Long lasting is good, smell unique — sometimes velvet, sometimes oud, sometimes rose. Crazy perfume.",
-            "author": "Tamana"
           }
         },
         "review_4": {
@@ -1439,6 +1432,7 @@
           "settings": {
             "product": "horizon-valley",
             "stars": 5,
+            "heading": "Fresh and sophisticated",
             "quote": "Fresh opening that dries down to a beautiful woody base. Colleagues at my architecture firm have noticed and commented. Very versatile.",
             "author": "Dev S."
           }
@@ -1448,17 +1442,9 @@
           "settings": {
             "product": "horizon-valley",
             "stars": 4,
+            "heading": "Feels premium",
             "quote": "The longevity is excellent, the projection is moderate but consistent, and the scent profile is very well composed. Very impressed.",
             "author": "Tejal M."
-          }
-        },
-        "review_6": {
-          "type": "review",
-          "settings": {
-            "product": "horizon-valley",
-            "stars": 3,
-            "quote": "Smells good. Really it does. Safe, wearable, easy fresh woody. Which is fine if that's what you need. Reliable fragrance.",
-            "author": "Arjun P."
           }
         },
         "review_7": {
@@ -1466,6 +1452,7 @@
           "settings": {
             "product": "hash-night",
             "stars": 5,
+            "heading": "This is for the brave",
             "quote": "Hash Night is not your everyday office fragrance. This is dark, artistic, and makes a statement. I personally love it.",
             "author": "Farhan K."
           }
@@ -1475,6 +1462,7 @@
           "settings": {
             "product": "hash-night",
             "stars": 5,
+            "heading": "Distinctive and unforgettable",
             "quote": "Dark, resinous, a little smoky. Polarising yes but memorable always.",
             "author": "Swati N."
           }
@@ -1484,6 +1472,7 @@
           "settings": {
             "product": "vanille-roses",
             "stars": 5,
+            "heading": "Sweet but elegant",
             "quote": "Rose fragrances can go very wrong — either too sharp or too soapy. This one gets it right. The vanilla softens the rose and makes it feel modern and warm.",
             "author": "Pooja V."
           }
@@ -1493,6 +1482,7 @@
           "settings": {
             "product": "vanille-roses",
             "stars": 5,
+            "heading": "Feminine and warm",
             "quote": "Roses but not in a sharp old-fashioned way. Sweet warm gourmand roses. Really beautiful.",
             "author": "Sonal R."
           }
@@ -1502,33 +1492,22 @@
           "settings": {
             "product": "marine-aqua",
             "stars": 5,
+            "heading": "Best summer fragrance I've found",
             "quote": "It keeps smelling fresh all day without becoming sour in the heat. The marine notes work perfectly in humid coastal weather.",
             "author": "Nikhil A."
-          }
-        },
-        "review_12": {
-          "type": "review",
-          "settings": {
-            "product": "marine-aqua",
-            "stars": 3,
-            "quote": "Very safe aquatic fresh scent. Nothing unique or surprising. If you want reliable and inoffensive this is great.",
-            "author": "Karan J."
           }
         }
       },
       "block_order": [
         "review_1",
         "review_2",
-        "review_3",
         "review_4",
         "review_5",
-        "review_6",
         "review_7",
         "review_8",
         "review_9",
         "review_10",
-        "review_11",
-        "review_12"
+        "review_11"
       ],
       "name": "MA Social Proof",
       "settings": {
