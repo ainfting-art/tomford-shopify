@@ -219,6 +219,27 @@
     </div>
   {% endif %}
 
+  {%- comment -%} MAISON AMIIR — free gift-wrap flag. Ticking sets the "Gift wrap"
+    cart attribute (via ma-giftwrap.js → /cart/update.js) so it appears on the
+    order in admin. No fee, no effect on totals or the rest of the cart. {%- endcomment -%}
+  {%- if cart != empty -%}
+    <div class="ma-giftwrap">
+      <label class="ma-giftwrap__row">
+        <input type="checkbox" class="ma-giftwrap__cb" {% if cart.attributes['Gift wrap'] == 'Yes' %}checked{% endif %} aria-label="Gift wrap your order — free">
+        <span class="ma-giftwrap__box" aria-hidden="true"></span>
+        <span class="ma-giftwrap__text">
+          <span class="ma-giftwrap__label">
+            Gift wrap your order
+            <svg class="ma-giftwrap__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h16v11H4z"/><path d="M4 13h16M12 9v11"/><path d="M12 9c-2 0-3.4-1.2-3.4-2.6 0-.9.6-1.6 1.5-1.6 1.7 0 1.9 2.4 1.9 4.2zM12 9c2 0 3.4-1.2 3.4-2.6 0-.9-.6-1.6-1.5-1.6-1.7 0-1.9 2.4-1.9 4.2z"/></svg>
+          </span>
+          <span class="ma-giftwrap__sub">Hand-wrapped in the Maison coffret.</span>
+        </span>
+        <span class="ma-giftwrap__free">FREE</span>
+      </label>
+    </div>
+    <script src="{{ 'ma-giftwrap.js' | asset_url }}" defer></script>
+  {%- endif -%}
+
   {%- liquid
     if settings.currency_code_enabled_cart_total
       assign total_price = cart.total_price | money_with_currency
@@ -286,6 +307,46 @@
 </div>
 
 {% stylesheet %}
+  .ma-giftwrap {
+    border-block-start: var(--style-border-width, 1px) solid var(--color-border);
+    padding-block: var(--padding-md);
+  }
+  .ma-giftwrap__row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    cursor: pointer;
+    margin: 0;
+  }
+  .ma-giftwrap__cb { position: absolute; opacity: 0; width: 0; height: 0; }
+  .ma-giftwrap__box {
+    position: relative; flex-shrink: 0;
+    width: 16px; height: 16px; margin-top: 1px;
+    border: 1px solid var(--color-foreground);
+    transition: background-color .2s ease, border-color .2s ease;
+  }
+  .ma-giftwrap__cb:checked ~ .ma-giftwrap__box { background: #A8894E; border-color: #A8894E; }
+  .ma-giftwrap__cb:checked ~ .ma-giftwrap__box::after {
+    content: ''; position: absolute; left: 5px; top: 2px;
+    width: 4px; height: 8px; border: solid #fff; border-width: 0 1.5px 1.5px 0; transform: rotate(45deg);
+  }
+  .ma-giftwrap__cb:focus-visible ~ .ma-giftwrap__box { outline: 2px solid #A8894E; outline-offset: 2px; }
+  .ma-giftwrap__text { flex: 1; min-width: 0; }
+  .ma-giftwrap__label {
+    display: flex; align-items: center; gap: 8px;
+    font-size: var(--font-size--sm); color: var(--color-foreground);
+  }
+  .ma-giftwrap__icon { width: 16px; height: 16px; color: #A8894E; flex-shrink: 0; }
+  .ma-giftwrap__sub {
+    display: block; margin-top: 4px;
+    font-family: Georgia, 'Times New Roman', serif; font-style: italic;
+    font-size: var(--font-size--2xs); color: rgb(var(--color-foreground-rgb) / var(--opacity-subdued-text));
+  }
+  .ma-giftwrap__free {
+    flex-shrink: 0; margin-top: 2px;
+    font-size: var(--font-size--2xs); letter-spacing: .26em; color: #A8894E;
+  }
+
   .cart-actions {
     display: flex;
     flex-direction: column;
