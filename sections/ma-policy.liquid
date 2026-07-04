@@ -1,0 +1,122 @@
+{% comment %} MAISON AMIIR — luxury policy layout: crest + sidebar index (desktop) / chip row (mobile) + reading column. Content is set verbatim per page via the "body" HTML setting. {% endcomment %}
+
+<div class="ma-policy" id="ma-policy-{{ section.id }}">
+  <header class="ma-policy__header">
+    <span class="ma-policy__icon" aria-hidden="true">
+      {%- case section.settings.icon -%}
+        {%- when 'shield' -%}
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 7.6-7 9-4-1.4-7-4.5-7-9V6l7-3z"/><circle cx="12" cy="11" r="1.6"/><path d="M12 12.6V15"/></svg>
+        {%- when 'parcel' -%}
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 7v10l9 4 9-4V7"/><path d="M12 11v10"/></svg>
+        {%- when 'refund' -%}
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14l-4-4 4-4"/><path d="M5 10h9a5 5 0 0 1 0 10h-3"/></svg>
+        {%- when 'document' -%}
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/><path d="M9.5 12h6M9.5 15.2h6M9.5 9h3"/></svg>
+        {%- when 'calendar' -%}
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="16" rx="1"/><path d="M4 9.2h16M8 3v4M16 3v4"/><path d="M10 13l4 4M14 13l-4 4"/></svg>
+        {%- else -%}
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
+      {%- endcase -%}
+    </span>
+    <h1 class="ma-policy__title">{{ page.title }}</h1>
+    <span class="ma-policy__rule" aria-hidden="true"></span>
+  </header>
+
+  <div class="ma-policy__chips" aria-hidden="true"></div>
+
+  <div class="ma-policy__grid">
+    <aside class="ma-policy__index">
+      <p class="ma-policy__index-label">On this page</p>
+      <nav class="ma-policy__index-list"></nav>
+    </aside>
+    <div class="ma-policy__content">
+      {{ section.settings.body }}
+    </div>
+  </div>
+</div>
+
+<style>
+  #shopify-section-{{ section.id }} { opacity: 1 !important; transform: none !important; }
+
+  .ma-policy {
+    background: #F7F3EA;
+    color: #171410;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    padding: clamp(3rem, 6vw, 5.5rem) clamp(1.1rem, 4vw, 3rem) clamp(4rem, 8vw, 6.5rem);
+  }
+  .ma-policy *, .ma-policy *::before, .ma-policy *::after { box-sizing: border-box; }
+
+  .ma-policy__header { text-align: center; margin-bottom: clamp(1.8rem, 4vw, 2.8rem); }
+  .ma-policy__icon { display: inline-flex; color: #A8894E; }
+  .ma-policy__icon svg { width: clamp(30px, 5vw, 38px); height: clamp(30px, 5vw, 38px); }
+  .ma-policy__title { font-family: 'Sinoreta', Georgia, serif; font-weight: 300; font-size: clamp(1.9rem, 4.5vw, 2.9rem); letter-spacing: .02em; margin: .5rem 0 0; line-height: 1.15; }
+  .ma-policy__rule { display: block; width: 56px; height: 1px; background: #A8894E; margin: clamp(1rem, 2.5vw, 1.4rem) auto 0; }
+
+  .ma-policy__grid { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: 200px 1fr; gap: clamp(1.6rem, 4vw, 3.4rem); }
+  .ma-policy--nolist .ma-policy__grid { grid-template-columns: 1fr; max-width: 660px; }
+  .ma-policy--nolist .ma-policy__content { margin: 0 auto; }
+
+  .ma-policy__index { position: sticky; top: 96px; align-self: start; border-right: 1px solid #ddd0b3; padding-right: 20px; }
+  .ma-policy__index-label { font-size: .62rem; letter-spacing: .22em; text-transform: uppercase; color: #A8894E; margin: 0 0 1rem; }
+  .ma-policy__index-list { display: flex; flex-direction: column; }
+  .ma-policy__index-link { font-size: .82rem; line-height: 1.35; color: rgba(23,20,16,.5); text-decoration: none; padding: .5rem 0; border-bottom: .5px solid #e7dcc2; transition: color .25s; }
+  .ma-policy__index-link:last-child { border-bottom: 0; }
+  .ma-policy__index-link:hover, .ma-policy__index-link.is-active { color: #171410; }
+
+  .ma-policy__chips { display: none; }
+
+  .ma-policy__content { max-width: 640px; }
+  .ma-policy__content p { font-size: clamp(.98rem, 1.3vw, 1.06rem); line-height: 1.9; color: rgba(23,20,16,.74); margin: 0 0 1.5em; }
+  .ma-policy__content a { color: #8a6d34; text-decoration: underline; text-underline-offset: 2px; }
+  .ma-policy__content ul { list-style: none; padding: 0; margin: 0 0 1.6em; }
+  .ma-policy__content li { font-size: clamp(.98rem, 1.3vw, 1.06rem); line-height: 1.85; color: rgba(23,20,16,.74); padding: .18em 0 .18em 1.2em; position: relative; }
+  .ma-policy__content li::before { content: '\2014'; position: absolute; left: 0; color: #A8894E; }
+  .ma-policy__content li strong { color: #171410; }
+
+  .ma-policy__lead { font-family: 'Sinoreta', Georgia, serif !important; font-style: italic; font-size: clamp(1.1rem, 1.8vw, 1.3rem) !important; line-height: 1.7 !important; color: #3a3327 !important; margin-bottom: clamp(2rem, 4vw, 2.8rem) !important; }
+
+  .ma-policy__sec { padding-top: clamp(1.4rem, 3vw, 2rem); }
+  .ma-policy__sec > strong:first-child {
+    display: block; font-weight: 500; font-size: .78rem; letter-spacing: .16em; text-transform: uppercase;
+    color: #171410; margin-bottom: .85rem;
+  }
+
+  @media (max-width: 749px) {
+    .ma-policy__grid { grid-template-columns: 1fr; gap: 0; }
+    .ma-policy__index { display: none; }
+    .ma-policy__content { max-width: none; }
+    .ma-policy__chips { display: block; margin: 0 auto clamp(1.4rem, 4vw, 2rem); max-width: 640px; }
+    .ma-policy__chips-label { font-size: .58rem; letter-spacing: .22em; text-transform: uppercase; color: #A8894E; margin: 0 0 .7rem; }
+    .ma-policy__chips-row { display: flex; gap: .5rem; overflow-x: auto; padding-bottom: .3rem; -webkit-overflow-scrolling: touch; }
+    .ma-policy__chip { flex: 0 0 auto; font-size: .72rem; letter-spacing: .02em; color: rgba(23,20,16,.55); background: #fff; border: .5px solid #d8cba9; border-radius: 20px; padding: .5em .95em; text-decoration: none; white-space: nowrap; transition: color .25s, border-color .25s; }
+    .ma-policy__chip.is-active { color: #171410; border-color: #A8894E; }
+    .ma-policy__content .ma-policy__sec:first-of-type { padding-top: 0; }
+  }
+</style>
+
+<script src="{{ 'ma-policy.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "MA Policy",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "icon",
+      "label": "Crest icon",
+      "options": [
+        { "value": "shield", "label": "Shield (Privacy)" },
+        { "value": "parcel", "label": "Parcel (Shipping)" },
+        { "value": "refund", "label": "Return loop (Refund)" },
+        { "value": "document", "label": "Document (Terms)" },
+        { "value": "calendar", "label": "Calendar (Cancellation)" },
+        { "value": "general", "label": "General" }
+      ],
+      "default": "general"
+    },
+    { "type": "html", "id": "body", "label": "Policy content (HTML)" }
+  ],
+  "presets": [{ "name": "MA Policy" }]
+}
+{% endschema %}
