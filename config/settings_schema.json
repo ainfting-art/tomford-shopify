@@ -1750,6 +1750,80 @@
         "default": true
       },
       {
+        "type": "header",
+        "content": "Cart testers (Try Before You Buy)"
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_testers_enabled",
+        "label": "Show Try Before You Buy in cart",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "cart_testers_heading",
+        "label": "Heading",
+        "default": "Try Before You Buy"
+      },
+      {
+        "type": "textarea",
+        "id": "cart_testers_subtext",
+        "label": "Subtext",
+        "default": "Experience your fragrance with a tester first. Not convinced? Enjoy a 7-day return."
+      },
+      {
+        "type": "image_picker",
+        "id": "tester_img_masculine",
+        "label": "Tester image — Masculine"
+      },
+      {
+        "type": "image_picker",
+        "id": "tester_img_feminine",
+        "label": "Tester image — Feminine"
+      },
+      {
+        "type": "image_picker",
+        "id": "tester_img_unisex",
+        "label": "Tester image — Unisex"
+      },
+      {
+        "type": "text",
+        "id": "tester_cross_for_masculine",
+        "label": "Cross tester when cart has Masculine (product handle)",
+        "info": "Given as the discovery tester when the cart contains a masculine product.",
+        "default": "life-s-belle"
+      },
+      {
+        "type": "text",
+        "id": "tester_cross_for_feminine",
+        "label": "Cross tester when cart has Feminine (product handle)",
+        "default": "dao-spirit"
+      },
+      {
+        "type": "text",
+        "id": "tester_cross_for_unisex",
+        "label": "Cross tester when cart has Unisex (product handle)",
+        "default": "desert-velvet-oud"
+      },
+      {
+        "type": "text",
+        "id": "tester_collection_masculine",
+        "label": "Masculine collection handle",
+        "default": "mens-collection"
+      },
+      {
+        "type": "text",
+        "id": "tester_collection_feminine",
+        "label": "Feminine collection handle",
+        "default": "womens-collection"
+      },
+      {
+        "type": "text",
+        "id": "tester_collection_unisex",
+        "label": "Unisex collection handle",
+        "default": "unisex-collection"
+      },
+      {
         "type": "checkbox",
         "id": "show_installments",
         "label": "t:settings.installments",
