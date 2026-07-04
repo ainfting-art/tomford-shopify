@@ -1803,7 +1803,8 @@
         "type": "text",
         "id": "tester_cross_for_unisex",
         "label": "Cross tester when cart has Unisex (product handle)",
-        "default": "desert-velvet-oud"
+        "info": "Must differ from the unisex product itself, or it de-duplicates to nothing.",
+        "default": "life-s-belle"
       },
       {
         "type": "text",

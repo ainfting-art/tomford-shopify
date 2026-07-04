@@ -8,7 +8,8 @@
 {%- comment -%} MAISON AMIIR — Try Before You Buy: free 2 ml testers. Own tester per
   product (qty-matched, category image) + one cross-category discovery tester per
   category present (deduped, capped at 2). Not real line items — the tester list is
-  written to the "Testers to pack" order attribute by ma-testers.js. {%- endcomment -%}
+  written to the "Testers to pack" order attribute by a hidden cart-form field
+  that submits at checkout (no live cart writes). {%- endcomment -%}
 {%- if settings.cart_testers_enabled and cart != empty -%}
   {%- liquid
     assign m_coll = settings.tester_collection_masculine | default: 'mens-collection'
@@ -20,8 +21,7 @@
     assign own_handles = ''
     assign tester_summary = ''
   -%}
-  <div class="ma-testers"
-    data-testers-current="{{ cart.attributes['Testers to pack'] | escape }}">
+  <div class="ma-testers">
     <p class="ma-testers__title">{{ settings.cart_testers_heading | default: 'Try Before You Buy' }}</p>
     <p class="ma-testers__sub">{{ settings.cart_testers_subtext | default: 'Experience your fragrance with a tester first. Not convinced? Enjoy a 7-day return.' }}</p>
 
@@ -97,9 +97,10 @@
       {%- endunless -%}
     {%- endfor -%}
 
-    <span class="ma-testers__data" data-testers="{{ tester_summary | strip | escape }}" hidden></span>
+    {%- comment -%} Passive order flag: submits with the cart form at checkout only —
+      no live cart writes, so it never races with add/remove/qty updates. {%- endcomment -%}
+    <input type="hidden" name="attributes[Testers to pack]" value="{{ tester_summary | strip | escape }}" form="cart-form">
   </div>
-  <script src="{{ 'ma-testers.js' | asset_url }}" defer></script>
 {%- endif -%}
 
 <div class="cart-totals">
