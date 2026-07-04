@@ -80,8 +80,12 @@
             links.forEach(function (l) {
               var on = l.getAttribute('data-target') === id;
               l.classList.toggle('is-active', on);
-              if (on && l.className.indexOf('chip') > -1 && l.scrollIntoView) {
-                l.scrollIntoView({ block: 'nearest', inline: 'center' });
+              /* Center the active chip by scrolling ONLY the chip row sideways.
+                 Never use scrollIntoView here — it scrolls the whole page and
+                 fights the user's vertical scroll on mobile. */
+              if (on && chipsRow && l.className.indexOf('chip') > -1) {
+                var target = l.offsetLeft - (chipsRow.clientWidth - l.clientWidth) / 2;
+                chipsRow.scrollLeft = target < 0 ? 0 : target;
               }
             });
           });
