@@ -178,7 +178,7 @@
         data-testid="cart-drawer-dialog"
         aria-labelledby="{% if cart.empty? %}cart-drawer-heading-empty{% else %}cart-drawer-heading{% endif %}"
         scroll-lock
-        cart-summary-sticky="false"
+        cart-summary-sticky="true"
       >
         <span
           ref="liveRegion"
@@ -228,17 +228,17 @@
                   class="cart-drawer__items"
                 >
                   {% render 'cart-products' %}
+
+                  {%- comment -%} MAISON AMIIR — subtotal/discount/gift-wrap/estimated-total scroll
+                    WITH the items, Tom Ford style; ONLY the checkout button below is pinned. {%- endcomment -%}
+                  <div class="ma-drawer-totals">
+                    {% render 'cart-summary', part: 'totals', section_id: section.id %}
+                  </div>
                 </scroll-hint>
 
                 <div
                   class="cart-drawer__summary"
                 >
-                  {% render 'cart-summary', part: 'totals', section_id: section.id %}
-                </div>
-
-                {%- comment -%} MAISON AMIIR — checkout button pinned as its own footer (direct child
-                  of the scroll container) so it stays put while the totals above scroll. {%- endcomment -%}
-                <div class="cart-drawer__checkout-sticky">
                   {% render 'cart-summary', part: 'checkout', section_id: section.id %}
                 </div>
               </scroll-hint>
@@ -291,20 +291,13 @@
   @media screen and (min-width: 750px) {
     .ma-cart-tagline { padding-inline: var(--padding-2xl); }
   }
-  /* pin ONLY the checkout button; subtotal/gift-wrap/estimated total scroll above it */
-  .cart-drawer__checkout-sticky {
-    position: sticky;
-    bottom: 0;
-    z-index: 3;
-    background: var(--color-background);
-    padding-inline: var(--cart-drawer-padding);
-    padding-block: var(--padding-md) var(--padding-lg);
-    border-block-start: var(--style-border-width, 1px) solid var(--color-border);
+  /* totals scroll with the items; the theme's pinned summary now holds ONLY the checkout button */
+  .ma-drawer-totals {
+    margin-block-start: var(--margin-lg);
   }
-  @media screen and (min-width: 750px) {
-    .cart-drawer__checkout-sticky {
-      padding-inline: var(--cart-drawer-padding-desktop);
-    }
+  .ma-drawer-totals .cart-totals {
+    border-block-start: var(--style-border-width, 1px) solid var(--color-border);
+    padding-block-start: var(--padding-lg);
   }
   /* transparent quantity stepper (no grey fill) */
   .cart-items__quantity .quantity-selector,
