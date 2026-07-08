@@ -1708,6 +1708,16 @@
         "padding-block-start": 100,
         "padding-block-end": 100
       }
+    },
+    "ma_journal_KaX3PU": {
+      "type": "ma-journal",
+      "name": "MA — From the Journal",
+      "settings": {
+        "blog": "",
+        "eyebrow": "Notes on Craft & Scent",
+        "heading": "From the Journal",
+        "rotation_days": 3
+      }
     }
   },
   "order": [
@@ -1727,6 +1737,7 @@
     "ma_explore_maison",
     "ma_social_proof",
     "1775472317723a194f",
-    "section_Rrah97"
+    "section_Rrah97",
+    "ma_journal_KaX3PU"
   ]
 }
