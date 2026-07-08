@@ -38,7 +38,7 @@
           <span class="ma-testers__name">{{ p.title }} &mdash; Sample</span>
           <span class="ma-testers__size">2 ml &nbsp;&middot;&nbsp; own sample</span>
         </span>
-        <span class="ma-testers__right"><span class="ma-testers__free">FREE</span><span class="ma-testers__qty">Qty {{ line.quantity }}</span></span>
+        <span class="ma-testers__right"><span class="ma-testers__free">FREE</span>{%- if line.quantity > 1 -%}<span class="ma-testers__qty">Qty {{ line.quantity }}</span>{%- endif -%}</span>
       </div>
     {%- endfor -%}
 

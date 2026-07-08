@@ -233,7 +233,13 @@
                 <div
                   class="cart-drawer__summary"
                 >
-                  {% render 'cart-summary', section_id: section.id %}
+                  {% render 'cart-summary', part: 'totals', section_id: section.id %}
+                </div>
+
+                {%- comment -%} MAISON AMIIR — checkout button pinned as its own footer (direct child
+                  of the scroll container) so it stays put while the totals above scroll. {%- endcomment -%}
+                <div class="cart-drawer__checkout-sticky">
+                  {% render 'cart-summary', part: 'checkout', section_id: section.id %}
                 </div>
               </scroll-hint>
             {%- endif -%}
@@ -285,13 +291,20 @@
   @media screen and (min-width: 750px) {
     .ma-cart-tagline { padding-inline: var(--padding-2xl); }
   }
-  /* pin ONLY the checkout button; subtotal/discount/gift-wrap/estimated total scroll */
-  .cart-drawer__summary .cart__ctas {
+  /* pin ONLY the checkout button; subtotal/gift-wrap/estimated total scroll above it */
+  .cart-drawer__checkout-sticky {
     position: sticky;
     bottom: 0;
     z-index: 3;
     background: var(--color-background);
-    padding-top: var(--padding-sm);
+    padding-inline: var(--cart-drawer-padding);
+    padding-block: var(--padding-md) var(--padding-lg);
+    border-block-start: var(--style-border-width, 1px) solid var(--color-border);
+  }
+  @media screen and (min-width: 750px) {
+    .cart-drawer__checkout-sticky {
+      padding-inline: var(--cart-drawer-padding-desktop);
+    }
   }
   /* transparent quantity stepper (no grey fill) */
   .cart-items__quantity .quantity-selector,

@@ -178,7 +178,14 @@
                         {{- item.product.title -}}
                       </a>
                     </p>
-                    {%- assign ma_size = item.product.metafields.custom.size | default: '100 ml' -%}
+                    {%- comment -%} MAISON AMIIR — bottle size (100 ml). custom.size holds junk numbers (11/12) for some products, so only trust it when it's a real "… ml" value. {%- endcomment -%}
+                    {%- liquid
+                      assign ma_size = item.product.metafields.custom.size | append: ''
+                      assign ma_size_l = ma_size | downcase
+                      unless ma_size_l contains 'ml'
+                        assign ma_size = '100 ml'
+                      endunless
+                    -%}
                     <p class="ma-cart-size">{{ ma_size }}</p>
                     {% if item.product.vendor and block_settings.vendor %}
                       <p>
@@ -659,6 +666,23 @@
     object-position: center center;
     width: 100%;
     height: auto;
+  }
+
+  /* MAISON AMIIR — in the drawer, let the product image fill the whole row height
+     (top of name down to the bottom of the quantity selector) instead of a small square. */
+  .cart-drawer .cart-items__media {
+    align-self: stretch;
+    display: flex;
+  }
+  .cart-drawer .cart-items__media-container {
+    aspect-ratio: auto;
+    height: auto;
+  }
+  .cart-drawer .cart-items__media-image {
+    aspect-ratio: auto;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
   }
 
   .cart-items__empty-button {

@@ -5,6 +5,13 @@
   @param {string} [section_id] - The section ID for cart discount component.
 {%- enddoc -%}
 
+{%- comment -%} MAISON AMIIR — `part` lets the drawer scroll the totals but pin only the
+  checkout button. No `part` (e.g. the cart page) renders both, unchanged. total_price is
+  assigned here (before the guards) so BOTH the totals line and the button can use it. {%- endcomment -%}
+{%- liquid
+  assign total_price = cart.total_price | money_with_currency | replace: 'Rs. ', '' | replace: 'Rs.', ''
+-%}
+{%- unless part == 'checkout' -%}
 <div class="cart-totals">
   {% # We need to keep this node in place to allow morphing to work properly # %}
   <div class="cart-totals__original-container cart-primary-typography">
@@ -239,11 +246,6 @@
     <script src="{{ 'ma-giftwrap.js' | asset_url }}" defer></script>
   {%- endif -%}
 
-  {%- comment -%} MAISON AMIIR — "2,295.00 INR" (drop the redundant "Rs." prefix) {%- endcomment -%}
-  {%- liquid
-    assign total_price = cart.total_price | money_with_currency | replace: 'Rs. ', '' | replace: 'Rs.', ''
-  -%}
-
   <div class="cart-totals__container{% if settings.show_installments %} cart-totals__container--has-installments{% endif %}">
     <span
       class="cart-totals__item cart-totals__total"
@@ -273,7 +275,9 @@
     </div>
   </div>
 </div>
+{%- endunless -%}
 
+{%- unless part == 'totals' -%}
 <div class="cart__ctas">
   <button
     type="submit"
@@ -301,6 +305,7 @@
     </div>
   {% endif %}
 </div>
+{%- endunless -%}
 
 {% stylesheet %}
   .ma-giftwrap {
