@@ -82,7 +82,7 @@
             <span class="ma-testers__thumb">{%- if ximg != blank -%}{{ ximg | image_url: width: 160 | image_tag: loading: 'lazy', alt: xp.title, class: 'ma-testers__img' }}{%- else -%}<span class="ma-testers__img ma-testers__img--ph"></span>{%- endif -%}</span>
             <span class="ma-testers__meta">
               <span class="ma-testers__name">{{ xp.title }} &mdash; Sample</span>
-              <span class="ma-testers__size">2 ml &nbsp;&middot;&nbsp; complimentary discovery</span>
+              <span class="ma-testers__size ma-testers__size--split"><span class="ma-testers__size-pre">2 ml &nbsp;&middot;&nbsp;</span><span class="ma-testers__size-phrase">complimentary discovery</span></span>
             </span>
             <span class="ma-testers__right"><span class="ma-testers__free">FREE</span></span>
           </div>
@@ -123,6 +123,11 @@
     letter-spacing: .08em; text-transform: uppercase;
     color: rgb(var(--color-foreground-rgb) / var(--opacity-subdued-text));
   }
+  /* when "complimentary discovery" runs out of room it wraps as its own centered
+     block (COMPLIMENTARY / DISCOVERY), instead of dangling back under "2 ML" */
+  .ma-testers__size--split { display: flex; }
+  .ma-testers__size-pre { white-space: nowrap; }
+  .ma-testers__size-phrase { text-align: center; min-width: 0; }
   .ma-testers__right { flex-shrink: 0; text-align: right; }
   .ma-testers__free { display: block; font-size: var(--font-size--2xs); letter-spacing: .22em; color: #A8894E; }
   .ma-testers__qty { display: block; margin-top: 2px; font-size: var(--font-size--2xs); color: rgb(var(--color-foreground-rgb) / var(--opacity-subdued-text)); }

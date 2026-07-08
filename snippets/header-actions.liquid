@@ -390,7 +390,9 @@
 
   .cart-drawer__dialog {
     position: fixed;
-    overflow: hidden;
+    /* clip, not hidden: a hidden box can still be scrolled by focus/scrollIntoView
+       (input focus inside the drawer was dragging the whole drawer and freezing it) */
+    overflow: clip;
     border-radius: 0;
     width: 100%;
     height: 100%;
@@ -409,12 +411,12 @@
   /* Needed to ensure the drawer is full height */
   .cart-drawer__dialog:modal {
     max-height: 100dvh;
-    overflow-y: hidden;
+    overflow-y: clip;
   }
 
   .cart-drawer__inner {
     height: 100%;
-    overflow: hidden;
+    overflow: clip;
   }
 
   .cart-drawer__content {
