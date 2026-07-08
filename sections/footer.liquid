@@ -79,6 +79,14 @@
   margin: 0 0 10px;
 }
 
+.ma-footer__thanks {
+  margin: 14px 0 0;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #A8894E;
+}
+
 .ma-footer__email-input {
   display: block;
   width: 100%;
@@ -541,6 +549,7 @@
           <input type="hidden" name="form_type" value="customer">
           <input type="hidden" name="utf8" value="✓">
           <input type="hidden" name="contact[tags]" value="newsletter">
+          <input type="hidden" name="return_to" value="{{ request.path }}?customer_posted=true">
           <input
             class="ma-footer__email-input"
             type="email"
@@ -550,7 +559,7 @@
             autocomplete="email"
           >
           <div class="ma-footer__consent">
-            <input type="checkbox" id="ma-newsletter-consent-d" name="contact[consent]" checked required>
+            <input type="checkbox" id="ma-newsletter-consent-d" checked required>
             <label class="ma-footer__consent-label" for="ma-newsletter-consent-d">
               Sign me up to hear from Maison Amiir. For more information, view our <a href="/pages/privacy-policy">Privacy Policy</a>.
             </label>
@@ -622,6 +631,7 @@
         <input type="hidden" name="form_type" value="customer">
         <input type="hidden" name="utf8" value="✓">
         <input type="hidden" name="contact[tags]" value="newsletter">
+        <input type="hidden" name="return_to" value="{{ request.path }}?customer_posted=true">
         <input
           class="ma-footer__email-input"
           type="email"
@@ -631,7 +641,7 @@
           autocomplete="email"
         >
         <div class="ma-footer__consent">
-          <input type="checkbox" id="ma-newsletter-consent-m" name="contact[consent]" checked required>
+          <input type="checkbox" id="ma-newsletter-consent-m" checked required>
           <label class="ma-footer__consent-label" for="ma-newsletter-consent-m">
             Sign me up to hear from Maison Amiir. For more information, view our <a href="/pages/privacy-policy">Privacy Policy</a>.
           </label>
@@ -755,6 +765,20 @@
 
   applyLayout();
   window.addEventListener('resize', applyLayout);
+
+  /* Newsletter feedback: Shopify redirects back with ?customer_posted=true
+     after a successful signup — swap the form(s) for a thank-you note. */
+  if (window.location.search.indexOf('customer_posted=true') !== -1) {
+    document.querySelectorAll('.ma-footer__col--subscribe form, .ma-footer__subscribe-mobile form').forEach(function(f) {
+      var p = document.createElement('p');
+      p.className = 'ma-footer__thanks';
+      p.textContent = 'Thank you — you are on the list.';
+      f.replaceWith(p);
+    });
+    if (window.history && history.replaceState) {
+      history.replaceState(null, '', window.location.pathname + window.location.hash);
+    }
+  }
 })();
 </script>
 
