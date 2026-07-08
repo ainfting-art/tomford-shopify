@@ -1,0 +1,172 @@
+{%- comment -%} MAISON AMIIR — Seasonal Hero (collection pages). Full-bleed image hero
+  with centered eyebrow/title/tagline, plus an optional quick-filter chip row underneath.
+  Everything is editor-driven: image pickers, texts, and chips as "Label|URL" lines
+  (get a URL by clicking a sidebar filter and copying the address bar). Used by the
+  collection.winter template; reusable for summer later. {%- endcomment -%}
+<style>
+  #shopify-section-{{ section.id }} { opacity: 1 !important; transform: none !important; }
+  .ma-shero { position: relative; min-height: {{ section.settings.height_desktop }}px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #10151d; }
+  .ma-shero__media, .ma-shero__media picture { position: absolute; inset: 0; }
+  .ma-shero__img { width: 100%; height: 100%; object-fit: cover; object-position: {{ section.settings.focal_desktop }}% center; display: block; position: absolute; inset: 0; }
+  .ma-shero__img--ph { background: #10151d; }
+  .ma-shero__overlay { position: absolute; inset: 0; background: rgba(6, 10, 16, {{ section.settings.overlay | divided_by: 100.0 }}); }
+  .ma-shero__content { position: relative; z-index: 2; text-align: center; padding: 48px 24px; max-width: 620px; }
+  .ma-shero__eyebrow { margin: 0 0 14px; font-size: 11px; letter-spacing: .32em; text-transform: uppercase; color: #A8894E; }
+  .ma-shero__title { margin: 0 0 14px; font-family: Sinoreta, Georgia, 'Times New Roman', serif; font-weight: 400; font-size: clamp(34px, 4.6vw, 52px); line-height: 1.1; color: #f4efe6; }
+  .ma-shero__tagline { margin: 0 auto; max-width: 480px; font-size: 13.5px; line-height: 1.7; color: rgba(244, 239, 230, .72); }
+  .ma-shero-chips { padding: 20px 18px 6px; }
+  .ma-shero-chips__row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+  .ma-shero-chips__chip { display: inline-block; border: 1px solid rgb(var(--color-foreground-rgb, 26 26 26) / .28); padding: 10px 22px; font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--color-foreground, #111); text-decoration: none; transition: background .25s ease, color .25s ease, border-color .25s ease; }
+  .ma-shero-chips__chip:hover { background: var(--color-foreground, #111); color: var(--color-background, #fff); border-color: var(--color-foreground, #111); }
+  .ma-shero-chips__note { margin: 12px 0 0; text-align: center; font-size: 9.5px; letter-spacing: .18em; text-transform: uppercase; color: rgb(var(--color-foreground-rgb, 26 26 26) / .45); }
+  @media screen and (max-width: 749px) {
+    .ma-shero { min-height: {{ section.settings.height_mobile }}px; }
+    .ma-shero__img { object-position: {{ section.settings.focal_mobile }}% center; }
+    .ma-shero__content { padding: 40px 18px; }
+    .ma-shero__tagline { font-size: 12.5px; }
+    .ma-shero-chips__row { justify-content: flex-start; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding: 0 18px; -webkit-overflow-scrolling: touch; }
+    .ma-shero-chips__row::-webkit-scrollbar { display: none; }
+    .ma-shero-chips__chip { flex: 0 0 auto; }
+    .ma-shero-chips { padding-inline: 0; }
+  }
+</style>
+<section class="ma-shero">
+  <div class="ma-shero__media">
+    {%- if section.settings.image -%}
+      <picture>
+        {%- if section.settings.image_mobile -%}
+          <source media="(max-width: 749px)" srcset="{{ section.settings.image_mobile | image_url: width: 1100 }}">
+        {%- endif -%}
+        {{ section.settings.image | image_url: width: 2400 | image_tag: class: 'ma-shero__img', loading: 'eager', fetchpriority: 'high', alt: section.settings.heading | default: collection.title }}
+      </picture>
+    {%- else -%}
+      <span class="ma-shero__img ma-shero__img--ph"></span>
+    {%- endif -%}
+    <span class="ma-shero__overlay"></span>
+  </div>
+  <div class="ma-shero__content">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="ma-shero__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+    {%- endif -%}
+    <h1 class="ma-shero__title">{{ section.settings.heading | default: collection.title | escape }}</h1>
+    {%- if section.settings.tagline != blank -%}
+      <p class="ma-shero__tagline">{{ section.settings.tagline | escape }}</p>
+    {%- endif -%}
+  </div>
+</section>
+{%- assign chips_raw = section.settings.chips | strip -%}
+{%- if chips_raw != blank -%}
+  <nav class="ma-shero-chips" aria-label="Quick filters">
+    <div class="ma-shero-chips__row">
+      {%- assign chip_lines = chips_raw | newline_to_br | split: '<br />' -%}
+      {%- for line in chip_lines -%}
+        {%- assign clean = line | replace: '<br>', '' | strip -%}
+        {%- assign parts = clean | split: '|' -%}
+        {%- if parts.size >= 2 -%}
+          <a class="ma-shero-chips__chip" href="{{ parts[1] | strip }}">{{ parts[0] | strip | escape }}</a>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+    {%- if section.settings.chips_note != blank -%}
+      <p class="ma-shero-chips__note">{{ section.settings.chips_note | escape }}</p>
+    {%- endif -%}
+  </nav>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "MA — Seasonal Hero",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Hero image (desktop / wide)"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Hero image (mobile, optional)"
+    },
+    {
+      "type": "range",
+      "id": "focal_desktop",
+      "label": "Image focus point desktop (% from left)",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "focal_mobile",
+      "label": "Image focus point mobile (% from left)",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 75
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "The Winter Edit"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading (blank = collection title)"
+    },
+    {
+      "type": "textarea",
+      "id": "tagline",
+      "label": "Tagline (one or two lines)",
+      "default": "Rich resins, dense woods and smoke — compositions that unfold slowly through colder air. This is where intensity becomes elegance."
+    },
+    {
+      "type": "range",
+      "id": "overlay",
+      "label": "Darkening overlay (%)",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "height_desktop",
+      "label": "Hero height desktop (px)",
+      "min": 320,
+      "max": 680,
+      "step": 20,
+      "default": 480
+    },
+    {
+      "type": "range",
+      "id": "height_mobile",
+      "label": "Hero height mobile (px)",
+      "min": 240,
+      "max": 520,
+      "step": 20,
+      "default": 360
+    },
+    {
+      "type": "textarea",
+      "id": "chips",
+      "label": "Quick-filter chips — one per line: Label|URL",
+      "info": "To get a URL: tick a sidebar filter on the collection page and copy the address bar. Leave empty to hide the chip row."
+    },
+    {
+      "type": "text",
+      "id": "chips_note",
+      "label": "Note under chips",
+      "default": "Tap a note — the shelf rearranges"
+    }
+  ],
+  "presets": [
+    {
+      "name": "MA — Seasonal Hero"
+    }
+  ]
+}
+{% endschema %}
