@@ -80,11 +80,27 @@
 }
 
 .ma-footer__thanks {
-  margin: 14px 0 0;
-  font-size: 12px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #A8894E;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 10px 0 0;
+  font-size: 13px;
+  letter-spacing: 0.01em;
+  color: #1a1a1a;
+}
+
+.ma-footer__thanks-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #A8894E;
+  color: #fff;
+  font-size: 10px;
+  line-height: 1;
+  flex-shrink: 0;
 }
 
 .ma-footer__email-input {
@@ -542,14 +558,14 @@
       </div>
 
       <!-- Column 4: Stay in the Know (newsletter — same row as nav columns) -->
-      <div class="ma-footer__col ma-footer__col--subscribe">
+      <div class="ma-footer__col ma-footer__col--subscribe" id="ma-footer-subscribe">
         <p class="ma-footer__col-heading">Stay in the Know</p>
         <p class="ma-footer__newsletter-subtext">Receive new arrivals, exclusive offers, and stories from the House of Amiir.</p>
         <form action="/contact#contact_form" method="post" accept-charset="UTF-8">
           <input type="hidden" name="form_type" value="customer">
           <input type="hidden" name="utf8" value="✓">
           <input type="hidden" name="contact[tags]" value="newsletter">
-          <input type="hidden" name="return_to" value="{{ request.path }}?customer_posted=true">
+          <input type="hidden" name="return_to" value="{{ request.path }}?customer_posted=true#ma-footer-subscribe">
           <input
             class="ma-footer__email-input"
             type="email"
@@ -624,14 +640,14 @@
     </div>
 
     <!-- Newsletter on mobile (below accordions) -->
-    <div class="ma-footer__subscribe-mobile">
+    <div class="ma-footer__subscribe-mobile" id="ma-footer-subscribe-m">
       <p class="ma-footer__col-heading">Stay in the Know</p>
       <p class="ma-footer__newsletter-subtext">Receive new arrivals, exclusive offers, and stories from the House of Amiir.</p>
       <form action="/contact#contact_form" method="post" accept-charset="UTF-8">
         <input type="hidden" name="form_type" value="customer">
         <input type="hidden" name="utf8" value="✓">
         <input type="hidden" name="contact[tags]" value="newsletter">
-        <input type="hidden" name="return_to" value="{{ request.path }}?customer_posted=true">
+        <input type="hidden" name="return_to" value="{{ request.path }}?customer_posted=true#ma-footer-subscribe-m">
         <input
           class="ma-footer__email-input"
           type="email"
@@ -766,17 +782,35 @@
   applyLayout();
   window.addEventListener('resize', applyLayout);
 
+  /* Newsletter: "SENDING…" button state while the form posts. */
+  document.querySelectorAll('.ma-footer__col--subscribe form, .ma-footer__subscribe-mobile form').forEach(function(f) {
+    f.addEventListener('submit', function() {
+      var btn = f.querySelector('.ma-footer__signup-btn');
+      if (btn) { btn.textContent = 'Sending…'; btn.disabled = true; }
+    });
+  });
+
   /* Newsletter feedback: Shopify redirects back with ?customer_posted=true
-     after a successful signup — swap the form(s) for a thank-you note. */
+     after a successful signup — show a check + "Thank you for subscribing."
+     under the email field (form stays, Tom Ford style) and bring it into view. */
   if (window.location.search.indexOf('customer_posted=true') !== -1) {
+    var thanksEl = null;
     document.querySelectorAll('.ma-footer__col--subscribe form, .ma-footer__subscribe-mobile form').forEach(function(f) {
+      var input = f.querySelector('.ma-footer__email-input');
+      if (!input) return;
       var p = document.createElement('p');
       p.className = 'ma-footer__thanks';
-      p.textContent = 'Thank you — you are on the list.';
-      f.replaceWith(p);
+      p.innerHTML = '<span class="ma-footer__thanks-check" aria-hidden="true">✓</span>Thank you for subscribing.';
+      input.insertAdjacentElement('afterend', p);
+      if (!thanksEl && p.offsetParent !== null) thanksEl = p;
     });
     if (window.history && history.replaceState) {
-      history.replaceState(null, '', window.location.pathname + window.location.hash);
+      history.replaceState(null, '', window.location.pathname);
+    }
+    if (thanksEl) {
+      setTimeout(function() {
+        thanksEl.scrollIntoView({ block: 'center', behavior: 'auto' });
+      }, 60);
     }
   }
 })();
