@@ -178,8 +178,7 @@
                         {{- item.product.title -}}
                       </a>
                     </p>
-                    {%- assign ma_size = item.variant.title | default: '' -%}
-                    {%- if ma_size == 'Default Title' or ma_size == '' -%}{%- assign ma_size = item.product.metafields.custom.size | default: '100 ml' -%}{%- endif -%}
+                    {%- assign ma_size = item.product.metafields.custom.size | default: '100 ml' -%}
                     <p class="ma-cart-size">{{ ma_size }}</p>
                     {% if item.product.vendor and block_settings.vendor %}
                       <p>
@@ -405,6 +404,10 @@
   }
   /* single price on the right only — hide the duplicate unit price under the name */
   .cart-items__unit-price-wrapper { display: none; }
+  /* full price on the right, never cropped */
+  .cart-items__price { white-space: nowrap; }
+  /* stepper on the left, Remove pushed to the far right */
+  .cart-drawer .cart-items__quantity-controls { justify-content: space-between; align-items: center; }
 
   .cart-items-disabled {
     pointer-events: none;
@@ -439,7 +442,7 @@
     --cart-item-price-width: 6rem;
 
     display: grid;
-    grid-template-columns: clamp(2.5rem, 15cqi, 7.5rem) minmax(0, 1fr) minmax(var(--cart-item-price-width), auto);
+    grid-template-columns: clamp(5rem, 26cqi, 7.5rem) minmax(0, 1fr) minmax(var(--cart-item-price-width), auto);
     grid-template-areas:
       'media details price'
       'media quantity price'
@@ -452,7 +455,7 @@
 
   /* Cart drawer: separate grid areas for variants and unit price */
   .cart-drawer .cart-items__table-row--full-width-variants {
-    grid-template-columns: clamp(2.5rem, 15cqi, 7.5rem) minmax(0, 1fr) auto;
+    grid-template-columns: clamp(5rem, 26cqi, 7.5rem) minmax(0, 1fr) auto;
     grid-template-rows: repeat(4, min-content) 1fr;
     grid-template-areas:
       'media details price'

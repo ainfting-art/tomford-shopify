@@ -239,12 +239,9 @@
     <script src="{{ 'ma-giftwrap.js' | asset_url }}" defer></script>
   {%- endif -%}
 
+  {%- comment -%} MAISON AMIIR — "2,295.00 INR" (drop the redundant "Rs." prefix) {%- endcomment -%}
   {%- liquid
-    if settings.currency_code_enabled_cart_total
-      assign total_price = cart.total_price | money_with_currency
-    else
-      assign total_price = cart.total_price | money
-    endif
+    assign total_price = cart.total_price | money_with_currency | replace: 'Rs. ', '' | replace: 'Rs.', ''
   -%}
 
   <div class="cart-totals__container{% if settings.show_installments %} cart-totals__container--has-installments{% endif %}">
@@ -288,8 +285,8 @@
     {% endif %}
     form="cart-form"
   >
-    <span class="button-text">
-      {{ 'content.checkout' | t }}
+    <span class="button-text ma-checkout-text">
+      Checkout<span class="ma-checkout-amt">&nbsp;&mdash;&nbsp;{{ total_price }}</span>
     </span>
   </button>
 
@@ -450,10 +447,12 @@
 
   .cart-totals__total-label {
     font-size: var(--cart-font-size--sm);
+    font-weight: var(--font-weight-bold) !important;
   }
 
   .cart-totals__total-value {
     font-size: var(--cart-font-size--xl);
+    font-weight: var(--font-weight-bold) !important;
 
     @media screen and (max-width: 749px) {
       font-size: var(--font-size--lg);
@@ -531,6 +530,15 @@
     width: 100%;
     height: clamp(25px, var(--height-buy-buttons), 55px);
     padding-inline: var(--padding-4xl);
+  }
+
+  /* MAISON AMIIR — "CHECKOUT — 2,295.00 INR" reads as one tight unit, not spread out */
+  .ma-checkout-text {
+    letter-spacing: .08em;
+    white-space: nowrap;
+  }
+  .ma-checkout-amt {
+    letter-spacing: .04em;
   }
 
   .cart-drawer__summary .cart-totals:not(:has(.cart-totals__original-container:empty)) {
