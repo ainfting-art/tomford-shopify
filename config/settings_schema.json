@@ -1841,7 +1841,7 @@
         "type": "url",
         "id": "empty_cart_button_link",
         "label": "t:settings.empty_cart_button_link",
-        "default": "/collections/all"
+        "default": "/collections/all-perfumes"
       },
       {
         "type": "header",
