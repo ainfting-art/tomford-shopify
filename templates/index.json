@@ -458,7 +458,7 @@
       "settings": {
         "heading": "Most Wanted",
         "collection": "winter-collection",
-        "cta_link": "",
+        "cta_link": "shopify://collections/new-arrivals",
         "cta_label": "Shop Now"
       }
     },
