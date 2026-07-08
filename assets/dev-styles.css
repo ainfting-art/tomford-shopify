@@ -405,11 +405,6 @@ footer {
 
 @media screen and (max-width: 480px) {
 
-    #shopify-section-template--26348156977471__section_wQqHde , .custom-hero-video {
-      height:450px !important;
-    }
-
-
   h2 {
     font-size: 32px;
     line-height: 40px;
