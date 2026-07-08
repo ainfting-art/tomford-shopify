@@ -415,18 +415,16 @@
             </details>
           {% endif %}
 
-          <details class="ma-pdp__accordion">
-            <summary class="ma-pdp__acc-trigger">
-              <span>Shipping Information</span>
-              <span class="ma-acc-plus" aria-hidden="true">+</span>
-              <span class="ma-acc-minus" aria-hidden="true">−</span>
-            </summary>
-            <div class="ma-pdp__acc-body">
-              <p>Complimentary standard delivery across India on all orders.</p>
-              <p>Standard Delivery: 5–7 business days.<br>Express Delivery: 2–3 business days.</p>
-              <p>Orders are shipped in discreet, luxury packaging.<br>7-day hassle-free returns on all fragrances.</p>
-            </div>
-          </details>
+          {% if section.settings.shipping_info != blank %}
+            <details class="ma-pdp__accordion">
+              <summary class="ma-pdp__acc-trigger">
+                <span>Shipping Information</span>
+                <span class="ma-acc-plus" aria-hidden="true">+</span>
+                <span class="ma-acc-minus" aria-hidden="true">−</span>
+              </summary>
+              <div class="ma-pdp__acc-body">{{ section.settings.shipping_info }}</div>
+            </details>
+          {% endif %}
 
         </div>
 
@@ -1535,7 +1533,15 @@
   "name": "Product Page",
   "tag": "div",
   "class": "ma-product-section",
-  "settings": [],
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "shipping_info",
+      "label": "Shipping information",
+      "info": "Shown in the Shipping Information accordion on every product page. Clear it to hide the accordion.",
+      "default": "<p>Complimentary standard delivery across India on all orders.</p><p>Standard Delivery: 5–7 business days.<br/>Express Delivery: 2–3 business days.</p><p>Orders are shipped in discreet, luxury packaging.<br/>7-day hassle-free returns on all fragrances.</p>"
+    }
+  ],
   "blocks": [],
   "presets": []
 }
