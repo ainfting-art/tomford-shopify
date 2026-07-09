@@ -3,9 +3,25 @@
   Everything is editor-driven: image pickers, texts, and chips as "Label|URL" lines
   (get a URL by clicking a sidebar filter and copying the address bar). Used by the
   collection.winter template; reusable for summer later. {%- endcomment -%}
+{%- liquid
+  case section.settings.height_mode
+    when 'large'
+      assign h_desktop = 560
+      assign h_mobile = 420
+    when 'small'
+      assign h_desktop = 380
+      assign h_mobile = 300
+    else
+      assign h_desktop = section.settings.height_desktop
+      assign h_mobile = section.settings.height_mobile
+  endcase
+-%}
 <style>
   #shopify-section-{{ section.id }} { opacity: 1 !important; transform: none !important; }
-  .ma-shero { position: relative; min-height: {{ section.settings.height_desktop }}px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #10151d; }
+  .ma-shero { position: relative; min-height: {{ h_desktop }}px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #10151d; }
+  .ma-shero--left { justify-content: flex-start; }
+  .ma-shero--left .ma-shero__content { text-align: left; padding: 48px 24px 48px clamp(28px, 7vw, 100px); }
+  .ma-shero--left .ma-shero__tagline { margin: 0; }
   .ma-shero__media, .ma-shero__media picture { position: absolute; inset: 0; }
   .ma-shero__img { width: 100%; height: 100%; object-fit: cover; object-position: {{ section.settings.focal_desktop }}% center; display: block; position: absolute; inset: 0; }
   .ma-shero__img--ph { background: #10151d; }
@@ -20,9 +36,10 @@
   .ma-shero-chips__chip:hover { background: var(--color-foreground, #111); color: var(--color-background, #fff); border-color: var(--color-foreground, #111); }
   .ma-shero-chips__note { margin: 12px 0 0; text-align: center; font-size: 9.5px; letter-spacing: .18em; text-transform: uppercase; color: rgb(var(--color-foreground-rgb, 26 26 26) / .45); }
   @media screen and (max-width: 749px) {
-    .ma-shero { min-height: {{ section.settings.height_mobile }}px; }
+    .ma-shero { min-height: {{ h_mobile }}px; }
     .ma-shero__img { object-position: {{ section.settings.focal_mobile }}% center; }
     .ma-shero__content { padding: 40px 18px; }
+    .ma-shero--left .ma-shero__content { padding: 36px 18px 36px 22px; }
     .ma-shero__tagline { font-size: 12.5px; }
     .ma-shero-chips__row { justify-content: flex-start; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding: 0 18px; -webkit-overflow-scrolling: touch; }
     .ma-shero-chips__row::-webkit-scrollbar { display: none; }
@@ -30,7 +47,7 @@
     .ma-shero-chips { padding-inline: 0; }
   }
 </style>
-<section class="ma-shero">
+<section class="ma-shero ma-shero--{{ section.settings.content_position | default: 'left' }}">
   <div class="ma-shero__media">
     {%- if section.settings.image -%}
       <picture>
@@ -124,6 +141,16 @@
       "default": "Rich resins, dense woods and smoke — compositions that unfold slowly through colder air. This is where intensity becomes elegance."
     },
     {
+      "type": "select",
+      "id": "content_position",
+      "label": "Text position",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" }
+      ],
+      "default": "left"
+    },
+    {
       "type": "range",
       "id": "overlay",
       "label": "Darkening overlay (%)",
@@ -133,9 +160,21 @@
       "default": 30
     },
     {
+      "type": "select",
+      "id": "height_mode",
+      "label": "Banner height",
+      "options": [
+        { "value": "large", "label": "Large" },
+        { "value": "small", "label": "Small" },
+        { "value": "custom", "label": "Custom (use sliders below)" }
+      ],
+      "default": "large"
+    },
+    {
       "type": "range",
       "id": "height_desktop",
-      "label": "Hero height desktop (px)",
+      "label": "Custom height desktop (px)",
+      "info": "Used only when Banner height = Custom",
       "min": 320,
       "max": 680,
       "step": 20,
@@ -144,7 +183,8 @@
     {
       "type": "range",
       "id": "height_mobile",
-      "label": "Hero height mobile (px)",
+      "label": "Custom height mobile (px)",
+      "info": "Used only when Banner height = Custom",
       "min": 240,
       "max": 520,
       "step": 20,
