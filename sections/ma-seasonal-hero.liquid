@@ -53,6 +53,12 @@
     #shopify-section-{{ section.id }} .ma-shero__title { font-size: clamp(26px, 8vw, 32px); margin-bottom: 12px; max-width: 300px; margin-inline: auto; }
     #shopify-section-{{ section.id }} .ma-shero--left .ma-shero__title { margin-inline: 0; }
     #shopify-section-{{ section.id }} .ma-shero--right .ma-shero__title { margin-inline: auto 0; }
+    {%- if section.settings.mobile_text_side == 'right' -%}
+    #shopify-section-{{ section.id }} .ma-shero { justify-content: flex-end; }
+    #shopify-section-{{ section.id }} .ma-shero .ma-shero__content { text-align: right; padding-right: 20px; }
+    #shopify-section-{{ section.id }} .ma-shero .ma-shero__title { margin-inline: auto 0; }
+    #shopify-section-{{ section.id }} .ma-shero .ma-shero__tagline { margin-left: auto; margin-right: 0; }
+    {%- endif -%}
     #shopify-section-{{ section.id }} .ma-shero__tagline { font-size: 13.5px; max-width: 300px; }
     #shopify-section-{{ section.id }} .ma-shero-chips__row { justify-content: flex-start; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding: 0 18px; -webkit-overflow-scrolling: touch; }
     #shopify-section-{{ section.id }} .ma-shero-chips__row::-webkit-scrollbar { display: none; }
@@ -186,6 +192,17 @@
         { "value": "bottom", "label": "Bottom" }
       ],
       "default": "top"
+    },
+    {
+      "type": "select",
+      "id": "mobile_text_side",
+      "label": "Mobile text side",
+      "info": "Horizontal side on mobile only — desktop keeps the Text position setting",
+      "options": [
+        { "value": "left", "label": "Left (default)" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
     },
     {
       "type": "select",
