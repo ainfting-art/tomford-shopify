@@ -13,7 +13,7 @@
       "type": "ma-seasonal-hero",
       "name": "MA — Seasonal Hero",
       "settings": {
-        "image": "shopify://shop_images/ATTACH__female_model_202604261700.jpg",
+        "image": "shopify://shop_images/ATTACH__female_model_202604261717_2ee457b3-c760-4ff7-bdf5-1d4cce9acae2.jpg",
         "focal_desktop": 50,
         "focal_mobile": 50,
         "eyebrow": "For Her",
@@ -24,7 +24,7 @@
         "mobile_text_pos": "bottom",
         "mobile_text_side": "left",
         "text_tone": "light",
-        "overlay": 20,
+        "overlay": 10,
         "height_mode": "large",
         "height_desktop": 480,
         "height_mobile": 360,
