@@ -26,6 +26,9 @@
   #shopify-section-{{ section.id }} .ma-shero--left { justify-content: flex-start; }
   #shopify-section-{{ section.id }} .ma-shero--left .ma-shero__content { text-align: left; padding: 48px 24px 48px clamp(28px, 7vw, 100px); }
   #shopify-section-{{ section.id }} .ma-shero--left .ma-shero__tagline { margin: 0; }
+  #shopify-section-{{ section.id }} .ma-shero--right { justify-content: flex-end; align-items: flex-start; }
+  #shopify-section-{{ section.id }} .ma-shero--right .ma-shero__content { text-align: right; padding: clamp(44px, 9vh, 76px) clamp(28px, 7vw, 100px) 48px 24px; }
+  #shopify-section-{{ section.id }} .ma-shero--right .ma-shero__tagline { margin: 0 0 0 auto; }
   #shopify-section-{{ section.id }} .ma-shero__media, #shopify-section-{{ section.id }} .ma-shero__media picture { position: absolute; inset: 0; }
   #shopify-section-{{ section.id }} .ma-shero__img { width: 100%; height: 100%; object-fit: cover; object-position: {{ section.settings.focal_desktop }}% center; display: block; position: absolute; inset: 0; }
   #shopify-section-{{ section.id }} .ma-shero__img--ph { background: #10151d; }
@@ -44,6 +47,7 @@
     #shopify-section-{{ section.id }} .ma-shero__img { object-position: {{ section.settings.focal_mobile }}% center; }
     #shopify-section-{{ section.id }} .ma-shero__content { padding: 44px 18px 28px; }
     #shopify-section-{{ section.id }} .ma-shero--left .ma-shero__content { padding: 44px 18px 28px 22px; }
+    #shopify-section-{{ section.id }} .ma-shero--right .ma-shero__content { padding: 40px 20px 28px 18px; max-width: 340px; }
     #shopify-section-{{ section.id }} .ma-shero__eyebrow { font-size: 10px; letter-spacing: .26em; margin-bottom: 10px; }
     #shopify-section-{{ section.id }} .ma-shero__title { font-size: clamp(26px, 8vw, 32px); margin-bottom: 12px; }
     #shopify-section-{{ section.id }} .ma-shero__tagline { font-size: 13.5px; max-width: 300px; }
@@ -162,7 +166,8 @@
       "label": "Text position",
       "options": [
         { "value": "left", "label": "Left" },
-        { "value": "center", "label": "Center" }
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right (top corner)" }
       ],
       "default": "left"
     },
