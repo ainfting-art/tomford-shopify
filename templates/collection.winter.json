@@ -237,10 +237,28 @@
         "padding-block-start": 0,
         "padding-block-end": 32
       }
+    },
+    "ma_bottom_banner": {
+      "type": "ma-seasonal-hero",
+      "name": "MA — Bottom Banner",
+      "settings": {
+        "show_heading": false,
+        "eyebrow": "",
+        "heading": "",
+        "tagline": "",
+        "content_position": "center",
+        "overlay": 0,
+        "height_mode": "small",
+        "focal_desktop": 50,
+        "focal_mobile": 60,
+        "chips": "",
+        "chips_note": ""
+      }
     }
   },
   "order": [
     "ma_seasonal_hero",
-    "main"
+    "main",
+    "ma_bottom_banner"
   ]
 }

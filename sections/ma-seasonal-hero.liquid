@@ -61,15 +61,19 @@
     {%- endif -%}
     <span class="ma-shero__overlay"></span>
   </div>
-  <div class="ma-shero__content">
-    {%- if section.settings.eyebrow != blank -%}
-      <p class="ma-shero__eyebrow">{{ section.settings.eyebrow | escape }}</p>
-    {%- endif -%}
-    <h1 class="ma-shero__title">{{ section.settings.heading | default: collection.title | escape }}</h1>
-    {%- if section.settings.tagline != blank -%}
-      <p class="ma-shero__tagline">{{ section.settings.tagline | escape }}</p>
-    {%- endif -%}
-  </div>
+  {%- if section.settings.show_heading or section.settings.eyebrow != blank or section.settings.tagline != blank -%}
+    <div class="ma-shero__content">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="ma-shero__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.show_heading -%}
+        <h1 class="ma-shero__title">{{ section.settings.heading | default: collection.title | escape }}</h1>
+      {%- endif -%}
+      {%- if section.settings.tagline != blank -%}
+        <p class="ma-shero__tagline">{{ section.settings.tagline | escape }}</p>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
 </section>
 {%- assign chips_raw = section.settings.chips | strip -%}
 {%- if chips_raw != blank -%}
@@ -128,6 +132,12 @@
       "id": "eyebrow",
       "label": "Eyebrow",
       "default": "The Winter Edit"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_heading",
+      "label": "Show heading",
+      "default": true
     },
     {
       "type": "text",
