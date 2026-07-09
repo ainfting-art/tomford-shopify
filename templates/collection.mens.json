@@ -1,20 +1,30 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "ma_seasonal_hero": {
       "type": "ma-seasonal-hero",
       "name": "MA — Seasonal Hero",
       "settings": {
+        "image": "shopify://shop_images/ATTACH__female_model_202604261821_8.jpg",
         "focal_desktop": 50,
-        "focal_mobile": 60,
+        "focal_mobile": 40,
         "eyebrow": "For Him",
         "show_heading": true,
         "heading": "",
         "tagline": "He leaves. The room remembers.",
         "content_position": "left",
-        "mobile_text_pos": "top",
+        "mobile_text_pos": "bottom",
         "text_tone": "light",
-        "overlay": 25,
-        "height_mode": "small",
+        "overlay": 10,
+        "height_mode": "large",
         "height_desktop": 480,
         "height_mobile": 360,
         "chips": "All|/collections/mens-collection\nWoody|/collections/mens-collection?filter.p.product_type=Woody\nAmber|/collections/mens-collection?filter.p.product_type=Amber\nFresh|/collections/mens-collection?filter.p.product_type=Fresh",
@@ -234,17 +244,18 @@
       "type": "ma-seasonal-hero",
       "name": "MA — Bottom Banner",
       "settings": {
+        "image": "shopify://shop_images/ATTACH__female_model_202604261821_7.jpg",
         "focal_desktop": 50,
-        "focal_mobile": 65,
+        "focal_mobile": 50,
         "eyebrow": "",
         "show_heading": true,
         "heading": "Not loud. Not subtle. Exact.",
         "tagline": "",
-        "content_position": "center",
-        "mobile_text_pos": "middle",
+        "content_position": "left",
+        "mobile_text_pos": "bottom",
         "text_tone": "light",
-        "overlay": 35,
-        "height_mode": "small",
+        "overlay": 15,
+        "height_mode": "large",
         "height_desktop": 480,
         "height_mobile": 360,
         "chips": "",
