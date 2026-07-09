@@ -24,7 +24,7 @@
         "content_position": "left",
         "text_tone": "light",
         "overlay": 30,
-        "height_mode": "small",
+        "height_mode": "large",
         "height_desktop": 480,
         "height_mobile": 360,
         "chips": "All|/collections/winter-collection\nAmber|/collections/winter-collection?filter.p.product_type=Amber\nWoody|/collections/winter-collection?filter.p.product_type=Woody\nFresh|/collections/winter-collection?filter.p.product_type=Fresh\nFloral|/collections/winter-collection?filter.p.product_type=Floral",
