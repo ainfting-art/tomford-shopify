@@ -43,7 +43,7 @@
   #shopify-section-{{ section.id }} .ma-shero-chips__chip:hover { background: var(--color-foreground, #111); color: var(--color-background, #fff); border-color: var(--color-foreground, #111); }
   #shopify-section-{{ section.id }} .ma-shero-chips__note { margin: 12px 0 0; text-align: center; font-size: 9.5px; letter-spacing: .18em; text-transform: uppercase; color: rgb(var(--color-foreground-rgb, 26 26 26) / .45); }
   @media screen and (max-width: 749px) {
-    #shopify-section-{{ section.id }} .ma-shero { min-height: {{ h_mobile }}px; align-items: flex-start; }
+    #shopify-section-{{ section.id }} .ma-shero { min-height: {{ h_mobile }}px; align-items: {% if section.settings.mobile_text_pos == 'middle' %}center{% else %}flex-start{% endif %}; }
     #shopify-section-{{ section.id }} .ma-shero__img { object-position: {{ section.settings.focal_mobile }}% center; }
     #shopify-section-{{ section.id }} .ma-shero__content { padding: 44px 18px 28px; }
     #shopify-section-{{ section.id }} .ma-shero--left .ma-shero__content { padding: 44px 18px 28px 22px; }
@@ -170,6 +170,17 @@
         { "value": "right", "label": "Right (top corner)" }
       ],
       "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "mobile_text_pos",
+      "label": "Mobile text position",
+      "info": "Vertical placement on mobile only — desktop text is always vertically centered",
+      "options": [
+        { "value": "top", "label": "Top" },
+        { "value": "middle", "label": "Middle (like desktop)" }
+      ],
+      "default": "top"
     },
     {
       "type": "select",
