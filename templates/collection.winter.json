@@ -19,7 +19,7 @@
         "focal_mobile": 60,
         "eyebrow": "The Winter Edit",
         "show_heading": true,
-        "heading": "",
+        "heading": "Winter Collection",
         "tagline": "Rich resins, dense woods and smoke — compositions that unfold slowly through colder air.\n This is where intensity becomes elegance.",
         "content_position": "left",
         "mobile_text_pos": "bottom",
@@ -246,7 +246,7 @@
       "name": "MA — Bottom Banner",
       "settings": {
         "image": "shopify://shop_images/Red_perfume_bottle_in_blizzard_202607090508.jpg",
-        "image_mobile": "shopify://shop_images/Red_perfume_bottle_in_blizzard_202607090508.jpg",
+        "image_mobile": "shopify://shop_images/Red_perfume_bottle_in_blizzard_2026070.jpg",
         "focal_desktop": 50,
         "focal_mobile": 65,
         "eyebrow": "The Winter Edit",
