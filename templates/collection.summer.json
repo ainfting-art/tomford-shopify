@@ -24,7 +24,7 @@
         "content_position": "left",
         "text_tone": "dark",
         "overlay": 30,
-        "height_mode": "small",
+        "height_mode": "large",
         "height_desktop": 480,
         "height_mobile": 360,
         "chips": "All|/collections/summer-collection\nFresh|/collections/summer-collection?filter.p.product_type=Fresh\nFloral|/collections/summer-collection?filter.p.product_type=Floral\nWoody|/collections/summer-collection?filter.p.product_type=Woody\nAmber|/collections/summer-collection?filter.p.product_type=Amber",
