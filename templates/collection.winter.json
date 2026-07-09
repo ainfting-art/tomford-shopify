@@ -18,6 +18,7 @@
         "focal_desktop": 50,
         "focal_mobile": 60,
         "eyebrow": "The Winter Edit",
+        "show_heading": true,
         "heading": "",
         "tagline": "Rich resins, dense woods and smoke — compositions that unfold slowly through colder air. This is where intensity becomes elegance.",
         "content_position": "left",
@@ -242,17 +243,21 @@
       "type": "ma-seasonal-hero",
       "name": "MA — Bottom Banner",
       "settings": {
-        "show_heading": false,
-        "eyebrow": "",
-        "heading": "",
-        "tagline": "",
-        "content_position": "center",
-        "overlay": 0,
-        "height_mode": "small",
+        "image": "shopify://shop_images/Red_perfume_bottle_in_blizzard_202607090508.jpg",
+        "image_mobile": "shopify://shop_images/Red_perfume_bottle_in_blizzard_202607090508.jpg",
         "focal_desktop": 50,
-        "focal_mobile": 60,
+        "focal_mobile": 65,
+        "eyebrow": "The Winter Edit",
+        "show_heading": true,
+        "heading": "The Winter Edit",
+        "tagline": "Deep, enveloping, intimate. Built for colder air and longer nights — fragrances that reveal themselves hour after hour.",
+        "content_position": "left",
+        "overlay": 30,
+        "height_mode": "custom",
+        "height_desktop": 480,
+        "height_mobile": 480,
         "chips": "",
-        "chips_note": ""
+        "chips_note": "Tap a note — the shelf rearranges"
       }
     }
   },
