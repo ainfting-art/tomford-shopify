@@ -80,7 +80,7 @@
         <h1 class="ma-shero__title">{{ section.settings.heading | default: collection.title | escape }}</h1>
       {%- endif -%}
       {%- if section.settings.tagline != blank -%}
-        <p class="ma-shero__tagline">{{ section.settings.tagline | escape }}</p>
+        <p class="ma-shero__tagline">{{ section.settings.tagline | escape | newline_to_br }}</p>
       {%- endif -%}
     </div>
   {%- endif -%}
