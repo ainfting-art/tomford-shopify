@@ -19,6 +19,10 @@
 <style>
   #shopify-section-{{ section.id }} { opacity: 1 !important; transform: none !important; }
   #shopify-section-{{ section.id }} .ma-shero { position: relative; min-height: {{ h_desktop }}px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #10151d; }
+  #shopify-section-{{ section.id }} .ma-shero--tone-dark { background: #e9e4da; }
+  #shopify-section-{{ section.id }} .ma-shero--tone-dark .ma-shero__img--ph { background: #e9e4da; }
+  #shopify-section-{{ section.id }} .ma-shero--tone-dark .ma-shero__title { color: #1c1c1c; }
+  #shopify-section-{{ section.id }} .ma-shero--tone-dark .ma-shero__tagline { color: rgba(28, 28, 28, .75); }
   #shopify-section-{{ section.id }} .ma-shero--left { justify-content: flex-start; }
   #shopify-section-{{ section.id }} .ma-shero--left .ma-shero__content { text-align: left; padding: 48px 24px 48px clamp(28px, 7vw, 100px); }
   #shopify-section-{{ section.id }} .ma-shero--left .ma-shero__tagline { margin: 0; }
@@ -49,7 +53,7 @@
     #shopify-section-{{ section.id }} .ma-shero-chips { padding-inline: 0; }
   }
 </style>
-<section class="ma-shero ma-shero--{{ section.settings.content_position | default: 'left' }}">
+<section class="ma-shero ma-shero--{{ section.settings.content_position | default: 'left' }} ma-shero--tone-{{ section.settings.text_tone | default: 'light' }}">
   <div class="ma-shero__media">
     {%- if section.settings.image -%}
       <picture>
@@ -161,6 +165,17 @@
         { "value": "center", "label": "Center" }
       ],
       "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "text_tone",
+      "label": "Text tone",
+      "info": "Light text for dark images (winter), dark text for bright images (summer)",
+      "options": [
+        { "value": "light", "label": "Light text" },
+        { "value": "dark", "label": "Dark text" }
+      ],
+      "default": "light"
     },
     {
       "type": "range",
