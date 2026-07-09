@@ -1,9 +1,20 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "ma_seasonal_hero": {
       "type": "ma-seasonal-hero",
       "name": "MA — Seasonal Hero",
       "settings": {
+        "image": "shopify://shop_images/ATTACH__female_model_202604261707_826bc159-41f1-4763-9c3f-0491156d1c58.jpg",
+        "image_mobile": "shopify://shop_images/ATTACH__female_model_202604261707.jpg",
         "focal_desktop": 50,
         "focal_mobile": 75,
         "eyebrow": "The Summer Edit",
@@ -233,16 +244,18 @@
       "type": "ma-seasonal-hero",
       "name": "MA — Bottom Banner",
       "settings": {
-        "show_heading": false,
+        "focal_desktop": 50,
+        "focal_mobile": 60,
         "eyebrow": "",
+        "show_heading": false,
         "heading": "",
         "tagline": "The sun sets. The scent doesn't.",
         "content_position": "center",
         "text_tone": "dark",
         "overlay": 0,
         "height_mode": "small",
-        "focal_desktop": 50,
-        "focal_mobile": 60,
+        "height_desktop": 480,
+        "height_mobile": 360,
         "chips": "",
         "chips_note": ""
       }
