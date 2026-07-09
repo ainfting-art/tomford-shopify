@@ -24,7 +24,7 @@
         "content_position": "left",
         "mobile_text_pos": "bottom",
         "text_tone": "light",
-        "overlay": 30,
+        "overlay": 0,
         "height_mode": "large",
         "height_desktop": 480,
         "height_mobile": 360,
