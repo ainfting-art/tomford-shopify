@@ -1,15 +1,28 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "ma_seasonal_hero": {
       "type": "ma-seasonal-hero",
       "name": "MA — Seasonal Hero",
       "settings": {
+        "image": "shopify://shop_images/Perfume_bottle_on_frozen_lake_202607090455.jpg",
+        "image_mobile": "shopify://shop_images/Perfume_bottle_on_frozen_lake_202607090455.jpg",
         "focal_desktop": 50,
-        "focal_mobile": 75,
+        "focal_mobile": 60,
         "eyebrow": "The Winter Edit",
         "heading": "",
         "tagline": "Rich resins, dense woods and smoke — compositions that unfold slowly through colder air. This is where intensity becomes elegance.",
+        "content_position": "left",
         "overlay": 30,
+        "height_mode": "small",
         "height_desktop": 480,
         "height_mobile": 360,
         "chips": "All|/collections/winter-collection\nAmber|/collections/winter-collection?filter.p.product_type=Amber\nWoody|/collections/winter-collection?filter.p.product_type=Woody\nFresh|/collections/winter-collection?filter.p.product_type=Fresh\nFloral|/collections/winter-collection?filter.p.product_type=Floral",
