@@ -13,6 +13,7 @@
       "type": "ma-seasonal-hero",
       "name": "MA — Seasonal Hero",
       "settings": {
+        "image": "shopify://shop_images/ATTACH__female_model_202604261700.jpg",
         "focal_desktop": 50,
         "focal_mobile": 50,
         "eyebrow": "For Her",
