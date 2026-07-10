@@ -25,6 +25,50 @@
   else
     assign price_clean = price_raw
   endif
+
+  comment
+    PDP v2 pilot gate — enabled per product via the "Pilot product handles"
+    section setting (comma-separated), or store-wide via the checkbox.
+  endcomment
+  assign pdp_v2 = false
+  if section.settings.pdp_v2_all
+    assign pdp_v2 = true
+  elsif section.settings.pdp_v2_handles != blank
+    assign pdp_v2_list = section.settings.pdp_v2_handles | downcase | split: ','
+    for pdp_v2_h in pdp_v2_list
+      assign pdp_v2_h_trim = pdp_v2_h | strip
+      if pdp_v2_h_trim == product.handle
+        assign pdp_v2 = true
+      endif
+    endfor
+  endif
+
+  assign mf_proof_line   = product.metafields.custom.proof_line.value
+  assign mf_original_mrp = product.metafields.custom.original_mrp.value
+  assign mf_note_img_top   = product.metafields.custom.note_image_top.value
+  assign mf_note_img_heart = product.metafields.custom.note_image_heart.value
+  assign mf_note_img_base  = product.metafields.custom.note_image_base.value
+  assign mf_pair = product.metafields.custom.pairs_with.value
+
+  assign v2_top_main   = mf_top_notes | replace: '·', ',' | split: ',' | first | strip
+  assign v2_heart_main = mf_heart_notes | replace: '·', ',' | split: ',' | first | strip
+  assign v2_base_main  = mf_base_notes | replace: '·', ',' | split: ',' | first | strip
+
+  assign v2_pair_variant = blank
+  if mf_pair != blank
+    assign v2_pair_variant = mf_pair.selected_or_first_available_variant
+  endif
+  if v2_pair_variant != blank
+    assign v2_pair_total = current_variant.price | plus: v2_pair_variant.price
+    assign v2_pair_total_str = v2_pair_total | money_without_currency
+    if v2_pair_total_str contains '.00'
+      assign v2_pair_total_str = v2_pair_total_str | remove: '.00'
+    endif
+    assign v2_pair_price_str = v2_pair_variant.price | money_without_currency
+    if v2_pair_price_str contains '.00'
+      assign v2_pair_price_str = v2_pair_price_str | remove: '.00'
+    endif
+  endif
 %}
 
 <script type="application/ld+json">
@@ -94,6 +138,9 @@
         <a href="#ma-reviews" class="ma-pdp__review-link">Reviews</a>
       {% endif %}
     </div>
+    {% if pdp_v2 and mf_proof_line != blank %}
+      <p class="ma-v2-proof">{{ mf_proof_line | escape }}</p>
+    {% endif %}
     {% if mf_short_hook != blank %}
       <p class="ma-pdp__tagline">{{ mf_short_hook }}</p>
     {% endif %}
@@ -203,6 +250,10 @@
           {% endif %}
         </div>
 
+        {% if pdp_v2 and mf_proof_line != blank %}
+          <p class="ma-v2-proof ma-v2-proof--desktop">{{ mf_proof_line | escape }}</p>
+        {% endif %}
+
         {% if mf_short_hook != blank %}
           <p class="ma-pdp__tagline">{{ mf_short_hook }}</p>
         {% endif %}
@@ -216,6 +267,23 @@
           <span class="ma-pdp__price-sep" aria-hidden="true">|</span>
           <span class="ma-pdp__volume">{{ product.metafields.custom.volume.value | default: '100.0 ML' }}</span>
         </div>
+
+        {% if pdp_v2 %}
+          {%- comment -%} M1 + G · price integrity + first-order offer {%- endcomment -%}
+          <p class="ma-v2-integrity">One price, all year. We never inflate a number to strike it through.</p>
+          <span class="ma-v2-offer-chip">First bottle — 15% off with WELCOME15</span>
+
+          {%- comment -%} M3 · batch code (variant SKU) + live stock {%- endcomment -%}
+          {% if current_variant.sku != blank %}
+            <div class="ma-v2-batch">
+              <span>Batch {{ current_variant.sku | escape }}</span>
+              {% if current_variant.inventory_management == 'shopify' and current_variant.inventory_quantity > 0 %}
+                <span class="ma-v2-batch__sep" aria-hidden="true">·</span>
+                <b>{{ current_variant.inventory_quantity }} bottles remain</b>
+              {% endif %}
+            </div>
+          {% endif %}
+        {% endif %}
 
         {%- comment -%}
           Uses Horizon's native <product-form-component> + <add-to-cart-component>
@@ -268,6 +336,20 @@
                 </button>
               </add-to-cart-component>
             </div>
+
+            {% if pdp_v2 %}
+              {%- comment -%} Live dispatch countdown — below Add to Bag {%- endcomment -%}
+              <p class="ma-v2-cutoff" id="ma-v2-cutoff" data-cutoff="{{ section.settings.dispatch_cutoff | default: 18 }}"></p>
+
+              {%- comment -%} M5 · gift toggle — line item property, ships with the order {%- endcomment -%}
+              <div class="ma-v2-gift" id="ma-v2-gift">
+                <label class="ma-v2-gift__label">
+                  <input type="checkbox" name="properties[Gift]" value="Yes — hand-written card" id="ma-v2-gift-check">
+                  <span>This is a gift</span>
+                </label>
+                <p class="ma-v2-gift__sub">We wrap it in the maison's black coffret, conceal the price, and place your hand-written card inside. Share your message in the notes at checkout.</p>
+              </div>
+            {% endif %}
           {% endform %}
         </product-form-component>
 
@@ -283,6 +365,11 @@
           </svg>
           <span>Chat with a Fragrance Concierge</span>
         </a>
+
+        {% if pdp_v2 %}
+          {%- comment -%} M8 · route the unsure into the quiz {%- endcomment -%}
+          <p class="ma-v2-consult">Unsure if this is your scent? <a href="/pages/find-your-signature">Take the 60-second consultation</a></p>
+        {% endif %}
 
         <div class="ma-pdp__trust-row">
           <div class="ma-pdp__trust-item">
@@ -303,11 +390,99 @@
           </div>
         </div>
 
+        {% if pdp_v2 %}
+          {%- comment -%} Free sample with every order (replaces cert badges; folds in the maison's promise) {%- endcomment -%}
+          <div class="ma-v2-sample">
+            <span class="ma-v2-sample__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="9" y="6" width="6" height="15" rx="2"/><path d="M10 6V3h4v3"/><path d="M12 11v5"/></svg>
+            </span>
+            <span class="ma-v2-sample__txt">
+              <span class="ma-v2-sample__title">Free Sample With Every Order</span>
+              <span class="ma-v2-sample__body">Wear the sample. If it doesn't move you, send the bottle back — sealed, no questions, within seven days.</span>
+            </span>
+          </div>
+        {% endif %}
+
         {% if product.description != blank %}
           <div class="ma-pdp__description">
             <p class="ma-pdp__description-label">Description</p>
             <div class="ma-pdp__description-body">{{ product.description }}</div>
           </div>
+        {% endif %}
+
+        {% if pdp_v2 %}
+
+          {%- comment -%} M2 · The Honest Arithmetic — renders only when the real original MRP metafield is filled {%- endcomment -%}
+          {% if mf_original_mrp != blank %}
+            <div class="ma-v2-value">
+              <p class="ma-v2-value__kick">The Honest Arithmetic</p>
+              <div class="ma-v2-value__row"><span>The house original, at the counter</span><span class="ma-v2-value__num">{{ mf_original_mrp | escape }}</span></div>
+              <div class="ma-v2-value__row"><span>The Amiir interpretation, 30% extrait</span><span class="ma-v2-value__num">₹{{ price_clean }}</span></div>
+              <p class="ma-v2-value__foot">Same pyramid. Same oil houses. The difference is marketing — not what's in the bottle.</p>
+            </div>
+          {% endif %}
+
+          {%- comment -%} D · The Notes — compact 3-tile grid, one main note per tier, photos from metafields {%- endcomment -%}
+          {% if mf_note_img_top != blank or mf_note_img_heart != blank or mf_note_img_base != blank %}
+            <div class="ma-v2-notes">
+              <p class="ma-v2-notes__label">The Notes</p>
+              <div class="ma-v2-notes__grid">
+                {% if mf_note_img_top != blank %}
+                  <div class="ma-v2-notes__cell">
+                    {{ mf_note_img_top | image_url: width: 400 | image_tag: class: 'ma-v2-notes__img', loading: 'lazy', alt: v2_top_main }}
+                    <p class="ma-v2-notes__tier">Top</p>
+                    <p class="ma-v2-notes__main">{{ v2_top_main | escape }}</p>
+                  </div>
+                {% endif %}
+                {% if mf_note_img_heart != blank %}
+                  <div class="ma-v2-notes__cell">
+                    {{ mf_note_img_heart | image_url: width: 400 | image_tag: class: 'ma-v2-notes__img', loading: 'lazy', alt: v2_heart_main }}
+                    <p class="ma-v2-notes__tier">Heart</p>
+                    <p class="ma-v2-notes__main">{{ v2_heart_main | escape }}</p>
+                  </div>
+                {% endif %}
+                {% if mf_note_img_base != blank %}
+                  <div class="ma-v2-notes__cell">
+                    {{ mf_note_img_base | image_url: width: 400 | image_tag: class: 'ma-v2-notes__img', loading: 'lazy', alt: v2_base_main }}
+                    <p class="ma-v2-notes__tier">Base</p>
+                    <p class="ma-v2-notes__main">{{ v2_base_main | escape }}</p>
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          {% endif %}
+
+          {%- comment -%} M7 · Complete the Wardrobe — real pair via product-reference metafield, real prices {%- endcomment -%}
+          {% if v2_pair_variant != blank and v2_pair_variant.available %}
+            <div class="ma-v2-pair">
+              <p class="ma-v2-pair__label">Complete the Wardrobe</p>
+              <div class="ma-v2-pair__row">
+                <div class="ma-v2-pair__card">
+                  {% if product.featured_image %}{{ product.featured_image | image_url: width: 200 | image_tag: class: 'ma-v2-pair__img', loading: 'lazy', alt: product.title }}{% endif %}
+                  <p class="ma-v2-pair__t">This Bottle</p>
+                  <p class="ma-v2-pair__s">₹{{ price_clean }}</p>
+                </div>
+                <a class="ma-v2-pair__card" href="{{ mf_pair.url }}">
+                  {% if mf_pair.featured_image %}{{ mf_pair.featured_image | image_url: width: 200 | image_tag: class: 'ma-v2-pair__img', loading: 'lazy', alt: mf_pair.title }}{% endif %}
+                  <p class="ma-v2-pair__t">{{ mf_pair.title | escape }}</p>
+                  <p class="ma-v2-pair__s">₹{{ v2_pair_price_str }}</p>
+                </a>
+              </div>
+              <div class="ma-v2-pair__foot">
+                <span class="ma-v2-pair__sum">The pair — ₹{{ v2_pair_total_str }}</span>
+                <button type="button" class="ma-v2-pair__btn" id="ma-v2-pair-btn" data-v1="{{ current_variant.id }}" data-v2="{{ v2_pair_variant.id }}">Add Both</button>
+              </div>
+            </div>
+          {% endif %}
+
+          {%- comment -%} H · featured written review, surfaced high (populated from Judge.me data by JS) {%- endcomment -%}
+          <div class="ma-v2-rev" id="ma-v2-rev" hidden>
+            <p class="ma-v2-rev__stars" id="ma-v2-rev-stars" aria-hidden="true"></p>
+            <p class="ma-v2-rev__title" id="ma-v2-rev-title"></p>
+            <p class="ma-v2-rev__body" id="ma-v2-rev-body"></p>
+            <p class="ma-v2-rev__author" id="ma-v2-rev-author"></p>
+          </div>
+
         {% endif %}
 
         <div class="ma-pdp__accordions">
@@ -426,6 +601,17 @@
             </details>
           {% endif %}
 
+          {% if pdp_v2 %}
+            <details class="ma-pdp__accordion">
+              <summary class="ma-pdp__acc-trigger">
+                <span>What if it doesn't suit me?</span>
+                <span class="ma-acc-plus" aria-hidden="true">+</span>
+                <span class="ma-acc-minus" aria-hidden="true">−</span>
+              </summary>
+              <div class="ma-pdp__acc-body">Wear the tester vial first. If it isn't you, the sealed bottle returns within 7 days.</div>
+            </details>
+          {% endif %}
+
         </div>
 
       </div>
@@ -459,6 +645,8 @@
 {%- if product.metafields.judgeme.review_widget_data -%}
 <script id="ma-rev-data" type="application/json">{{ product.metafields.judgeme.review_widget_data }}</script>
 {%- endif -%}
+{%- comment -%} v2: the carousel's job moves up into the featured review block {%- endcomment -%}
+{% unless pdp_v2 %}
 <section class="ma-rev-strip" id="ma-rev-strip" style="display:none;" aria-label="Customer Reviews">
   <div class="ma-rev-strip__inner">
     <p class="ma-rev-strip__heading">What Our Customers Say</p>
@@ -473,6 +661,7 @@
     <div class="ma-rev-strip__dots" id="ma-rev-dots" aria-hidden="true"></div>
   </div>
 </section>
+{% endunless %}
 
 {% stylesheet %}
 /* =============================================
@@ -1094,6 +1283,199 @@
   .ma-rev-strip__quote{font-size:42px;}
 }
 
+/* =============================================
+   PDP v2 (PILOT) — one red accent per screen,
+   everything else quiet ink / grey
+   ============================================= */
+.ma-v2-proof {
+  font-size: 12px; letter-spacing: 0.06em; color: #8a8378;
+  margin: -6px 0 14px;
+  font-family: var(--font-body--family, sans-serif);
+}
+.ma-pdp__mobile-header .ma-v2-proof { margin: 0 0 8px; font-size: 11px; }
+
+.ma-v2-integrity {
+  font-size: 12px; color: #6f665c; letter-spacing: 0.03em;
+  font-style: italic; margin: -14px 0 10px;
+  font-family: var(--font-body--family, sans-serif);
+}
+.ma-v2-offer-chip {
+  display: inline-block;
+  font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: #7d1f1f; border: 1px solid #7d1f1f;
+  padding: 5px 10px; margin: 0 0 12px;
+  font-family: var(--font-body--family, sans-serif);
+}
+.ma-v2-batch {
+  display: flex; align-items: baseline; gap: 8px;
+  font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: #6f665c; margin: 0 0 6px;
+  font-family: var(--font-body--family, sans-serif);
+}
+.ma-v2-batch b { font-weight: 500; color: #1a1a1a; }
+.ma-v2-batch__sep { color: #c5c0b8; }
+
+.ma-v2-cutoff {
+  font-size: 12px; letter-spacing: 0.03em; color: #6f665c;
+  margin: 12px 0 0;
+  font-family: var(--font-body--family, sans-serif);
+}
+.ma-v2-cutoff b { color: #7d1f1f; font-weight: 500; }
+.ma-v2-cutoff:empty { display: none; }
+
+.ma-v2-gift { border: 1px solid #e5e5e5; padding: 13px 15px; margin: 14px 0 16px; }
+.ma-v2-gift__label {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 12.5px; letter-spacing: 0.04em; cursor: pointer;
+  font-family: var(--font-body--family, sans-serif);
+}
+.ma-v2-gift__label input { accent-color: #1a1a1a; width: 15px; height: 15px; flex-shrink: 0; margin: 0; }
+.ma-v2-gift__sub {
+  font-size: 11.5px; color: #8a8378; line-height: 1.6;
+  margin: 8px 0 0 25px; display: none;
+  font-family: var(--font-body--family, sans-serif);
+}
+.ma-v2-gift--on .ma-v2-gift__sub { display: block; }
+
+.ma-v2-consult {
+  font-size: 12px; color: #6f665c; letter-spacing: 0.03em;
+  text-align: center; margin: -2px 0 24px; line-height: 1.7;
+  font-family: var(--font-body--family, sans-serif);
+}
+.ma-v2-consult a { color: #7d1f1f; text-decoration: underline; text-underline-offset: 3px; }
+
+.ma-v2-sample {
+  display: flex; align-items: center; gap: 13px;
+  background: #faf8f5; border: 1px solid #efece6;
+  padding: 14px 16px; margin: -8px 0 26px;
+}
+.ma-v2-sample__icon { width: 20px; flex-shrink: 0; color: #5b534a; }
+.ma-v2-sample__icon svg { width: 20px; height: 20px; display: block; }
+.ma-v2-sample__title {
+  display: block; font-size: 10.5px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: #1a1a1a; margin-bottom: 4px;
+  font-family: var(--font-body--family, sans-serif);
+}
+.ma-v2-sample__body {
+  display: block; font-size: 12px; color: #8a8378; line-height: 1.6;
+  font-family: var(--font-body--family, sans-serif);
+}
+
+.ma-v2-value { border: 1px solid #1a1a1a; padding: 20px; margin: 26px 0 28px; }
+.ma-v2-value__kick {
+  font-size: 10px; letter-spacing: 0.26em; text-transform: uppercase;
+  color: #7d1f1f; margin: 0 0 12px;
+  font-family: var(--font-body--family, sans-serif);
+}
+.ma-v2-value__row {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+  padding: 9px 0; border-bottom: 1px solid #eee;
+  font-size: 13.5px; color: #444;
+  font-family: var(--font-body--family, sans-serif);
+}
+.ma-v2-value__row:last-of-type { border-bottom: 0; }
+.ma-v2-value__num { letter-spacing: 0.04em; color: #1a1a1a; white-space: nowrap; }
+.ma-v2-value__foot {
+  font-size: 12.5px; color: #6f665c; font-style: italic;
+  margin: 12px 0 0; line-height: 1.6;
+  font-family: var(--font-body--family, sans-serif);
+}
+
+.ma-v2-notes { margin: 0 0 28px; }
+.ma-v2-notes__label {
+  font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: #999; margin: 0 0 12px;
+  font-family: var(--font-body--family, sans-serif);
+}
+.ma-v2-notes__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.ma-v2-notes__cell { text-align: center; }
+.ma-v2-notes__img {
+  width: 100%; aspect-ratio: 1 / 1; object-fit: cover;
+  display: block; margin: 0 0 8px; background: #f2f0ee;
+}
+.ma-v2-notes__tier {
+  font-size: 8.5px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: #999; margin: 0 0 3px;
+  font-family: var(--font-body--family, sans-serif);
+}
+.ma-v2-notes__main {
+  font-size: 12.5px; letter-spacing: 0.05em; color: #1a1a1a; margin: 0;
+  font-family: var(--font-body--family, sans-serif);
+}
+
+.ma-v2-pair { margin: 0 0 28px; }
+.ma-v2-pair__label {
+  font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: #999; margin: 0 0 12px;
+  font-family: var(--font-body--family, sans-serif);
+}
+.ma-v2-pair__row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0 0 10px; }
+.ma-v2-pair__card {
+  border: 1px solid #eee; padding: 14px 10px; text-align: center;
+  text-decoration: none; color: inherit; display: block;
+}
+.ma-v2-pair__img { width: 64px; height: auto; display: block; margin: 0 auto 8px; }
+.ma-v2-pair__t {
+  font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+  margin: 0 0 3px; color: #1a1a1a;
+  font-family: var(--font-body--family, sans-serif);
+}
+.ma-v2-pair__s { font-size: 11px; color: #8a8378; margin: 0; font-family: var(--font-body--family, sans-serif); }
+.ma-v2-pair__foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.ma-v2-pair__sum { font-size: 12.5px; color: #6f665c; font-family: var(--font-body--family, sans-serif); }
+.ma-v2-pair__btn {
+  background: #fff; border: 1px solid #1a1a1a; color: #1a1a1a;
+  font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+  padding: 10px 16px; cursor: pointer;
+  font-family: var(--font-body--family, sans-serif);
+  transition: background 0.2s, color 0.2s;
+}
+.ma-v2-pair__btn:hover:not(:disabled) { background: #1a1a1a; color: #fff; }
+.ma-v2-pair__btn:disabled { opacity: 0.6; cursor: wait; }
+
+.ma-v2-rev { border-top: 1px solid #eee; padding: 20px 0 6px; margin: 0 0 8px; }
+.ma-v2-rev__stars { font-size: 13px; letter-spacing: 0.14em; color: #1a1a1a; margin: 0 0 6px; }
+.ma-v2-rev__title {
+  font-size: 14px; font-weight: 700; letter-spacing: 0.02em;
+  color: #1a1a1a; margin: 0 0 6px;
+  font-family: var(--font-body--family, sans-serif);
+}
+.ma-v2-rev__body {
+  font-size: 14px; font-style: italic; color: #444; line-height: 1.75;
+  margin: 0 0 8px;
+  font-family: var(--font-body--family, sans-serif);
+}
+.ma-v2-rev__author {
+  font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: #8a8378; margin: 0;
+  font-family: var(--font-body--family, sans-serif);
+}
+
+@media screen and (max-width: 749px) {
+  .ma-pdp__info .ma-v2-proof--desktop { display: none; }
+  .ma-v2-integrity { font-size: 11.5px; margin: -8px 0 9px; }
+  .ma-v2-offer-chip { font-size: 9.5px; padding: 4px 8px; }
+  .ma-v2-batch { font-size: 10px; }
+  .ma-v2-cutoff { font-size: 11.5px; }
+  .ma-v2-gift__label { font-size: 12px; }
+  .ma-v2-gift__sub { font-size: 11px; }
+  .ma-v2-consult { font-size: 11.5px; }
+  .ma-v2-sample { padding: 12px 14px; }
+  .ma-v2-sample__title { font-size: 10px; }
+  .ma-v2-sample__body { font-size: 11.5px; }
+  .ma-v2-value { padding: 16px; }
+  .ma-v2-value__kick { font-size: 9px; }
+  .ma-v2-value__row { font-size: 12.5px; }
+  .ma-v2-value__foot { font-size: 11.5px; }
+  .ma-v2-notes__grid { gap: 8px; }
+  .ma-v2-notes__tier { font-size: 8px; }
+  .ma-v2-notes__main { font-size: 12px; }
+  .ma-v2-pair__t { font-size: 9.5px; }
+  .ma-v2-pair__s { font-size: 10.5px; }
+  .ma-v2-pair__btn { font-size: 9px; padding: 9px 14px; }
+  .ma-v2-rev__body { font-size: 13.5px; }
+}
+
 {% endstylesheet %}
 
 <script>
@@ -1526,6 +1908,120 @@
     init();
   }
 })();
+
+/* =============================================
+   PDP v2 (PILOT) — countdown · gift · pair · featured review
+   Every init guards on its own element, so this is inert
+   on products where the pilot flag is off.
+   ============================================= */
+(function() {
+
+  /* Live dispatch countdown below Add to Bag */
+  function initCutoff() {
+    var el = document.getElementById('ma-v2-cutoff');
+    if (!el) return;
+    var cutoffHour = parseInt(el.getAttribute('data-cutoff'), 10);
+    if (isNaN(cutoffHour) || cutoffHour < 0 || cutoffHour > 23) cutoffHour = 18;
+    function tick() {
+      var now = new Date();
+      var cut = new Date();
+      cut.setHours(cutoffHour, 0, 0, 0);
+      if (now > cut) {
+        el.innerHTML = 'Ordered tonight? Dispatched <b>tomorrow morning</b>.';
+        return;
+      }
+      var ms = cut - now;
+      var h = Math.floor(ms / 3600000);
+      var m = Math.floor(ms % 3600000 / 60000);
+      el.innerHTML = 'Order in the next <b>' + h + 'h ' + m + 'm</b> — dispatched today.';
+    }
+    tick();
+    setInterval(tick, 30000);
+  }
+
+  /* Gift toggle — reveals the promise line; the checkbox itself is a
+     line item property, so "Gift: Yes — hand-written card" lands on the order */
+  function initGift() {
+    var box = document.getElementById('ma-v2-gift');
+    var check = document.getElementById('ma-v2-gift-check');
+    if (!box || !check) return;
+    check.addEventListener('change', function() {
+      box.classList.toggle('ma-v2-gift--on', check.checked);
+    });
+  }
+
+  /* Complete the Wardrobe — adds both variants, then goes to the bag */
+  function initPair() {
+    var btn = document.getElementById('ma-v2-pair-btn');
+    if (!btn || !window.fetch) return;
+    btn.addEventListener('click', function() {
+      var v1 = parseInt(btn.getAttribute('data-v1'), 10);
+      var v2 = parseInt(btn.getAttribute('data-v2'), 10);
+      if (!v1 || !v2) return;
+      var was = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Adding…';
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items: [{ id: v1, quantity: 1 }, { id: v2, quantity: 1 }] })
+      }).then(function(r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        window.location.href = '/cart';
+      }).catch(function() {
+        btn.disabled = false;
+        btn.textContent = was;
+      });
+    });
+  }
+
+  /* Featured written review, surfaced high — best-rated, titled first */
+  function initRevHigh() {
+    var wrap = document.getElementById('ma-v2-rev');
+    var dataEl = document.getElementById('ma-rev-data');
+    if (!wrap || !dataEl) return;
+    var raw;
+    try { raw = JSON.parse(dataEl.textContent); } catch (e) { return; }
+    var all = raw.reviews || (raw.data && raw.data.reviews) || [];
+    var good = all.filter(function(r) {
+      return r.published !== false && !r.hidden && r.rating >= 4 && (r.body || '').trim().length > 15;
+    });
+    if (!good.length) return;
+    good.sort(function(a, b) {
+      if (b.rating !== a.rating) return b.rating - a.rating;
+      var at = (a.title || '').trim() ? 1 : 0;
+      var bt = (b.title || '').trim() ? 1 : 0;
+      return bt - at;
+    });
+    var r = good[0];
+    var stars = '';
+    for (var i = 0; i < 5; i++) stars += i < (r.rating || 5) ? '★' : '☆';
+    document.getElementById('ma-v2-rev-stars').textContent = stars;
+    var titleEl = document.getElementById('ma-v2-rev-title');
+    if ((r.title || '').trim()) {
+      titleEl.textContent = r.title.trim();
+    } else {
+      titleEl.style.display = 'none';
+    }
+    document.getElementById('ma-v2-rev-body').textContent = '“' + (r.body || '').trim() + '”';
+    var name = r.reviewer && r.reviewer.name ? r.reviewer.name : 'Verified Buyer';
+    var verified = r.reviewer && r.reviewer.verified_buyer ? ' · Verified Buyer' : '';
+    document.getElementById('ma-v2-rev-author').textContent = '— ' + name + verified;
+    wrap.hidden = false;
+  }
+
+  function initV2() {
+    initCutoff();
+    initGift();
+    initPair();
+    initRevHigh();
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initV2);
+  } else {
+    initV2();
+  }
+})();
 </script>
 
 {% schema %}
@@ -1540,6 +2036,34 @@
       "label": "Shipping information",
       "info": "Shown in the Shipping Information accordion on every product page. Clear it to hide the accordion.",
       "default": "<p>Complimentary standard delivery across India on all orders.</p><p>Standard Delivery: 5–7 business days.<br/>Express Delivery: 2–3 business days.</p><p>Orders are shipped in discreet, luxury packaging.<br/>7-day hassle-free returns on all fragrances.</p>"
+    },
+    {
+      "type": "header",
+      "content": "New PDP (v2) — pilot"
+    },
+    {
+      "type": "checkbox",
+      "id": "pdp_v2_all",
+      "label": "Enable new PDP on ALL products",
+      "info": "Tick this after the pilot is approved — rolls the new page out store-wide.",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "pdp_v2_handles",
+      "label": "Pilot product handles",
+      "info": "Comma-separated handles that get the new PDP while testing.",
+      "default": "desert-velvet-oud"
+    },
+    {
+      "type": "range",
+      "id": "dispatch_cutoff",
+      "label": "Dispatch cutoff hour (24h)",
+      "info": "Orders before this hour show \"dispatched today\" in the countdown.",
+      "min": 0,
+      "max": 23,
+      "step": 1,
+      "default": 18
     }
   ],
   "blocks": [],
