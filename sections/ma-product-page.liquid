@@ -368,7 +368,9 @@
                     {% endif %}
                   </p>
                 {% endif %}
-                <p class="ma-v2-cutoff" id="ma-v2-cutoff" data-cutoff="{{ section.settings.dispatch_cutoff | default: 18 }}"></p>
+                {% if current_variant.available %}
+                  <p class="ma-v2-cutoff" id="ma-v2-cutoff" data-cutoff="{{ section.settings.dispatch_cutoff | default: 18 }}"></p>
+                {% endif %}
               </div>
 
               {%- comment -%} M5 · gift toggle — line item property, ships with the order {%- endcomment -%}
