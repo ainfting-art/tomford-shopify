@@ -56,26 +56,12 @@
 
   comment
     Main note per tier = first entry of the notes metafield.
-    Works for both single-line text ("Smoky Oud · Warm Amber") and list-type values.
+    join normalizes list values to a string and leaves plain text untouched,
+    so one path handles both ("Smoky Oud · Warm Amber" or a list).
   endcomment
-  assign v2_top_main = ''
-  if mf_top_notes.first
-    assign v2_top_main = mf_top_notes.first | strip
-  elsif mf_top_notes != blank
-    assign v2_top_main = mf_top_notes | replace: '·', ',' | split: ',' | first | strip
-  endif
-  assign v2_heart_main = ''
-  if mf_heart_notes.first
-    assign v2_heart_main = mf_heart_notes.first | strip
-  elsif mf_heart_notes != blank
-    assign v2_heart_main = mf_heart_notes | replace: '·', ',' | split: ',' | first | strip
-  endif
-  assign v2_base_main = ''
-  if mf_base_notes.first
-    assign v2_base_main = mf_base_notes.first | strip
-  elsif mf_base_notes != blank
-    assign v2_base_main = mf_base_notes | replace: '·', ',' | split: ',' | first | strip
-  endif
+  assign v2_top_main   = mf_top_notes | join: ',' | replace: '·', ',' | split: ',' | first | strip
+  assign v2_heart_main = mf_heart_notes | join: ',' | replace: '·', ',' | split: ',' | first | strip
+  assign v2_base_main  = mf_base_notes | join: ',' | replace: '·', ',' | split: ',' | first | strip
 
   assign v2_pair_variant = blank
   if mf_pair != blank
@@ -1426,6 +1412,7 @@
 }
 .ma-v2-notes__main {
   font-size: 12.5px; letter-spacing: 0.05em; color: #1a1a1a; margin: 0;
+  text-transform: capitalize;
   font-family: var(--font-body--family, sans-serif);
 }
 
