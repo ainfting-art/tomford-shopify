@@ -81,6 +81,9 @@ export class DialogComponent extends Component {
             document.body.style.top = '';
             window.scrollTo({ top: this.#previousScrollY, behavior: 'instant' });
             dialog.classList.remove('dialog-closing');
+            if (document.activeElement instanceof HTMLElement) {
+              document.activeElement.blur();
+            }
             this.dispatchEvent(new DialogCloseEvent());
           }
         });
@@ -130,6 +133,12 @@ export class DialogComponent extends Component {
 
     dialog.close();
     dialog.classList.remove('dialog-closing');
+
+    /* Back/Esc closes restore focus to the opener with a visible focus style
+       (grey cart icon). Pointer users never rely on it — release the focus. */
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
 
     this.dispatchEvent(new DialogCloseEvent());
   };
