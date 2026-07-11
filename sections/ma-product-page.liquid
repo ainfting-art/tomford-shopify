@@ -380,7 +380,10 @@
                   <span>This is a gift <span class="ma-v2-gift__tag">— coffret-wrapped, with your hand-written card</span></span>
                   <svg class="ma-v2-gift__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="8" width="18" height="13" rx="1"/><path d="M3 12h18"/><path d="M12 8v13"/><path d="M12 8c-2.5 0-4.5-1.3-4.5-3S9 2.5 10.5 3.5 12 8 12 8zm0 0c2.5 0 4.5-1.3 4.5-3S15 2.5 13.5 3.5 12 8 12 8z"/></svg>
                 </label>
-                <p class="ma-v2-gift__sub">We wrap it in the maison's black coffret, conceal the price, and place your hand-written card inside. Share your message in the notes at checkout.</p>
+                <p class="ma-v2-gift__sub">We wrap it in the maison's black coffret, conceal the price, and place your hand-written card inside.</p>
+                <div class="ma-v2-gift__msgwrap">
+                  <textarea class="ma-v2-gift__msg" id="ma-v2-gift-msg" name="properties[Gift message]" rows="3" maxlength="220" disabled placeholder="Your card message — we write it word for word"></textarea>
+                </div>
               </div>
             {% endif %}
           {% endform %}
@@ -1535,6 +1538,17 @@
 }
 .ma-v2-rev__dot.is-active { background: #1a1a1a; transform: scale(1.35); }
 .ma-v2-gift__tag { display: block; color: #8a8378; font-size: 11.5px; letter-spacing: 0.02em; margin-top: 4px; }
+.ma-v2-gift__msgwrap { display: none; margin-top: 10px; }
+.ma-v2-gift--on .ma-v2-gift__msgwrap { display: block; }
+.ma-v2-gift__msg {
+  width: 100%; min-height: 72px; resize: none;
+  border: 1px solid #e0d5bd; background: #fff; color: #1a1a1a;
+  padding: 10px 12px; font-size: 12.5px; line-height: 1.6;
+  font-family: var(--font-body--family, sans-serif);
+  outline: none;
+}
+.ma-v2-gift__msg:focus { border-color: #b8a06a; }
+.ma-v2-gift__msg::placeholder { color: #b0a692; }
 
 @media screen and (max-width: 749px) {
   .ma-pdp__info .ma-v2-proof--desktop { display: none; }
@@ -2026,8 +2040,15 @@
     var box = document.getElementById('ma-v2-gift');
     var check = document.getElementById('ma-v2-gift-check');
     if (!box || !check) return;
+    var msg = document.getElementById('ma-v2-gift-msg');
     check.addEventListener('change', function() {
       box.classList.toggle('ma-v2-gift--on', check.checked);
+      if (msg) {
+        /* disabled inputs don't submit — no stray gift message on non-gift orders */
+        msg.disabled = !check.checked;
+        if (!check.checked) msg.value = '';
+        if (check.checked) msg.focus();
+      }
     });
   }
 
