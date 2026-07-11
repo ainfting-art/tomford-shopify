@@ -69,6 +69,24 @@
     assign v2_pair_variant = mf_pair.selected_or_first_available_variant
     assign v2_pair_feel = mf_pair.metafields.custom.feel.value
   endif
+
+  comment
+    Wardrobe roles: a product whose "when to wear" mentions night is the
+    NIGHT of the pair, everything else is the DAY.
+  endcomment
+  assign v2_this_role = 'Day'
+  assign v2_wear_l = mf_how_to_wear | downcase
+  if v2_wear_l contains 'night'
+    assign v2_this_role = 'Night'
+  endif
+  assign v2_pair_role = ''
+  if mf_pair != blank
+    assign v2_pair_role = 'Day'
+    assign v2_pair_wear_l = mf_pair.metafields.custom.when_to_wear.value | downcase
+    if v2_pair_wear_l contains 'night'
+      assign v2_pair_role = 'Night'
+    endif
+  endif
   if v2_pair_variant != blank
     assign v2_pair_total = current_variant.price | plus: v2_pair_variant.price
     assign v2_pair_total_str = v2_pair_total | money_without_currency
@@ -280,20 +298,9 @@
         </div>
 
         {% if pdp_v2 %}
-          {%- comment -%} M1 + G · price integrity + first-order offer {%- endcomment -%}
-          <p class="ma-v2-integrity">One price, all year. We never inflate a number to strike it through.</p>
+          {%- comment -%} M1 + G · price integrity (one line) + first-order offer {%- endcomment -%}
+          <p class="ma-v2-integrity">One price, all year. No fake discounts.</p>
           <span class="ma-v2-offer-chip">First bottle — 15% off with WELCOME15</span>
-
-          {%- comment -%} M3 · batch code (variant SKU) + live stock {%- endcomment -%}
-          {% if current_variant.sku != blank %}
-            <div class="ma-v2-batch">
-              <span>{{ current_variant.sku | escape }}</span>
-              {% if current_variant.inventory_management == 'shopify' and current_variant.inventory_quantity > 0 %}
-                <span class="ma-v2-batch__sep" aria-hidden="true">·</span>
-                <b>{{ current_variant.inventory_quantity }} bottles remain</b>
-              {% endif %}
-            </div>
-          {% endif %}
         {% endif %}
 
         {%- comment -%}
@@ -349,8 +356,20 @@
             </div>
 
             {% if pdp_v2 %}
-              {%- comment -%} Live dispatch countdown — below Add to Bag {%- endcomment -%}
-              <p class="ma-v2-cutoff" id="ma-v2-cutoff" data-cutoff="{{ section.settings.dispatch_cutoff | default: 18 }}"></p>
+              {%- comment -%} Act-now cluster: live stock + dispatch countdown, below Add to Bag {%- endcomment -%}
+              <div class="ma-v2-actnow">
+                {% if current_variant.sku != blank %}
+                  <p class="ma-v2-stockline">
+                    {% if current_variant.inventory_management == 'shopify' and current_variant.inventory_quantity > 0 %}
+                      <b>{{ current_variant.inventory_quantity }} bottles remain</b>
+                      <span class="ma-v2-stockline__batch">&nbsp;· Batch {{ current_variant.sku | escape }}</span>
+                    {% else %}
+                      <span class="ma-v2-stockline__batch">Batch {{ current_variant.sku | escape }}</span>
+                    {% endif %}
+                  </p>
+                {% endif %}
+                <p class="ma-v2-cutoff" id="ma-v2-cutoff" data-cutoff="{{ section.settings.dispatch_cutoff | default: 18 }}"></p>
+              </div>
 
               {%- comment -%} M5 · gift toggle — line item property, ships with the order {%- endcomment -%}
               <div class="ma-v2-gift" id="ma-v2-gift">
@@ -469,13 +488,15 @@
               <p class="ma-v2-pair__label">Complete the Wardrobe</p>
               <div class="ma-v2-pair__row">
                 <div class="ma-v2-pair__card">
-                  {% if product.featured_image %}{{ product.featured_image | image_url: width: 200 | image_tag: class: 'ma-v2-pair__img', loading: 'lazy', alt: product.title }}{% endif %}
-                  <p class="ma-v2-pair__t">This Bottle</p>
+                  <div class="ma-v2-pair__imgwrap">{% if product.featured_image %}{{ product.featured_image | image_url: width: 400 | image_tag: class: 'ma-v2-pair__img', loading: 'lazy', alt: product.title }}{% endif %}</div>
+                  <p class="ma-v2-pair__role">{{ v2_this_role }}</p>
+                  <p class="ma-v2-pair__t">{{ product.title | escape }}</p>
                   {% if mf_feel != blank %}<p class="ma-v2-pair__cap">{{ mf_feel | escape }}</p>{% endif %}
                   <p class="ma-v2-pair__s">₹{{ price_clean }}</p>
                 </div>
                 <a class="ma-v2-pair__card" href="{{ mf_pair.url }}">
-                  {% if mf_pair.featured_image %}{{ mf_pair.featured_image | image_url: width: 200 | image_tag: class: 'ma-v2-pair__img', loading: 'lazy', alt: mf_pair.title }}{% endif %}
+                  <div class="ma-v2-pair__imgwrap">{% if mf_pair.featured_image %}{{ mf_pair.featured_image | image_url: width: 400 | image_tag: class: 'ma-v2-pair__img', loading: 'lazy', alt: mf_pair.title }}{% endif %}</div>
+                  <p class="ma-v2-pair__role">{{ v2_pair_role }}</p>
                   <p class="ma-v2-pair__t">{{ mf_pair.title | escape }}</p>
                   {% if v2_pair_feel != blank %}<p class="ma-v2-pair__cap">{{ v2_pair_feel | escape }}</p>{% endif %}
                   <p class="ma-v2-pair__s">₹{{ v2_pair_price_str }}</p>
@@ -953,7 +974,7 @@
 .ma-pdp__price-row { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
 .ma-pdp__price { font-size: 20px; letter-spacing: 0.04em; color: #1a1a1a; }
 .ma-pdp__price-sep { color: #bbb; font-size: 16px; }
-.ma-pdp__volume { font-size: 15px; letter-spacing: 0.06em; color: #777; }
+.ma-pdp__volume { font-size: 15px; letter-spacing: 0.06em; color: #444; }
 
 .ma-pdp__form { margin-bottom: 0; }
 
@@ -1115,7 +1136,7 @@
   .ma-pdp__mobile-header .ma-pdp__star { width: 13px; height: 13px; }
   .ma-pdp__mobile-header .ma-pdp__review-link { font-size: 15px; }
   .ma-pdp__mobile-header .ma-pdp__tagline { font-size: 12px; margin: 0 0 4px; letter-spacing: 0.08em; }
-  .ma-pdp__mobile-header .ma-pdp__interpretation { font-size: 14px; line-height: 1.5; margin: 0; }
+  .ma-pdp__mobile-header .ma-pdp__interpretation { font-size: 14px; line-height: 1.5; margin: 0 0 18px; }
 
   /* Grid: flex column */
   .ma-pdp__grid { display: flex; flex-direction: column; }
@@ -1158,7 +1179,7 @@
 
   /* Typography */
   .ma-pdp__price { font-size: 18px; }
-  .ma-pdp__volume { font-size: 13px; }
+  .ma-pdp__volume { font-size: 15px; }
   .ma-pdp__price-row { margin-bottom: 14px; }
   .ma-pdp__atc-row { height: 50px; }
   .ma-pdp__atc-btn { font-size: 11px; letter-spacing: 0.15em; }
@@ -1308,44 +1329,52 @@
   margin: -6px 0 14px;
   font-family: var(--font-body--family, sans-serif);
 }
-.ma-pdp__mobile-header .ma-v2-proof { margin: 0 0 8px; font-size: 11px; }
+.ma-pdp__mobile-header .ma-v2-proof { margin: 0 0 9px; font-size: 12.5px; }
 
 .ma-v2-integrity {
-  font-size: 12px; color: #6f665c; letter-spacing: 0.03em;
-  font-style: italic; margin: -14px 0 10px;
+  font-size: 13px; color: #55504a; letter-spacing: 0.02em;
+  font-style: italic; margin: -12px 0 10px;
   font-family: var(--font-body--family, sans-serif);
 }
 .ma-v2-offer-chip {
   display: inline-block;
-  font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase;
-  color: #7d1f1f; border: 1px solid #7d1f1f;
-  padding: 5px 10px; margin: 0 0 12px;
+  font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: #fff; background: #7d1f1f; border: 0;
+  padding: 9px 14px; margin: 0 0 12px;
   font-family: var(--font-body--family, sans-serif);
 }
-.ma-v2-batch {
-  display: flex; align-items: baseline; gap: 8px;
-  font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
-  color: #6f665c; margin: 0 0 6px;
-  font-family: var(--font-body--family, sans-serif);
-}
-.ma-v2-batch b { font-weight: 500; color: #1a1a1a; }
-.ma-v2-batch__sep { color: #c5c0b8; }
 
-.ma-v2-cutoff {
-  font-size: 12px; letter-spacing: 0.03em; color: #6f665c;
-  margin: 12px 0 0;
+/* Act-now cluster: stock + countdown under Add to Bag */
+.ma-v2-actnow {
+  border-left: 2px solid #7d1f1f;
+  padding: 3px 0 3px 12px;
+  margin: 14px 0 4px;
+}
+.ma-v2-stockline {
+  font-size: 13px; letter-spacing: 0.03em; color: #1a1a1a;
+  margin: 0 0 3px;
   font-family: var(--font-body--family, sans-serif);
 }
-.ma-v2-cutoff b { color: #7d1f1f; font-weight: 500; }
+.ma-v2-stockline b { color: #7d1f1f; font-weight: 600; }
+.ma-v2-stockline__batch {
+  color: #8a8378; font-size: 11px;
+  letter-spacing: 0.06em; text-transform: uppercase;
+}
+.ma-v2-cutoff {
+  font-size: 13px; letter-spacing: 0.02em; color: #55504a;
+  margin: 0;
+  font-family: var(--font-body--family, sans-serif);
+}
+.ma-v2-cutoff b { color: #7d1f1f; font-weight: 600; }
 .ma-v2-cutoff:empty { display: none; }
 
-.ma-v2-gift { border: 1px solid #e5e5e5; padding: 13px 15px; margin: 14px 0 16px; }
+.ma-v2-gift { border: 1px solid #e5e5e5; padding: 14px 16px; margin: 14px 0 16px; }
 .ma-v2-gift__label {
-  display: flex; align-items: center; gap: 10px;
-  font-size: 12.5px; letter-spacing: 0.04em; cursor: pointer;
+  display: flex; align-items: flex-start; gap: 12px;
+  font-size: 13px; letter-spacing: 0.02em; cursor: pointer; line-height: 1.5;
   font-family: var(--font-body--family, sans-serif);
 }
-.ma-v2-gift__label input { accent-color: #1a1a1a; width: 15px; height: 15px; flex-shrink: 0; margin: 0; }
+.ma-v2-gift__label input { accent-color: #1a1a1a; width: 16px; height: 16px; flex-shrink: 0; margin: 1px 0 0; }
 .ma-v2-gift__sub {
   font-size: 11.5px; color: #8a8378; line-height: 1.6;
   margin: 8px 0 0 25px; display: none;
@@ -1361,19 +1390,19 @@
 .ma-v2-consult a { color: #7d1f1f; text-decoration: underline; text-underline-offset: 3px; }
 
 .ma-v2-sample {
-  display: flex; align-items: center; gap: 13px;
-  background: #faf8f5; border: 1px solid #efece6;
-  padding: 14px 16px; margin: -8px 0 26px;
+  display: flex; align-items: center; gap: 14px;
+  background: #f7f2e7; border: 1px solid #e8dcc3; border-left: 3px solid #b8a06a;
+  padding: 16px 15px; margin: -8px 0 26px;
 }
-.ma-v2-sample__icon { width: 20px; flex-shrink: 0; color: #5b534a; }
-.ma-v2-sample__icon svg { width: 20px; height: 20px; display: block; }
+.ma-v2-sample__icon { width: 24px; flex-shrink: 0; color: #6a5626; }
+.ma-v2-sample__icon svg { width: 24px; height: 24px; display: block; }
 .ma-v2-sample__title {
-  display: block; font-size: 10.5px; letter-spacing: 0.14em;
-  text-transform: uppercase; color: #1a1a1a; margin-bottom: 4px;
+  display: block; font-size: 12px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: #1a1a1a; font-weight: 600; margin-bottom: 4px;
   font-family: var(--font-body--family, sans-serif);
 }
 .ma-v2-sample__body {
-  display: block; font-size: 12px; color: #8a8378; line-height: 1.6;
+  display: block; font-size: 12.5px; color: #6a5f4e; line-height: 1.6;
   font-family: var(--font-body--family, sans-serif);
 }
 
@@ -1426,29 +1455,38 @@
   color: #999; margin: 0 0 12px;
   font-family: var(--font-body--family, sans-serif);
 }
-.ma-v2-pair__row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0 0 10px; }
+.ma-v2-pair__row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0 0 12px; }
 .ma-v2-pair__card {
-  border: 1px solid #eee; padding: 14px 10px; text-align: center;
-  text-decoration: none; color: inherit; display: block;
+  border: 1px solid #e8e8e8; padding: 0 0 14px; text-align: center;
+  text-decoration: none; color: inherit; display: block; overflow: hidden;
 }
-.ma-v2-pair__img { width: 64px; height: auto; display: block; margin: 0 auto 8px; }
+.ma-v2-pair__imgwrap {
+  width: 100%; aspect-ratio: 4 / 5; background: #f2f0ee;
+  overflow: hidden; margin: 0 0 12px;
+}
+.ma-v2-pair__img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ma-v2-pair__role {
+  font-size: 9px; letter-spacing: 0.26em; text-transform: uppercase;
+  color: #7d1f1f; margin: 0 0 4px;
+  font-family: var(--font-body--family, sans-serif);
+}
 .ma-v2-pair__t {
-  font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
-  margin: 0 0 3px; color: #1a1a1a;
+  font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase;
+  margin: 0 0 4px; padding: 0 8px; color: #1a1a1a;
   font-family: var(--font-body--family, sans-serif);
 }
-.ma-v2-pair__s { font-size: 11px; color: #8a8378; margin: 0; font-family: var(--font-body--family, sans-serif); }
-.ma-v2-pair__cap { font-size: 10px; color: #8a8378; letter-spacing: 0.03em; margin: 0 0 4px; font-family: var(--font-body--family, sans-serif); }
+.ma-v2-pair__s { font-size: 12px; color: #1a1a1a; margin: 0; font-family: var(--font-body--family, sans-serif); }
+.ma-v2-pair__cap { font-size: 10.5px; color: #8a8378; letter-spacing: 0.03em; line-height: 1.5; margin: 0 0 5px; padding: 0 10px; font-family: var(--font-body--family, sans-serif); }
 .ma-v2-pair__foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
-.ma-v2-pair__sum { font-size: 12.5px; color: #6f665c; font-family: var(--font-body--family, sans-serif); }
+.ma-v2-pair__sum { font-size: 13px; color: #55504a; font-family: var(--font-body--family, sans-serif); }
 .ma-v2-pair__btn {
-  background: #fff; border: 1px solid #1a1a1a; color: #1a1a1a;
-  font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
-  padding: 10px 16px; cursor: pointer;
+  background: #1a1a1a; border: 0; color: #fff;
+  font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase;
+  padding: 13px 22px; cursor: pointer;
   font-family: var(--font-body--family, sans-serif);
-  transition: background 0.2s, color 0.2s;
+  transition: background 0.2s;
 }
-.ma-v2-pair__btn:hover:not(:disabled) { background: #1a1a1a; color: #fff; }
+.ma-v2-pair__btn:hover:not(:disabled) { background: #2a2a2a; }
 .ma-v2-pair__btn:disabled { opacity: 0.6; cursor: wait; }
 
 .ma-v2-rev { border-top: 1px solid #eee; padding: 22px 0 8px; margin: 0 0 8px; text-align: center; }
@@ -1463,6 +1501,9 @@
 .ma-v2-rev__body {
   font-size: 14px; font-style: italic; color: #444; line-height: 1.75;
   margin: 0 auto 8px; max-width: 400px;
+  height: 123px;
+  display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical;
+  overflow: hidden;
   font-family: var(--font-body--family, sans-serif);
 }
 .ma-v2-rev__author {
@@ -1477,31 +1518,24 @@
   transition: background 0.3s, transform 0.3s;
 }
 .ma-v2-rev__dot.is-active { background: #1a1a1a; transform: scale(1.35); }
-.ma-v2-gift__tag { color: #8a8378; font-size: 11.5px; letter-spacing: 0.03em; }
+.ma-v2-gift__tag { display: block; color: #8a8378; font-size: 11.5px; letter-spacing: 0.02em; margin-top: 4px; }
 
 @media screen and (max-width: 749px) {
   .ma-pdp__info .ma-v2-proof--desktop { display: none; }
-  .ma-v2-integrity { font-size: 11.5px; margin: -8px 0 9px; }
-  .ma-v2-offer-chip { font-size: 9.5px; padding: 4px 8px; }
-  .ma-v2-batch { font-size: 10px; }
-  .ma-v2-cutoff { font-size: 11.5px; }
-  .ma-v2-gift__label { font-size: 12px; }
-  .ma-v2-gift__sub { font-size: 11px; }
+  .ma-v2-integrity { font-size: 13px; margin: -6px 0 10px; white-space: nowrap; overflow: hidden; }
+  .ma-v2-offer-chip { display: block; text-align: center; font-size: 11.5px; padding: 10px 12px; }
+  .ma-v2-stockline { font-size: 13.5px; }
+  .ma-v2-cutoff { font-size: 13.5px; }
+  .ma-v2-gift__label { font-size: 13px; }
   .ma-v2-consult { font-size: 11.5px; }
-  .ma-v2-sample { padding: 12px 14px; }
-  .ma-v2-sample__title { font-size: 10px; }
-  .ma-v2-sample__body { font-size: 11.5px; }
   .ma-v2-value { padding: 16px; }
   .ma-v2-value__kick { font-size: 9px; }
   .ma-v2-value__row { font-size: 12.5px; }
   .ma-v2-value__foot { font-size: 11.5px; }
   .ma-v2-notes__grid { gap: 8px; }
-  .ma-v2-notes__tier { font-size: 8px; }
-  .ma-v2-notes__main { font-size: 12px; }
-  .ma-v2-pair__t { font-size: 9.5px; }
-  .ma-v2-pair__s { font-size: 10.5px; }
-  .ma-v2-pair__btn { font-size: 9px; padding: 9px 14px; }
-  .ma-v2-rev__body { font-size: 13.5px; }
+  .ma-v2-notes__tier { font-size: 9px; }
+  .ma-v2-notes__main { font-size: 13px; }
+  .ma-v2-rev__body { font-size: 13.5px; height: 118px; }
 }
 
 {% endstylesheet %}
@@ -2061,10 +2095,11 @@
       var t = decode((r.title || '').trim());
       if (t) {
         titleEl.textContent = t;
-        titleEl.style.display = '';
       } else {
-        titleEl.style.display = 'none';
+        /* keep the line so the carousel height never jumps between reviews */
+        titleEl.innerHTML = '&nbsp;';
       }
+      titleEl.style.display = '';
       bodyEl.textContent = '“' + decode((r.body || '').trim()) + '”';
       var name = r.reviewer && r.reviewer.name ? decode(r.reviewer.name) : 'Verified Buyer';
       var verified = r.reviewer && r.reviewer.verified_buyer ? ' · Verified Buyer' : '';
