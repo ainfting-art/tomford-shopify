@@ -58,13 +58,13 @@
 
     <div class="ma-rec-panels">
       <div class="ma-rec-panel{% if ma_default == 'm' %} is-active{% endif %}" data-panel="m">
-        {% render 'ma-rec-row', products: collections['mens-collection'].products, limit: section.settings.cat_limit %}
+        {% render 'ma-rec-row', products: collections['mens-collection'].products, limit: section.settings.cat_limit, exclude_id: product.id %}
       </div>
       <div class="ma-rec-panel{% if ma_default == 'u' %} is-active{% endif %}" data-panel="u">
-        {% render 'ma-rec-row', products: collections['unisex-collection'].products, limit: section.settings.cat_limit %}
+        {% render 'ma-rec-row', products: collections['unisex-collection'].products, limit: section.settings.cat_limit, exclude_id: product.id %}
       </div>
       <div class="ma-rec-panel{% if ma_default == 'f' %} is-active{% endif %}" data-panel="f">
-        {% render 'ma-rec-row', products: collections['womens-collection'].products, limit: section.settings.cat_limit %}
+        {% render 'ma-rec-row', products: collections['womens-collection'].products, limit: section.settings.cat_limit, exclude_id: product.id %}
       </div>
     </div>
   </div>

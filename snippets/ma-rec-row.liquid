@@ -3,6 +3,7 @@
   @param {array} products - product array to render
   @param {string} [title] - optional heading shown on the left
   @param {number} [limit] - max products to show
+  @param {number} [exclude_id] - product id to skip (e.g. the product being viewed)
 {%- enddoc -%}
 
 {%- liquid
@@ -24,8 +25,16 @@
   </div>
 
   <div class="ma-rec__track">
-    {%- for p in products limit: row_limit -%}
+    {%- assign ma_shown = 0 -%}
+    {%- for p in products -%}
       {%- liquid
+        if exclude_id != blank and p.id == exclude_id
+          continue
+        endif
+        if ma_shown >= row_limit
+          break
+        endif
+        assign ma_shown = ma_shown | plus: 1
         assign rc = p.metafields.reviews.rating_count.value | default: 0
         assign ra = p.metafields.reviews.rating.value.rating | default: 0
         assign interp = p.metafields.custom.interpretation.value
