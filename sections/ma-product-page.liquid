@@ -64,8 +64,10 @@
   assign v2_base_main  = mf_base_notes | join: ',' | replace: '·', ',' | split: ',' | first | strip
 
   assign v2_pair_variant = blank
+  assign v2_pair_feel = blank
   if mf_pair != blank
     assign v2_pair_variant = mf_pair.selected_or_first_available_variant
+    assign v2_pair_feel = mf_pair.metafields.custom.feel.value
   endif
   if v2_pair_variant != blank
     assign v2_pair_total = current_variant.price | plus: v2_pair_variant.price
@@ -469,11 +471,13 @@
                 <div class="ma-v2-pair__card">
                   {% if product.featured_image %}{{ product.featured_image | image_url: width: 200 | image_tag: class: 'ma-v2-pair__img', loading: 'lazy', alt: product.title }}{% endif %}
                   <p class="ma-v2-pair__t">This Bottle</p>
+                  {% if mf_feel != blank %}<p class="ma-v2-pair__cap">{{ mf_feel | escape }}</p>{% endif %}
                   <p class="ma-v2-pair__s">₹{{ price_clean }}</p>
                 </div>
                 <a class="ma-v2-pair__card" href="{{ mf_pair.url }}">
                   {% if mf_pair.featured_image %}{{ mf_pair.featured_image | image_url: width: 200 | image_tag: class: 'ma-v2-pair__img', loading: 'lazy', alt: mf_pair.title }}{% endif %}
                   <p class="ma-v2-pair__t">{{ mf_pair.title | escape }}</p>
+                  {% if v2_pair_feel != blank %}<p class="ma-v2-pair__cap">{{ v2_pair_feel | escape }}</p>{% endif %}
                   <p class="ma-v2-pair__s">₹{{ v2_pair_price_str }}</p>
                 </a>
               </div>
@@ -1434,6 +1438,7 @@
   font-family: var(--font-body--family, sans-serif);
 }
 .ma-v2-pair__s { font-size: 11px; color: #8a8378; margin: 0; font-family: var(--font-body--family, sans-serif); }
+.ma-v2-pair__cap { font-size: 10px; color: #8a8378; letter-spacing: 0.03em; margin: 0 0 4px; font-family: var(--font-body--family, sans-serif); }
 .ma-v2-pair__foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
 .ma-v2-pair__sum { font-size: 12.5px; color: #6f665c; font-family: var(--font-body--family, sans-serif); }
 .ma-v2-pair__btn {
@@ -1946,14 +1951,17 @@
     var cutoffHour = parseInt(el.getAttribute('data-cutoff'), 10);
     if (isNaN(cutoffHour) || cutoffHour < 0 || cutoffHour > 23) cutoffHour = 18;
     function tick() {
+      /* Pin the cutoff to the warehouse clock (IST, UTC+5:30) — a visitor in
+         Dubai or London sees the true Indian dispatch window, not their own. */
       var now = new Date();
-      var cut = new Date();
+      var ist = new Date(now.getTime() + (now.getTimezoneOffset() + 330) * 60000);
+      var cut = new Date(ist);
       cut.setHours(cutoffHour, 0, 0, 0);
-      if (now > cut) {
+      if (ist > cut) {
         el.innerHTML = 'Ordered tonight? Dispatched <b>tomorrow morning</b>.';
         return;
       }
-      var ms = cut - now;
+      var ms = cut - ist;
       var h = Math.floor(ms / 3600000);
       var m = Math.floor(ms % 3600000 / 60000);
       el.innerHTML = 'Order in the next <b>' + h + 'h ' + m + 'm</b> — dispatched today.';
