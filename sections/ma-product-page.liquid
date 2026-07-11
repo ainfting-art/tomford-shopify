@@ -1942,8 +1942,8 @@
       setTimeout(function() {
         current = ((idx % total) + total) % total;
         var r    = reviews[current];
-        var name = (r.reviewer && r.reviewer.name) ? r.reviewer.name : 'Verified Buyer';
-        var tick = (r.reviewer && r.reviewer.verified_buyer) ? ' · Verified Buyer' : '';
+        var name = r.reviewer_name || (r.reviewer && r.reviewer.name) || 'Verified Buyer';
+        var tick = (r.verified_buyer || (r.reviewer && r.reviewer.verified_buyer)) ? ' · Verified Buyer' : '';
         bodyEl.textContent   = r.body || '';
         starsEl.textContent  = renderStars(r.rating || 5);
         authorEl.textContent = name + tick;
@@ -2031,14 +2031,31 @@
     });
   }
 
-  /* Complete the Wardrobe — adds both variants, then goes to the bag */
+  /* Complete the Wardrobe — adds both variants and stays on the page:
+     button flashes "Added", the header cart count ticks up, no redirect. */
   function initPair() {
     var btn = document.getElementById('ma-v2-pair-btn');
     if (!btn || !window.fetch) return;
+
+    function bumpCartCount() {
+      fetch('/cart.js')
+        .then(function(r) { return r.json(); })
+        .then(function(cart) {
+          var sels = ['[data-cart-count]', '.cart-count-bubble span:not(.visually-hidden)', '.cart-count', '.header__cart-count', '#CartCount'];
+          for (var i = 0; i < sels.length; i++) {
+            document.querySelectorAll(sels[i]).forEach(function(el) {
+              el.textContent = cart.item_count;
+            });
+          }
+          document.dispatchEvent(new CustomEvent('cart:refresh', { bubbles: true }));
+        })
+        .catch(function() {});
+    }
+
     btn.addEventListener('click', function() {
       var v1 = parseInt(btn.getAttribute('data-v1'), 10);
       var v2 = parseInt(btn.getAttribute('data-v2'), 10);
-      if (!v1 || !v2) return;
+      if (!v1 || !v2 || btn.disabled) return;
       var was = btn.textContent;
       btn.disabled = true;
       btn.textContent = 'Adding…';
@@ -2048,7 +2065,12 @@
         body: JSON.stringify({ items: [{ id: v1, quantity: 1 }, { id: v2, quantity: 1 }] })
       }).then(function(r) {
         if (!r.ok) throw new Error('HTTP ' + r.status);
-        window.location.href = '/cart';
+        btn.textContent = 'Added ✓ — in your bag';
+        bumpCartCount();
+        setTimeout(function() {
+          btn.disabled = false;
+          btn.textContent = was;
+        }, 2400);
       }).catch(function() {
         btn.disabled = false;
         btn.textContent = was;
@@ -2117,9 +2139,15 @@
       }
       titleEl.style.display = '';
       bodyEl.textContent = '“' + decode((r.body || '').trim()) + '”';
-      var name = r.reviewer && r.reviewer.name ? decode(r.reviewer.name) : 'Verified Buyer';
-      var verified = r.reviewer && r.reviewer.verified_buyer ? ' · Verified Buyer' : '';
-      authorEl.textContent = '— ' + name + verified;
+      /* Judge.me widget data stores the name flat as reviewer_name */
+      var rawName = r.reviewer_name || (r.reviewer && r.reviewer.name) || '';
+      var name = decode(rawName).trim();
+      var isVerified = r.verified_buyer || (r.reviewer && r.reviewer.verified_buyer);
+      if (name) {
+        authorEl.textContent = '— ' + name + (isVerified ? ' · Verified Buyer' : '');
+      } else {
+        authorEl.textContent = '— Verified Buyer';
+      }
       dotsEl.querySelectorAll('.ma-v2-rev__dot').forEach(function(d, i) {
         d.classList.toggle('is-active', i === current);
       });
