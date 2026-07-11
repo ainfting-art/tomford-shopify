@@ -54,9 +54,28 @@
   assign mf_note_img_base  = product.metafields.custom.note_image_base.value
   assign mf_pair = product.metafields.custom.pairs_with.value
 
-  assign v2_top_main   = mf_top_notes | replace: '·', ',' | split: ',' | first | strip
-  assign v2_heart_main = mf_heart_notes | replace: '·', ',' | split: ',' | first | strip
-  assign v2_base_main  = mf_base_notes | replace: '·', ',' | split: ',' | first | strip
+  comment
+    Main note per tier = first entry of the notes metafield.
+    Works for both single-line text ("Smoky Oud · Warm Amber") and list-type values.
+  endcomment
+  assign v2_top_main = ''
+  if mf_top_notes.first
+    assign v2_top_main = mf_top_notes.first | strip
+  elsif mf_top_notes != blank
+    assign v2_top_main = mf_top_notes | replace: '·', ',' | split: ',' | first | strip
+  endif
+  assign v2_heart_main = ''
+  if mf_heart_notes.first
+    assign v2_heart_main = mf_heart_notes.first | strip
+  elsif mf_heart_notes != blank
+    assign v2_heart_main = mf_heart_notes | replace: '·', ',' | split: ',' | first | strip
+  endif
+  assign v2_base_main = ''
+  if mf_base_notes.first
+    assign v2_base_main = mf_base_notes.first | strip
+  elsif mf_base_notes != blank
+    assign v2_base_main = mf_base_notes | replace: '·', ',' | split: ',' | first | strip
+  endif
 
   assign v2_pair_variant = blank
   if mf_pair != blank
@@ -435,21 +454,21 @@
                   <div class="ma-v2-notes__cell">
                     {{ mf_note_img_top | image_url: width: 400 | image_tag: class: 'ma-v2-notes__img', loading: 'lazy', alt: v2_top_main }}
                     <p class="ma-v2-notes__tier">Top</p>
-                    <p class="ma-v2-notes__main">{{ v2_top_main | escape }}</p>
+                    {% if v2_top_main != blank %}<p class="ma-v2-notes__main">{{ v2_top_main | escape }}</p>{% endif %}
                   </div>
                 {% endif %}
                 {% if mf_note_img_heart != blank %}
                   <div class="ma-v2-notes__cell">
                     {{ mf_note_img_heart | image_url: width: 400 | image_tag: class: 'ma-v2-notes__img', loading: 'lazy', alt: v2_heart_main }}
                     <p class="ma-v2-notes__tier">Heart</p>
-                    <p class="ma-v2-notes__main">{{ v2_heart_main | escape }}</p>
+                    {% if v2_heart_main != blank %}<p class="ma-v2-notes__main">{{ v2_heart_main | escape }}</p>{% endif %}
                   </div>
                 {% endif %}
                 {% if mf_note_img_base != blank %}
                   <div class="ma-v2-notes__cell">
                     {{ mf_note_img_base | image_url: width: 400 | image_tag: class: 'ma-v2-notes__img', loading: 'lazy', alt: v2_base_main }}
                     <p class="ma-v2-notes__tier">Base</p>
-                    <p class="ma-v2-notes__main">{{ v2_base_main | escape }}</p>
+                    {% if v2_base_main != blank %}<p class="ma-v2-notes__main">{{ v2_base_main | escape }}</p>{% endif %}
                   </div>
                 {% endif %}
               </div>
