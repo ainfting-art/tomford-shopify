@@ -59,9 +59,11 @@ class CartDrawerComponent extends DialogComponent {
 
   #handlePopState = async () => {
     if (this.refs.dialog?.open) {
-      this.refs.dialog.style.setProperty('--dialog-drawer-closing-animation', 'none');
+      /* Close exactly like the X button. Suppressing the closing animation here
+         (the old '--dialog-drawer-closing-animation: none') meant closeDialog's
+         awaited animationend never fired, so the body scroll-lock was never
+         released — a frozen page after the mobile back button. */
       await this.closeDialog();
-      this.refs.dialog.style.removeProperty('--dialog-drawer-closing-animation');
     }
   };
 
