@@ -2062,13 +2062,24 @@
       fetch('/cart.js')
         .then(function(r) { return r.json(); })
         .then(function(cart) {
-          var sels = ['[data-cart-count]', '.cart-count-bubble span:not(.visually-hidden)', '.cart-count', '.header__cart-count', '#CartCount'];
+          /* Speak the theme's native dialect: cart-items-component listens for
+             cart:update and re-renders the drawer section when no HTML is passed;
+             the drawer auto-opens on the same event, exactly like a native add. */
+          document.dispatchEvent(new CustomEvent('cart:update', {
+            bubbles: true,
+            detail: {
+              resource: cart,
+              sourceId: 'ma-v2-pair-btn',
+              data: { source: 'ma-v2-pair', itemCount: cart.item_count }
+            }
+          }));
+          /* Fallback for any plain count badges outside the component system */
+          var sels = ['[data-cart-count]', '.cart-count-bubble span:not(.visually-hidden)', '.cart-count', '.header__cart-count', '#CartCount', '.custom-header__cart-count'];
           for (var i = 0; i < sels.length; i++) {
             document.querySelectorAll(sels[i]).forEach(function(el) {
               el.textContent = cart.item_count;
             });
           }
-          document.dispatchEvent(new CustomEvent('cart:refresh', { bubbles: true }));
         })
         .catch(function() {});
     }
