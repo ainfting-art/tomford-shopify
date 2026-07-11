@@ -376,6 +376,7 @@
                 <label class="ma-v2-gift__label">
                   <input type="checkbox" name="properties[Gift]" value="Yes — hand-written card" id="ma-v2-gift-check">
                   <span>This is a gift <span class="ma-v2-gift__tag">— coffret-wrapped, with your hand-written card</span></span>
+                  <svg class="ma-v2-gift__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="8" width="18" height="13" rx="1"/><path d="M3 12h18"/><path d="M12 8v13"/><path d="M12 8c-2.5 0-4.5-1.3-4.5-3S9 2.5 10.5 3.5 12 8 12 8zm0 0c2.5 0 4.5-1.3 4.5-3S15 2.5 13.5 3.5 12 8 12 8z"/></svg>
                 </label>
                 <p class="ma-v2-gift__sub">We wrap it in the maison's black coffret, conceal the price, and place your hand-written card inside. Share your message in the notes at checkout.</p>
               </div>
@@ -1344,18 +1345,19 @@
   font-family: var(--font-body--family, sans-serif);
 }
 
-/* Act-now cluster: stock + countdown under Add to Bag */
+/* Act-now plaque: stock + countdown under Add to Bag (V3) */
 .ma-v2-actnow {
-  border-left: 2px solid #7d1f1f;
-  padding: 3px 0 3px 12px;
-  margin: 14px 0 4px;
+  background: #faf7f2;
+  border-left: 3px solid #7d1f1f;
+  padding: 14px 16px;
+  margin: 14px 0 10px;
 }
 .ma-v2-stockline {
-  font-size: 13px; letter-spacing: 0.03em; color: #1a1a1a;
+  font-size: 14px; letter-spacing: 0.02em; color: #1a1a1a;
   margin: 0 0 3px;
   font-family: var(--font-body--family, sans-serif);
 }
-.ma-v2-stockline b { color: #7d1f1f; font-weight: 600; }
+.ma-v2-stockline b { color: #7d1f1f; font-weight: 700; }
 .ma-v2-stockline__batch {
   color: #8a8378; font-size: 11px;
   letter-spacing: 0.06em; text-transform: uppercase;
@@ -1368,13 +1370,25 @@
 .ma-v2-cutoff b { color: #7d1f1f; font-weight: 600; }
 .ma-v2-cutoff:empty { display: none; }
 
-.ma-v2-gift { border: 1px solid #e5e5e5; padding: 14px 16px; margin: 14px 0 16px; }
+/* Gift plaque (V3): gold check left, ribbon icon right */
+.ma-v2-gift { border: 1px solid #e8dcc3; background: #fbf9f4; padding: 14px 16px; margin: 0 0 16px; }
 .ma-v2-gift__label {
-  display: flex; align-items: flex-start; gap: 12px;
-  font-size: 13px; letter-spacing: 0.02em; cursor: pointer; line-height: 1.5;
+  display: flex; align-items: center; gap: 12px;
+  font-size: 13px; letter-spacing: 0.02em; cursor: pointer; line-height: 1.45;
   font-family: var(--font-body--family, sans-serif);
 }
-.ma-v2-gift__label input { accent-color: #1a1a1a; width: 16px; height: 16px; flex-shrink: 0; margin: 1px 0 0; }
+.ma-v2-gift__label input {
+  appearance: none; -webkit-appearance: none;
+  width: 18px; height: 18px; border: 1px solid #b8a06a; background: #fff;
+  display: inline-grid; place-content: center;
+  flex-shrink: 0; margin: 0; cursor: pointer;
+}
+.ma-v2-gift__label input::before {
+  content: ""; width: 10px; height: 10px; background: #b8a06a;
+  transform: scale(0); transition: transform 0.12s ease-in-out;
+}
+.ma-v2-gift__label input:checked::before { transform: scale(1); }
+.ma-v2-gift__icon { width: 20px; height: 20px; stroke: #6a5626; fill: none; stroke-width: 1.4; flex-shrink: 0; margin-left: auto; }
 .ma-v2-gift__sub {
   font-size: 11.5px; color: #8a8378; line-height: 1.6;
   margin: 8px 0 0 25px; display: none;
@@ -1524,7 +1538,7 @@
   .ma-pdp__info .ma-v2-proof--desktop { display: none; }
   .ma-v2-integrity { font-size: 13px; margin: -6px 0 10px; white-space: nowrap; overflow: hidden; }
   .ma-v2-offer-chip { display: block; text-align: center; font-size: 11.5px; padding: 10px 12px; }
-  .ma-v2-stockline { font-size: 13.5px; }
+  .ma-v2-stockline { font-size: 14px; }
   .ma-v2-cutoff { font-size: 13.5px; }
   .ma-v2-gift__label { font-size: 13px; }
   .ma-v2-consult { font-size: 11.5px; }
@@ -2176,8 +2190,8 @@
       "type": "checkbox",
       "id": "pdp_v2_all",
       "label": "Enable new PDP on ALL products",
-      "info": "Tick this after the pilot is approved — rolls the new page out store-wide.",
-      "default": false
+      "info": "Rollout is ON store-wide. Untick to fall back to the pilot handles below.",
+      "default": true
     },
     {
       "type": "text",
@@ -2189,9 +2203,8 @@
     {
       "type": "text",
       "id": "proof_line_fallback",
-      "label": "Proof line under the stars",
-      "info": "Shown when a product has no custom.proof_line metafield of its own.",
-      "default": "The most re-ordered masculine in the maison this season."
+      "label": "Proof line under the stars (fallback)",
+      "info": "Optional store-wide line for products without their own custom.proof_line metafield. Leave empty to show nothing."
     },
     {
       "type": "range",
