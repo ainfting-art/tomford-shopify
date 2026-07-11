@@ -87,9 +87,15 @@ export class DialogComponent extends Component {
     dialog.classList.add('dialog-closing');
     dialog.style.animation = '';
 
-    await onAnimationEnd(dialog, undefined, {
-      subtree: false,
-    });
+    /* Failsafe: if the closing animation never fires its end event (animations
+       disabled, reduced-motion, cached styles), release the page anyway — a
+       hung await here leaves the body position:fixed, i.e. a frozen page. */
+    await Promise.race([
+      onAnimationEnd(dialog, undefined, {
+        subtree: false,
+      }),
+      new Promise((resolve) => setTimeout(resolve, 700)),
+    ]);
 
     document.body.style.width = '';
     document.body.style.position = '';
