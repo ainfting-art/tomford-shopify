@@ -60,6 +60,32 @@ export class DialogComponent extends Component {
       dialog.showModal();
       this.dispatchEvent(new DialogOpenEvent());
 
+      if (!this.maNativeCloseGuard) {
+        this.maNativeCloseGuard = true;
+
+        /* Android's back button (and Esc) close a modal dialog NATIVELY via the
+           browser's close watcher, bypassing closeDialog() entirely — leaving
+           the body position:fixed, i.e. a frozen page. Intercept the native
+           cancel and route it through the full close routine instead. */
+        dialog.addEventListener('cancel', (event) => {
+          event.preventDefault();
+          this.closeDialog();
+        });
+
+        /* Last line of defense: if anything still closes the dialog natively
+           (forced close requests), release the scroll-lock and announce it. */
+        dialog.addEventListener('close', () => {
+          if (document.body.style.position === 'fixed') {
+            document.body.style.width = '';
+            document.body.style.position = '';
+            document.body.style.top = '';
+            window.scrollTo({ top: this.#previousScrollY, behavior: 'instant' });
+            dialog.classList.remove('dialog-closing');
+            this.dispatchEvent(new DialogCloseEvent());
+          }
+        });
+      }
+
       this.addEventListener('click', this.#handleClick);
       this.addEventListener('keydown', this.#handleKeyDown);
     });
