@@ -98,6 +98,21 @@
       assign v2_pair_price_str = v2_pair_price_str | remove: '.00'
     endif
   endif
+
+  comment
+    Pair Privilege: the pair price shown = total minus the automatic discount
+    percent configured in the section settings (must match the admin discount).
+  endcomment
+  assign v2_pair_pct = section.settings.pair_discount_percent | default: 0
+  assign v2_pair_deal_str = blank
+  if v2_pair_variant != blank and v2_pair_pct > 0
+    assign v2_keep_pct = 100 | minus: v2_pair_pct
+    assign v2_pair_deal = v2_pair_total | times: v2_keep_pct | divided_by: 100
+    assign v2_pair_deal_str = v2_pair_deal | money_without_currency
+    if v2_pair_deal_str contains '.00'
+      assign v2_pair_deal_str = v2_pair_deal_str | remove: '.00'
+    endif
+  endif
 %}
 
 <script type="application/ld+json">
@@ -254,6 +269,18 @@
       {% endif %}
 
     </div>
+
+    {%- comment -%} R1 · growing thumbnail strip (mobile only) — one box per
+        uploaded image, no placeholders; grows automatically with the gallery {%- endcomment -%}
+    {% if pdp_v2 and product.images.size > 1 %}
+      <div class="ma-v2-thumbs" id="ma-v2-thumbs" aria-label="Gallery thumbnails">
+        {% for image in product.images %}
+          <button type="button" class="ma-v2-thumbs__t{% if forloop.first %} is-sel{% endif %}" data-v2-thumb="{{ forloop.index0 }}" aria-label="View image {{ forloop.index }}">
+            {{ image | image_url: width: 160 | image_tag: class: 'ma-v2-thumbs__img', loading: 'lazy', alt: image.alt | default: product.title }}
+          </button>
+        {% endfor %}
+      </div>
+    {% endif %}
 
     {%- comment -%} COL 3: INFO PANEL {%- endcomment -%}
     <div class="ma-pdp__info" id="ma-pdp-info">
@@ -509,7 +536,14 @@
                 </a>
               </div>
               <div class="ma-v2-pair__foot">
-                <span class="ma-v2-pair__sum">The pair — ₹{{ v2_pair_total_str }}</span>
+                <span class="ma-v2-pair__sum">
+                  {% if v2_pair_deal_str != blank %}
+                    The pair — <b class="ma-v2-pair__deal">₹{{ v2_pair_deal_str }}</b> <s class="ma-v2-pair__was">₹{{ v2_pair_total_str }}</s>
+                    <span class="ma-v2-pair__note">The maison's two-bottle privilege · applied automatically</span>
+                  {% else %}
+                    The pair — ₹{{ v2_pair_total_str }}
+                  {% endif %}
+                </span>
                 <button type="button" class="ma-v2-pair__btn" id="ma-v2-pair-btn" data-v1="{{ current_variant.id }}" data-v2="{{ v2_pair_variant.id }}">Add Both</button>
               </div>
             </div>
@@ -1497,7 +1531,13 @@
 .ma-v2-pair__s { font-size: 12px; color: #1a1a1a; margin: 0; font-family: var(--font-body--family, sans-serif); }
 .ma-v2-pair__cap { font-size: 10.5px; color: #8a8378; letter-spacing: 0.03em; line-height: 1.5; margin: 0 0 5px; padding: 0 10px; font-family: var(--font-body--family, sans-serif); }
 .ma-v2-pair__foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
-.ma-v2-pair__sum { font-size: 13px; color: #55504a; font-family: var(--font-body--family, sans-serif); }
+.ma-v2-pair__sum { font-size: 13px; color: #55504a; font-family: var(--font-body--family, sans-serif); line-height: 1.5; }
+.ma-v2-pair__deal { color: #1a1a1a; font-weight: 700; }
+.ma-v2-pair__was { color: #a8a095; text-decoration: line-through; margin-left: 4px; font-weight: 400; }
+.ma-v2-pair__note { display: block; font-size: 10px; letter-spacing: 0.04em; color: #7d1f1f; margin-top: 3px; }
+
+/* R1 · growing thumbnail strip (mobile) */
+.ma-v2-thumbs { display: none; }
 .ma-v2-pair__btn {
   background: #1a1a1a; border: 0; color: #fff;
   font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase;
@@ -1566,6 +1606,27 @@
   .ma-v2-notes__tier { font-size: 9px; }
   .ma-v2-notes__main { font-size: 13px; }
   .ma-v2-rev__body { font-size: 13.5px; height: 118px; }
+
+  /* R1 strip: one row of square thumbs under the gallery, grows with uploads */
+  .ma-v2-thumbs {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    margin: 8px 0 0;
+    padding-bottom: 2px;
+  }
+  .ma-v2-thumbs::-webkit-scrollbar { display: none; }
+  .ma-v2-thumbs__t {
+    flex: 0 0 auto;
+    width: 58px; height: 58px;
+    padding: 0; border: 1px solid #e5e0d8; background: #f2f0ee;
+    cursor: pointer; overflow: hidden;
+    transition: border-color 0.15s;
+  }
+  .ma-v2-thumbs__t.is-sel { border-color: #1a1a1a; }
+  .ma-v2-thumbs__img { width: 100%; height: 100%; object-fit: cover; display: block; }
 }
 
 {% endstylesheet %}
@@ -2217,11 +2278,45 @@
     }, { passive: true });
   }
 
+  /* R1 strip: clicking a thumb drives the gallery through its existing dots
+     (tested nav); a dot-class observer keeps the selected thumb in sync when
+     the customer swipes the main image instead. */
+  function initThumbs() {
+    var strip = document.getElementById('ma-v2-thumbs');
+    if (!strip) return;
+    var thumbs = strip.querySelectorAll('.ma-v2-thumbs__t');
+    var dots = document.querySelectorAll('.ma-pdp__dot');
+    if (!thumbs.length) return;
+
+    function select(idx) {
+      thumbs.forEach(function (t, i) { t.classList.toggle('is-sel', i === idx); });
+    }
+
+    thumbs.forEach(function (t) {
+      t.addEventListener('click', function () {
+        var idx = parseInt(t.getAttribute('data-v2-thumb'), 10);
+        if (dots[idx]) dots[idx].click();
+        select(idx);
+      });
+    });
+
+    /* keep thumb selection matched to the active dot (covers swipe) */
+    if (dots.length && window.MutationObserver) {
+      var obs = new MutationObserver(function () {
+        for (var i = 0; i < dots.length; i++) {
+          if (dots[i].classList.contains('ma-pdp__dot--active')) { select(i); break; }
+        }
+      });
+      dots.forEach(function (d) { obs.observe(d, { attributes: true, attributeFilter: ['class'] }); });
+    }
+  }
+
   function initV2() {
     initCutoff();
     initGift();
     initPair();
     initRevHigh();
+    initThumbs();
   }
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initV2);
@@ -2277,6 +2372,16 @@
       "max": 23,
       "step": 1,
       "default": 18
+    },
+    {
+      "type": "range",
+      "id": "pair_discount_percent",
+      "label": "Pair Privilege discount (%)",
+      "info": "The two-bottle price shown in Complete the Wardrobe. MUST match the automatic discount in Admin → Discounts. Set 0 to hide the pair price.",
+      "min": 0,
+      "max": 50,
+      "step": 5,
+      "default": 20
     }
   ],
   "blocks": [],
