@@ -1607,8 +1607,10 @@
   .ma-v2-notes__main { font-size: 13px; }
   .ma-v2-rev__body { font-size: 13.5px; height: 118px; }
 
-  /* R1 strip: one row of square thumbs under the gallery, grows with uploads */
+  /* R1 strip: one row of square thumbs BELOW the hero image (order 1 = tie with
+     gallery, source order then places it right after), grows with uploads */
   .ma-v2-thumbs {
+    order: 1;
     display: flex;
     gap: 6px;
     overflow-x: auto;
