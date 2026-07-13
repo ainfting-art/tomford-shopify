@@ -1,0 +1,84 @@
+{%- comment -%}
+  MAISON AMIIR — Home · The Honest Arithmetic band.
+  Light, calm palette (paper/ink/gold) to match the theme. Editable text so the
+  comparison stays honest — set your own representative counter price.
+{%- endcomment -%}
+
+<section class="ma-arith" id="ma-arith-{{ section.id }}">
+  {%- if section.settings.eyebrow != blank -%}
+    <p class="ma-arith__k">{{ section.settings.eyebrow | escape }}</p>
+  {%- endif -%}
+  <div class="ma-arith__rows">
+    <div class="ma-arith__col">
+      <span class="ma-arith__lab">{{ section.settings.left_label | escape }}</span>
+      <span class="ma-arith__val ma-arith__val--was">{{ section.settings.left_price | escape }}</span>
+    </div>
+    <span class="ma-arith__arrow" aria-hidden="true">→</span>
+    <div class="ma-arith__col">
+      <span class="ma-arith__lab">{{ section.settings.right_label | escape }}</span>
+      <span class="ma-arith__val ma-arith__val--now">{{ section.settings.right_price | escape }}</span>
+    </div>
+  </div>
+  {%- if section.settings.foot != blank -%}
+    <p class="ma-arith__foot">{{ section.settings.foot | escape }}</p>
+  {%- endif -%}
+</section>
+
+<style>
+  #ma-arith-{{ section.id }}.ma-arith {
+    background: #f7f3ec;
+    border-top: 1px solid #e5ded2;
+    border-bottom: 1px solid #e5ded2;
+    padding: 52px 24px;
+    text-align: center;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+  #ma-arith-{{ section.id }} .ma-arith__k {
+    font-size: 10px; letter-spacing: .3em; text-transform: uppercase;
+    color: #7d1f1f; margin: 0 0 20px;
+  }
+  #ma-arith-{{ section.id }} .ma-arith__rows {
+    display: flex; justify-content: center; align-items: center;
+    gap: 34px; flex-wrap: wrap; margin-bottom: 16px;
+  }
+  #ma-arith-{{ section.id }} .ma-arith__col { display: flex; flex-direction: column; }
+  #ma-arith-{{ section.id }} .ma-arith__lab {
+    font-size: 10px; letter-spacing: .14em; text-transform: uppercase;
+    color: #8a8378; margin-bottom: 8px;
+  }
+  #ma-arith-{{ section.id }} .ma-arith__val {
+    font-family: Georgia, "Times New Roman", serif; letter-spacing: .02em; color: #1a1a1a;
+  }
+  #ma-arith-{{ section.id }} .ma-arith__val--was { color: #a8a095; text-decoration: line-through; font-size: 26px; }
+  #ma-arith-{{ section.id }} .ma-arith__val--now { color: #1a1a1a; font-size: 36px; }
+  #ma-arith-{{ section.id }} .ma-arith__arrow { font-size: 22px; color: #b8a06a; }
+  #ma-arith-{{ section.id }} .ma-arith__foot {
+    font-family: Georgia, serif; font-style: italic; font-size: 14px; color: #6f665c;
+    max-width: 520px; margin: 0 auto; line-height: 1.7;
+  }
+  @media (max-width: 749px) {
+    #ma-arith-{{ section.id }}.ma-arith { padding: 40px 20px; }
+    #ma-arith-{{ section.id }} .ma-arith__rows { flex-direction: column; gap: 6px; }
+    #ma-arith-{{ section.id }} .ma-arith__arrow { transform: rotate(90deg); margin: 4px 0; }
+    #ma-arith-{{ section.id }} .ma-arith__val--now { font-size: 32px; }
+    #ma-arith-{{ section.id }} .ma-arith__val--was { font-size: 22px; }
+    #ma-arith-{{ section.id }} .ma-arith__foot { font-size: 12.5px; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "MA — Honest Arithmetic",
+  "tag": "section",
+  "class": "ma-arith-section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Why Maison Amiir Costs a Fraction" },
+    { "type": "text", "id": "left_label", "label": "Left label", "default": "The house original, at the counter" },
+    { "type": "text", "id": "left_price", "label": "Left price (set an honest representative figure)", "default": "₹20,000+" },
+    { "type": "text", "id": "right_label", "label": "Right label", "default": "The Amiir interpretation, 30% extrait" },
+    { "type": "text", "id": "right_price", "label": "Right price", "default": "from ₹2,200" },
+    { "type": "text", "id": "foot", "label": "Footnote", "default": "Same pyramid. Same oil houses. The difference is the name on the bottle and the rent on the boutique — not what's inside." }
+  ],
+  "presets": [{ "name": "MA — Honest Arithmetic" }]
+}
+{% endschema %}

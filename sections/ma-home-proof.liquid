@@ -1,0 +1,72 @@
+{%- comment -%}
+  MAISON AMIIR — Home · Proof bar (trust density).
+  Light palette. Defaults use only PROVABLE claims — edit numbers to real figures
+  in the theme editor before relying on any count.
+{%- endcomment -%}
+
+<section class="ma-proof" id="ma-proof-{{ section.id }}">
+  <div class="ma-proof__in">
+    <div class="ma-proof__item">
+      <span class="ma-proof__big">{{ section.settings.a_big | escape }}</span>
+      <span class="ma-proof__sm">{{ section.settings.a_sm | escape }}</span>
+    </div>
+    <div class="ma-proof__item">
+      <span class="ma-proof__big">{{ section.settings.b_big | escape }}</span>
+      <span class="ma-proof__sm">{{ section.settings.b_sm | escape }}</span>
+    </div>
+    <div class="ma-proof__item">
+      <span class="ma-proof__big">{{ section.settings.c_big | escape }}</span>
+      <span class="ma-proof__sm">{{ section.settings.c_sm | escape }}</span>
+    </div>
+    <div class="ma-proof__item">
+      <span class="ma-proof__big">{{ section.settings.d_big | escape }}</span>
+      <span class="ma-proof__sm">{{ section.settings.d_sm | escape }}</span>
+    </div>
+  </div>
+</section>
+
+<style>
+  #ma-proof-{{ section.id }}.ma-proof {
+    background: #fbf9f5;
+    border-bottom: 1px solid #e5ded2;
+    padding: 22px 24px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+  #ma-proof-{{ section.id }} .ma-proof__in {
+    max-width: 1100px; margin: 0 auto;
+    display: flex; justify-content: space-around; align-items: center;
+    gap: 20px; flex-wrap: wrap; text-align: center;
+  }
+  #ma-proof-{{ section.id }} .ma-proof__item { display: flex; flex-direction: column; gap: 3px; }
+  #ma-proof-{{ section.id }} .ma-proof__big {
+    font-size: 18px; letter-spacing: .08em; text-transform: uppercase; color: #1a1a1a;
+  }
+  #ma-proof-{{ section.id }} .ma-proof__sm {
+    font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: #8a8378;
+  }
+  @media (max-width: 749px) {
+    #ma-proof-{{ section.id }} .ma-proof__in { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 10px; }
+    #ma-proof-{{ section.id }} .ma-proof__big { font-size: 15px; }
+    #ma-proof-{{ section.id }} .ma-proof__sm { font-size: 9px; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "MA — Proof Bar",
+  "tag": "section",
+  "class": "ma-proof-section",
+  "settings": [
+    { "type": "paragraph", "content": "Use only claims you can prove. Defaults below are all true for Maison Amiir." },
+    { "type": "text", "id": "a_big", "label": "1 — headline", "default": "30% Extrait" },
+    { "type": "text", "id": "a_sm", "label": "1 — sub", "default": "above eau de parfum" },
+    { "type": "text", "id": "b_big", "label": "2 — headline", "default": "7-Day" },
+    { "type": "text", "id": "b_sm", "label": "2 — sub", "default": "risk-free returns" },
+    { "type": "text", "id": "c_big", "label": "3 — headline", "default": "100%" },
+    { "type": "text", "id": "c_sm", "label": "3 — sub", "default": "authentic international oils" },
+    { "type": "text", "id": "d_big", "label": "4 — headline", "default": "Complimentary" },
+    { "type": "text", "id": "d_sm", "label": "4 — sub", "default": "delivery across India" }
+  ],
+  "presets": [{ "name": "MA — Proof Bar" }]
+}
+{% endschema %}

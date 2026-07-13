@@ -1,0 +1,74 @@
+{%- comment -%}
+  MAISON AMIIR — Home · Risk-reversal band ("The Maison Promise").
+  Light palette. Kills the dupe-buyer's first-purchase fear.
+{%- endcomment -%}
+
+<section class="ma-risk" id="ma-risk-{{ section.id }}">
+  <div class="ma-risk__in">
+    {%- if section.settings.eyebrow != blank -%}<p class="ma-risk__k">{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
+    {%- if section.settings.heading != blank -%}<h2 class="ma-risk__h">{{ section.settings.heading | escape }}</h2>{%- endif -%}
+    <div class="ma-risk__grid">
+      <div class="ma-risk__c">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="6" width="6" height="15" rx="2"/><path d="M10 6V3h4v3"/><path d="M12 11v5"/></svg>
+        <p class="ma-risk__t">{{ section.settings.t1 | escape }}</p>
+        <p class="ma-risk__d">{{ section.settings.d1 | escape }}</p>
+      </div>
+      <div class="ma-risk__c">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 8A9 9 0 1112 21"/><path d="M3 3.5V8h4.5"/><path d="M12 8v4.2l3 1.8"/></svg>
+        <p class="ma-risk__t">{{ section.settings.t2 | escape }}</p>
+        <p class="ma-risk__d">{{ section.settings.d2 | escape }}</p>
+      </div>
+      <div class="ma-risk__c">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <p class="ma-risk__t">{{ section.settings.t3 | escape }}</p>
+        <p class="ma-risk__d">{{ section.settings.d3 | escape }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  #ma-risk-{{ section.id }}.ma-risk {
+    background: #fff;
+    border-top: 1px solid #e5ded2; border-bottom: 1px solid #e5ded2;
+    padding: 54px 24px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+  #ma-risk-{{ section.id }} .ma-risk__in { max-width: 1000px; margin: 0 auto; text-align: center; }
+  #ma-risk-{{ section.id }} .ma-risk__k {
+    font-size: 10px; letter-spacing: .3em; text-transform: uppercase; color: #7d1f1f; margin: 0 0 12px;
+  }
+  #ma-risk-{{ section.id }} .ma-risk__h {
+    font-family: Georgia, "Times New Roman", serif; font-weight: 400;
+    font-size: 28px; letter-spacing: .02em; margin: 0 0 28px; color: #1a1a1a;
+  }
+  #ma-risk-{{ section.id }} .ma-risk__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  #ma-risk-{{ section.id }} .ma-risk__c { padding: 26px 20px; border: 1px solid #e5ded2; }
+  #ma-risk-{{ section.id }} .ma-risk__c svg { width: 30px; height: 30px; stroke: #7d1f1f; fill: none; stroke-width: 1.4; margin-bottom: 12px; }
+  #ma-risk-{{ section.id }} .ma-risk__t { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: #1a1a1a; margin: 0 0 8px; }
+  #ma-risk-{{ section.id }} .ma-risk__d { font-size: 12.5px; color: #8a8378; line-height: 1.6; margin: 0; }
+  @media (max-width: 749px) {
+    #ma-risk-{{ section.id }}.ma-risk { padding: 40px 20px; }
+    #ma-risk-{{ section.id }} .ma-risk__grid { grid-template-columns: 1fr; gap: 10px; }
+    #ma-risk-{{ section.id }} .ma-risk__h { font-size: 23px; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "MA — Risk Reversal",
+  "tag": "section",
+  "class": "ma-risk-section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Buy Without a Doubt" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "The Maison Promise" },
+    { "type": "text", "id": "t1", "label": "Card 1 title", "default": "Try Before You Commit" },
+    { "type": "textarea", "id": "d1", "label": "Card 1 text", "default": "A tester vial ships in every order. Wear it first — open the bottle only when you're sure." },
+    { "type": "text", "id": "t2", "label": "Card 2 title", "default": "7-Day, No Questions" },
+    { "type": "textarea", "id": "d2", "label": "Card 2 text", "default": "Not your scent? Send the sealed bottle back within 7 days. We make it effortless." },
+    { "type": "text", "id": "t3", "label": "Card 3 title", "default": "100% Authentic Oils" },
+    { "type": "textarea", "id": "d3", "label": "Card 3 text", "default": "IFRA-grade international oils at 30% extrait. Small-batch, never mass-warehoused." }
+  ],
+  "presets": [{ "name": "MA — Risk Reversal" }]
+}
+{% endschema %}
