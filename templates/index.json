@@ -484,7 +484,7 @@
       "type": "ma-most-wanted",
       "name": "Most Wanted Grid",
       "settings": {
-        "heading": "Most Wanted",
+        "heading": "Most Wanted this season",
         "collection": "winter-collection",
         "cta_link": "shopify://collections/new-arrivals",
         "cta_label": "Shop Now"
