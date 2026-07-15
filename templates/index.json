@@ -132,35 +132,6 @@
         "padding-block-end": 0
       }
     },
-    "ma_home_arith": {
-      "type": "ma-home-arith",
-      "settings": {
-        "bottle_image": "shopify://shop_images/Perfume_bottle_casting_light_pat__202607090455.jpg",
-        "eyebrow": "Maison Amiir",
-        "heading": "Luxury belongs inside the bottle. Not on the receipt.",
-        "subheading": "Only the scent should define the experience.",
-        "left_label": "Typical luxury pricing",
-        "left_value": "₹20,000",
-        "right_label": "Maison Amiir",
-        "right_value": "from ₹2,200",
-        "refine_1": "Lasts all day · 30% extrait",
-        "refine_2": "Kind to skin · IFRA-compliant oils"
-      }
-    },
-    "ma_home_proof": {
-      "type": "ma-home-proof",
-      "disabled": true,
-      "settings": {
-        "a_big": "30% Extrait",
-        "a_sm": "above eau de parfum",
-        "b_big": "7-Day",
-        "b_sm": "risk-free returns",
-        "c_big": "100%",
-        "c_sm": "authentic international oils",
-        "d_big": "Complimentary",
-        "d_sm": "delivery across India"
-      }
-    },
     "product_list_nrNjhj": {
       "type": "product-list",
       "blocks": {
@@ -492,9 +463,37 @@
         "cta_label": "Shop the Bestsellers"
       }
     },
+    "ma_home_arith": {
+      "type": "ma-home-arith",
+      "settings": {
+        "bottle_image": "shopify://shop_images/ATTACH__bottle_PNG_202604230346_1.jpg",
+        "eyebrow": "Maison Amiir",
+        "heading": "Luxury belongs inside the bottle. Not on the receipt.",
+        "subheading": "Only the scent should define the experience.",
+        "left_label": "Typical luxury pricing",
+        "left_value": "₹20,000",
+        "right_label": "Maison Amiir",
+        "right_value": "from ₹2,200",
+        "refine_1": "Lasts all day · 30% extrait",
+        "refine_2": "Kind to skin · IFRA-compliant oils"
+      }
+    },
+    "ma_home_proof": {
+      "type": "ma-home-proof",
+      "disabled": true,
+      "settings": {
+        "a_big": "30% Extrait",
+        "a_sm": "above eau de parfum",
+        "b_big": "7-Day",
+        "b_sm": "risk-free returns",
+        "c_big": "100%",
+        "c_sm": "authentic international oils",
+        "d_big": "Complimentary",
+        "d_sm": "delivery across India"
+      }
+    },
     "ma_value_story": {
       "type": "ma-value-story",
-      "disabled": true,
       "blocks": {
         "pillar_1": {
           "type": "pillar",
@@ -535,6 +534,7 @@
         "pillar_3",
         "pillar_4"
       ],
+      "disabled": true,
       "name": "Value Story",
       "settings": {
         "bg_video": "shopify://files/videos/Video Project 4.mp4",
@@ -587,6 +587,141 @@
         "collection": "mens-collection",
         "cta_link": "shopify://collections/mens-collection",
         "cta_label": "Shop Now"
+      }
+    },
+    "ma_home_risk": {
+      "type": "ma-home-risk",
+      "settings": {
+        "eyebrow": "Buy Without a Doubt",
+        "heading": "The Maison Promise",
+        "subline": "Wear it first. Decide after. A scent is personal — you should never commit to one you haven't lived with.",
+        "k1": "The Tester",
+        "t1": "A Tester in Every Order",
+        "d1": "Live with the scent for days before you ever break the seal on the bottle.",
+        "k2": "The Return",
+        "t2": "Seven Days to Decide",
+        "d2": "Return the sealed bottle within seven days for a full refund. No questions asked.",
+        "k3": "The Skin",
+        "t3": "Gentle on Skin",
+        "d3": "IFRA-compliant international oils, free of harsh solvents — it wears softly.",
+        "k4": "The Hours",
+        "t4": "Lasts All Day",
+        "d4": "30% extrait concentration — the scent lingers for hours, not minutes.",
+        "sign": "The house takes the risk."
+      }
+    },
+    "ma_social_proof": {
+      "type": "ma-social-proof",
+      "blocks": {
+        "review_1": {
+          "type": "review",
+          "settings": {
+            "product": "desert-velvet-oud",
+            "stars": 5,
+            "heading": "My boyfriend wears it and I'm obsessed",
+            "quote": "My boyfriend bought this and honestly I want to wear it myself. The amber and oud combination smells incredible on skin. Very long lasting.",
+            "author": "Ananya T."
+          }
+        },
+        "review_2": {
+          "type": "review",
+          "settings": {
+            "product": "desert-velvet-oud",
+            "stars": 5,
+            "heading": "This oud is special",
+            "quote": "I've tried many oud fragrances over the years and Desert Velvet Oud has quickly become one of my favourites. The smoky and warmth combo is exactly what a good oud should be.",
+            "author": "Siddharth M."
+          }
+        },
+        "review_4": {
+          "type": "review",
+          "settings": {
+            "product": "horizon-valley",
+            "stars": 5,
+            "heading": "Fresh and sophisticated",
+            "quote": "Fresh opening that dries down to a beautiful woody base. Colleagues at my architecture firm have noticed and commented. Very versatile.",
+            "author": "Dev S."
+          }
+        },
+        "review_5": {
+          "type": "review",
+          "settings": {
+            "product": "horizon-valley",
+            "stars": 4,
+            "heading": "Feels premium",
+            "quote": "The longevity is excellent, the projection is moderate but consistent, and the scent profile is very well composed. Very impressed.",
+            "author": "Tejal M."
+          }
+        },
+        "review_7": {
+          "type": "review",
+          "settings": {
+            "product": "hash-night",
+            "stars": 5,
+            "heading": "This is for the brave",
+            "quote": "Hash Night is not your everyday office fragrance. This is dark, artistic, and makes a statement. I personally love it.",
+            "author": "Farhan K."
+          }
+        },
+        "review_8": {
+          "type": "review",
+          "settings": {
+            "product": "hash-night",
+            "stars": 5,
+            "heading": "Distinctive and unforgettable",
+            "quote": "Dark, resinous, a little smoky. Polarising yes but memorable always.",
+            "author": "Swati N."
+          }
+        },
+        "review_9": {
+          "type": "review",
+          "settings": {
+            "product": "vanille-roses",
+            "stars": 5,
+            "heading": "Sweet but elegant",
+            "quote": "Rose fragrances can go very wrong — either too sharp or too soapy. This one gets it right. The vanilla softens the rose and makes it feel modern and warm.",
+            "author": "Pooja V."
+          }
+        },
+        "review_10": {
+          "type": "review",
+          "settings": {
+            "product": "vanille-roses",
+            "stars": 5,
+            "heading": "Feminine and warm",
+            "quote": "Roses but not in a sharp old-fashioned way. Sweet warm gourmand roses. Really beautiful.",
+            "author": "Sonal R."
+          }
+        },
+        "review_11": {
+          "type": "review",
+          "settings": {
+            "product": "marine-aqua",
+            "stars": 5,
+            "heading": "Best summer fragrance I've found",
+            "quote": "It keeps smelling fresh all day without becoming sour in the heat. The marine notes work perfectly in humid coastal weather.",
+            "author": "Nikhil A."
+          }
+        }
+      },
+      "block_order": [
+        "review_1",
+        "review_2",
+        "review_4",
+        "review_5",
+        "review_7",
+        "review_8",
+        "review_9",
+        "review_10",
+        "review_11"
+      ],
+      "name": "MA Social Proof",
+      "settings": {
+        "heading": "Worn. Remembered.",
+        "subline": "4.3 · From Verified Clients",
+        "rating": 4.1,
+        "aggregate": "4.3 · Verified Buyers",
+        "rotate_seconds": 5
       }
     },
     "ma_brand_story": {
@@ -1437,124 +1572,6 @@
         "subtext": "We don't just sell scents; we archive moments of elegance, capturing the ephemeral and making it eternal."
       }
     },
-    "ma_social_proof": {
-      "type": "ma-social-proof",
-      "blocks": {
-        "review_1": {
-          "type": "review",
-          "settings": {
-            "product": "desert-velvet-oud",
-            "stars": 5,
-            "heading": "My boyfriend wears it and I'm obsessed",
-            "quote": "My boyfriend bought this and honestly I want to wear it myself. The amber and oud combination smells incredible on skin. Very long lasting.",
-            "author": "Ananya T."
-          }
-        },
-        "review_2": {
-          "type": "review",
-          "settings": {
-            "product": "desert-velvet-oud",
-            "stars": 5,
-            "heading": "This oud is special",
-            "quote": "I've tried many oud fragrances over the years and Desert Velvet Oud has quickly become one of my favourites. The smoky and warmth combo is exactly what a good oud should be.",
-            "author": "Siddharth M."
-          }
-        },
-        "review_4": {
-          "type": "review",
-          "settings": {
-            "product": "horizon-valley",
-            "stars": 5,
-            "heading": "Fresh and sophisticated",
-            "quote": "Fresh opening that dries down to a beautiful woody base. Colleagues at my architecture firm have noticed and commented. Very versatile.",
-            "author": "Dev S."
-          }
-        },
-        "review_5": {
-          "type": "review",
-          "settings": {
-            "product": "horizon-valley",
-            "stars": 4,
-            "heading": "Feels premium",
-            "quote": "The longevity is excellent, the projection is moderate but consistent, and the scent profile is very well composed. Very impressed.",
-            "author": "Tejal M."
-          }
-        },
-        "review_7": {
-          "type": "review",
-          "settings": {
-            "product": "hash-night",
-            "stars": 5,
-            "heading": "This is for the brave",
-            "quote": "Hash Night is not your everyday office fragrance. This is dark, artistic, and makes a statement. I personally love it.",
-            "author": "Farhan K."
-          }
-        },
-        "review_8": {
-          "type": "review",
-          "settings": {
-            "product": "hash-night",
-            "stars": 5,
-            "heading": "Distinctive and unforgettable",
-            "quote": "Dark, resinous, a little smoky. Polarising yes but memorable always.",
-            "author": "Swati N."
-          }
-        },
-        "review_9": {
-          "type": "review",
-          "settings": {
-            "product": "vanille-roses",
-            "stars": 5,
-            "heading": "Sweet but elegant",
-            "quote": "Rose fragrances can go very wrong — either too sharp or too soapy. This one gets it right. The vanilla softens the rose and makes it feel modern and warm.",
-            "author": "Pooja V."
-          }
-        },
-        "review_10": {
-          "type": "review",
-          "settings": {
-            "product": "vanille-roses",
-            "stars": 5,
-            "heading": "Feminine and warm",
-            "quote": "Roses but not in a sharp old-fashioned way. Sweet warm gourmand roses. Really beautiful.",
-            "author": "Sonal R."
-          }
-        },
-        "review_11": {
-          "type": "review",
-          "settings": {
-            "product": "marine-aqua",
-            "stars": 5,
-            "heading": "Best summer fragrance I've found",
-            "quote": "It keeps smelling fresh all day without becoming sour in the heat. The marine notes work perfectly in humid coastal weather.",
-            "author": "Nikhil A."
-          }
-        }
-      },
-      "block_order": [
-        "review_1",
-        "review_2",
-        "review_4",
-        "review_5",
-        "review_7",
-        "review_8",
-        "review_9",
-        "review_10",
-        "review_11"
-      ],
-      "name": "MA Social Proof",
-      "settings": {
-        "heading": "Worn. Remembered.",
-        "subline": "4.3 · From Verified Clients",
-        "rating": 4.1,
-        "aggregate": "4.3 · Verified Buyers",
-        "rotate_seconds": 5
-      }
-    },
-    "ma_home_risk": {
-      "type": "ma-home-risk",
-      "settings": {}
-    },
     "1775472317723a194f": {
       "type": "_blocks",
       "settings": {
@@ -1587,7 +1604,6 @@
     },
     "section_Rrah97": {
       "type": "section",
-      "disabled": true,
       "blocks": {
         "group_AfAKnE": {
           "type": "group",
@@ -1718,6 +1734,7 @@
       "block_order": [
         "group_AfAKnE"
       ],
+      "disabled": true,
       "name": "t:names.rich_text_section",
       "settings": {
         "content_direction": "column",
