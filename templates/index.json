@@ -478,58 +478,6 @@
         "refine_2": "Kind to skin ✦ IFRA-compliant ✦ Last all day"
       }
     },
-    "ma_value_story": {
-      "type": "ma-value-story",
-      "blocks": {
-        "pillar_1": {
-          "type": "pillar",
-          "settings": {
-            "icon": "◈",
-            "title": "30% Extrait Oil",
-            "text": "The same concentration tier as the houses that inspire us."
-          }
-        },
-        "pillar_2": {
-          "type": "pillar",
-          "settings": {
-            "icon": "✦",
-            "title": "International Fragrance Oils",
-            "text": "Sourced from the same global suppliers as luxury perfumery."
-          }
-        },
-        "pillar_3": {
-          "type": "pillar",
-          "settings": {
-            "icon": "⬡",
-            "title": "Small Batch Crafted",
-            "text": "Made to order, never mass-warehoused."
-          }
-        },
-        "pillar_4": {
-          "type": "pillar",
-          "settings": {
-            "icon": "◎",
-            "title": "No Boutique Markup",
-            "text": "You pay for the scent, not the storefront."
-          }
-        }
-      },
-      "block_order": [
-        "pillar_1",
-        "pillar_2",
-        "pillar_3",
-        "pillar_4"
-      ],
-      "name": "Value Story",
-      "settings": {
-        "bg_image": "shopify://shop_images/8K_luxury_workshop_202604281850_1.jpg",
-        "overlay": 0,
-        "overline": "The Maison Amiir Difference",
-        "heading": "Luxury, Without the Markup",
-        "lede": "A great fragrance is mostly oil and intention — not the marble store or the magazine campaign. We put the money where you smell it: 30% extrait concentration, international fragrance oils, made in small batches.",
-        "closing": "Extrait Concentration · From ₹2,200"
-      }
-    },
     "ma_home_proof": {
       "type": "ma-home-proof",
       "disabled": true,
@@ -570,7 +518,7 @@
         "cap_4": "The Note",
         "eyebrow": "The Maison Amiir Coffret",
         "heading": "Every order arrives as a gift.",
-        "body": "Our coffrets are crafted with premium materials, subtle texture, and clean lines — the purity of French design and the sophistication of Dubai. Every bottle is placed with intention.",
+        "body": "For someone you'll think about while choosing it. And someone who'll think about you every time they wear it.",
         "gift_line": "Gift-ready, always. No wrapping required.",
         "button_label": "Explore the Collection",
         "button_link": "/collections/all-perfumes"
@@ -720,6 +668,58 @@
         "rating": 4.1,
         "aggregate": "4.3 · Verified Buyers",
         "rotate_seconds": 5
+      }
+    },
+    "ma_value_story": {
+      "type": "ma-value-story",
+      "blocks": {
+        "pillar_1": {
+          "type": "pillar",
+          "settings": {
+            "icon": "◈",
+            "title": "30% Extrait Oil",
+            "text": "The same concentration tier as the houses that inspire us."
+          }
+        },
+        "pillar_2": {
+          "type": "pillar",
+          "settings": {
+            "icon": "✦",
+            "title": "International Fragrance Oils",
+            "text": "Sourced from the same global suppliers as luxury perfumery."
+          }
+        },
+        "pillar_3": {
+          "type": "pillar",
+          "settings": {
+            "icon": "⬡",
+            "title": "Small Batch Crafted",
+            "text": "Made to order, never mass-warehoused."
+          }
+        },
+        "pillar_4": {
+          "type": "pillar",
+          "settings": {
+            "icon": "◎",
+            "title": "No Boutique Markup",
+            "text": "You pay for the scent, not the storefront."
+          }
+        }
+      },
+      "block_order": [
+        "pillar_1",
+        "pillar_2",
+        "pillar_3",
+        "pillar_4"
+      ],
+      "name": "Value Story",
+      "settings": {
+        "bg_image": "shopify://shop_images/8K_luxury_workshop_202604281850_1.jpg",
+        "overlay": 0,
+        "overline": "The Maison Amiir Difference",
+        "heading": "Luxury, Without the Markup",
+        "lede": "A great fragrance is mostly oil and intention — not the marble store or the magazine campaign. We put the money where you smell it: 30% extrait concentration, international fragrance oils, made in small batches.",
+        "closing": "Extrait Concentration · From ₹2,200"
       }
     },
     "ma_brand_story": {
