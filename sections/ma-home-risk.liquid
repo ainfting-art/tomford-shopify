@@ -1,74 +1,215 @@
 {%- comment -%}
-  MAISON AMIIR — Home · Risk-reversal band ("The Maison Promise").
-  Light palette. Kills the dupe-buyer's first-purchase fear.
+  MAISON AMIIR — The Maison Promise (premium).
+  Four gold-medallion cards: tester / return / gentle-on-skin / longevity.
+  House language: display-serif tracked heading, double-framed white cards on ivory,
+  gold kickers, italic serif promises, MA watermark, signed by the house.
 {%- endcomment -%}
 
-<section class="ma-risk" id="ma-risk-{{ section.id }}">
-  <div class="ma-risk__in">
-    {%- if section.settings.eyebrow != blank -%}<p class="ma-risk__k">{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
-    {%- if section.settings.heading != blank -%}<h2 class="ma-risk__h">{{ section.settings.heading | escape }}</h2>{%- endif -%}
-    <div class="ma-risk__grid">
-      <div class="ma-risk__c">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="6" width="6" height="15" rx="2"/><path d="M10 6V3h4v3"/><path d="M12 11v5"/></svg>
-        <p class="ma-risk__t">{{ section.settings.t1 | escape }}</p>
-        <p class="ma-risk__d">{{ section.settings.d1 | escape }}</p>
+<section class="ma-pm" id="ma-pm-{{ section.id }}">
+  <div class="ma-pm__in">
+    {%- if section.settings.eyebrow != blank -%}<p class="ma-pm__k">{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
+    {%- if section.settings.heading != blank -%}<h2 class="ma-pm__h">{{ section.settings.heading | escape }}</h2>{%- endif -%}
+    <div class="ma-pm__rule" aria-hidden="true"></div>
+    {%- if section.settings.subline != blank -%}<p class="ma-pm__s">{{ section.settings.subline | escape }}</p>{%- endif -%}
+
+    <div class="ma-pm__cards">
+      <div class="ma-pm__c">
+        <span class="ma-pm__med" aria-hidden="true">
+          <svg viewBox="0 0 40 40"><path d="M17 5.5h6"/><path d="M18.5 5.5v4.2l-3 4.6a5.5 5.5 0 0 0-.9 3V31a3.5 3.5 0 0 0 3.5 3.5h3.8A3.5 3.5 0 0 0 25.4 31V17.3a5.5 5.5 0 0 0-.9-3l-3-4.6V5.5"/><path d="M14.6 22.5h10.8"/></svg>
+        </span>
+        {%- if section.settings.k1 != blank -%}<p class="ma-pm__kick">{{ section.settings.k1 | escape }}</p>{%- endif -%}
+        <p class="ma-pm__t">{{ section.settings.t1 | escape }}</p>
+        <p class="ma-pm__d">{{ section.settings.d1 | escape }}</p>
       </div>
-      <div class="ma-risk__c">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 8A9 9 0 1112 21"/><path d="M3 3.5V8h4.5"/><path d="M12 8v4.2l3 1.8"/></svg>
-        <p class="ma-risk__t">{{ section.settings.t2 | escape }}</p>
-        <p class="ma-risk__d">{{ section.settings.d2 | escape }}</p>
+      <div class="ma-pm__c">
+        <span class="ma-pm__med" aria-hidden="true">
+          <svg viewBox="0 0 40 40"><path d="M31.5 20a11.5 11.5 0 1 1-3.4-8.1"/><path d="M28.5 6.5v6h-6"/><path d="M16.5 20.5l2.6 2.6 4.9-5.2"/></svg>
+        </span>
+        {%- if section.settings.k2 != blank -%}<p class="ma-pm__kick">{{ section.settings.k2 | escape }}</p>{%- endif -%}
+        <p class="ma-pm__t">{{ section.settings.t2 | escape }}</p>
+        <p class="ma-pm__d">{{ section.settings.d2 | escape }}</p>
       </div>
-      <div class="ma-risk__c">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        <p class="ma-risk__t">{{ section.settings.t3 | escape }}</p>
-        <p class="ma-risk__d">{{ section.settings.d3 | escape }}</p>
+      <div class="ma-pm__c">
+        <span class="ma-pm__med" aria-hidden="true">
+          <svg viewBox="0 0 40 40"><path d="M9 28C9 16.5 18 9.5 30.5 9.5 30.5 22 23 29 11.5 29z"/><path d="M13 25c3.5-6 8.5-9.5 14-11"/></svg>
+        </span>
+        {%- if section.settings.k3 != blank -%}<p class="ma-pm__kick">{{ section.settings.k3 | escape }}</p>{%- endif -%}
+        <p class="ma-pm__t">{{ section.settings.t3 | escape }}</p>
+        <p class="ma-pm__d">{{ section.settings.d3 | escape }}</p>
+      </div>
+      <div class="ma-pm__c">
+        <span class="ma-pm__med" aria-hidden="true">
+          <svg viewBox="0 0 40 40"><circle cx="20" cy="21" r="11.5"/><path d="M20 13.5V21l5.5 3.5"/><path d="M16 5.5h8"/></svg>
+        </span>
+        {%- if section.settings.k4 != blank -%}<p class="ma-pm__kick">{{ section.settings.k4 | escape }}</p>{%- endif -%}
+        <p class="ma-pm__t">{{ section.settings.t4 | escape }}</p>
+        <p class="ma-pm__d">{{ section.settings.d4 | escape }}</p>
       </div>
     </div>
+
+    {%- if section.settings.sign != blank -%}
+      <p class="ma-pm__sign">{{ section.settings.sign }} <b>&mdash; Amiir</b></p>
+    {%- endif -%}
   </div>
 </section>
 
 <style>
-  #ma-risk-{{ section.id }}.ma-risk {
-    background: #fff;
-    border-top: 1px solid #e5ded2; border-bottom: 1px solid #e5ded2;
-    padding: 54px 24px;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  #ma-pm-{{ section.id }}.ma-pm{
+    --pm-ivory:#f4efe7; --pm-ivory2:#faf7f1; --pm-ink:#1a1a1a; --pm-ink2:#6a6157;
+    --pm-gold:#a89566; --pm-goldlt:#cbb783; --pm-burg:#8a1f2c; --pm-line:#e5dfd2;
+    position:relative; background:var(--pm-ivory); color:var(--pm-ink);
+    padding:70px 28px 62px; text-align:center; overflow:hidden;
+    font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+    border-top:1px solid var(--pm-line); border-bottom:1px solid var(--pm-line);
   }
-  #ma-risk-{{ section.id }} .ma-risk__in { max-width: 1000px; margin: 0 auto; text-align: center; }
-  #ma-risk-{{ section.id }} .ma-risk__k {
-    font-size: 10px; letter-spacing: .3em; text-transform: uppercase; color: #7d1f1f; margin: 0 0 12px;
+  #ma-pm-{{ section.id }}.ma-pm::before{
+    content:"MA"; position:absolute; top:50%; left:50%; transform:translate(-50%,-54%);
+    font-family:Georgia,"Times New Roman",serif; font-size:34rem; line-height:1;
+    color:rgba(168,149,102,.05); pointer-events:none;
   }
-  #ma-risk-{{ section.id }} .ma-risk__h {
-    font-family: Georgia, "Times New Roman", serif; font-weight: 400;
-    font-size: 28px; letter-spacing: .02em; margin: 0 0 28px; color: #1a1a1a;
+  #ma-pm-{{ section.id }} .ma-pm__in{ position:relative; max-width:1080px; margin:0 auto; }
+  #ma-pm-{{ section.id }} .ma-pm__k{
+    font-size:10px; letter-spacing:.36em; text-transform:uppercase; color:var(--pm-burg);
+    font-weight:700; margin:0 0 18px;
   }
-  #ma-risk-{{ section.id }} .ma-risk__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
-  #ma-risk-{{ section.id }} .ma-risk__c { padding: 26px 20px; border: 1px solid #e5ded2; }
-  #ma-risk-{{ section.id }} .ma-risk__c svg { width: 30px; height: 30px; stroke: #7d1f1f; fill: none; stroke-width: 1.4; margin-bottom: 12px; }
-  #ma-risk-{{ section.id }} .ma-risk__t { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: #1a1a1a; margin: 0 0 8px; }
-  #ma-risk-{{ section.id }} .ma-risk__d { font-size: 12.5px; color: #8a8378; line-height: 1.6; margin: 0; }
-  @media (max-width: 749px) {
-    #ma-risk-{{ section.id }}.ma-risk { padding: 40px 20px; }
-    #ma-risk-{{ section.id }} .ma-risk__grid { grid-template-columns: 1fr; gap: 10px; }
-    #ma-risk-{{ section.id }} .ma-risk__h { font-size: 23px; }
+  #ma-pm-{{ section.id }} .ma-pm__h{
+    font-family:Georgia,"Times New Roman",serif; font-weight:400 !important;
+    font-size:clamp(24px,3.4vw,34px); letter-spacing:.14em !important; text-transform:uppercase;
+    color:var(--pm-ink); margin:0 0 14px;
+  }
+  #ma-pm-{{ section.id }} .ma-pm__rule{
+    width:64px; height:1px; background:var(--pm-gold); margin:0 auto 16px; position:relative;
+  }
+  #ma-pm-{{ section.id }} .ma-pm__rule::after{
+    content:"\25C6"; position:absolute; top:50%; left:50%; transform:translate(-50%,-52%);
+    font-size:7px; color:var(--pm-gold); background:var(--pm-ivory); padding:0 8px;
+  }
+  #ma-pm-{{ section.id }} .ma-pm__s{
+    font-family:Georgia,serif; font-style:italic; font-size:15px; color:var(--pm-ink2);
+    margin:0 auto 46px; max-width:48ch; line-height:1.7;
+  }
+  #ma-pm-{{ section.id }} .ma-pm__cards{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:20px;
+  }
+  #ma-pm-{{ section.id }} .ma-pm__c{
+    background:#fff; border:1px solid var(--pm-line);
+    box-shadow:0 14px 34px rgba(70,52,24,.08);
+    padding:36px 20px 32px; position:relative;
+    transition:transform .45s cubic-bezier(.2,.7,.2,1), box-shadow .45s ease;
+  }
+  #ma-pm-{{ section.id }} .ma-pm__c::after{
+    content:""; position:absolute; inset:7px; border:1px solid rgba(168,149,102,.22); pointer-events:none;
+  }
+  @media (hover:hover){
+    #ma-pm-{{ section.id }} .ma-pm__c:hover{ transform:translateY(-6px); box-shadow:0 24px 46px rgba(70,52,24,.14); }
+  }
+  #ma-pm-{{ section.id }} .ma-pm__med{
+    width:72px; height:72px; margin:0 auto 18px; border-radius:50%;
+    position:relative; display:grid; place-items:center;
+    background:radial-gradient(circle at 38% 30%,#fdfbf6,var(--pm-ivory2) 70%);
+    border:1px solid var(--pm-goldlt);
+    box-shadow:0 4px 14px rgba(120,90,40,.14), inset 0 1px 2px #fff;
+  }
+  #ma-pm-{{ section.id }} .ma-pm__med::after{
+    content:""; position:absolute; inset:5px; border-radius:50%; border:1px solid rgba(168,149,102,.4);
+  }
+  #ma-pm-{{ section.id }} .ma-pm__med svg{
+    width:33px; height:33px; fill:none; stroke:var(--pm-gold);
+    stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; position:relative; z-index:1;
+  }
+  #ma-pm-{{ section.id }} .ma-pm__kick{
+    font-size:8.5px; letter-spacing:.3em; text-transform:uppercase; color:var(--pm-gold);
+    font-weight:700; margin:0 0 9px;
+  }
+  #ma-pm-{{ section.id }} .ma-pm__t{
+    font-family:Georgia,serif; font-size:17px; letter-spacing:.02em; color:var(--pm-ink); margin:0 0 10px;
+  }
+  #ma-pm-{{ section.id }} .ma-pm__d{
+    font-family:Georgia,serif; font-style:italic; font-size:12.5px; color:var(--pm-ink2);
+    line-height:1.8; margin:0;
+  }
+  #ma-pm-{{ section.id }} .ma-pm__sign{
+    margin:44px 0 0; font-family:Georgia,serif; font-style:italic; font-size:15px; color:var(--pm-ink2);
+  }
+  #ma-pm-{{ section.id }} .ma-pm__sign b{ color:var(--pm-burg); font-weight:400; font-style:italic; }
+
+  /* reveal (JS-gated so no-JS never hides content) */
+  #ma-pm-{{ section.id }}.is-ready .ma-pm__c{ opacity:0; transform:translateY(22px); }
+  #ma-pm-{{ section.id }}.is-ready.is-in .ma-pm__c{
+    opacity:1; transform:none;
+    transition:opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1), box-shadow .45s ease;
+  }
+  #ma-pm-{{ section.id }}.is-ready.is-in .ma-pm__c:nth-child(2){ transition-delay:.1s; }
+  #ma-pm-{{ section.id }}.is-ready.is-in .ma-pm__c:nth-child(3){ transition-delay:.2s; }
+  #ma-pm-{{ section.id }}.is-ready.is-in .ma-pm__c:nth-child(4){ transition-delay:.3s; }
+
+  @media (max-width:899px){
+    #ma-pm-{{ section.id }} .ma-pm__cards{ grid-template-columns:1fr 1fr; gap:12px; }
+  }
+  @media (max-width:749px){
+    #ma-pm-{{ section.id }}.ma-pm{ padding:46px 18px 42px; }
+    #ma-pm-{{ section.id }}.ma-pm::before{ font-size:19rem; }
+    #ma-pm-{{ section.id }} .ma-pm__h{ font-size:21px; }
+    #ma-pm-{{ section.id }} .ma-pm__s{ font-size:12.5px; margin-bottom:26px; }
+    #ma-pm-{{ section.id }} .ma-pm__c{ padding:24px 13px 22px; }
+    #ma-pm-{{ section.id }} .ma-pm__med{ width:56px; height:56px; margin-bottom:13px; }
+    #ma-pm-{{ section.id }} .ma-pm__med svg{ width:26px; height:26px; }
+    #ma-pm-{{ section.id }} .ma-pm__kick{ font-size:7px; letter-spacing:.26em; margin-bottom:7px; }
+    #ma-pm-{{ section.id }} .ma-pm__t{ font-size:13.5px; margin-bottom:8px; line-height:1.3; }
+    #ma-pm-{{ section.id }} .ma-pm__d{ font-size:10.5px; line-height:1.7; }
+    #ma-pm-{{ section.id }} .ma-pm__sign{ margin-top:26px; font-size:12.5px; }
+  }
+  @media (prefers-reduced-motion:reduce){
+    #ma-pm-{{ section.id }} *{ transition:none !important; }
+    #ma-pm-{{ section.id }}.is-ready .ma-pm__c{ opacity:1 !important; transform:none !important; }
   }
 </style>
 
+<script>
+  (function(){
+    var s = document.getElementById('ma-pm-{{ section.id }}');
+    if(!s) return;
+    s.classList.add('is-ready');
+    var show = function(){ s.classList.add('is-in'); };
+    {% if request.design_mode %}
+      show(); return;
+    {% endif %}
+    if(!('IntersectionObserver' in window)){ show(); return; }
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){ show(); io.disconnect(); } });
+    }, { threshold: 0.22 });
+    io.observe(s);
+  })();
+</script>
+
 {% schema %}
 {
-  "name": "MA — Risk Reversal",
+  "name": "MA — Maison Promise",
   "tag": "section",
   "class": "ma-risk-section",
   "settings": [
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Buy Without a Doubt" },
     { "type": "text", "id": "heading", "label": "Heading", "default": "The Maison Promise" },
-    { "type": "text", "id": "t1", "label": "Card 1 title", "default": "Try Before You Commit" },
-    { "type": "textarea", "id": "d1", "label": "Card 1 text", "default": "A tester vial ships in every order. Wear it first — open the bottle only when you're sure." },
-    { "type": "text", "id": "t2", "label": "Card 2 title", "default": "7-Day, No Questions" },
-    { "type": "textarea", "id": "d2", "label": "Card 2 text", "default": "Not your scent? Send the sealed bottle back within 7 days. We make it effortless." },
-    { "type": "text", "id": "t3", "label": "Card 3 title", "default": "100% Authentic Oils" },
-    { "type": "textarea", "id": "d3", "label": "Card 3 text", "default": "IFRA-grade international oils at 30% extrait. Small-batch, never mass-warehoused." }
+    { "type": "text", "id": "subline", "label": "Sub-line", "default": "Wear it first. Decide after. A scent is personal — you should never commit to one you haven't lived with." },
+    { "type": "header", "content": "Card 1 — The Tester" },
+    { "type": "text", "id": "k1", "label": "Kicker", "default": "The Tester" },
+    { "type": "text", "id": "t1", "label": "Title", "default": "A Tester in Every Order" },
+    { "type": "textarea", "id": "d1", "label": "Promise", "default": "Live with the scent for days before you ever break the seal on the bottle." },
+    { "type": "header", "content": "Card 2 — The Return" },
+    { "type": "text", "id": "k2", "label": "Kicker", "default": "The Return" },
+    { "type": "text", "id": "t2", "label": "Title", "default": "Seven Days to Decide" },
+    { "type": "textarea", "id": "d2", "label": "Promise", "default": "Return the sealed bottle within seven days for a full refund. No questions asked." },
+    { "type": "header", "content": "Card 3 — The Skin" },
+    { "type": "text", "id": "k3", "label": "Kicker", "default": "The Skin" },
+    { "type": "text", "id": "t3", "label": "Title", "default": "Gentle on Skin" },
+    { "type": "textarea", "id": "d3", "label": "Promise", "default": "IFRA-compliant international oils, free of harsh solvents — it wears softly." },
+    { "type": "header", "content": "Card 4 — The Hours" },
+    { "type": "text", "id": "k4", "label": "Kicker", "default": "The Hours" },
+    { "type": "text", "id": "t4", "label": "Title", "default": "Lasts All Day" },
+    { "type": "textarea", "id": "d4", "label": "Promise", "default": "30% extrait concentration — the scent lingers for hours, not minutes." },
+    { "type": "header", "content": "Signature" },
+    { "type": "text", "id": "sign", "label": "Sign-off (— Amiir is appended)", "default": "The house takes the risk." }
   ],
-  "presets": [{ "name": "MA — Risk Reversal" }]
+  "presets": [{ "name": "MA — Maison Promise" }]
 }
 {% endschema %}

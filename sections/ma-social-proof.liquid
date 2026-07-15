@@ -4,6 +4,9 @@
 
 <div class="ma-sproof">
   <h2 class="ma-sproof__h2 ma-home-reveal">{{ section.settings.heading }}</h2>
+  {%- if section.settings.subline != blank -%}
+    <p class="ma-sproof__sub ma-home-reveal">{{ section.settings.subline | escape }}</p>
+  {%- endif -%}
 
   <div class="ma-sproof__grid" id="ma-sproof-grid-{{ section.id }}">
     {%- for block in section.blocks -%}
@@ -50,6 +53,7 @@
   .ma-sproof *, .ma-sproof *::before, .ma-sproof *::after { box-sizing: border-box; }
 
   .ma-sproof__h2 { font-family: 'Sinoreta', Georgia, serif; font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 300; letter-spacing: .02em; color: rgba(0,0,0,.85); margin: 0 0 1.8rem; }
+  .ma-sproof__sub { font-size: .72rem; letter-spacing: .22em; text-transform: uppercase; color: rgba(0,0,0,.42); margin: -1.15rem 0 1.9rem; }
 
   .ma-sproof__agg { margin-bottom: clamp(2rem, 4.5vw, 2.8rem); }
   .ma-sproof__agg-stars { position: relative; display: inline-block; font-size: 1.15rem; letter-spacing: 2px; line-height: 1; margin-bottom: .55rem; }
@@ -101,6 +105,7 @@
   "tag": "section",
   "settings": [
     { "type": "text", "id": "heading", "label": "Heading", "default": "What Our Clients Say" },
+    { "type": "text", "id": "subline", "label": "Subline (small caps under heading)" },
     { "type": "range", "id": "rating", "label": "Aggregate star fill", "min": 1, "max": 5, "step": 0.1, "default": 4.3 },
     { "type": "text", "id": "aggregate", "label": "Aggregate line", "default": "4.3 · Verified Buyers" },
     { "type": "range", "id": "rotate_seconds", "label": "Seconds between rotations", "min": 3, "max": 15, "step": 1, "default": 6 }
