@@ -467,6 +467,7 @@
       "type": "ma-home-arith",
       "settings": {
         "bottle_image": "shopify://shop_images/8K_luxury_workshop_202604281850.jpg",
+        "melt": 100,
         "eyebrow": "Luxury, Without the Markup price",
         "heading": "Luxury belongs inside the bottle. Not on the receipt.",
         "subheading": "A great fragrance is mostly oil and intention — not the marble store or the magazine",
@@ -504,6 +505,17 @@
         "cta_label": "Shop Now"
       }
     },
+    "ma_most_wanted_JMH4Mt": {
+      "type": "ma-most-wanted",
+      "name": "FOR HIM",
+      "settings": {
+        "eyebrow": "Masculine",
+        "heading": "For Him",
+        "collection": "mens-collection",
+        "cta_link": "shopify://collections/mens-collection",
+        "cta_label": "Shop Now"
+      }
+    },
     "ma_unboxing": {
       "type": "ma-unboxing",
       "name": "MA Unboxing",
@@ -522,17 +534,6 @@
         "gift_line": "Gift-ready, always. No wrapping required.",
         "button_label": "Explore the Collection",
         "button_link": "/collections/all-perfumes"
-      }
-    },
-    "ma_most_wanted_JMH4Mt": {
-      "type": "ma-most-wanted",
-      "name": "FOR HIM",
-      "settings": {
-        "eyebrow": "Masculine",
-        "heading": "For Him",
-        "collection": "mens-collection",
-        "cta_link": "shopify://collections/mens-collection",
-        "cta_label": "Shop Now"
       }
     },
     "ma_home_risk": {
@@ -1455,14 +1456,14 @@
     "ma_most_wanted_3eDjHb",
     "ma_home_arith",
     "ma_home_proof",
+    "ma_quiz_invite_J9337a",
     "ma_most_wanted_edUXRw",
-    "ma_unboxing",
     "ma_most_wanted_JMH4Mt",
+    "ma_unboxing",
     "ma_home_risk",
     "ma_social_proof",
     "ma_value_story",
     "ma_brand_story",
-    "ma_quiz_invite_J9337a",
     "section_VhLBpg",
     "ma_explore_maison",
     "1775472317723a194f",
