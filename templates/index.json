@@ -132,6 +132,17 @@
         "padding-block-end": 0
       }
     },
+    "ma_most_wanted_3eDjHb": {
+      "type": "ma-most-wanted",
+      "name": "Most Wanted Grid",
+      "settings": {
+        "eyebrow": "The Icons",
+        "heading": "Most Wanted",
+        "collection": "winter-collection",
+        "cta_link": "shopify://collections/all-perfumes",
+        "cta_label": "Shop the Bestsellers"
+      }
+    },
     "product_list_nrNjhj": {
       "type": "product-list",
       "blocks": {
@@ -452,17 +463,6 @@
         "padding-block-end": 48
       }
     },
-    "ma_most_wanted_3eDjHb": {
-      "type": "ma-most-wanted",
-      "name": "Most Wanted Grid",
-      "settings": {
-        "eyebrow": "The Icons",
-        "heading": "Most Wanted",
-        "collection": "winter-collection",
-        "cta_link": "shopify://collections/all-perfumes",
-        "cta_label": "Shop the Bestsellers"
-      }
-    },
     "ma_home_arith": {
       "type": "ma-home-arith",
       "settings": {
@@ -491,6 +491,26 @@
         "c_sm": "authentic international oils",
         "d_big": "Complimentary",
         "d_sm": "delivery across India"
+      }
+    },
+    "ma_quiz_invite_J9337a": {
+      "type": "ma-quiz-invite",
+      "name": "Quiz Invite",
+      "settings": {
+        "bg_image": "shopify://shop_images/gif.gif",
+        "bg_video": "shopify://files/videos/0626 (1)(1).mp4",
+        "media_opacity": 100,
+        "brand_line": "Maison Amiir",
+        "eyebrow": "The Fragrance Finder",
+        "headline": "TOO MANY FRAGRANCES. START HERE.",
+        "subtext": "Answer six quick questions and receive personalised fragrance recommendations based on what you already love.",
+        "pill1": "6 Questions",
+        "pill2": "Under 2 Minutes",
+        "pill3": "",
+        "hint": "No account required",
+        "cta_label": "Find Your Signature",
+        "quiz_url": "/pages/find-your-signature",
+        "accent_color": "#000000"
       }
     },
     "ma_most_wanted_edUXRw": {
@@ -735,26 +755,6 @@
         "body": "Each Maison Amiir fragrance is crafted in limited batches at extrait concentration — every drop carrying the weight of its intention. Luxury, made to be lived in rather than locked away.",
         "link_label": "Our Story",
         "link_url": "/pages/our-story"
-      }
-    },
-    "ma_quiz_invite_J9337a": {
-      "type": "ma-quiz-invite",
-      "name": "Quiz Invite",
-      "settings": {
-        "bg_image": "shopify://shop_images/gif.gif",
-        "bg_video": "shopify://files/videos/0626 (1)(1).mp4",
-        "media_opacity": 100,
-        "brand_line": "Maison Amiir",
-        "eyebrow": "The Fragrance Finder",
-        "headline": "TOO MANY FRAGRANCES. START HERE.",
-        "subtext": "Answer six quick questions and receive personalised fragrance recommendations based on what you already love.",
-        "pill1": "6 Questions",
-        "pill2": "Under 2 Minutes",
-        "pill3": "",
-        "hint": "No account required",
-        "cta_label": "Find Your Signature",
-        "quiz_url": "/pages/find-your-signature",
-        "accent_color": "#000000"
       }
     },
     "section_VhLBpg": {
@@ -1451,16 +1451,16 @@
   "order": [
     "section_wQqHde",
     "hero_jVaWmY",
-    "custom_liquid_hmfTtV",
-    "product_list_nrNjhj",
     "ma_most_wanted_3eDjHb",
-    "ma_home_arith",
-    "ma_home_proof",
-    "ma_quiz_invite_J9337a",
+    "custom_liquid_hmfTtV",
     "ma_most_wanted_edUXRw",
+    "ma_home_arith",
     "ma_most_wanted_JMH4Mt",
     "ma_unboxing",
+    "product_list_nrNjhj",
+    "ma_home_proof",
     "ma_home_risk",
+    "ma_quiz_invite_J9337a",
     "ma_social_proof",
     "ma_value_story",
     "ma_brand_story",
