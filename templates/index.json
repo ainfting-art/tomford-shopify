@@ -756,19 +756,6 @@
         "closing": "Extrait Concentration · From ₹2,200"
       }
     },
-    "ma_brand_story": {
-      "type": "ma-brand-story",
-      "name": "MA Brand Story",
-      "settings": {
-        "image": "shopify://shop_images/Documentary_overhead_product_photography._Exactly_202605020131.jpg",
-        "image_tag": "Atelier",
-        "overline": "The Atelier",
-        "heading": "Perfume is the most intense form of memory.",
-        "body": "Each Maison Amiir fragrance is crafted in limited batches at extrait concentration — every drop carrying the weight of its intention. Luxury, made to be lived in rather than locked away.",
-        "link_label": "Our Story",
-        "link_url": "/pages/our-story"
-      }
-    },
     "section_VhLBpg": {
       "type": "section",
       "blocks": {
@@ -1256,6 +1243,19 @@
         "subtext": "We don't just sell scents; we archive moments of elegance, capturing the ephemeral and making it eternal."
       }
     },
+    "ma_brand_story": {
+      "type": "ma-brand-story",
+      "name": "MA Brand Story",
+      "settings": {
+        "image": "shopify://shop_images/Documentary_overhead_product_photography._Exactly_202605020131.jpg",
+        "image_tag": "Atelier",
+        "overline": "The Atelier",
+        "heading": "Perfume is the most intense form of memory.",
+        "body": "Each Maison Amiir fragrance is crafted in limited batches at extrait concentration — every drop carrying the weight of its intention. Luxury, made to be lived in rather than locked away.",
+        "link_label": "Our Story",
+        "link_url": "/pages/our-story"
+      }
+    },
     "1775472317723a194f": {
       "type": "_blocks",
       "settings": {
@@ -1476,9 +1476,9 @@
     "ma_social_proof",
     "ma_quiz_invite_J9337a",
     "ma_value_story",
-    "ma_brand_story",
     "section_VhLBpg",
     "ma_explore_maison",
+    "ma_brand_story",
     "1775472317723a194f",
     "section_Rrah97",
     "ma_journal_KaX3PU"
