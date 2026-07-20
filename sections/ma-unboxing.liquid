@@ -67,7 +67,7 @@
   .ma-unbox {
     background: #FFFFFF;
     color: #171410;
-    padding: 0;
+    padding: clamp(2.8rem, 5.5vw, 4.4rem) 0;   /* dead space top + bottom so it doesn't touch neighbouring sections; image stays flush to the side walls */
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   }
   .ma-unbox *, .ma-unbox *::before, .ma-unbox *::after { box-sizing: border-box; }
