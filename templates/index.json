@@ -9,7 +9,7 @@
  */
 {
   "sections": {
-    "ma_home_trust": { "type": "ma-home-trust", "settings": {} }, "section_wQqHde": {
+    "section_wQqHde": {
       "type": "section",
       "blocks": {
         "custom_liquid_L7VJAP": {
@@ -51,6 +51,18 @@
         "gradient_direction": "to top",
         "padding-block-start": 32,
         "padding-block-end": 32
+      }
+    },
+    "ma_home_trust": {
+      "type": "ma-home-trust",
+      "settings": {
+        "stars": "★★★★☆",
+        "a_big": "4.3",
+        "a_sm": "From 500+ reviews",
+        "b_big": "15,000+",
+        "b_sm": "Bottles shipped",
+        "c_big": "7-Day",
+        "c_sm": "Risk-free returns"
       }
     },
     "hero_jVaWmY": {
@@ -557,26 +569,6 @@
         "sign": "The house takes the risk."
       }
     },
-    "ma_quiz_invite_J9337a": {
-      "type": "ma-quiz-invite",
-      "name": "Quiz Invite",
-      "settings": {
-        "bg_image": "shopify://shop_images/gif.gif",
-        "bg_video": "shopify://files/videos/0626 (1)(1).mp4",
-        "media_opacity": 50,
-        "brand_line": "Maison Amiir",
-        "eyebrow": "too many fragrances?",
-        "headline": "Find the one made for you",
-        "subtext": "Answer six quick questions and receive personalised fragrance recommendations based on what you already love.",
-        "pill1": "6 Questions",
-        "pill2": "Under 2 Minutes",
-        "pill3": "",
-        "hint": "No account required",
-        "cta_label": "Find Your Signature",
-        "quiz_url": "/pages/find-your-signature",
-        "accent_color": "#000000"
-      }
-    },
     "ma_social_proof": {
       "type": "ma-social-proof",
       "blocks": {
@@ -689,6 +681,26 @@
         "rating": 4.1,
         "aggregate": "4.3 · Verified Buyers",
         "rotate_seconds": 5
+      }
+    },
+    "ma_quiz_invite_J9337a": {
+      "type": "ma-quiz-invite",
+      "name": "Quiz Invite",
+      "settings": {
+        "bg_image": "shopify://shop_images/gif.gif",
+        "bg_video": "shopify://files/videos/0626 (1)(1).mp4",
+        "media_opacity": 50,
+        "brand_line": "Maison Amiir",
+        "eyebrow": "too many fragrances?",
+        "headline": "Find the one made for you",
+        "subtext": "Answer six quick questions and receive personalised fragrance recommendations based on what you already love.",
+        "pill1": "6 Questions",
+        "pill2": "Under 2 Minutes",
+        "pill3": "",
+        "hint": "No account required",
+        "cta_label": "Find Your Signature",
+        "quiz_url": "/pages/find-your-signature",
+        "accent_color": "#000000"
       }
     },
     "ma_value_story": {
@@ -1449,7 +1461,8 @@
     }
   },
   "order": [
-    "section_wQqHde", "ma_home_trust",
+    "section_wQqHde",
+    "ma_home_trust",
     "hero_jVaWmY",
     "ma_most_wanted_3eDjHb",
     "custom_liquid_hmfTtV",
@@ -1460,8 +1473,8 @@
     "product_list_nrNjhj",
     "ma_home_proof",
     "ma_home_risk",
-    "ma_quiz_invite_J9337a",
     "ma_social_proof",
+    "ma_quiz_invite_J9337a",
     "ma_value_story",
     "ma_brand_story",
     "section_VhLBpg",
