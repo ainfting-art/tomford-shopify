@@ -1,46 +1,45 @@
 {%- comment -%}
-  MAISON AMIIR — The Maison Promise (premium).
-  Four gold-medallion cards: tester / return / gentle-on-skin / longevity.
-  House language: display-serif tracked heading, double-framed white cards on ivory,
-  gold kickers, italic serif promises, MA watermark, signed by the house.
+  MAISON AMIIR — The Maison Promise (unified grid).
+  One system across breakpoints: centred header -> four-promise grid -> founder's seal.
+  Desktop reflows the grid 4-across with vertical hairline dividers + centred logo watermark;
+  mobile is a compact one-screen 2x2 with a cross divider. Each cell carries a faint 01-04 numeral.
+  Serif = Cormorant Garamond (Georgia fallback); labels = Marcellus. base.css h-lock countered on <h2> only.
 {%- endcomment -%}
 
 <section class="ma-pm" id="ma-pm-{{ section.id }}">
+  <img class="ma-pm__logo" src="https://maisonamiir.com/cdn/shop/files/MAISON-LOGO-NEW.png?v=1775626552&width=800" alt="" aria-hidden="true" loading="lazy">
   <div class="ma-pm__in">
-    {%- if section.settings.eyebrow != blank -%}<p class="ma-pm__k">{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
-    {%- if section.settings.heading != blank -%}<h2 class="ma-pm__h">{{ section.settings.heading | escape }}</h2>{%- endif -%}
-    <div class="ma-pm__rule" aria-hidden="true"></div>
-    {%- if section.settings.subline != blank -%}<p class="ma-pm__s">{{ section.settings.subline | escape }}</p>{%- endif -%}
+    <div class="ma-pm__head">
+      {%- if section.settings.eyebrow != blank -%}<p class="ma-pm__k">{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
+      {%- if section.settings.heading != blank -%}<h2 class="ma-pm__h">{{ section.settings.heading | escape }}</h2>{%- endif -%}
+      {%- if section.settings.subline != blank -%}<p class="ma-pm__s">{{ section.settings.subline | escape }}</p>{%- endif -%}
+    </div>
 
     <div class="ma-pm__cards">
       <div class="ma-pm__c">
-        <span class="ma-pm__med" aria-hidden="true">
-          <svg viewBox="0 0 40 40"><path d="M17 5.5h6"/><path d="M18.5 5.5v4.2l-3 4.6a5.5 5.5 0 0 0-.9 3V31a3.5 3.5 0 0 0 3.5 3.5h3.8A3.5 3.5 0 0 0 25.4 31V17.3a5.5 5.5 0 0 0-.9-3l-3-4.6V5.5"/><path d="M14.6 22.5h10.8"/></svg>
-        </span>
+        <span class="ma-pm__num" aria-hidden="true">01</span>
+        <span class="ma-pm__ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 2.5h6M10 2.5v4.6L6.5 15.1A3 3 0 0 0 9.3 20.9h5.4a3 3 0 0 0 2.8-5.8L14 7.1V2.5"/><path d="M8 14.5h8"/></svg></span>
         {%- if section.settings.k1 != blank -%}<p class="ma-pm__kick">{{ section.settings.k1 | escape }}</p>{%- endif -%}
         <p class="ma-pm__t">{{ section.settings.t1 | escape }}</p>
         <p class="ma-pm__d">{{ section.settings.d1 | escape }}</p>
       </div>
       <div class="ma-pm__c">
-        <span class="ma-pm__med" aria-hidden="true">
-          <svg viewBox="0 0 40 40"><path d="M31.5 20a11.5 11.5 0 1 1-3.4-8.1"/><path d="M28.5 6.5v6h-6"/><path d="M16.5 20.5l2.6 2.6 4.9-5.2"/></svg>
-        </span>
+        <span class="ma-pm__num" aria-hidden="true">02</span>
+        <span class="ma-pm__ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3l7 2.6v5.1c0 4.4-3 7.4-7 8.8-4-1.4-7-4.4-7-8.8V5.6L12 3z"/><path d="M9 12l2 2 4-4.2"/></svg></span>
         {%- if section.settings.k2 != blank -%}<p class="ma-pm__kick">{{ section.settings.k2 | escape }}</p>{%- endif -%}
         <p class="ma-pm__t">{{ section.settings.t2 | escape }}</p>
         <p class="ma-pm__d">{{ section.settings.d2 | escape }}</p>
       </div>
       <div class="ma-pm__c">
-        <span class="ma-pm__med" aria-hidden="true">
-          <svg viewBox="0 0 40 40"><path d="M9 28C9 16.5 18 9.5 30.5 9.5 30.5 22 23 29 11.5 29z"/><path d="M13 25c3.5-6 8.5-9.5 14-11"/></svg>
-        </span>
+        <span class="ma-pm__num" aria-hidden="true">03</span>
+        <span class="ma-pm__ic" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.1"/><path d="M12 2v2.3M12 19.7V22M2 12h2.3M19.7 12H22M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M19.1 4.9l-1.6 1.6M6.5 17.5l-1.6 1.6"/></svg></span>
         {%- if section.settings.k3 != blank -%}<p class="ma-pm__kick">{{ section.settings.k3 | escape }}</p>{%- endif -%}
         <p class="ma-pm__t">{{ section.settings.t3 | escape }}</p>
         <p class="ma-pm__d">{{ section.settings.d3 | escape }}</p>
       </div>
       <div class="ma-pm__c">
-        <span class="ma-pm__med" aria-hidden="true">
-          <svg viewBox="0 0 40 40"><circle cx="20" cy="21" r="11.5"/><path d="M20 13.5V21l5.5 3.5"/><path d="M16 5.5h8"/></svg>
-        </span>
+        <span class="ma-pm__num" aria-hidden="true">04</span>
+        <span class="ma-pm__ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3s6 6.6 6 11a6 6 0 0 1-12 0c0-4.4 6-11 6-11z"/><path d="M9.6 14.2a2.6 2.6 0 0 0 2.1 2.4"/></svg></span>
         {%- if section.settings.k4 != blank -%}<p class="ma-pm__kick">{{ section.settings.k4 | escape }}</p>{%- endif -%}
         <p class="ma-pm__t">{{ section.settings.t4 | escape }}</p>
         <p class="ma-pm__d">{{ section.settings.d4 | escape }}</p>
@@ -48,139 +47,119 @@
     </div>
 
     {%- if section.settings.sign != blank -%}
-      <p class="ma-pm__sign">{{ section.settings.sign }} <b>&mdash; Amiir</b></p>
+      <div class="ma-pm__seal">
+        <div class="ma-pm__seal-rule" aria-hidden="true"></div>
+        <p class="ma-pm__sign">{{ section.settings.sign }} <b>&mdash; Amiir</b></p>
+      </div>
     {%- endif -%}
   </div>
 </section>
 
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Marcellus&display=swap');
+
+  #shopify-section-{{ section.id }}{ opacity:1 !important; transform:none !important; }
+
   #ma-pm-{{ section.id }}.ma-pm{
-    --pm-ivory:#f4efe7; --pm-ivory2:#faf7f1; --pm-ink:#1a1a1a; --pm-ink2:#6a6157;
-    --pm-gold:#a89566; --pm-goldlt:#cbb783; --pm-burg:#8a1f2c; --pm-line:#e5dfd2;
-    position:relative; background:var(--pm-ivory); color:var(--pm-ink);
-    padding:70px 28px 62px; text-align:center; overflow:hidden;
-    font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+    --pm-cream:#F4EEE1; --pm-ink:#171310; --pm-ink2:rgba(23,19,16,.70);
+    --pm-gold:#A8894E; --pm-goldlt:#C6A15B; --pm-burg:#6E1220; --pm-line:rgba(23,19,16,.14);
+    --pm-serif:'Cormorant Garamond',Georgia,'Times New Roman',serif;
+    --pm-label:'Marcellus',Georgia,serif;
+    position:relative; overflow:hidden; background:var(--pm-cream); color:var(--pm-ink);
+    font-family:var(--pm-serif);
     border-top:1px solid var(--pm-line); border-bottom:1px solid var(--pm-line);
   }
-  #ma-pm-{{ section.id }}.ma-pm::before{
-    content:"MA"; position:absolute; top:50%; left:50%; transform:translate(-50%,-54%);
-    font-family:Georgia,"Times New Roman",serif; font-size:34rem; line-height:1;
-    color:rgba(168,149,102,.05); pointer-events:none;
-  }
-  #ma-pm-{{ section.id }} .ma-pm__in{ position:relative; max-width:1080px; margin:0 auto; }
+
+  /* logo watermark — desktop only, centred */
+  #ma-pm-{{ section.id }} .ma-pm__logo{ display:none; }
+
+  #ma-pm-{{ section.id }} .ma-pm__in{ position:relative; z-index:1; }
+
+  /* ---- header ---- */
+  #ma-pm-{{ section.id }} .ma-pm__head{ text-align:center; padding:30px 22px 6px; }
   #ma-pm-{{ section.id }} .ma-pm__k{
-    font-size:10px; letter-spacing:.36em; text-transform:uppercase; color:var(--pm-burg);
-    font-weight:700; margin:0 0 18px;
+    font-family:var(--pm-label); font-size:9.5px; letter-spacing:.34em; text-transform:uppercase;
+    color:var(--pm-burg); margin:0 0 12px;
   }
   #ma-pm-{{ section.id }} .ma-pm__h{
-    font-family:Georgia,"Times New Roman",serif; font-weight:400 !important;
-    font-size:clamp(24px,3.4vw,34px); letter-spacing:.14em !important; text-transform:uppercase;
-    color:var(--pm-ink); margin:0 0 14px;
-  }
-  #ma-pm-{{ section.id }} .ma-pm__rule{
-    width:64px; height:1px; background:var(--pm-gold); margin:0 auto 16px; position:relative;
-  }
-  #ma-pm-{{ section.id }} .ma-pm__rule::after{
-    content:"\25C6"; position:absolute; top:50%; left:50%; transform:translate(-50%,-52%);
-    font-size:7px; color:var(--pm-gold); background:var(--pm-ivory); padding:0 8px;
+    font-family:var(--pm-serif) !important; font-weight:500 !important;
+    text-transform:none !important; letter-spacing:.005em !important;
+    font-size:30px; line-height:1.05; color:var(--pm-ink); margin:0;
   }
   #ma-pm-{{ section.id }} .ma-pm__s{
-    font-family:Georgia,serif; font-style:italic; font-size:15px; color:var(--pm-ink2);
-    margin:0 auto 46px; max-width:48ch; line-height:1.7;
+    font-family:var(--pm-serif); font-style:italic; font-size:14px; line-height:1.45;
+    color:var(--pm-ink2); margin:9px auto 0; max-width:34ch;
   }
-  #ma-pm-{{ section.id }} .ma-pm__cards{
-    display:grid; grid-template-columns:repeat(4,1fr); gap:20px;
-  }
+
+  /* ---- grid (mobile base: 2 columns) ---- */
+  #ma-pm-{{ section.id }} .ma-pm__cards{ display:grid; grid-template-columns:1fr 1fr; margin:22px 0 0; }
   #ma-pm-{{ section.id }} .ma-pm__c{
-    background:#fff; border:1px solid var(--pm-line);
-    box-shadow:0 14px 34px rgba(70,52,24,.08);
-    padding:36px 20px 32px; position:relative;
-    transition:transform .45s cubic-bezier(.2,.7,.2,1), box-shadow .45s ease;
+    position:relative; overflow:hidden; padding:20px 15px 22px; text-align:left;
+    border-top:1px solid var(--pm-line);
   }
-  #ma-pm-{{ section.id }} .ma-pm__c::after{
-    content:""; position:absolute; inset:7px; border:1px solid rgba(168,149,102,.22); pointer-events:none;
+  #ma-pm-{{ section.id }} .ma-pm__c:nth-child(odd){ border-right:1px solid var(--pm-line); }
+  #ma-pm-{{ section.id }} .ma-pm__num{
+    position:absolute; right:6px; bottom:-14px; z-index:0; pointer-events:none;
+    font-family:var(--pm-serif); font-weight:600; font-size:70px; line-height:1;
+    color:rgba(110,18,32,.07);
   }
-  @media (hover:hover){
-    #ma-pm-{{ section.id }} .ma-pm__c:hover{ transform:translateY(-6px); box-shadow:0 24px 46px rgba(70,52,24,.14); }
+  #ma-pm-{{ section.id }} .ma-pm__ic{
+    display:block; position:relative; z-index:1; width:26px; height:26px; color:var(--pm-gold); margin:0 0 12px;
   }
-  #ma-pm-{{ section.id }} .ma-pm__med{
-    width:72px; height:72px; margin:0 auto 18px; border-radius:50%;
-    position:relative; display:grid; place-items:center;
-    background:radial-gradient(circle at 38% 30%,#fdfbf6,var(--pm-ivory2) 70%);
-    border:1px solid var(--pm-goldlt);
-    box-shadow:0 4px 14px rgba(120,90,40,.14), inset 0 1px 2px #fff;
-  }
-  #ma-pm-{{ section.id }} .ma-pm__med::after{
-    content:""; position:absolute; inset:5px; border-radius:50%; border:1px solid rgba(168,149,102,.4);
-  }
-  #ma-pm-{{ section.id }} .ma-pm__med svg{
-    width:33px; height:33px; fill:none; stroke:var(--pm-gold);
-    stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; position:relative; z-index:1;
+  #ma-pm-{{ section.id }} .ma-pm__ic svg{
+    width:100%; height:100%; display:block; fill:none; stroke:currentColor;
+    stroke-width:1.15; stroke-linecap:round; stroke-linejoin:round;
   }
   #ma-pm-{{ section.id }} .ma-pm__kick{
-    font-size:8.5px; letter-spacing:.3em; text-transform:uppercase; color:var(--pm-gold);
-    font-weight:700; margin:0 0 9px;
+    position:relative; z-index:1; font-family:var(--pm-label); font-size:8.5px; letter-spacing:.22em;
+    text-transform:uppercase; color:var(--pm-gold); margin:0 0 7px;
   }
   #ma-pm-{{ section.id }} .ma-pm__t{
-    font-family:Georgia,serif; font-size:17px; letter-spacing:.02em; color:var(--pm-ink); margin:0 0 10px;
+    position:relative; z-index:1; font-family:var(--pm-serif); font-weight:600; font-size:19px;
+    line-height:1.1; color:var(--pm-ink); margin:0 0 9px;
   }
   #ma-pm-{{ section.id }} .ma-pm__d{
-    font-family:Georgia,serif; font-style:italic; font-size:12.5px; color:var(--pm-ink2);
-    line-height:1.8; margin:0;
+    position:relative; z-index:1; font-family:var(--pm-serif); font-size:13.5px; line-height:1.4;
+    color:var(--pm-ink2); margin:0;
   }
-  #ma-pm-{{ section.id }} .ma-pm__sign{
-    margin:44px 0 0; font-family:Georgia,serif; font-style:italic; font-size:15px; color:var(--pm-ink2);
-  }
-  #ma-pm-{{ section.id }} .ma-pm__sign b{ color:var(--pm-burg); font-weight:400; font-style:italic; }
 
-  /* reveal (JS-gated so no-JS never hides content) */
-  #ma-pm-{{ section.id }}.is-ready .ma-pm__c{ opacity:0; transform:translateY(22px); }
-  #ma-pm-{{ section.id }}.is-ready.is-in .ma-pm__c{
-    opacity:1; transform:none;
-    transition:opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1), box-shadow .45s ease;
-  }
-  #ma-pm-{{ section.id }}.is-ready.is-in .ma-pm__c:nth-child(2){ transition-delay:.1s; }
-  #ma-pm-{{ section.id }}.is-ready.is-in .ma-pm__c:nth-child(3){ transition-delay:.2s; }
-  #ma-pm-{{ section.id }}.is-ready.is-in .ma-pm__c:nth-child(4){ transition-delay:.3s; }
+  /* ---- seal ---- */
+  #ma-pm-{{ section.id }} .ma-pm__seal{ position:relative; z-index:1; text-align:center; padding:16px 20px 26px; border-top:1px solid var(--pm-line); }
+  #ma-pm-{{ section.id }} .ma-pm__seal-rule{ height:1px; width:88px; margin:0 auto 12px; background:linear-gradient(90deg,transparent,var(--pm-gold),transparent); }
+  #ma-pm-{{ section.id }} .ma-pm__sign{ font-family:var(--pm-serif); font-weight:500; font-size:16px; color:var(--pm-ink); margin:0; }
+  #ma-pm-{{ section.id }} .ma-pm__sign b{ font-weight:400; font-style:italic; color:var(--pm-burg); }
 
-  @media (max-width:899px){
-    #ma-pm-{{ section.id }} .ma-pm__cards{ grid-template-columns:1fr 1fr; gap:12px; }
+  /* ---- DESKTOP: 4 across + centred logo watermark ---- */
+  @media (min-width:900px){
+    #ma-pm-{{ section.id }} .ma-pm__logo{
+      display:block; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+      width:min(50%,560px); opacity:.05; z-index:0; pointer-events:none;
+    }
+    #ma-pm-{{ section.id }} .ma-pm__in{ max-width:1180px; margin:0 auto; padding:8px 40px 4px; }
+    #ma-pm-{{ section.id }} .ma-pm__head{ padding:60px 22px 8px; }
+    #ma-pm-{{ section.id }} .ma-pm__k{ font-size:11px; letter-spacing:.42em; color:var(--pm-gold); margin-bottom:20px; }
+    #ma-pm-{{ section.id }} .ma-pm__h{ font-size:clamp(40px,4vw,56px); }
+    #ma-pm-{{ section.id }} .ma-pm__s{ font-size:19px; max-width:56ch; margin-top:18px; }
+    #ma-pm-{{ section.id }} .ma-pm__cards{
+      grid-template-columns:repeat(4,1fr); margin:44px 0 0;
+      border-top:1px solid var(--pm-line); border-bottom:1px solid var(--pm-line);
+    }
+    #ma-pm-{{ section.id }} .ma-pm__c{ border-top:0; border-right:0; padding:38px 30px 42px; }
+    #ma-pm-{{ section.id }} .ma-pm__c + .ma-pm__c{ border-left:1px solid var(--pm-line); }
+    #ma-pm-{{ section.id }} .ma-pm__num{ right:14px; bottom:-20px; font-size:96px; }
+    #ma-pm-{{ section.id }} .ma-pm__ic{ width:30px; height:30px; margin-bottom:18px; }
+    #ma-pm-{{ section.id }} .ma-pm__kick{ font-size:10px; letter-spacing:.26em; margin-bottom:10px; }
+    #ma-pm-{{ section.id }} .ma-pm__t{ font-size:23px; margin-bottom:12px; }
+    #ma-pm-{{ section.id }} .ma-pm__d{ font-size:16px; line-height:1.55; }
+    #ma-pm-{{ section.id }} .ma-pm__seal{ padding:34px 20px 44px; }
+    #ma-pm-{{ section.id }} .ma-pm__seal-rule{ width:120px; margin-bottom:20px; }
+    #ma-pm-{{ section.id }} .ma-pm__sign{ font-size:clamp(20px,2vw,26px); }
   }
-  @media (max-width:749px){
-    #ma-pm-{{ section.id }}.ma-pm{ padding:46px 18px 42px; }
-    #ma-pm-{{ section.id }}.ma-pm::before{ font-size:19rem; }
-    #ma-pm-{{ section.id }} .ma-pm__h{ font-size:21px; }
-    #ma-pm-{{ section.id }} .ma-pm__s{ font-size:12.5px; margin-bottom:26px; }
-    #ma-pm-{{ section.id }} .ma-pm__c{ padding:24px 13px 22px; }
-    #ma-pm-{{ section.id }} .ma-pm__med{ width:56px; height:56px; margin-bottom:13px; }
-    #ma-pm-{{ section.id }} .ma-pm__med svg{ width:26px; height:26px; }
-    #ma-pm-{{ section.id }} .ma-pm__kick{ font-size:7px; letter-spacing:.26em; margin-bottom:7px; }
-    #ma-pm-{{ section.id }} .ma-pm__t{ font-size:13.5px; margin-bottom:8px; line-height:1.3; }
-    #ma-pm-{{ section.id }} .ma-pm__d{ font-size:10.5px; line-height:1.7; }
-    #ma-pm-{{ section.id }} .ma-pm__sign{ margin-top:26px; font-size:12.5px; }
-  }
+
   @media (prefers-reduced-motion:reduce){
     #ma-pm-{{ section.id }} *{ transition:none !important; }
-    #ma-pm-{{ section.id }}.is-ready .ma-pm__c{ opacity:1 !important; transform:none !important; }
   }
 </style>
-
-<script>
-  (function(){
-    var s = document.getElementById('ma-pm-{{ section.id }}');
-    if(!s) return;
-    s.classList.add('is-ready');
-    var show = function(){ s.classList.add('is-in'); };
-    {% if request.design_mode %}
-      show(); return;
-    {% endif %}
-    if(!('IntersectionObserver' in window)){ show(); return; }
-    var io = new IntersectionObserver(function(entries){
-      entries.forEach(function(e){ if(e.isIntersecting){ show(); io.disconnect(); } });
-    }, { threshold: 0.22 });
-    io.observe(s);
-  })();
-</script>
 
 {% schema %}
 {
@@ -199,14 +178,14 @@
     { "type": "text", "id": "k2", "label": "Kicker", "default": "The Return" },
     { "type": "text", "id": "t2", "label": "Title", "default": "Seven Days to Decide" },
     { "type": "textarea", "id": "d2", "label": "Promise", "default": "Return the sealed bottle within seven days for a full refund. No questions asked." },
-    { "type": "header", "content": "Card 3 — The Skin" },
-    { "type": "text", "id": "k3", "label": "Kicker", "default": "The Skin" },
-    { "type": "text", "id": "t3", "label": "Title", "default": "Gentle on Skin" },
-    { "type": "textarea", "id": "d3", "label": "Promise", "default": "IFRA-compliant international oils, free of harsh solvents — it wears softly." },
-    { "type": "header", "content": "Card 4 — The Hours" },
-    { "type": "text", "id": "k4", "label": "Kicker", "default": "The Hours" },
-    { "type": "text", "id": "t4", "label": "Title", "default": "Lasts All Day" },
-    { "type": "textarea", "id": "d4", "label": "Promise", "default": "30% extrait concentration — the scent lingers for hours, not minutes." },
+    { "type": "header", "content": "Card 3 — The Climate" },
+    { "type": "text", "id": "k3", "label": "Kicker", "default": "The Climate" },
+    { "type": "text", "id": "t3", "label": "Title", "default": "Crafted for India" },
+    { "type": "textarea", "id": "d3", "label": "Promise", "default": "Built for Indian skin, heat and humidity — not London winters." },
+    { "type": "header", "content": "Card 4 — The Formula" },
+    { "type": "text", "id": "k4", "label": "Kicker", "default": "The Formula" },
+    { "type": "text", "id": "t4", "label": "Title", "default": "The Oil is Everything" },
+    { "type": "textarea", "id": "d4", "label": "Promise", "default": "Most of what you pay goes into the oil — not the bottle, the box, or the campaign." },
     { "type": "header", "content": "Signature" },
     { "type": "text", "id": "sign", "label": "Sign-off (— Amiir is appended)", "default": "The house takes the risk." }
   ],
