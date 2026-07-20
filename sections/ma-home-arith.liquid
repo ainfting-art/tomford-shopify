@@ -154,6 +154,10 @@
 
   /* ---- mobile only: photo on top, copy below (desktop <900px untouched) ---- */
   @media (max-width:899px){
+    /* photo-on-top makes the stacked copy taller than one locked screen —
+       release the height cap so mobile grows to fit and nothing clips at the bottom */
+    #ma-ar-{{ section.id }}.ma-ar{ height:auto; max-height:none; overflow:visible; }
+    #ma-ar-{{ section.id }} .ma-ar__copy{ flex:0 0 auto; justify-content:flex-start; padding:22px 24px 34px; }
     #ma-ar-{{ section.id }} .ma-ar__photo{ order:-1; }
     {%- if melt > 0 -%}
     /* melt now blends the photo's BOTTOM edge into the copy beneath it */
