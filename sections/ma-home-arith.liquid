@@ -152,6 +152,22 @@
   }
   {%- endif -%}
 
+  /* ---- mobile only: photo on top, copy below (desktop <900px untouched) ---- */
+  @media (max-width:899px){
+    #ma-ar-{{ section.id }} .ma-ar__photo{ order:-1; }
+    {%- if melt > 0 -%}
+    /* melt now blends the photo's BOTTOM edge into the copy beneath it */
+    #ma-ar-{{ section.id }} .ma-ar__photo::before{
+      top:auto; bottom:0; height:34%;
+      -webkit-mask-image:linear-gradient(0deg,#000 0,transparent 100%);
+              mask-image:linear-gradient(0deg,#000 0,transparent 100%);
+    }
+    #ma-ar-{{ section.id }} .ma-ar__photo::after{
+      background:linear-gradient(0deg,var(--cream) 0%,rgba(244,238,225,.55) 14%,rgba(244,238,225,0) 46%);
+    }
+    {%- endif -%}
+  }
+
   /* ---- desktop: split, still exactly one screen ---- */
   @media (min-width:900px){
     #ma-ar-{{ section.id }}.ma-ar--split{ flex-direction:row; }
