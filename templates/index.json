@@ -55,6 +55,7 @@
     },
     "ma_home_trust": {
       "type": "ma-home-trust",
+      "disabled": true,
       "settings": {
         "stars": "★★★★☆",
         "a_big": "4.3",
