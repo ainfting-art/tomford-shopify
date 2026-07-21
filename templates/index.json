@@ -583,7 +583,6 @@
     },
     "ma_home_proof": {
       "type": "ma-home-proof",
-      "disabled": true,
       "settings": {
         "a_big": "30% Extrait",
         "a_sm": "above eau de parfum",
@@ -792,7 +791,6 @@
         "pillar_3",
         "pillar_4"
       ],
-      "disabled": true,
       "name": "Value Story",
       "settings": {
         "bg_image": "shopify://shop_images/8K_luxury_workshop_202604281850_1.jpg",
@@ -1527,8 +1525,8 @@
     "section_VhLBpg",
     "ma_explore_maison",
     "ma_brand_story",
-    "1775472317723a194f",
     "section_Rrah97",
-    "ma_journal_KaX3PU"
+    "ma_journal_KaX3PU",
+    "1775472317723a194f"
   ]
 }
