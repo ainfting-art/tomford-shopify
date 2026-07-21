@@ -52,7 +52,7 @@
   .ma-value__scrim {
     position: absolute; inset: 0; z-index: 1;
     background:
-      linear-gradient(to bottom, rgba(0, 0, 0, 0.55) 0%, rgba(174, 18, 18, 0.25) 45%, rgba(214, 15, 15, 0.6) 100%),
+      linear-gradient(to bottom, rgba(0, 0, 0, 0.55) 0%, rgba(0,0,0,.25) 45%, rgba(214, 15, 15, 0.6) 100%),
       rgba(0,0,0, {{ section.settings.overlay | default: 65 | divided_by: 100.0 }});
   }
   .ma-value__inner { position: relative; z-index: 2; }
