@@ -66,6 +66,52 @@
         "c_sm": "Risk-free returns"
       }
     },
+    "trust_banner_3_marquee_AKyjRX": {
+      "type": "trust-banner-3-marquee",
+      "blocks": {
+        "item_8YdjHc": {
+          "type": "item",
+          "settings": {
+            "text": "4.3 ★ RATED"
+          }
+        },
+        "item_CczWFY": {
+          "type": "item",
+          "settings": {
+            "text": "15,000+ BOTTLES SHIPPED"
+          }
+        },
+        "item_YX4gfP": {
+          "type": "item",
+          "settings": {
+            "text": "FRENCH & SWISS AROMA CHEMICALS"
+          }
+        },
+        "item_KVW9w6": {
+          "type": "item",
+          "settings": {
+            "text": "7-DAY RISK-FREE RETURNS"
+          }
+        },
+        "item_7qgKQj": {
+          "type": "item",
+          "settings": {
+            "text": "500+ REVIEWS"
+          }
+        }
+      },
+      "block_order": [
+        "item_8YdjHc",
+        "item_CczWFY",
+        "item_YX4gfP",
+        "item_KVW9w6",
+        "item_7qgKQj"
+      ],
+      "name": "MA Trust — Marquee",
+      "settings": {
+        "speed": 41
+      }
+    },
     "hero_jVaWmY": {
       "type": "hero",
       "blocks": {
@@ -1469,6 +1515,7 @@
     "custom_liquid_hmfTtV",
     "ma_most_wanted_edUXRw",
     "ma_home_arith",
+    "trust_banner_3_marquee_AKyjRX",
     "ma_most_wanted_JMH4Mt",
     "ma_unboxing",
     "product_list_nrNjhj",
