@@ -53,65 +53,6 @@
         "padding-block-end": 32
       }
     },
-    "ma_home_trust": {
-      "type": "ma-home-trust",
-      "disabled": true,
-      "settings": {
-        "stars": "★★★★☆",
-        "a_big": "4.3",
-        "a_sm": "From 500+ reviews",
-        "b_big": "15,000+",
-        "b_sm": "Bottles shipped",
-        "c_big": "7-Day",
-        "c_sm": "Risk-free returns"
-      }
-    },
-    "trust_banner_3_marquee_AKyjRX": {
-      "type": "trust-banner-3-marquee",
-      "blocks": {
-        "item_8YdjHc": {
-          "type": "item",
-          "settings": {
-            "text": "4.3 ★ RATED"
-          }
-        },
-        "item_CczWFY": {
-          "type": "item",
-          "settings": {
-            "text": "15,000+ BOTTLES SHIPPED"
-          }
-        },
-        "item_YX4gfP": {
-          "type": "item",
-          "settings": {
-            "text": "FRENCH & SWISS AROMA CHEMICALS"
-          }
-        },
-        "item_KVW9w6": {
-          "type": "item",
-          "settings": {
-            "text": "7-DAY RISK-FREE RETURNS"
-          }
-        },
-        "item_7qgKQj": {
-          "type": "item",
-          "settings": {
-            "text": "500+ REVIEWS"
-          }
-        }
-      },
-      "block_order": [
-        "item_8YdjHc",
-        "item_CczWFY",
-        "item_YX4gfP",
-        "item_KVW9w6",
-        "item_7qgKQj"
-      ],
-      "name": "MA Trust — Marquee",
-      "settings": {
-        "speed": 41
-      }
-    },
     "hero_jVaWmY": {
       "type": "hero",
       "blocks": {
@@ -180,6 +121,19 @@
         "padding-block-end": 0
       }
     },
+    "ma_home_trust": {
+      "type": "ma-home-trust",
+      "disabled": true,
+      "settings": {
+        "stars": "★★★★☆",
+        "a_big": "4.3",
+        "a_sm": "From 500+ reviews",
+        "b_big": "15,000+",
+        "b_sm": "Bottles shipped",
+        "c_big": "7-Day",
+        "c_sm": "Risk-free returns"
+      }
+    },
     "ma_most_wanted_3eDjHb": {
       "type": "ma-most-wanted",
       "name": "Most Wanted Grid",
@@ -228,6 +182,52 @@
         "right_value": "from ₹2,200",
         "refine_1": "30% Extrait Oil ✦ The same concentration tier as the houses that inspire us.",
         "refine_2": "Kind to skin ✦ IFRA-compliant ✦ Last all day"
+      }
+    },
+    "trust_banner_3_marquee_AKyjRX": {
+      "type": "trust-banner-3-marquee",
+      "blocks": {
+        "item_8YdjHc": {
+          "type": "item",
+          "settings": {
+            "text": "4.3 ★ RATED"
+          }
+        },
+        "item_CczWFY": {
+          "type": "item",
+          "settings": {
+            "text": "15,000+ BOTTLES SHIPPED"
+          }
+        },
+        "item_YX4gfP": {
+          "type": "item",
+          "settings": {
+            "text": "FRENCH & SWISS AROMA CHEMICALS"
+          }
+        },
+        "item_KVW9w6": {
+          "type": "item",
+          "settings": {
+            "text": "7-DAY RISK-FREE RETURNS"
+          }
+        },
+        "item_7qgKQj": {
+          "type": "item",
+          "settings": {
+            "text": "500+ REVIEWS"
+          }
+        }
+      },
+      "block_order": [
+        "item_8YdjHc",
+        "item_CczWFY",
+        "item_YX4gfP",
+        "item_KVW9w6",
+        "item_7qgKQj"
+      ],
+      "name": "MA Trust — Marquee",
+      "settings": {
+        "speed": 41
       }
     },
     "ma_most_wanted_JMH4Mt": {
@@ -1509,8 +1509,8 @@
   },
   "order": [
     "section_wQqHde",
-    "ma_home_trust",
     "hero_jVaWmY",
+    "ma_home_trust",
     "ma_most_wanted_3eDjHb",
     "custom_liquid_hmfTtV",
     "ma_most_wanted_edUXRw",
