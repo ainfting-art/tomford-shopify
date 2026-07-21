@@ -1,69 +1,74 @@
-{% style %}
-  #shopify-section-{{ section.id }} .ma-marquee {
-    background: #f4efe6; border-top: 1px solid #c9a24b; border-bottom: 1px solid #c9a24b;
-    padding: 16px 0; overflow: hidden;
-  }
-  #shopify-section-{{ section.id }} .ma-marquee__track {
-    display: flex; width: max-content;
-    animation: ma-marquee-scroll {{ section.settings.speed }}s linear infinite;
-  }
-  #shopify-section-{{ section.id }} .ma-marquee__set {
-    display: flex; align-items: center; gap: 28px; padding-right: 28px; white-space: nowrap;
-  }
-  #shopify-section-{{ section.id }} .ma-marquee__item {
-    font-family: 'Cormorant Garamond', Georgia, serif; color: #16130f;
-    font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase;
-  }
-  #shopify-section-{{ section.id }} .ma-marquee__dot { color: #c9a24b; font-size: 12px; }
-  @keyframes ma-marquee-scroll {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    #shopify-section-{{ section.id }} .ma-marquee__track { animation: none; }
-  }
-{% endstyle %}
+{%- comment -%}
+  MAISON AMIIR — Home · Trust band (sits directly below the hero video).
+  Light ivory strip carrying the credibility numbers pulled out of the hero.
+  House style: serif figures, gold star, hairline dividers. Editable text.
+{%- endcomment -%}
 
-<section class="ma-marquee">
-  <div class="ma-marquee__track">
-    {%- for i in (1..2) -%}
-      <div class="ma-marquee__set" aria-hidden="{% if i == 2 %}true{% else %}false{% endif %}">
-        {%- for block in section.blocks -%}
-          <span class="ma-marquee__item" {% if i == 1 %}{{ block.shopify_attributes }}{% endif %}>{{ block.settings.text }}</span>
-          {%- unless forloop.last -%}<span class="ma-marquee__dot">◆</span>{%- endunless -%}
-        {%- endfor -%}
-      </div>
-    {%- endfor -%}
+<section class="ma-tb" id="ma-tb-{{ section.id }}">
+  <div class="ma-tb__in">
+    <div class="ma-tb__i">
+      <div class="ma-tb__v"><span class="ma-tb__st" aria-hidden="true">{{ section.settings.stars }}</span> {{ section.settings.a_big | escape }}</div>
+      <div class="ma-tb__l">{{ section.settings.a_sm | escape }}</div>
+    </div>
+    <div class="ma-tb__i">
+      <div class="ma-tb__v">{{ section.settings.b_big | escape }}</div>
+      <div class="ma-tb__l">{{ section.settings.b_sm | escape }}</div>
+    </div>
+    <div class="ma-tb__i">
+      <div class="ma-tb__v">{{ section.settings.c_big | escape }}</div>
+      <div class="ma-tb__l">{{ section.settings.c_sm | escape }}</div>
+    </div>
   </div>
 </section>
 
+<style>
+  #shopify-section-{{ section.id }} { opacity: 1 !important; }
+  #ma-tb-{{ section.id }}.ma-tb {
+    background: #f4efe7;
+    border-bottom: 1px solid #e5dfd2;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #1a1a1a;
+  }
+  #ma-tb-{{ section.id }} .ma-tb__in {
+    max-width: 1100px; margin: 0 auto;
+    display: flex; align-items: stretch; justify-content: center;
+  }
+  #ma-tb-{{ section.id }} .ma-tb__i {
+    flex: 1; text-align: center; padding: 26px 18px; position: relative;
+  }
+  #ma-tb-{{ section.id }} .ma-tb__i + .ma-tb__i::before {
+    content: ""; position: absolute; left: 0; top: 24%; height: 52%; width: 1px; background: #e5dfd2;
+  }
+  #ma-tb-{{ section.id }} .ma-tb__v {
+    font-family: Georgia, "Times New Roman", serif; font-size: 26px; line-height: 1; letter-spacing: .01em; color: #1a1a1a;
+  }
+  #ma-tb-{{ section.id }} .ma-tb__st { color: #a89566; font-size: 15px; letter-spacing: 2px; vertical-align: 2px; }
+  #ma-tb-{{ section.id }} .ma-tb__l {
+    font-size: 9.5px; letter-spacing: .18em; text-transform: uppercase; color: #928878; margin-top: 9px;
+  }
+  @media (max-width: 749px) {
+    #ma-tb-{{ section.id }} .ma-tb__i { padding: 18px 8px; }
+    #ma-tb-{{ section.id }} .ma-tb__v { font-size: 18px; }
+    #ma-tb-{{ section.id }} .ma-tb__st { font-size: 11px; }
+    #ma-tb-{{ section.id }} .ma-tb__l { font-size: 8px; letter-spacing: .12em; margin-top: 6px; }
+  }
+</style>
+
 {% schema %}
 {
-  "name": "MA Trust — Marquee",
+  "name": "MA — Trust Band",
   "tag": "section",
+  "class": "ma-trust-section",
   "settings": [
-    { "type": "range", "id": "speed", "label": "Scroll speed (seconds per loop)", "min": 15, "max": 60, "step": 1, "default": 32 }
+    { "type": "paragraph", "content": "Sits right below the hero. Use figures you can stand behind." },
+    { "type": "text", "id": "stars", "label": "Rating stars", "default": "★★★★☆" },
+    { "type": "text", "id": "a_big", "label": "1 — figure", "default": "4.3" },
+    { "type": "text", "id": "a_sm", "label": "1 — label", "default": "From 500+ reviews" },
+    { "type": "text", "id": "b_big", "label": "2 — figure", "default": "15,000+" },
+    { "type": "text", "id": "b_sm", "label": "2 — label", "default": "Bottles shipped" },
+    { "type": "text", "id": "c_big", "label": "3 — figure", "default": "7-Day" },
+    { "type": "text", "id": "c_sm", "label": "3 — label", "default": "Risk-free returns" }
   ],
-  "blocks": [
-    {
-      "type": "item",
-      "name": "Item",
-      "settings": [
-        { "type": "text", "id": "text", "label": "Text", "default": "4.3 ★ RATED" }
-      ]
-    }
-  ],
-  "presets": [
-    {
-      "name": "MA Trust — Marquee",
-      "blocks": [
-        { "type": "item", "settings": { "text": "4.3 ★ RATED" } },
-        { "type": "item", "settings": { "text": "15,000+ BOTTLES SHIPPED" } },
-        { "type": "item", "settings": { "text": "FRENCH & SWISS AROMA CHEMICALS" } },
-        { "type": "item", "settings": { "text": "7-DAY RISK-FREE RETURNS" } },
-        { "type": "item", "settings": { "text": "500+ REVIEWS" } }
-      ]
-    }
-  ]
+  "presets": [{ "name": "MA — Trust Band" }]
 }
 {% endschema %}
