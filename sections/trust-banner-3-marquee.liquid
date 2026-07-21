@@ -1,0 +1,69 @@
+{% style %}
+  #shopify-section-{{ section.id }} .ma-marquee {
+    background: #f4efe6; border-top: 1px solid #c9a24b; border-bottom: 1px solid #c9a24b;
+    padding: 16px 0; overflow: hidden;
+  }
+  #shopify-section-{{ section.id }} .ma-marquee__track {
+    display: flex; width: max-content;
+    animation: ma-marquee-scroll {{ section.settings.speed }}s linear infinite;
+  }
+  #shopify-section-{{ section.id }} .ma-marquee__set {
+    display: flex; align-items: center; gap: 28px; padding-right: 28px; white-space: nowrap;
+  }
+  #shopify-section-{{ section.id }} .ma-marquee__item {
+    font-family: 'Cormorant Garamond', Georgia, serif; color: #16130f;
+    font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase;
+  }
+  #shopify-section-{{ section.id }} .ma-marquee__dot { color: #c9a24b; font-size: 12px; }
+  @keyframes ma-marquee-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #shopify-section-{{ section.id }} .ma-marquee__track { animation: none; }
+  }
+{% endstyle %}
+
+<section class="ma-marquee">
+  <div class="ma-marquee__track">
+    {%- for i in (1..2) -%}
+      <div class="ma-marquee__set" aria-hidden="{% if i == 2 %}true{% else %}false{% endif %}">
+        {%- for block in section.blocks -%}
+          <span class="ma-marquee__item" {% if i == 1 %}{{ block.shopify_attributes }}{% endif %}>{{ block.settings.text }}</span>
+          {%- unless forloop.last -%}<span class="ma-marquee__dot">◆</span>{%- endunless -%}
+        {%- endfor -%}
+      </div>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "MA Trust — Marquee",
+  "tag": "section",
+  "settings": [
+    { "type": "range", "id": "speed", "label": "Scroll speed (seconds per loop)", "min": 15, "max": 60, "step": 1, "default": 32 }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Item",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Text", "default": "4.3 ★ RATED" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "MA Trust — Marquee",
+      "blocks": [
+        { "type": "item", "settings": { "text": "4.3 ★ RATED" } },
+        { "type": "item", "settings": { "text": "15,000+ BOTTLES SHIPPED" } },
+        { "type": "item", "settings": { "text": "FRENCH & SWISS AROMA CHEMICALS" } },
+        { "type": "item", "settings": { "text": "7-DAY RISK-FREE RETURNS" } },
+        { "type": "item", "settings": { "text": "500+ REVIEWS" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
