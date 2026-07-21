@@ -1,0 +1,259 @@
+/* ==========================================================================
+   MA — Trust Banner
+   Cinematic, luxury trust band. Dark charcoal ground, gold hairlines,
+   crimson accent glow, Cormorant Garamond display figures.
+   ========================================================================== */
+
+.ma-trust-banner-section {
+  --ma-ink: #0c0b0a;
+  --ma-charcoal: #16130f;
+  --ma-gold: #c9a24b;
+  --ma-gold-soft: #e4c98a;
+  --ma-crimson: #7a1224;
+  --ma-ivory: #f4efe6;
+  --ma-ivory-dim: rgba(244, 239, 230, 0.62);
+  background: var(--ma-ink);
+  padding: clamp(48px, 6vw, 96px) clamp(20px, 5vw, 64px);
+}
+
+.ma-trust-banner {
+  max-width: 1120px;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* ---------- Header ---------- */
+
+.ma-trust-banner__header {
+  text-align: center;
+  margin-bottom: clamp(28px, 3vw, 44px);
+}
+
+.ma-trust-banner__eyebrow {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 12px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--ma-gold);
+  margin: 0 0 10px;
+}
+
+.ma-trust-banner__eyebrow::before,
+.ma-trust-banner__eyebrow::after {
+  content: '';
+}
+
+.ma-trust-banner__heading {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(26px, 3vw, 38px);
+  letter-spacing: 0.04em;
+  color: var(--ma-ivory);
+  margin: 0;
+}
+
+/* ---------- Frame ---------- */
+
+.ma-trust-banner__frame {
+  position: relative;
+  border: 1px solid rgba(201, 162, 75, 0.35);
+  background:
+    radial-gradient(120% 180% at 50% -20%, rgba(122, 18, 36, 0.22), transparent 60%),
+    linear-gradient(180deg, var(--ma-charcoal) 0%, var(--ma-ink) 100%);
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.4),
+    0 30px 60px -20px rgba(0, 0, 0, 0.65);
+}
+
+.ma-trust-banner__frame::before,
+.ma-trust-banner__frame::after {
+  content: '';
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--ma-gold);
+  opacity: 0.85;
+}
+
+.ma-trust-banner__frame::before {
+  top: -1px;
+  left: -1px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.ma-trust-banner__frame::after {
+  bottom: -1px;
+  right: -1px;
+  border-left: none;
+  border-top: none;
+}
+
+/* cinematic sheen sweep */
+.ma-trust-banner__sheen {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    transparent 20%,
+    rgba(228, 201, 138, 0.08) 45%,
+    rgba(228, 201, 138, 0.16) 50%,
+    rgba(228, 201, 138, 0.08) 55%,
+    transparent 80%
+  );
+  transform: translateX(-120%);
+  pointer-events: none;
+}
+
+.ma-trust-banner--reveal.is-visible .ma-trust-banner__sheen {
+  animation: ma-sheen-sweep 1.6s cubic-bezier(0.16, 1, 0.3, 1) 0.15s 1;
+}
+
+@keyframes ma-sheen-sweep {
+  to { transform: translateX(120%); }
+}
+
+/* ---------- Stats row ---------- */
+
+.ma-trust-banner__stats {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+.ma-trust-banner__stat {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: clamp(28px, 4vw, 46px) clamp(16px, 3vw, 28px);
+  min-width: 0;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.7s ease;
+}
+
+.ma-trust-banner--reveal .ma-trust-banner__stat { opacity: 0; }
+.ma-trust-banner--reveal.is-visible .ma-trust-banner__stat { opacity: 1; transform: translateY(0); }
+.ma-trust-banner--reveal.is-visible .ma-trust-banner__stat:nth-child(1) { transition-delay: 0.05s; }
+.ma-trust-banner--reveal.is-visible .ma-trust-banner__stat:nth-child(3) { transition-delay: 0.18s; }
+.ma-trust-banner--reveal.is-visible .ma-trust-banner__stat:nth-child(5) { transition-delay: 0.31s; }
+
+.ma-trust-banner:not(.ma-trust-banner--reveal) .ma-trust-banner__stat { opacity: 1; transform: none; }
+
+.ma-trust-banner__stat:hover .ma-trust-banner__value {
+  color: var(--ma-gold-soft);
+  text-shadow: 0 0 18px rgba(228, 201, 138, 0.35);
+}
+
+.ma-trust-banner__icon {
+  color: var(--ma-gold);
+  width: 28px;
+  height: 28px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ma-trust-banner__icon svg {
+  width: 100%;
+  height: 100%;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.2;
+}
+
+.ma-trust-banner__value {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 500;
+  font-size: clamp(28px, 3.4vw, 40px);
+  line-height: 1.1;
+  color: var(--ma-ivory);
+  margin: 0 0 8px;
+  transition: color 0.5s ease, text-shadow 0.5s ease;
+}
+
+.ma-trust-banner__label {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ma-ivory-dim);
+  margin: 0;
+}
+
+/* divider */
+.ma-trust-banner__divider {
+  width: 1px;
+  align-self: center;
+  height: 44%;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    rgba(201, 162, 75, 0.55) 50%,
+    transparent
+  );
+}
+
+/* stars */
+.ma-trust-banner__stars {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 10px;
+  color: var(--ma-gold);
+}
+
+.ma-star {
+  width: 16px;
+  height: 16px;
+}
+
+.ma-star--full { fill: currentColor; }
+.ma-star--empty { fill: none; stroke: currentColor; stroke-width: 1; opacity: 0.45; }
+.ma-star--half { stroke: currentColor; stroke-width: 1; }
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 749px) {
+  .ma-trust-banner__stats {
+    flex-wrap: wrap;
+  }
+
+  .ma-trust-banner__stat {
+    flex: 1 1 50%;
+    padding: 24px 12px;
+  }
+
+  .ma-trust-banner__stat:nth-child(3) {
+    border-top: 1px solid rgba(201, 162, 75, 0.2);
+  }
+
+  .ma-trust-banner__divider:nth-of-type(1) {
+    display: none;
+  }
+
+  .ma-trust-banner__value {
+    font-size: 26px;
+  }
+
+  .ma-trust-banner__label {
+    letter-spacing: 0.16em;
+    font-size: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ma-trust-banner__stat,
+  .ma-trust-banner__sheen {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
