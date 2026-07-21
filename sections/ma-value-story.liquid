@@ -40,7 +40,7 @@
     position: relative;
     overflow: hidden;
     background: #F4EEE1;
-    color: #000000ff;
+    color: #fff;
     text-align: center;
     padding: clamp(3.5rem, 8vw, 5.5rem) clamp(1.2rem, 5vw, 3.5rem);
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -52,17 +52,17 @@
   .ma-value__scrim {
     position: absolute; inset: 0; z-index: 1;
     background:
-      linear-gradient(to bottom, rgba(0, 0, 0, 0.55) 0%, rgba(0,0,0,.25) 45%, rgba(0,0,0,.6) 100%),
+      linear-gradient(to bottom, rgba(0,0,0,.55) 0%, rgba(0,0,0,.25) 45%, rgba(0,0,0,.6) 100%),
       rgba(0,0,0, {{ section.settings.overlay | default: 65 | divided_by: 100.0 }});
   }
   .ma-value__inner { position: relative; z-index: 2; }
   .ma-value__media ~ .ma-value__inner .ma-value__overline,
   .ma-value__media ~ .ma-value__inner .ma-value__h2,
   .ma-value__media ~ .ma-value__inner .ma-value__lede,
-  .ma-value__media ~ .ma-value__inner .ma-value__closing { text-shadow: 0 1px 18px #000000a6; }
+  .ma-value__media ~ .ma-value__inner .ma-value__closing { text-shadow: 0 1px 18px rgba(0,0,0,.65); }
   .ma-value__media ~ .ma-value__inner .ma-value__lede { color: rgba(255,255,255,.82); }
-  .ma-value__media ~ .ma-value__inner .ma-value__pillar { background: #6e122012; }
-  .ma-value__media ~ .ma-value__inner .ma-value__pillar-desc { color: #ffffff9e; }
+  .ma-value__media ~ .ma-value__inner .ma-value__pillar { background: rgba(8,8,8,.74); }
+  .ma-value__media ~ .ma-value__inner .ma-value__pillar-desc { color: rgba(255,255,255,.62); }
 
   .ma-value__overline { font-size: .72rem; letter-spacing: .32em; text-indent: .32em; text-transform: uppercase; color: rgba(255,255,255,.45); margin: 0 0 1.1rem; }
   .ma-value__h2 { font-family: 'Sinoreta', Georgia, serif; font-size: clamp(1.9rem, 4.4vw, 2.75rem); font-weight: 300; letter-spacing: .03em; line-height: 1.25; margin: 0 0 1.2rem; color: #fff; }
@@ -72,18 +72,18 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 1px;
-    background: #f4eee131;
-    border: 1px solid #f25f5f89;
+    background: rgba(255,255,255,.1);
+    border: 1px solid rgba(255,255,255,.1);
     max-width: 1080px;
     margin: 0 auto clamp(1.8rem, 4vw, 2.4rem);
   }
-  .ma-value__pillar { background: #fdae03ff; padding: clamp(1.6rem, 3vw, 2rem) 1.3rem; }
+  .ma-value__pillar { background: #F4EEE1; padding: clamp(1.6rem, 3vw, 2rem) 1.3rem; }
   .ma-value__pillar-icon { font-size: 1.35rem; margin-bottom: .8rem; opacity: .6; }
   /* Helvetica here: Sinoreta lacks proper numerals ("30" breaks) */
-  .ma-value__pillar-title { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: clamp(.82rem, 1.2vw, .92rem); font-weight: 400; letter-spacing: .2em; text-transform: uppercase; color: #ac1414ff; margin: 0 0 .55rem; line-height: 1.5; }
-  .ma-value__pillar-desc { font-size: clamp(.82rem, 1.15vw, .9rem); font-weight: 300; color: rgba(255, 0, 0, 1); line-height: 1.7; margin: 0; }
+  .ma-value__pillar-title { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: clamp(.82rem, 1.2vw, .92rem); font-weight: 400; letter-spacing: .2em; text-transform: uppercase; color: #fff; margin: 0 0 .55rem; line-height: 1.5; }
+  .ma-value__pillar-desc { font-size: clamp(.82rem, 1.15vw, .9rem); font-weight: 300; color: rgba(255,255,255,.5); line-height: 1.7; margin: 0; }
 
-  .ma-value__closing { font-size: .78rem; letter-spacing: .26em; text-indent: .26em; text-transform: uppercase; color: rgba(231, 10, 10, 0.5); margin: 0; }
+  .ma-value__closing { font-size: .78rem; letter-spacing: .26em; text-indent: .26em; text-transform: uppercase; color: rgba(255,255,255,.5); margin: 0; }
 
   @media (max-width: 899px) {
     .ma-value__pillars { grid-template-columns: repeat(2, 1fr); }
