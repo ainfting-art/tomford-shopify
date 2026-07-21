@@ -711,32 +711,32 @@
           "type": "pillar",
           "settings": {
             "icon": "◈",
-            "title": "30% Extrait Oil",
-            "text": "The same concentration tier as the houses that inspire us."
+            "title": "A Tester in Every Order",
+            "text": "Live with the scent for days before you ever break the seal on the bottle."
           }
         },
         "pillar_2": {
           "type": "pillar",
           "settings": {
             "icon": "✦",
-            "title": "International Fragrance Oils",
-            "text": "Sourced from the same global suppliers as luxury perfumery."
+            "title": "Seven Days to Decide",
+            "text": "Return the sealed bottle within seven days for a full refund. No questions asked."
           }
         },
         "pillar_3": {
           "type": "pillar",
           "settings": {
             "icon": "⬡",
-            "title": "Small Batch Crafted",
-            "text": "Made to order, never mass-warehoused."
+            "title": "Crafted for India",
+            "text": "Built for Indian skin, heat and humidity — not London winters."
           }
         },
         "pillar_4": {
           "type": "pillar",
           "settings": {
             "icon": "◎",
-            "title": "No Boutique Markup",
-            "text": "You pay for the scent, not the storefront."
+            "title": "The Oil is Everything",
+            "text": "Most of what you pay goes into the oil — not the bottle, the box, or the campaign."
           }
         }
       },
@@ -751,10 +751,10 @@
       "settings": {
         "bg_image": "shopify://shop_images/8K_luxury_workshop_202604281850_1.jpg",
         "overlay": 0,
-        "overline": "The Maison Amiir Difference",
-        "heading": "Luxury, Without the Markup",
-        "lede": "A great fragrance is mostly oil and intention — not the marble store or the magazine campaign. We put the money where you smell it: 30% extrait concentration, international fragrance oils, made in small batches.",
-        "closing": "Extrait Concentration · From ₹2,200"
+        "overline": "Buy Without a Doubt",
+        "heading": "The Maison Promise",
+        "lede": "Wear it first. Decide after. A scent is personal — you should never commit to one you haven't lived with.",
+        "closing": "The house takes the risk.Extrait Concentration · From ₹2,200"
       }
     },
     "section_VhLBpg": {
