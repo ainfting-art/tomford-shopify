@@ -52,16 +52,16 @@
   .ma-value__scrim {
     position: absolute; inset: 0; z-index: 1;
     background:
-      linear-gradient(to bottom, rgba(0,0,0,.55) 0%, rgba(0,0,0,.25) 45%, rgba(0,0,0,.6) 100%),
+      linear-gradient(to bottom, rgba(228, 22, 22, 0.55) 0%, rgba(174, 18, 18, 0.25) 45%, rgba(214, 15, 15, 0.6) 100%),
       rgba(0,0,0, {{ section.settings.overlay | default: 65 | divided_by: 100.0 }});
   }
   .ma-value__inner { position: relative; z-index: 2; }
   .ma-value__media ~ .ma-value__inner .ma-value__overline,
   .ma-value__media ~ .ma-value__inner .ma-value__h2,
   .ma-value__media ~ .ma-value__inner .ma-value__lede,
-  .ma-value__media ~ .ma-value__inner .ma-value__closing { text-shadow: 0 1px 18px rgba(0,0,0,.65); }
+  .ma-value__media ~ .ma-value__inner .ma-value__closing { text-shadow: 0 1px 18px rgba(211, 42, 42, 0.65); }
   .ma-value__media ~ .ma-value__inner .ma-value__lede { color: rgba(255,255,255,.82); }
-  .ma-value__media ~ .ma-value__inner .ma-value__pillar { background: rgba(8,8,8,.74); }
+  .ma-value__media ~ .ma-value__inner .ma-value__pillar { background: rgba(149, 20, 20, 0.74); }
   .ma-value__media ~ .ma-value__inner .ma-value__pillar-desc { color: rgba(255,255,255,.62); }
 
   .ma-value__overline { font-size: .72rem; letter-spacing: .32em; text-indent: .32em; text-transform: uppercase; color: rgba(255,255,255,.45); margin: 0 0 1.1rem; }
