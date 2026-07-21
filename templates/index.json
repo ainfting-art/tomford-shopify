@@ -188,7 +188,7 @@
         "heading": "Most Wanted",
         "collection": "winter-collection",
         "cta_link": "shopify://collections/all-perfumes",
-        "cta_label": "Shop the Bestsellers"
+        "cta_label": "Shop All"
       }
     },
     "custom_liquid_hmfTtV": {
@@ -211,7 +211,7 @@
         "heading": "For Her",
         "collection": "womens-collection",
         "cta_link": "shopify://collections/womens-collection",
-        "cta_label": "Shop Now"
+        "cta_label": "View all"
       }
     },
     "ma_home_arith": {
@@ -238,7 +238,7 @@
         "heading": "For Him",
         "collection": "mens-collection",
         "cta_link": "shopify://collections/mens-collection",
-        "cta_label": "Shop Now"
+        "cta_label": "View all"
       }
     },
     "ma_unboxing": {
