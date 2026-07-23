@@ -1,0 +1,345 @@
+{%- comment -%}
+  MA Atelier Editorial — standalone luxury storytelling section.
+  Does not modify or depend on any other section. Add via Theme Customizer.
+{%- endcomment -%}
+
+{% style %}
+  #shopify-section-{{ section.id }} .ma-atelier {
+    position: relative;
+    overflow: hidden;
+    background: {{ section.settings.background_color }};
+    margin-top: {{ section.settings.margin_top }}px;
+    margin-bottom: {{ section.settings.margin_bottom }}px;
+  }
+
+  /* ---------- Media (image) ---------- */
+  #shopify-section-{{ section.id }} .ma-atelier__media {
+    position: relative;
+    width: 100%;
+    height: {{ section.settings.mobile_image_height }}px;
+    overflow: hidden;
+  }
+  #shopify-section-{{ section.id }} .ma-atelier__media img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: {{ section.settings.image_sizing }};
+    object-position: {{ section.settings.image_position_x }}% {{ section.settings.image_position_y }}%;
+    transform: scale({{ section.settings.image_scale | times: 1.0 | divided_by: 100 }});
+    opacity: {{ section.settings.image_opacity | times: 1.0 | divided_by: 100 }};
+  }
+  #shopify-section-{{ section.id }} .ma-atelier__overlay {
+    position: absolute;
+    inset: 0;
+    background: {{ section.settings.overlay_color }};
+    opacity: {{ section.settings.overlay_strength | times: 1.0 | divided_by: 100 }};
+    pointer-events: none;
+  }
+  #shopify-section-{{ section.id }} .ma-atelier__fade {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      {{ section.settings.fade_color }} {{ section.settings.mobile_fade_strength }}%
+    );
+    pointer-events: none;
+  }
+
+  /* ---------- Content (mobile: stacked below image) ---------- */
+  #shopify-section-{{ section.id }} .ma-atelier__content {
+    position: relative;
+    z-index: 2;
+    margin-top: -28px;
+    padding: {{ section.settings.mobile_padding_top }}px {{ section.settings.mobile_padding_x }}px {{ section.settings.mobile_padding_bottom }}px;
+    text-align: {{ section.settings.mobile_content_align }};
+    max-width: none;
+  }
+
+  #shopify-section-{{ section.id }} .ma-atelier__label {
+    font-family: {{ section.settings.label_font.family }}, sans-serif;
+    font-weight: {{ section.settings.label_weight }};
+    font-size: {{ section.settings.label_size_mobile }}px;
+    color: {{ section.settings.label_color }};
+    letter-spacing: {{ section.settings.label_letter_spacing }}px;
+    text-transform: {{ section.settings.label_transform }};
+    margin: 0 0 {{ section.settings.content_spacing }}px;
+  }
+
+  #shopify-section-{{ section.id }} .ma-atelier__headline {
+    font-family: {{ section.settings.headline_font.family }}, serif;
+    font-weight: {{ section.settings.headline_weight }};
+    font-size: {{ section.settings.headline_size_mobile }}px;
+    color: {{ section.settings.headline_color }};
+    letter-spacing: {{ section.settings.headline_letter_spacing }}px;
+    line-height: {{ section.settings.headline_line_height }};
+    margin: 0 0 {{ section.settings.content_spacing }}px;
+    max-width: 100%;
+  }
+
+  #shopify-section-{{ section.id }} .ma-atelier__paragraph {
+    font-family: {{ section.settings.paragraph_font.family }}, sans-serif;
+    font-size: {{ section.settings.paragraph_size_mobile }}px;
+    color: {{ section.settings.paragraph_color }};
+    line-height: {{ section.settings.paragraph_line_height }};
+    margin: 0 0 {{ section.settings.content_spacing }}px;
+    max-width: 100%;
+  }
+
+  #shopify-section-{{ section.id }} .ma-atelier__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: {{ section.settings.cta_font.family }}, sans-serif;
+    font-size: {{ section.settings.cta_size }}px;
+    letter-spacing: {{ section.settings.cta_letter_spacing }}px;
+    text-transform: uppercase;
+    color: {{ section.settings.cta_color }};
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 3px;
+    transition: color 0.35s ease;
+  }
+  #shopify-section-{{ section.id }} .ma-atelier__cta:hover {
+    color: {{ section.settings.cta_hover_color }};
+  }
+  #shopify-section-{{ section.id }} .ma-atelier__cta-arrow {
+    transition: transform 0.35s ease;
+  }
+  #shopify-section-{{ section.id }} .ma-atelier__cta:hover .ma-atelier__cta-arrow {
+    transform: translateX(5px);
+  }
+
+  /* ---------- Desktop: independent composition, image + text integrated ---------- */
+  @media (min-width: 750px) {
+    #shopify-section-{{ section.id }} .ma-atelier {
+      min-height: {{ section.settings.section_height }}px;
+      display: flex;
+      align-items: {% case section.settings.text_position_y %}{% when 'top' %}flex-start{% when 'bottom' %}flex-end{% else %}center{% endcase %};
+      justify-content: {% case section.settings.text_position_x %}{% when 'center' %}center{% when 'right' %}flex-end{% else %}flex-start{% endcase %};
+      padding: {{ section.settings.padding_top }}px {{ section.settings.content_padding_desktop }}px {{ section.settings.padding_bottom }}px;
+    }
+    #shopify-section-{{ section.id }} .ma-atelier__media {
+      position: absolute;
+      inset: 0;
+      height: 100%;
+      width: 100%;
+    }
+    #shopify-section-{{ section.id }} .ma-atelier__fade {
+      background: linear-gradient(
+        to {% if section.settings.fade_direction == 'left' %}right{% else %}left{% endif %},
+        {{ section.settings.fade_color }} 0%,
+        transparent {{ section.settings.fade_strength }}%
+      );
+    }
+    #shopify-section-{{ section.id }} .ma-atelier__content {
+      position: relative;
+      z-index: 2;
+      width: {{ section.settings.content_width }}%;
+      max-width: {{ section.settings.content_max_width }}px;
+      margin-top: 0;
+      padding: 0;
+      text-align: {% if section.settings.text_position_x == 'right' %}right{% elsif section.settings.text_position_x == 'center' %}center{% else %}left{% endif %};
+    }
+    #shopify-section-{{ section.id }} .ma-atelier__label {
+      font-size: {{ section.settings.label_size }}px;
+    }
+    #shopify-section-{{ section.id }} .ma-atelier__headline {
+      font-size: {{ section.settings.headline_size }}px;
+      max-width: {{ section.settings.headline_max_width }}px;
+    }
+    #shopify-section-{{ section.id }} .ma-atelier__paragraph {
+      font-size: {{ section.settings.paragraph_size }}px;
+      max-width: {{ section.settings.paragraph_max_width }}px;
+    }
+  }
+{% endstyle %}
+
+<section class="ma-atelier">
+  <div class="ma-atelier__media">
+    {%- if section.settings.image != blank -%}
+      <img
+        src="{{ section.settings.image | image_url: width: 1800 }}"
+        alt="{{ section.settings.image.alt | default: section.settings.headline | escape }}"
+        loading="lazy"
+      >
+    {%- endif -%}
+    <div class="ma-atelier__overlay"></div>
+    <div class="ma-atelier__fade"></div>
+  </div>
+
+  <div class="ma-atelier__content">
+    {%- if section.settings.label != blank -%}
+      <p class="ma-atelier__label">{{ section.settings.label }}</p>
+    {%- endif -%}
+
+    {%- if section.settings.headline != blank -%}
+      <h2 class="ma-atelier__headline">{{ section.settings.headline }}</h2>
+    {%- endif -%}
+
+    {%- if section.settings.paragraph != blank -%}
+      <p class="ma-atelier__paragraph">{{ section.settings.paragraph }}</p>
+    {%- endif -%}
+
+    {%- if section.settings.cta_text != blank -%}
+      <a class="ma-atelier__cta" href="{{ section.settings.cta_link | default: '#' }}">
+        <span>{{ section.settings.cta_text }}</span>
+        <span class="ma-atelier__cta-arrow">→</span>
+      </a>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "MA Atelier Editorial",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    { "type": "text", "id": "label", "label": "Label", "default": "THE ATELIER" },
+    { "type": "text", "id": "headline", "label": "Headline", "default": "Perfume is the most intense form of memory." },
+    { "type": "textarea", "id": "paragraph", "label": "Paragraph", "default": "Each Maison Amiir fragrance is crafted in limited batches at extrait concentration — every drop carrying the weight of its intention. Luxury, made to be lived in rather than locked away." },
+    { "type": "text", "id": "cta_text", "label": "CTA text", "default": "OUR STORY" },
+    { "type": "url", "id": "cta_link", "label": "CTA link" },
+
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "select", "id": "image_sizing", "label": "Image sizing", "default": "cover", "options": [
+      { "value": "cover", "label": "Cover (fill, crop)" },
+      { "value": "contain", "label": "Contain (fit, no crop)" }
+    ]},
+    { "type": "range", "id": "image_scale", "label": "Image scale", "min": 100, "max": 160, "step": 2, "default": 100, "unit": "%" },
+    { "type": "range", "id": "image_position_x", "label": "Image focal point — X", "min": 0, "max": 100, "step": 5, "default": 50, "unit": "%" },
+    { "type": "range", "id": "image_position_y", "label": "Image focal point — Y", "min": 0, "max": 100, "step": 5, "default": 50, "unit": "%" },
+    { "type": "range", "id": "image_opacity", "label": "Image opacity", "min": 40, "max": 100, "step": 5, "default": 100, "unit": "%" },
+
+    {
+      "type": "header",
+      "content": "Effects — overlay & fade"
+    },
+    { "type": "range", "id": "overlay_strength", "label": "Overlay strength", "min": 0, "max": 90, "step": 5, "default": 35, "unit": "%" },
+    { "type": "color", "id": "overlay_color", "label": "Overlay color", "default": "#000000" },
+    { "type": "range", "id": "fade_strength", "label": "Fade strength (desktop, side)", "min": 0, "max": 100, "step": 5, "default": 70, "unit": "%" },
+    { "type": "range", "id": "mobile_fade_strength", "label": "Fade strength (mobile, bottom)", "min": 0, "max": 100, "step": 5, "default": 60, "unit": "%" },
+    { "type": "color", "id": "fade_color", "label": "Fade color", "default": "#0c0b0a" },
+    { "type": "select", "id": "fade_direction", "label": "Desktop fade direction", "default": "left", "options": [
+      { "value": "left", "label": "Text on left — fade from left" },
+      { "value": "right", "label": "Text on right — fade from right" }
+    ]},
+    { "type": "color", "id": "background_color", "label": "Section background color", "default": "#0c0b0a" },
+
+    {
+      "type": "header",
+      "content": "Typography — Label"
+    },
+    { "type": "font_picker", "id": "label_font", "label": "Label font", "default": "helvetica_n4" },
+    { "type": "select", "id": "label_weight", "label": "Label weight", "default": "500", "options": [
+      { "value": "400", "label": "Regular" },
+      { "value": "500", "label": "Medium" },
+      { "value": "600", "label": "Semibold" },
+      { "value": "700", "label": "Bold" }
+    ]},
+    { "type": "select", "id": "label_transform", "label": "Label text transform", "default": "uppercase", "options": [
+      { "value": "none", "label": "As typed" },
+      { "value": "uppercase", "label": "Uppercase" }
+    ]},
+    { "type": "range", "id": "label_size", "label": "Label size (desktop)", "min": 10, "max": 24, "step": 1, "default": 12, "unit": "px" },
+    { "type": "range", "id": "label_size_mobile", "label": "Label size (mobile)", "min": 8, "max": 20, "step": 1, "default": 11, "unit": "px" },
+    { "type": "range", "id": "label_letter_spacing", "label": "Label letter spacing", "min": 0, "max": 6, "step": 0.5, "default": 3, "unit": "px" },
+    { "type": "color", "id": "label_color", "label": "Label color", "default": "#c9a24b" },
+
+    {
+      "type": "header",
+      "content": "Typography — Headline"
+    },
+    { "type": "font_picker", "id": "headline_font", "label": "Headline font", "default": "playfair_display_n4" },
+    { "type": "select", "id": "headline_weight", "label": "Headline weight", "default": "400", "options": [
+      { "value": "300", "label": "Light" },
+      { "value": "400", "label": "Regular" },
+      { "value": "500", "label": "Medium" },
+      { "value": "600", "label": "Semibold" }
+    ]},
+    { "type": "range", "id": "headline_size", "label": "Headline size (desktop)", "min": 24, "max": 72, "step": 1, "default": 44, "unit": "px" },
+    { "type": "range", "id": "headline_size_mobile", "label": "Headline size (mobile)", "min": 20, "max": 48, "step": 1, "default": 30, "unit": "px" },
+    { "type": "range", "id": "headline_letter_spacing", "label": "Headline letter spacing", "min": -2, "max": 4, "step": 0.5, "default": 0, "unit": "px" },
+    { "type": "range", "id": "headline_line_height", "label": "Headline line height", "min": 1.0, "max": 1.6, "step": 0.1, "default": 1.2 },
+    { "type": "range", "id": "headline_max_width", "label": "Headline max width (desktop)", "min": 240, "max": 800, "step": 10, "default": 480, "unit": "px" },
+    { "type": "color", "id": "headline_color", "label": "Headline color", "default": "#f5f0e6" },
+
+    {
+      "type": "header",
+      "content": "Typography — Paragraph"
+    },
+    { "type": "font_picker", "id": "paragraph_font", "label": "Paragraph font", "default": "helvetica_n4" },
+    { "type": "range", "id": "paragraph_size", "label": "Paragraph size (desktop)", "min": 12, "max": 22, "step": 1, "default": 15, "unit": "px" },
+    { "type": "range", "id": "paragraph_size_mobile", "label": "Paragraph size (mobile)", "min": 12, "max": 18, "step": 1, "default": 14, "unit": "px" },
+    { "type": "range", "id": "paragraph_line_height", "label": "Paragraph line height", "min": 1.2, "max": 2.0, "step": 0.1, "default": 1.6 },
+    { "type": "range", "id": "paragraph_max_width", "label": "Paragraph max width (desktop)", "min": 240, "max": 700, "step": 10, "default": 420, "unit": "px" },
+    { "type": "color", "id": "paragraph_color", "label": "Paragraph color", "default": "#e8e2d5" },
+
+    {
+      "type": "header",
+      "content": "Typography — CTA"
+    },
+    { "type": "font_picker", "id": "cta_font", "label": "CTA font", "default": "helvetica_n4" },
+    { "type": "range", "id": "cta_size", "label": "CTA size", "min": 10, "max": 20, "step": 1, "default": 13, "unit": "px" },
+    { "type": "range", "id": "cta_letter_spacing", "label": "CTA letter spacing", "min": 0, "max": 6, "step": 0.5, "default": 2, "unit": "px" },
+    { "type": "color", "id": "cta_color", "label": "CTA color", "default": "#f5f0e6" },
+    { "type": "color", "id": "cta_hover_color", "label": "CTA hover color", "default": "#c9a24b" },
+
+    {
+      "type": "header",
+      "content": "Layout — Desktop"
+    },
+    { "type": "range", "id": "section_height", "label": "Section height", "min": 400, "max": 900, "step": 10, "default": 640, "unit": "px" },
+    { "type": "range", "id": "content_width", "label": "Content column width", "min": 30, "max": 70, "step": 1, "default": 42, "unit": "%" },
+    { "type": "range", "id": "content_max_width", "label": "Content max width", "min": 300, "max": 700, "step": 10, "default": 520, "unit": "px" },
+    { "type": "select", "id": "text_position_x", "label": "Text position — horizontal", "default": "left", "options": [
+      { "value": "left", "label": "Left" },
+      { "value": "center", "label": "Center" },
+      { "value": "right", "label": "Right" }
+    ]},
+    { "type": "select", "id": "text_position_y", "label": "Text position — vertical", "default": "center", "options": [
+      { "value": "top", "label": "Top" },
+      { "value": "center", "label": "Center" },
+      { "value": "bottom", "label": "Bottom" }
+    ]},
+    { "type": "range", "id": "content_padding_desktop", "label": "Content side padding (desktop)", "min": 20, "max": 120, "step": 5, "default": 60, "unit": "px" },
+    { "type": "range", "id": "padding_top", "label": "Section padding top (desktop)", "min": 0, "max": 160, "step": 5, "default": 0, "unit": "px" },
+    { "type": "range", "id": "padding_bottom", "label": "Section padding bottom (desktop)", "min": 0, "max": 160, "step": 5, "default": 0, "unit": "px" },
+
+    {
+      "type": "header",
+      "content": "Layout — Mobile (designed independently)"
+    },
+    { "type": "range", "id": "mobile_image_height", "label": "Image height (mobile)", "min": 300, "max": 700, "step": 10, "default": 480, "unit": "px" },
+    { "type": "select", "id": "mobile_content_align", "label": "Text alignment (mobile)", "default": "left", "options": [
+      { "value": "left", "label": "Left" },
+      { "value": "center", "label": "Center" }
+    ]},
+    { "type": "range", "id": "mobile_padding_top", "label": "Content padding top (mobile)", "min": 0, "max": 80, "step": 5, "default": 30, "unit": "px" },
+    { "type": "range", "id": "mobile_padding_bottom", "label": "Content padding bottom (mobile)", "min": 0, "max": 80, "step": 5, "default": 45, "unit": "px" },
+    { "type": "range", "id": "mobile_padding_x", "label": "Content side padding (mobile)", "min": 12, "max": 40, "step": 2, "default": 24, "unit": "px" },
+
+    {
+      "type": "header",
+      "content": "Spacing — shared"
+    },
+    { "type": "range", "id": "content_spacing", "label": "Space between elements", "min": 8, "max": 48, "step": 2, "default": 20, "unit": "px" },
+    { "type": "range", "id": "margin_top", "label": "Section margin top", "min": 0, "max": 120, "step": 5, "default": 0, "unit": "px" },
+    { "type": "range", "id": "margin_bottom", "label": "Section margin bottom", "min": 0, "max": 120, "step": 5, "default": 0, "unit": "px" }
+  ],
+  "presets": [
+    {
+      "name": "MA Atelier Editorial"
+    }
+  ]
+}
+{% endschema %}
