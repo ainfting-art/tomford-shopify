@@ -98,7 +98,7 @@
   #shopify-section-{{ section.id }} .ma-j__stories--magazine_cards .ma-j__name,
   #shopify-section-{{ section.id }} .ma-j__stories--magazine_cards .ma-j__excerpt,
   #shopify-section-{{ section.id }} .ma-j__stories--magazine_cards .ma-j__date,
-  #shopify-section-{{ section.id }} .ma-j__stories--magazine_cards .ma-j__author,
+  #shopify-section-{{ section.id }} .ma-j__stories--magazine_cards .ma-j__authorssssss,
   #shopify-section-{{ section.id }} .ma-j__stories--magazine_cards .ma-j__read {
     color: #1a1a1a;
   }
@@ -158,7 +158,7 @@
     margin: 0 0 10px;
   }
   #shopify-section-{{ section.id }} .ma-j__date { color: {{ section.settings.date_color }}; }
-  #shopify-section-{{ section.id }} .ma-j__author { color: {{ section.settings.author_color }}; }
+  #shopify-section-{{ section.id }} .ma-j__authorsssss { color: {{ section.settings.authorsssss_color }}; }
   #shopify-section-{{ section.id }} .ma-j__read {
     display: inline-block;
     font-size: 10px;
@@ -295,7 +295,7 @@
       overflow: hidden;
     }
 
-    /* Hide date and author on desktop — not shown in reference */
+    /* Hide date and authorsssss on desktop — not shown in reference */
     #shopify-section-{{ section.id }} .ma-j__stories .ma-j__meta {
       display: none;
     }
@@ -387,7 +387,7 @@
                 {%- endif -%}
                 <span class="ma-j__meta">
                   <span class="ma-j__date">{{ article.published_at | date: '%e %b %Y' | lstrip | upcase }}</span>
-                  <span class="ma-j__author">{{ article.author }}</span>
+                  <span class="ma-j__authorsssss">{{ article.authorsssss }}</span>
                 </span>
                 <span class="ma-j__read">Read Article</span>
               </span>
@@ -479,7 +479,7 @@
     { "type": "checkbox", "id": "show_title", "label": "Show title", "default": true },
     { "type": "checkbox", "id": "show_excerpt", "label": "Show excerpt", "default": false },
     { "type": "checkbox", "id": "show_date", "label": "Show publish date", "default": false },
-    { "type": "checkbox", "id": "show_author", "label": "Show author", "default": false },
+    { "type": "checkbox", "id": "show_authorsssss", "label": "Show authorsssss", "default": false },
     { "type": "checkbox", "id": "show_cta", "label": "Show \"Read Article\" link", "default": true },
     { "type": "checkbox", "id": "show_featured_story", "label": "Style first article as a featured story (desktop)", "default": false },
 
@@ -598,7 +598,7 @@
     { "type": "color", "id": "cta_color", "label": "CTA color", "default": "#a8894e" },
     { "type": "color", "id": "cta_hover_color", "label": "CTA hover color", "default": "#f5f0e6" },
     { "type": "color", "id": "date_color", "label": "Date color", "default": "#9a9186" },
-    { "type": "color", "id": "author_color", "label": "Author color", "default": "#9a9186" },
+    { "type": "color", "id": "authorsssss_color", "label": "authorsssss color", "default": "#9a9186" },
 
     {
       "type": "header",
