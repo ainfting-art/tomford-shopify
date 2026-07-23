@@ -27,6 +27,8 @@
     margin-top: {{ section.settings.margin_top }}px;
     margin-bottom: {{ section.settings.margin_bottom }}px;
     padding: {{ section.settings.padding_top }}px {{ section.settings.padding_right }}px {{ section.settings.padding_bottom }}px {{ section.settings.padding_left }}px;
+    overflow: visible;
+    height: auto;
   }
   #shopify-section-{{ section.id }} .ma-j__inner {
     max-width: {{ section.settings.section_width }}px;
@@ -226,6 +228,8 @@
       grid-template-columns: {{ section.settings.intro_width }}px 1fr;
       gap: {{ section.settings.content_spacing }}px;
       align-items: start;
+      height: auto;
+      overflow: visible;
     }
     #shopify-section-{{ section.id }} .ma-j__intro { margin-bottom: 0; }
     #shopify-section-{{ section.id }} .ma-j__heading { font-size: {{ section.settings.heading_size }}px; }
@@ -245,7 +249,7 @@
     /* Constrain image height on desktop so card body (title/CTA) is never pushed out of view */
     #shopify-section-{{ section.id }} .ma-j__stories .ma-j__media {
       aspect-ratio: {{ section.settings.image_aspect_ratio }};
-      max-height: 220px;
+      max-height: 180px;
     }
     #shopify-section-{{ section.id }} .ma-j__stories .ma-j__body {
       padding-top: 14px;
@@ -340,19 +344,11 @@
                 {%- if section.settings.show_excerpt and article.excerpt != blank -%}
                   <span class="ma-j__excerpt">{{ article.excerpt | strip_html | truncate: 110 }}</span>
                 {%- endif -%}
-                {%- if section.settings.show_date or section.settings.show_author -%}
-                  <span class="ma-j__meta">
-                    {%- if section.settings.show_date -%}
-                      <span class="ma-j__date">{{ article.published_at | date: '%e %b %Y' | lstrip | upcase }}</span>
-                    {%- endif -%}
-                    {%- if section.settings.show_author -%}
-                      <span class="ma-j__author">{{ article.author }}</span>
-                    {%- endif -%}
-                  </span>
-                {%- endif -%}
-                {%- if section.settings.show_cta -%}
-                  <span class="ma-j__read">Read Article →</span>
-                {%- endif -%}
+                <span class="ma-j__meta">
+                  <span class="ma-j__date">{{ article.published_at | date: '%e %b %Y' | lstrip | upcase }}</span>
+                  <span class="ma-j__author">{{ article.author }}</span>
+                </span>
+                <span class="ma-j__read">Read Article →</span>
               </span>
             </a>
           {%- endif -%}
