@@ -1351,7 +1351,7 @@
         "cta_letter_spacing": 2,
         "cta_color": "#f5f0e6",
         "cta_hover_color": "#c9a24b",
-        "section_height": 640,
+        "section_height": 520,
         "content_width": 42,
         "content_max_width": 520,
         "text_position_x": "left",
@@ -1737,7 +1737,7 @@
         "padding_right": 40,
         "margin_top": 0,
         "margin_bottom": 0,
-        "section_width": 1600,
+        "section_width": 900,
         "section_min_height": 380
       }
     }
