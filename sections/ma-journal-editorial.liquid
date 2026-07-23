@@ -223,56 +223,96 @@
 
   /* ---------- Desktop: editorial intro + curated cards ---------- */
   @media (min-width: 750px) {
+
+    /* Outer section: never clip, always auto height */
+    #shopify-section-{{ section.id }} .ma-j {
+      overflow: visible;
+      height: auto;
+    }
+
+    /* Two-column layout: fixed intro width | flexible stories */
     #shopify-section-{{ section.id }} .ma-j__inner {
       display: grid;
       grid-template-columns: {{ section.settings.intro_width }}px 1fr;
       gap: {{ section.settings.content_spacing }}px;
-      align-items: start;
+      align-items: center;
       height: auto;
       overflow: visible;
     }
     #shopify-section-{{ section.id }} .ma-j__intro { margin-bottom: 0; }
-    #shopify-section-{{ section.id }} .ma-j__heading { font-size: {{ section.settings.heading_size }}px; }
 
+    /* Left column typography — match reference: small eyebrow, large serif heading, underlined CTA */
+    #shopify-section-{{ section.id }} .ma-j__heading {
+      font-size: {{ section.settings.heading_size }}px;
+    }
+
+    /* Stories grid: 3 equal columns, no overflow clipping */
     #shopify-section-{{ section.id }} .ma-j__stories {
       display: grid !important;
-      grid-template-columns: repeat({{ section.settings.desktop_columns }}, {{ section.settings.card_min_width }}px);
-      justify-content: start;
+      grid-template-columns: repeat({{ section.settings.desktop_columns }}, 1fr);
       gap: {{ section.settings.card_gap }}px;
       overflow: visible;
+      height: auto;
     }
+
+    /* Each card: block, full height auto, no flex leakage from mobile */
     #shopify-section-{{ section.id }} .ma-j__stories .ma-j__card {
       display: block;
       flex: none;
       margin-bottom: 0;
+      overflow: visible;
+      height: auto;
     }
-    /* Constrain image height on desktop so card body (title/CTA) is never pushed out of view */
-    #shopify-section-{{ section.id }} .ma-j__stories .ma-j__media {
-      aspect-ratio: {{ section.settings.image_aspect_ratio }};
-      max-height: 180px;
-    }
-    #shopify-section-{{ section.id }} .ma-j__stories .ma-j__body {
-      padding-top: 14px;
-      padding-left: 0;
-      padding-right: 0;
-    }
-    {% if section.settings.show_featured_story %}
-      #shopify-section-{{ section.id }} .ma-j__stories .ma-j__card:first-child .ma-j__media {
-        aspect-ratio: {{ section.settings.featured_image_aspect }};
-      }
-      #shopify-section-{{ section.id }} .ma-j__stories .ma-j__card:first-child .ma-j__name {
-        font-size: {{ section.settings.title_size | plus: 3 }}px;
-      }
-    {% endif %}
 
-    /* Reset mobile-only layout styling so desktop is always uniform, no matter which
-       mobile layout is selected (Full Editorial's small-row treatment for non-first
-       cards otherwise leaks through due to higher selector specificity). */
+    /* Image: compact 4:3 ratio, never taller than 160px — keeps body text always visible */
+    #shopify-section-{{ section.id }} .ma-j__stories .ma-j__media {
+      aspect-ratio: 4 / 3;
+      max-height: 160px;
+      width: 100%;
+    }
+
+    /* Card body: flush left, tight top spacing, no extra padding */
+    #shopify-section-{{ section.id }} .ma-j__stories .ma-j__body {
+      padding: 12px 0 0 0;
+    }
+
+    /* Category: gold uppercase small — exactly like reference INGREDIENTS / RITUALS / CULTURE */
+    #shopify-section-{{ section.id }} .ma-j__stories .ma-j__category {
+      display: block;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      margin-bottom: 6px;
+    }
+
+    /* Title: serif, white, 2-line max, compact size */
+    #shopify-section-{{ section.id }} .ma-j__stories .ma-j__name {
+      font-size: 16px;
+      line-height: 1.3;
+      margin-bottom: 10px;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* Hide date and author on desktop — not shown in reference */
+    #shopify-section-{{ section.id }} .ma-j__stories .ma-j__meta {
+      display: none;
+    }
+
+    /* Read Article: small underlined, no arrow styling needed */
+    #shopify-section-{{ section.id }} .ma-j__stories .ma-j__read {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+    }
+
+    /* Reset all mobile Full Editorial overrides so desktop is always uniform */
     #shopify-section-{{ section.id }} .ma-j__stories--full_editorial .ma-j__card:first-child .ma-j__media {
-      aspect-ratio: {{ section.settings.image_aspect_ratio }};
+      aspect-ratio: 4 / 3;
+      max-height: 160px;
     }
     #shopify-section-{{ section.id }} .ma-j__stories--full_editorial .ma-j__card:first-child .ma-j__name {
-      font-size: {{ section.settings.title_size }}px;
+      font-size: 16px;
     }
     #shopify-section-{{ section.id }} .ma-j__stories--full_editorial .ma-j__card:not(:first-child) {
       display: block;
@@ -280,12 +320,13 @@
     }
     #shopify-section-{{ section.id }} .ma-j__stories--full_editorial .ma-j__card:not(:first-child) .ma-j__media {
       flex: none;
-      aspect-ratio: {{ section.settings.image_aspect_ratio }};
+      aspect-ratio: 4 / 3;
+      max-height: 160px;
     }
     #shopify-section-{{ section.id }} .ma-j__stories--full_editorial .ma-j__card:not(:first-child) .ma-j__body {
       flex: none;
-      padding: 0;
-      margin-top: {{ section.settings.text_spacing }}px;
+      padding: 12px 0 0 0;
+      margin-top: 0;
     }
   }
 {% endstyle %}
@@ -348,7 +389,7 @@
                   <span class="ma-j__date">{{ article.published_at | date: '%e %b %Y' | lstrip | upcase }}</span>
                   <span class="ma-j__author">{{ article.author }}</span>
                 </span>
-                <span class="ma-j__read">Read Article →</span>
+                <span class="ma-j__read">Read Article</span>
               </span>
             </a>
           {%- endif -%}
