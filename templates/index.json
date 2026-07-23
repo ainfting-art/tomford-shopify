@@ -1688,7 +1688,7 @@
         "hover_zoom": true,
         "hover_darken": false,
         "parallax_image": false,
-        "card_shadow_strength": 15,
+        "card_shadow_strength": 60,
         "eyebrow_font": "sans_serif_n4",
         "eyebrow_weight": "500",
         "eyebrow_size": 12,
