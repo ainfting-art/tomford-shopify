@@ -242,6 +242,16 @@
       flex: none;
       margin-bottom: 0;
     }
+    /* Constrain image height on desktop so card body (title/CTA) is never pushed out of view */
+    #shopify-section-{{ section.id }} .ma-j__stories .ma-j__media {
+      aspect-ratio: {{ section.settings.image_aspect_ratio }};
+      max-height: 220px;
+    }
+    #shopify-section-{{ section.id }} .ma-j__stories .ma-j__body {
+      padding-top: 14px;
+      padding-left: 0;
+      padding-right: 0;
+    }
     {% if section.settings.show_featured_story %}
       #shopify-section-{{ section.id }} .ma-j__stories .ma-j__card:first-child .ma-j__media {
         aspect-ratio: {{ section.settings.featured_image_aspect }};
