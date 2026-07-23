@@ -37,15 +37,17 @@
     display: flex;
     width: max-content;
     gap: {{ section.settings.card_gap }}px;
-    animation: ma-vs-scroll-{{ section.id }} {{ section.settings.scroll_speed }}s linear infinite;
+    cursor: grab;
+    touch-action: pan-y;
+    will-change: transform;
   }
-  #shopify-section-{{ section.id }}.ma-vs-paused .ma-vs__track,
-  #shopify-section-{{ section.id }} .ma-vs__viewport:hover .ma-vs__track {
-    animation-play-state: {% if section.settings.pause_on_hover %}paused{% else %}running{% endif %};
+  #shopify-section-{{ section.id }} .ma-vs__track.is-dragging {
+    cursor: grabbing;
   }
-  @keyframes ma-vs-scroll-{{ section.id }} {
-    from { transform: translateX(0); }
-    to { transform: translateX(calc(-50% - {{ section.settings.card_gap }}px / 2)); }
+  #shopify-section-{{ section.id }} .ma-vs__card,
+  #shopify-section-{{ section.id }} .ma-vs__card * {
+    user-select: none;
+    -webkit-user-drag: none;
   }
   #shopify-section-{{ section.id }} .ma-vs__set {
     display: flex;
@@ -142,9 +144,6 @@
     #shopify-section-{{ section.id }} .ma-vs__heading { font-size: {{ section.settings.heading_size | times: 0.6 | round }}px; }
     #shopify-section-{{ section.id }} .ma-vs__subtitle { font-size: {{ section.settings.subtitle_size | times: 0.75 | round }}px; }
   }
-  @media (prefers-reduced-motion: reduce) {
-    #shopify-section-{{ section.id }} .ma-vs__track { animation: none; }
-  }
 {% endstyle %}
 
 <section class="ma-video-showcase" id="ma-video-showcase-{{ section.id }}">
@@ -205,6 +204,109 @@
   {%- endif -%}
 </section>
 
+<script>
+(function () {
+  var root = document.getElementById('ma-video-showcase-{{ section.id }}');
+  if (!root) return;
+  var viewport = root.querySelector('.ma-vs__viewport');
+  var track = root.querySelector('.ma-vs__track');
+  if (!track) return;
+
+  var loopSeconds = {{ section.settings.scroll_speed }};
+  var pauseOnHover = {{ section.settings.pause_on_hover | json }};
+  var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var halfWidth = 0;
+  var speed = 0;
+  var pos = 0;
+  var isDragging = false;
+  var isHovering = false;
+  var startX = 0;
+  var startPos = 0;
+  var dragDistance = 0;
+  var suppressClick = false;
+  var lastTime = null;
+
+  function measure() {
+    halfWidth = track.scrollWidth / 2;
+    speed = loopSeconds > 0 ? halfWidth / loopSeconds : 0;
+  }
+
+  function wrap(p) {
+    if (halfWidth <= 0) return 0;
+    while (p <= -halfWidth) p += halfWidth;
+    while (p > 0) p -= halfWidth;
+    return p;
+  }
+
+  function applyTransform() {
+    track.style.transform = 'translateX(' + pos + 'px)';
+  }
+
+  function tick(time) {
+    if (lastTime === null) lastTime = time;
+    var dt = (time - lastTime) / 1000;
+    lastTime = time;
+    if (!isDragging && !reducedMotion && !(pauseOnHover && isHovering)) {
+      pos = wrap(pos - speed * dt);
+      applyTransform();
+    }
+    requestAnimationFrame(tick);
+  }
+
+  measure();
+  requestAnimationFrame(tick);
+  window.addEventListener('resize', measure);
+
+  viewport.addEventListener('mouseenter', function () { isHovering = true; });
+  viewport.addEventListener('mouseleave', function () { isHovering = false; });
+
+  function onPointerDown(e) {
+    isDragging = true;
+    dragDistance = 0;
+    startX = e.clientX;
+    startPos = pos;
+    track.classList.add('is-dragging');
+    if (track.setPointerCapture) {
+      try { track.setPointerCapture(e.pointerId); } catch (err) {}
+    }
+  }
+
+  function onPointerMove(e) {
+    if (!isDragging) return;
+    var dx = e.clientX - startX;
+    dragDistance = Math.abs(dx);
+    pos = wrap(startPos + dx);
+    applyTransform();
+  }
+
+  function onPointerUp() {
+    if (!isDragging) return;
+    isDragging = false;
+    track.classList.remove('is-dragging');
+    if (dragDistance > 6) suppressClick = true;
+  }
+
+  track.addEventListener('pointerdown', onPointerDown);
+  track.addEventListener('pointermove', onPointerMove);
+  track.addEventListener('pointerup', onPointerUp);
+  track.addEventListener('pointercancel', onPointerUp);
+  track.addEventListener('pointerleave', function (e) {
+    if (isDragging && e.buttons === 0) onPointerUp();
+  });
+
+  track.addEventListener('click', function (e) {
+    if (suppressClick) {
+      e.preventDefault();
+      e.stopPropagation();
+      suppressClick = false;
+    }
+  }, true);
+
+  track.addEventListener('dragstart', function (e) { e.preventDefault(); });
+})();
+</script>
+
 {% schema %}
 {
   "name": "MA Video Showcase",
@@ -234,7 +336,8 @@
     { "type": "range", "id": "card_width_mobile", "label": "Card width (mobile)", "min": 100, "max": 240, "step": 5, "default": 150, "unit": "px" },
     { "type": "range", "id": "card_gap", "label": "Gap between cards", "min": 0, "max": 60, "step": 2, "default": 14, "unit": "px" },
     { "type": "range", "id": "card_radius", "label": "Card corner radius", "min": 0, "max": 40, "step": 1, "default": 10, "unit": "px" },
-    { "type": "range", "id": "scroll_speed", "label": "Rotation speed (seconds per full loop — lower is faster)", "min": 10, "max": 110, "step": 1, "default": 45 },    { "type": "checkbox", "id": "pause_on_hover", "label": "Pause on hover", "default": true },
+    { "type": "range", "id": "scroll_speed", "label": "Rotation speed (seconds per full loop — lower is faster)", "min": 10, "max": 110, "step": 1, "default": 45 },
+    { "type": "checkbox", "id": "pause_on_hover", "label": "Pause auto-rotation on hover (dragging always works)", "default": true },
 
     {
       "type": "header",
