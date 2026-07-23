@@ -1655,10 +1655,10 @@
       "type": "ma-journal-editorial",
       "name": "MA Journal Editorial",
       "settings": {
-        "eyebrow": "Notes on Craft & Scent",
+        "eyebrow": "Journal",
         "heading": "Thoughts on scent, craft and culture.",
         "cta_text": "Explore the Journal",
-        "cta_link": "",
+        "cta_link": "shopify://blogs/blogs",
         "cta_underline": true,
         "blog": "blogs",
         "rotation_days": 3,
