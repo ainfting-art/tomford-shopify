@@ -1,0 +1,274 @@
+{% style %}
+  #shopify-section-{{ section.id }} .ma-video-showcase {
+    background: {{ section.settings.background_color }};
+    padding: {{ section.settings.section_padding_top }}px 0 {{ section.settings.section_padding_bottom }}px;
+    position: relative;
+    overflow: hidden;
+  }
+  #shopify-section-{{ section.id }} .ma-vs__header {
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto clamp(24px, 4vw, 44px);
+    padding: 0 20px;
+    position: relative;
+  }
+  #shopify-section-{{ section.id }} .ma-vs__subtitle {
+    display: inline-block;
+    font-family: {{ section.settings.subtitle_font.family }}, cursive;
+    font-weight: {{ section.settings.subtitle_font.weight }};
+    color: {{ section.settings.subtitle_color }};
+    font-size: {{ section.settings.subtitle_size }}px;
+    transform: rotate(-4deg) translateY(6px);
+    margin: 0;
+  }
+  #shopify-section-{{ section.id }} .ma-vs__heading {
+    font-family: {{ section.settings.heading_font.family }}, serif;
+    font-weight: {{ section.settings.heading_font.weight }};
+    color: {{ section.settings.heading_color }};
+    font-size: {{ section.settings.heading_size }}px;
+    line-height: 1.15;
+    margin: 0;
+  }
+  #shopify-section-{{ section.id }} .ma-vs__viewport {
+    overflow: hidden;
+    width: 100%;
+  }
+  #shopify-section-{{ section.id }} .ma-vs__track {
+    display: flex;
+    width: max-content;
+    gap: {{ section.settings.card_gap }}px;
+    animation: ma-vs-scroll-{{ section.id }} {{ section.settings.scroll_speed }}s linear infinite;
+  }
+  #shopify-section-{{ section.id }}.ma-vs-paused .ma-vs__track,
+  #shopify-section-{{ section.id }} .ma-vs__viewport:hover .ma-vs__track {
+    animation-play-state: {% if section.settings.pause_on_hover %}paused{% else %}running{% endif %};
+  }
+  @keyframes ma-vs-scroll-{{ section.id }} {
+    from { transform: translateX(0); }
+    to { transform: translateX(calc(-50% - {{ section.settings.card_gap }}px / 2)); }
+  }
+  #shopify-section-{{ section.id }} .ma-vs__set {
+    display: flex;
+    gap: {{ section.settings.card_gap }}px;
+    flex-shrink: 0;
+  }
+  #shopify-section-{{ section.id }} .ma-vs__card {
+    position: relative;
+    flex: 0 0 auto;
+    width: {{ section.settings.card_width }}px;
+    aspect-ratio: 9 / 16;
+    border-radius: {{ section.settings.card_radius }}px;
+    overflow: hidden;
+    display: block;
+    background: #000;
+    text-decoration: none;
+  }
+  #shopify-section-{{ section.id }} .ma-vs__card video,
+  #shopify-section-{{ section.id }} .ma-vs__card img.ma-vs__poster {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  #shopify-section-{{ section.id }} .ma-vs__footer {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px;
+    background: linear-gradient(180deg, transparent, rgba(0,0,0,0.55) 60%);
+  }
+  #shopify-section-{{ section.id }} .ma-vs__thumb {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    object-fit: cover;
+    flex-shrink: 0;
+    border: 1px solid rgba(255,255,255,0.4);
+  }
+  #shopify-section-{{ section.id }} .ma-vs__meta {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+    min-width: 0;
+  }
+  #shopify-section-{{ section.id }} .ma-vs__product-name {
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  #shopify-section-{{ section.id }} .ma-vs__price {
+    font-size: 11px;
+    display: flex;
+    gap: 6px;
+  }
+  #shopify-section-{{ section.id }} .ma-vs__price-current {
+    color: #fff;
+  }
+  #shopify-section-{{ section.id }} .ma-vs__price-compare {
+    color: rgba(255,255,255,0.55);
+    text-decoration: line-through;
+  }
+  #shopify-section-{{ section.id }} .ma-vs__badge {
+    position: absolute;
+    left: clamp(16px, 3vw, 40px);
+    bottom: clamp(16px, 3vw, 32px);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: {{ section.settings.badge_bg_color }};
+    color: {{ section.settings.badge_text_color }};
+    padding: 10px 18px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    z-index: 2;
+  }
+  #shopify-section-{{ section.id }} .ma-vs__badge svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+  }
+  @media (max-width: 749px) {
+    #shopify-section-{{ section.id }} .ma-vs__card {
+      width: {{ section.settings.card_width_mobile }}px;
+    }
+    #shopify-section-{{ section.id }} .ma-vs__heading { font-size: {{ section.settings.heading_size | times: 0.6 | round }}px; }
+    #shopify-section-{{ section.id }} .ma-vs__subtitle { font-size: {{ section.settings.subtitle_size | times: 0.75 | round }}px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #shopify-section-{{ section.id }} .ma-vs__track { animation: none; }
+  }
+{% endstyle %}
+
+<section class="ma-video-showcase" id="ma-video-showcase-{{ section.id }}">
+  <div class="ma-vs__header">
+    {%- if section.settings.subtitle != blank -%}
+      <p class="ma-vs__subtitle">{{ section.settings.subtitle }}</p>
+    {%- endif -%}
+    {%- if section.settings.heading != blank -%}
+      <h2 class="ma-vs__heading">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+  </div>
+
+  <div class="ma-vs__viewport">
+    <div class="ma-vs__track">
+      {%- for i in (1..2) -%}
+        <div class="ma-vs__set" aria-hidden="{% if i == 2 %}true{% else %}false{% endif %}">
+          {%- for block in section.blocks -%}
+            {%- assign product = block.settings.product -%}
+            <a
+              href="{% if product != blank %}{{ product.url }}{% else %}{{ block.settings.custom_link }}{% endif %}"
+              class="ma-vs__card"
+              {% if i == 1 %}{{ block.shopify_attributes }}{% endif %}
+            >
+              {%- if block.settings.video != blank -%}
+                {{ block.settings.video | video_tag: autoplay: true, loop: true, muted: true, controls: false, playsinline: true, image_size: '600x' }}
+              {%- elsif block.settings.poster_image != blank -%}
+                <img class="ma-vs__poster" src="{{ block.settings.poster_image | image_url: width: 600 }}" alt="{{ block.settings.poster_image.alt | escape }}" loading="lazy">
+              {%- endif -%}
+
+              {%- if product != blank -%}
+                <div class="ma-vs__footer">
+                  {%- if product.featured_image != blank -%}
+                    <img class="ma-vs__thumb" src="{{ product.featured_image | image_url: width: 64 }}" alt="{{ product.title | escape }}">
+                  {%- endif -%}
+                  <div class="ma-vs__meta">
+                    <span class="ma-vs__product-name">{{ product.title }}</span>
+                    <span class="ma-vs__price">
+                      <span class="ma-vs__price-current">{{ product.price | money }}</span>
+                      {%- if product.compare_at_price > product.price -%}
+                        <span class="ma-vs__price-compare">{{ product.compare_at_price | money }}</span>
+                      {%- endif -%}
+                    </span>
+                  </div>
+                </div>
+              {%- endif -%}
+            </a>
+          {%- endfor -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+
+  {%- if section.settings.badge_enabled -%}
+    <a class="ma-vs__badge" href="{{ section.settings.badge_link }}">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 12v9H4v-9M2 7h20v5H2V7zM12 22V7M12 7C10 7 8 5.5 8 3.5S9.5 1 11 1c2.5 0 3.5 3 1 6M12 7c2 0 4-1.5 4-3.5S14.5 1 13 1c-2.5 0-3.5 3-1 6z"/></svg>
+      <span>{{ section.settings.badge_text }}</span>
+    </a>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "MA Video Showcase",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Header text"
+    },
+    { "type": "text", "id": "subtitle", "label": "Subtitle (script text)", "default": "for every mood" },
+    { "type": "font_picker", "id": "subtitle_font", "label": "Subtitle font", "default": "helvetica_n4" },
+    { "type": "range", "id": "subtitle_size", "label": "Subtitle size", "min": 14, "max": 40, "step": 1, "default": 24, "unit": "px" },
+    { "type": "color", "id": "subtitle_color", "label": "Subtitle color", "default": "#c0263d" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "experience the collection" },
+    { "type": "font_picker", "id": "heading_font", "label": "Heading font", "default": "playfair_display_n4" },
+    { "type": "range", "id": "heading_size", "label": "Heading size", "min": 24, "max": 64, "step": 1, "default": 44, "unit": "px" },
+    { "type": "color", "id": "heading_color", "label": "Heading color", "default": "#1a1a1a" },
+
+    {
+      "type": "header",
+      "content": "Layout & motion"
+    },
+    { "type": "color", "id": "background_color", "label": "Section background", "default": "#f5f1e9" },
+    { "type": "range", "id": "section_padding_top", "label": "Top padding", "min": 0, "max": 120, "step": 4, "default": 64, "unit": "px" },
+    { "type": "range", "id": "section_padding_bottom", "label": "Bottom padding", "min": 0, "max": 120, "step": 4, "default": 64, "unit": "px" },
+    { "type": "range", "id": "card_width", "label": "Card width (desktop)", "min": 160, "max": 340, "step": 5, "default": 215, "unit": "px" },
+    { "type": "range", "id": "card_width_mobile", "label": "Card width (mobile)", "min": 100, "max": 240, "step": 5, "default": 150, "unit": "px" },
+    { "type": "range", "id": "card_gap", "label": "Gap between cards", "min": 0, "max": 60, "step": 2, "default": 14, "unit": "px" },
+    { "type": "range", "id": "card_radius", "label": "Card corner radius", "min": 0, "max": 40, "step": 1, "default": 10, "unit": "px" },
+    { "type": "range", "id": "scroll_speed", "label": "Rotation speed (seconds per full loop — lower is faster)", "min": 10, "max": 110, "step": 1, "default": 45 },    { "type": "checkbox", "id": "pause_on_hover", "label": "Pause on hover", "default": true },
+
+    {
+      "type": "header",
+      "content": "Floating badge"
+    },
+    { "type": "checkbox", "id": "badge_enabled", "label": "Show badge", "default": true },
+    { "type": "text", "id": "badge_text", "label": "Badge text", "default": "Fifth Sense India" },
+    { "type": "url", "id": "badge_link", "label": "Badge link" },
+    { "type": "color", "id": "badge_bg_color", "label": "Badge background", "default": "#8c1c2b" },
+    { "type": "color", "id": "badge_text_color", "label": "Badge text color", "default": "#ffffff" }
+  ],
+  "blocks": [
+    {
+      "type": "video",
+      "name": "Video card",
+      "settings": [
+        { "type": "video", "id": "video", "label": "Video (uploaded to Shopify Files)" },
+        { "type": "image_picker", "id": "poster_image", "label": "Fallback poster image (used if no video)" },
+        { "type": "product", "id": "product", "label": "Linked product (pulls name, price & thumbnail automatically)" },
+        { "type": "url", "id": "custom_link", "label": "Custom link (only used if no product is selected)" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "MA Video Showcase",
+      "blocks": [
+        { "type": "video" },
+        { "type": "video" },
+        { "type": "video" },
+        { "type": "video" },
+        { "type": "video" }
+      ]
+    }
+  ]
+}
+{% endschema %}
