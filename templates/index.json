@@ -1674,7 +1674,7 @@
         "intro_width": 520,
         "desktop_columns": 3,
         "card_min_width": 200,
-        "card_gap": 20,
+        "card_gap": 40,
         "featured_image_aspect": "1 / 1",
         "mobile_layout": "full_editorial",
         "mobile_card_width": 300,
@@ -1687,7 +1687,7 @@
         "reveal_on_scroll": true,
         "hover_zoom": true,
         "hover_darken": false,
-        "parallax_image": true,
+        "parallax_image": false,
         "card_shadow_strength": 15,
         "eyebrow_font": "sans_serif_n4",
         "eyebrow_weight": "500",
@@ -1739,7 +1739,7 @@
         "margin_top": 0,
         "margin_bottom": 0,
         "section_width": 1140,
-        "section_min_height": 320
+        "section_min_height": 340
       }
     }
   },
