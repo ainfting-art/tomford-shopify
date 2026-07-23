@@ -1670,7 +1670,7 @@
         "show_author": true,
         "show_cta": true,
         "show_featured_story": true,
-        "intro_width": 520,
+        "intro_width": 240,
         "desktop_columns": 3,
         "card_min_width": 200,
         "card_gap": 14,
