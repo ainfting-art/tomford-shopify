@@ -247,6 +247,29 @@
         font-size: {{ section.settings.title_size | plus: 3 }}px;
       }
     {% endif %}
+
+    /* Reset mobile-only layout styling so desktop is always uniform, no matter which
+       mobile layout is selected (Full Editorial's small-row treatment for non-first
+       cards otherwise leaks through due to higher selector specificity). */
+    #shopify-section-{{ section.id }} .ma-j__stories--full_editorial .ma-j__card:first-child .ma-j__media {
+      aspect-ratio: {{ section.settings.image_aspect_ratio }};
+    }
+    #shopify-section-{{ section.id }} .ma-j__stories--full_editorial .ma-j__card:first-child .ma-j__name {
+      font-size: {{ section.settings.title_size }}px;
+    }
+    #shopify-section-{{ section.id }} .ma-j__stories--full_editorial .ma-j__card:not(:first-child) {
+      display: block;
+      align-items: normal;
+    }
+    #shopify-section-{{ section.id }} .ma-j__stories--full_editorial .ma-j__card:not(:first-child) .ma-j__media {
+      flex: none;
+      aspect-ratio: {{ section.settings.image_aspect_ratio }};
+    }
+    #shopify-section-{{ section.id }} .ma-j__stories--full_editorial .ma-j__card:not(:first-child) .ma-j__body {
+      flex: none;
+      padding: 0;
+      margin-top: {{ section.settings.text_spacing }}px;
+    }
   }
 {% endstyle %}
 
