@@ -75,18 +75,28 @@
   #shopify-section-{{ section.id }} .ma-j__card {
     display: block;
     text-decoration: none;
-    background: {{ section.settings.card_bg_color }};
+    background: transparent;
     color: {{ section.settings.card_text_color }};
-    border: 1px solid {{ section.settings.card_border_color }};
+    border: 0;
     border-radius: {{ section.settings.image_radius }}px;
     overflow: hidden;
     transition: background 0.35s ease, color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+  }
+  #shopify-section-{{ section.id }} .ma-j__stories--magazine_cards .ma-j__card {
+    background: {{ section.settings.card_bg_color }};
+    border: 1px solid {{ section.settings.card_border_color }};
     {% if section.settings.card_shadow_strength > 0 %}box-shadow: 0 {{ section.settings.card_shadow_strength }}px {{ section.settings.card_shadow_strength | times: 2 }}px rgba(0,0,0,{{ section.settings.card_shadow_strength | times: 1.0 | divided_by: 100 }});{% endif %}
   }
-  #shopify-section-{{ section.id }} .ma-j__card:hover {
+  #shopify-section-{{ section.id }} .ma-j__stories--magazine_cards .ma-j__card:hover {
     background: {{ section.settings.card_hover_bg_color }};
-    color: {{ section.settings.card_hover_text_color }};
     border-color: {{ section.settings.card_hover_border_color }};
+  }
+  #shopify-section-{{ section.id }} .ma-j__stories--magazine_cards .ma-j__name,
+  #shopify-section-{{ section.id }} .ma-j__stories--magazine_cards .ma-j__excerpt,
+  #shopify-section-{{ section.id }} .ma-j__stories--magazine_cards .ma-j__date,
+  #shopify-section-{{ section.id }} .ma-j__stories--magazine_cards .ma-j__author,
+  #shopify-section-{{ section.id }} .ma-j__stories--magazine_cards .ma-j__read {
+    color: #1a1a1a;
   }
   #shopify-section-{{ section.id }} .ma-j__media {
     position: relative;
@@ -234,10 +244,6 @@
       }
       #shopify-section-{{ section.id }} .ma-j__stories .ma-j__card:first-child .ma-j__name {
         font-size: {{ section.settings.title_size | plus: 3 }}px;
-      }
-      #shopify-section-{{ section.id }} .ma-j__stories .ma-j__card:first-child {
-        background: {{ section.settings.featured_card_bg }};
-        color: {{ section.settings.featured_text_color }};
       }
     {% endif %}
   }
@@ -401,7 +407,7 @@
     { "type": "checkbox", "id": "show_date", "label": "Show publish date", "default": false },
     { "type": "checkbox", "id": "show_author", "label": "Show author", "default": false },
     { "type": "checkbox", "id": "show_cta", "label": "Show \"Read Article\" link", "default": true },
-    { "type": "checkbox", "id": "show_featured_story", "label": "Style first article as a featured story (desktop)", "default": true },
+    { "type": "checkbox", "id": "show_featured_story", "label": "Style first article as a featured story (desktop)", "default": false },
 
     {
       "type": "header",
@@ -423,11 +429,11 @@
       "content": "Mobile layout"
     },
     { "type": "select", "id": "mobile_layout", "label": "Mobile story layout", "default": "editorial_stack", "options": [
-  { "value": "editorial_stack", "label": "01 — Editorial Stack" },
-  { "value": "magazine_cards", "label": "02 — Magazine Cards" },
-  { "value": "full_editorial", "label": "03 — Full Editorial" },
-  { "value": "horizontal_scroll", "label": "04 — Horizontal Scroll" }
-]},
+      { "value": "editorial_stack", "label": "01 — Editorial Stack" },
+      { "value": "magazine_cards", "label": "02 — Magazine Cards" },
+      { "value": "full_editorial", "label": "03 — Full Editorial" },
+      { "value": "horizontal_scroll", "label": "04 — Horizontal Scroll" }
+    ]},
     { "type": "range", "id": "mobile_card_width", "label": "Card width (horizontal scroll layout)", "min": 220, "max": 360, "step": 10, "default": 300, "unit": "px" },
     { "type": "range", "id": "mobile_card_gap", "label": "Card spacing (horizontal scroll layout)", "min": 8, "max": 40, "step": 2, "default": 20, "unit": "px" },
     { "type": "range", "id": "story_spacing", "label": "Story spacing (stacked mobile layouts)", "min": 0, "max": 80, "step": 4, "default": 32, "unit": "px" },
@@ -498,12 +504,12 @@
       { "value": "400", "label": "Regular" }, { "value": "500", "label": "Medium" }, { "value": "600", "label": "Semibold" }, { "value": "700", "label": "Bold" }
     ]},
     { "type": "range", "id": "title_size", "label": "Title size", "min": 14, "max": 26, "step": 1, "default": 18, "unit": "px" },
-    { "type": "color", "id": "title_color", "label": "Title color", "default": "#1a1a1a" },
+    { "type": "color", "id": "title_color", "label": "Title color", "default": "#f5f0e6" },
 
     { "type": "font_picker", "id": "excerpt_font", "label": "Excerpt font", "default": "helvetica_n4" },
     { "type": "range", "id": "excerpt_size", "label": "Excerpt size", "min": 11, "max": 18, "step": 1, "default": 13, "unit": "px" },
     { "type": "range", "id": "excerpt_line_height", "label": "Excerpt line height", "min": 1.2, "max": 1.8, "step": 0.1, "default": 1.5 },
-    { "type": "color", "id": "excerpt_color", "label": "Excerpt color", "default": "#4a4a4a" },
+    { "type": "color", "id": "excerpt_color", "label": "Excerpt color", "default": "#c9c2b3" },
 
     {
       "type": "header",
@@ -516,9 +522,9 @@
     { "type": "range", "id": "cta_size", "label": "CTA size", "min": 10, "max": 18, "step": 1, "default": 12, "unit": "px" },
     { "type": "range", "id": "cta_letter_spacing", "label": "CTA letter spacing", "min": 0, "max": 5, "step": 0.5, "default": 2, "unit": "px" },
     { "type": "color", "id": "cta_color", "label": "CTA color", "default": "#a8894e" },
-    { "type": "color", "id": "cta_hover_color", "label": "CTA hover color", "default": "#1a1a1a" },
-    { "type": "color", "id": "date_color", "label": "Date color", "default": "#8a8a8a" },
-    { "type": "color", "id": "author_color", "label": "Author color", "default": "#8a8a8a" },
+    { "type": "color", "id": "cta_hover_color", "label": "CTA hover color", "default": "#f5f0e6" },
+    { "type": "color", "id": "date_color", "label": "Date color", "default": "#9a9186" },
+    { "type": "color", "id": "author_color", "label": "Author color", "default": "#9a9186" },
 
     {
       "type": "header",
@@ -532,7 +538,7 @@
       "content": "Card colors"
     },
     { "type": "color", "id": "card_bg_color", "label": "Card background", "default": "#f5f1e9" },
-    { "type": "color", "id": "card_text_color", "label": "Card text", "default": "#1a1a1a" },
+    { "type": "color", "id": "card_text_color", "label": "Card text", "default": "#f5f0e6" },
     { "type": "color", "id": "card_border_color", "label": "Card border", "default": "#f5f1e9" },
     { "type": "color", "id": "card_hover_bg_color", "label": "Card hover background", "default": "#f5f1e9" },
     { "type": "color", "id": "card_hover_text_color", "label": "Card hover text", "default": "#1a1a1a" },
