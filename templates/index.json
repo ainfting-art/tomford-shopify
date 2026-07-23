@@ -1504,6 +1504,84 @@
         "padding-block-start": 0,
         "padding-block-end": 0
       }
+    },
+    "video_showcase_Jgy4PX": {
+      "type": "video-showcase",
+      "blocks": {
+        "video_6W7By4": {
+          "type": "video",
+          "settings": {
+            "video": "shopify://files/videos/MARINE AQUA (1).mp4",
+            "product": "",
+            "custom_link": ""
+          }
+        },
+        "video_7de3QK": {
+          "type": "video",
+          "settings": {
+            "video": "shopify://files/videos/HERO BANNER VIDEO 700x800.mp4",
+            "product": "",
+            "custom_link": ""
+          }
+        },
+        "video_NWVRCr": {
+          "type": "video",
+          "settings": {
+            "video": "shopify://files/videos/MOBILE BANNER 700x800 (2)_789a065f-f775-4765-9410-c9463d862b08.mp4",
+            "product": "",
+            "custom_link": ""
+          }
+        },
+        "video_daUL3A": {
+          "type": "video",
+          "settings": {
+            "video": "shopify://files/videos/Video Project 5.mp4",
+            "product": "",
+            "custom_link": ""
+          }
+        },
+        "video_ym4ecF": {
+          "type": "video",
+          "settings": {
+            "video": "shopify://files/videos/Video Project 4.mp4",
+            "product": "",
+            "custom_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "video_6W7By4",
+        "video_7de3QK",
+        "video_NWVRCr",
+        "video_daUL3A",
+        "video_ym4ecF"
+      ],
+      "disabled": true,
+      "name": "MA Video Showcase",
+      "settings": {
+        "subtitle": "for every mood",
+        "subtitle_font": "sans_serif_n4",
+        "subtitle_size": 24,
+        "subtitle_color": "#c0263d",
+        "heading": "experience the collection",
+        "heading_font": "playfair_display_n4",
+        "heading_size": 44,
+        "heading_color": "#1a1a1a",
+        "background_color": "#f5f1e9",
+        "section_padding_top": 64,
+        "section_padding_bottom": 64,
+        "card_width": 215,
+        "card_width_mobile": 150,
+        "card_gap": 14,
+        "card_radius": 10,
+        "scroll_speed": 45,
+        "pause_on_hover": true,
+        "badge_enabled": true,
+        "badge_text": "Fifth Sense India",
+        "badge_link": "",
+        "badge_bg_color": "#8c1c2b",
+        "badge_text_color": "#ffffff"
+      }
     }
   },
   "order": [
@@ -1528,6 +1606,7 @@
     "ma_brand_story",
     "section_Rrah97",
     "ma_journal_KaX3PU",
-    "1775472317723a194f"
+    "1775472317723a194f",
+    "video_showcase_Jgy4PX"
   ]
 }
