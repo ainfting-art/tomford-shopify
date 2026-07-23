@@ -1291,6 +1291,7 @@
     },
     "ma_brand_story": {
       "type": "ma-brand-story",
+      "disabled": true,
       "name": "MA Brand Story",
       "settings": {
         "image": "shopify://shop_images/Documentary_overhead_product_photography._Exactly_202605020131.jpg",
