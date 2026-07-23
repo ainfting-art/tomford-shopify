@@ -1659,7 +1659,7 @@
         "cta_text": "Explore the Journal",
         "cta_link": "",
         "cta_underline": true,
-        "blog": "",
+        "blog": "blogs",
         "rotation_days": 3,
         "num_articles": 3,
         "show_featured_image": true,
