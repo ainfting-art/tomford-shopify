@@ -1318,7 +1318,7 @@
         "image_position_x": 45,
         "image_position_y": 0,
         "image_opacity": 100,
-        "overlay_strength": 35,
+        "overlay_strength": 0,
         "overlay_color": "#464646",
         "fade_strength": 100,
         "mobile_fade_strength": 100,
