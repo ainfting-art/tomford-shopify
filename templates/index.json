@@ -1670,7 +1670,7 @@
         "show_author": true,
         "show_cta": true,
         "show_featured_story": true,
-        "intro_width": 520,
+        "intro_width": 410,
         "desktop_columns": 3,
         "card_min_width": 210,
         "card_gap": 14,
@@ -1681,7 +1681,7 @@
         "story_spacing": 32,
         "image_aspect_ratio": "4 / 5",
         "image_crop": "cover",
-        "image_radius": 8,
+        "image_radius": 10,
         "fade_in_animation": true,
         "reveal_on_scroll": true,
         "hover_zoom": true,
@@ -1737,7 +1737,7 @@
         "padding_right": 40,
         "margin_top": 0,
         "margin_bottom": 0,
-        "section_width": 1280,
+        "section_width": 900,
         "section_min_height": 0
       }
     }
