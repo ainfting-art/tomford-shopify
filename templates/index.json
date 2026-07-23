@@ -1679,7 +1679,7 @@
         "mobile_card_width": 300,
         "mobile_card_gap": 20,
         "story_spacing": 32,
-        "image_aspect_ratio": "4 / 5",
+        "image_aspect_ratio": "1 / 1",
         "image_crop": "cover",
         "image_radius": 10,
         "fade_in_animation": true,
