@@ -85,6 +85,8 @@
   #shopify-section-{{ section.id }} .ma-j__stories--magazine_cards .ma-j__card {
     background: {{ section.settings.card_bg_color }};
     border: 1px solid {{ section.settings.card_border_color }};
+    border-radius: {{ section.settings.image_radius }}px;
+    overflow: hidden;
     {% if section.settings.card_shadow_strength > 0 %}box-shadow: 0 {{ section.settings.card_shadow_strength }}px {{ section.settings.card_shadow_strength | times: 2 }}px rgba(0,0,0,{{ section.settings.card_shadow_strength | times: 1.0 | divided_by: 100 }});{% endif %}
   }
   #shopify-section-{{ section.id }} .ma-j__stories--magazine_cards .ma-j__card:hover {
