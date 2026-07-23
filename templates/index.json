@@ -1650,7 +1650,7 @@
         "badge_text_color": "#ffffff"
       }
     },
-    "ma_journal_editorial_zPz6VM": {
+    "ma_journal_editorial_jEbC6P": {
       "type": "ma-journal-editorial",
       "name": "MA Journal Editorial",
       "settings": {
@@ -1670,18 +1670,18 @@
         "show_author": true,
         "show_cta": true,
         "show_featured_story": true,
-        "intro_width": 340,
+        "intro_width": 520,
         "desktop_columns": 3,
-        "card_min_width": 260,
-        "card_gap": 26,
+        "card_min_width": 200,
+        "card_gap": 14,
         "featured_image_aspect": "1 / 1",
         "mobile_layout": "full_editorial",
         "mobile_card_width": 300,
         "mobile_card_gap": 20,
         "story_spacing": 32,
-        "image_aspect_ratio": "1 / 1",
+        "image_aspect_ratio": "4 / 5",
         "image_crop": "cover",
-        "image_radius": 8,
+        "image_radius": 10,
         "fade_in_animation": true,
         "reveal_on_scroll": true,
         "hover_zoom": true,
@@ -1737,7 +1737,7 @@
         "padding_right": 40,
         "margin_top": 0,
         "margin_bottom": 0,
-        "section_width": 1280,
+        "section_width": 900,
         "section_min_height": 0
       }
     }
@@ -1767,6 +1767,6 @@
     "ma_journal_KaX3PU",
     "1775472317723a194f",
     "video_showcase_Jgy4PX",
-    "ma_journal_editorial_zPz6VM"
+    "ma_journal_editorial_jEbC6P"
   ]
 }
