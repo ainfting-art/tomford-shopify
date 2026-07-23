@@ -156,45 +156,67 @@
     {%- endif -%}
   </div>
 
-  <div class="ma-vs__viewport">
-    <div class="ma-vs__track">
-      {%- for i in (1..2) -%}
-        <div class="ma-vs__set" aria-hidden="{% if i == 2 %}true{% else %}false{% endif %}">
-          {%- for block in section.blocks -%}
-            {%- assign product = block.settings.product -%}
-            <a
-              href="{% if product != blank %}{{ product.url }}{% else %}{{ block.settings.custom_link }}{% endif %}"
-              class="ma-vs__card"
-              {% if i == 1 %}{{ block.shopify_attributes }}{% endif %}
-            >
-              {%- if block.settings.video != blank -%}
-                {{ block.settings.video | video_tag: autoplay: true, loop: true, muted: true, controls: false, playsinline: true, image_size: '600x' }}
-              {%- elsif block.settings.poster_image != blank -%}
-                <img class="ma-vs__poster" src="{{ block.settings.poster_image | image_url: width: 600 }}" alt="{{ block.settings.poster_image.alt | escape }}" loading="lazy">
-              {%- endif -%}
+  {%- assign visible_count = 0 -%}
+  {%- for block in section.blocks -%}
+    {%- if block.settings.video != blank or block.settings.poster_image != blank -%}
+      {%- assign visible_count = visible_count | plus: 1 -%}
+    {%- endif -%}
+  {%- endfor -%}
 
-              {%- if product != blank -%}
-                <div class="ma-vs__footer">
-                  {%- if product.featured_image != blank -%}
-                    <img class="ma-vs__thumb" src="{{ product.featured_image | image_url: width: 64 }}" alt="{{ product.title | escape }}">
+  {%- assign target_min_cards = 6 -%}
+  {%- assign repeat_count = 1 -%}
+  {%- if visible_count > 0 -%}
+    {%- assign repeat_count = target_min_cards | times: 1.0 | divided_by: visible_count | ceil -%}
+    {%- if repeat_count < 1 -%}{%- assign repeat_count = 1 -%}{%- endif -%}
+    {%- if repeat_count > 8 -%}{%- assign repeat_count = 8 -%}{%- endif -%}
+  {%- endif -%}
+
+  {%- if visible_count > 0 -%}
+    <div class="ma-vs__viewport">
+      <div class="ma-vs__track">
+        {%- for i in (1..2) -%}
+          <div class="ma-vs__set" aria-hidden="{% if i == 2 %}true{% else %}false{% endif %}">
+            {%- for r in (1..repeat_count) -%}
+              {%- for block in section.blocks -%}
+                {%- if block.settings.video == blank and block.settings.poster_image == blank -%}
+                  {%- continue -%}
+                {%- endif -%}
+                {%- assign product = block.settings.product -%}
+                <a
+                  href="{% if product != blank %}{{ product.url }}{% else %}{{ block.settings.custom_link }}{% endif %}"
+                  class="ma-vs__card"
+                  {% if i == 1 and r == 1 %}{{ block.shopify_attributes }}{% endif %}
+                >
+                  {%- if block.settings.video != blank -%}
+                    {{ block.settings.video | video_tag: autoplay: true, loop: true, muted: true, controls: false, playsinline: true, image_size: '600x' }}
+                  {%- elsif block.settings.poster_image != blank -%}
+                    <img class="ma-vs__poster" src="{{ block.settings.poster_image | image_url: width: 600 }}" alt="{{ block.settings.poster_image.alt | escape }}" loading="lazy">
                   {%- endif -%}
-                  <div class="ma-vs__meta">
-                    <span class="ma-vs__product-name">{{ product.title }}</span>
-                    <span class="ma-vs__price">
-                      <span class="ma-vs__price-current">{{ product.price | money }}</span>
-                      {%- if product.compare_at_price > product.price -%}
-                        <span class="ma-vs__price-compare">{{ product.compare_at_price | money }}</span>
+
+                  {%- if product != blank -%}
+                    <div class="ma-vs__footer">
+                      {%- if product.featured_image != blank -%}
+                        <img class="ma-vs__thumb" src="{{ product.featured_image | image_url: width: 64 }}" alt="{{ product.title | escape }}">
                       {%- endif -%}
-                    </span>
-                  </div>
-                </div>
-              {%- endif -%}
-            </a>
-          {%- endfor -%}
-        </div>
-      {%- endfor -%}
+                      <div class="ma-vs__meta">
+                        <span class="ma-vs__product-name">{{ product.title }}</span>
+                        <span class="ma-vs__price">
+                          <span class="ma-vs__price-current">{{ product.price | money }}</span>
+                          {%- if product.compare_at_price > product.price -%}
+                            <span class="ma-vs__price-compare">{{ product.compare_at_price | money }}</span>
+                          {%- endif -%}
+                        </span>
+                      </div>
+                    </div>
+                  {%- endif -%}
+                </a>
+              {%- endfor -%}
+            {%- endfor -%}
+          </div>
+        {%- endfor -%}
+      </div>
     </div>
-  </div>
+  {%- endif -%}
 
   {%- if section.settings.badge_enabled -%}
     <a class="ma-vs__badge" href="{{ section.settings.badge_link }}">
@@ -353,6 +375,7 @@
     {
       "type": "video",
       "name": "Video card",
+      "limit": 5,
       "settings": [
         { "type": "video", "id": "video", "label": "Video (uploaded to Shopify Files)" },
         { "type": "image_picker", "id": "poster_image", "label": "Fallback poster image (used if no video)" },
@@ -364,13 +387,7 @@
   "presets": [
     {
       "name": "MA Video Showcase",
-      "blocks": [
-        { "type": "video" },
-        { "type": "video" },
-        { "type": "video" },
-        { "type": "video" },
-        { "type": "video" }
-      ]
+      "blocks": []
     }
   ]
 }
