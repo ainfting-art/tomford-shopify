@@ -1691,7 +1691,7 @@
         "card_shadow_strength": 15,
         "eyebrow_font": "sans_serif_n4",
         "eyebrow_weight": "500",
-        "eyebrow_size": 12,
+        "eyebrow_size": 15,
         "eyebrow_letter_spacing": 3,
         "eyebrow_color": "#a8894e",
         "heading_font": "playfair_display_n4",
@@ -1737,9 +1737,9 @@
         "padding_left": 40,
         "padding_right": 40,
         "margin_top": 0,
-        "margin_bottom": 0,
+        "margin_bottom": 65,
         "section_width": 1140,
-        "section_min_height": 380
+        "section_min_height": 320
       }
     }
   },
