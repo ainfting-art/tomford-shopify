@@ -1,8 +1,8 @@
 {%- comment -%}
   MAISON AMIIR — Editorial Social Proof Section
   Preserves 100% of existing Judge.me review logic, auto-fetching, and rotation.
-  Transforms presentation into a Celine / MFK luxury fashion house editorial spread
-  with locked heights (zero shaking), stable image cropping, and manual navigation arrows.
+  Transforms presentation into a Celine / MFK luxury fashion house editorial spread.
+  FIXED: Generous 380px stage height prevents thumbnail/author clipping while eliminating layout shaking.
 {%- endcomment -%}
 
 {%- liquid
@@ -135,7 +135,7 @@
 }
 
 /* ═══════════════════════════════════════════════
-   LOCKED REVIEW STAGE (PREVENTS SHAKING & JUMPING)
+   LOCKED REVIEW STAGE (GENEROUS HEIGHT - ZERO CLIPPING)
 ═══════════════════════════════════════════════ */
 #shopify-section-{{ sid }} .ma-sproof__grid.ma-esp__grid {
   display: grid !important;
@@ -144,9 +144,9 @@
   margin: 0 auto !important;
   gap: 0 !important;
   position: relative !important;
-  height: 240px !important;
-  min-height: 240px !important;
-  max-height: 240px !important;
+  height: {{ section.settings.stage_height }}px !important;
+  min-height: {{ section.settings.stage_height }}px !important;
+  max-height: {{ section.settings.stage_height }}px !important;
   overflow: hidden !important;
   align-items: center !important;
 }
@@ -174,7 +174,7 @@
   font-size: 14px !important;
   letter-spacing: 4px !important;
   color: {{ accent_color }} !important;
-  margin-bottom: 12px !important;
+  margin-bottom: 10px !important;
   line-height: 1 !important;
   flex: 0 0 auto !important;
 }
@@ -187,7 +187,7 @@
   letter-spacing: 0.16em !important;
   text-transform: uppercase !important;
   color: {{ text_color }} !important;
-  margin: 0 0 12px !important;
+  margin: 0 0 14px !important;
   line-height: 1.4 !important;
   flex: 0 0 auto !important;
 }
@@ -201,12 +201,12 @@
   font-style: italic !important;
   line-height: {{ section.settings.quote_line_height | divided_by: 100.0 }} !important;
   color: {{ text_color }} !important;
-  margin: 0 auto 16px !important;
+  margin: 0 auto 24px !important;
   max-width: 580px !important;
   border: none !important;
   padding: 0 24px !important;
   flex: 0 1 auto !important;
-  /* Line clamp ensures long 7-line reviews never push or shake the layout */
+  /* Line clamp ensures long reviews never push the author thumbnail out of frame */
   display: -webkit-box !important;
   -webkit-line-clamp: 4 !important;
   -webkit-box-orient: vertical !important;
@@ -246,7 +246,7 @@
   pointer-events: none;
 }
 
-/* Footer / Product Thumbnail styling */
+/* Footer / Product Thumbnail styling (FLEX-PROTECTED AGAINST CLIPPING) */
 #shopify-section-{{ sid }} .ma-sproof__foot {
   border-top: none !important;
   padding-top: 0 !important;
@@ -263,15 +263,17 @@
   text-decoration: none !important;
 }
 #shopify-section-{{ sid }} .ma-sproof__prod-img {
-  width: 42px !important;
-  height: 42px !important;
+  width: 44px !important;
+  height: 44px !important;
   object-fit: cover !important;
   border-radius: 4px !important;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.1) !important;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.12) !important;
   display: block !important;
+  flex-shrink: 0 !important;
 }
 #shopify-section-{{ sid }} .ma-sproof__prod-meta {
   text-align: left !important;
+  flex-shrink: 0 !important;
 }
 #shopify-section-{{ sid }} .ma-sproof__attr {
   display: block !important;
@@ -334,7 +336,7 @@
   align-items: center;
   justify-content: center;
   gap: 32px;
-  margin-top: 24px;
+  margin-top: 16px;
   z-index: 10;
   position: relative;
 }
@@ -426,9 +428,9 @@
   #shopify-section-{{ sid }} .ma-sproof__h2.ma-esp__heading { font-size: {{ section.settings.mob_heading_size }}px; }
   #shopify-section-{{ sid }} .ma-sproof__sub.ma-esp__subline { font-size: {{ section.settings.mob_sub_size }}px; margin-bottom: 20px; }
   #shopify-section-{{ sid }} .ma-sproof__grid.ma-esp__grid {
-    height: 260px !important;
-    min-height: 260px !important;
-    max-height: 260px !important;
+    height: {{ section.settings.mob_stage_height }}px !important;
+    min-height: {{ section.settings.mob_stage_height }}px !important;
+    max-height: {{ section.settings.mob_stage_height }}px !important;
   }
   #shopify-section-{{ sid }} .ma-sproof__quote { 
     font-size: {{ section.settings.mob_quote_size }}px !important;
@@ -671,7 +673,8 @@
     { "type": "color", "id": "overlay_color", "label": "Image Tint Overlay", "default": "#000000" },
     { "type": "range", "id": "overlay_strength", "label": "Tint Overlay Opacity (%)", "min": 0, "max": 60, "step": 5, "default": 0 },
 
-    { "type": "header", "content": "── DESKTOP TYPOGRAPHY ──" },
+    { "type": "header", "content": "── DESKTOP TYPOGRAPHY & STAGE ──" },
+    { "type": "range", "id": "stage_height", "label": "Review Box Height (px - Prevents Clipping)", "min": 280, "max": 500, "step": 20, "default": 380 },
     { "type": "font_picker", "id": "eyebrow_font", "label": "Eyebrow Font", "default": "helvetica_n4" },
     { "type": "range", "id": "eyebrow_size", "label": "Eyebrow Size (px)", "min": 9, "max": 16, "step": 1, "default": 11 },
     { "type": "select", "id": "eyebrow_weight", "label": "Eyebrow Weight", "default": "600", "options": [
@@ -680,7 +683,7 @@
     { "type": "range", "id": "eyebrow_spacing", "label": "Eyebrow Letter Spacing (px)", "min": 0, "max": 6, "step": 1, "default": 2 },
 
     { "type": "font_picker", "id": "heading_font", "label": "Heading Font", "default": "playfair_display_n4" },
-    { "type": "range", "id": "heading_size", "label": "Heading Size (px)", "min": 28, "max": 72, "step": 2, "default": 44 },
+    { "type": "range", "id": "heading_size", "label": "Heading Size (px)", "min": 28, "max": 72, "step": 2, "default": 48 },
     { "type": "select", "id": "heading_weight", "label": "Heading Weight", "default": "400", "options": [
       {"value": "300", "label": "Light"}, {"value": "400", "label": "Regular"}, {"value": "600", "label": "Bold"}
     ]},
@@ -688,39 +691,40 @@
     { "type": "range", "id": "heading_spacing", "label": "Heading Letter Spacing (px)", "min": -1, "max": 4, "step": 1, "default": 0 },
 
     { "type": "font_picker", "id": "sub_font", "label": "Supporting Text Font", "default": "playfair_display_i4" },
-    { "type": "range", "id": "sub_size", "label": "Supporting Text Size (px)", "min": 14, "max": 24, "step": 1, "default": 16 },
+    { "type": "range", "id": "sub_size", "label": "Supporting Text Size (px)", "min": 14, "max": 24, "step": 1, "default": 18 },
     { "type": "select", "id": "sub_weight", "label": "Supporting Text Weight", "default": "400", "options": [
       {"value": "300", "label": "Light"}, {"value": "400", "label": "Regular"}
     ]},
 
     { "type": "font_picker", "id": "quote_font", "label": "Review Quote Font", "default": "playfair_display_n4" },
-    { "type": "range", "id": "quote_size", "label": "Review Quote Size (px)", "min": 18, "max": 36, "step": 1, "default": 22 },
+    { "type": "range", "id": "quote_size", "label": "Review Quote Size (px)", "min": 18, "max": 40, "step": 1, "default": 26 },
     { "type": "select", "id": "quote_weight", "label": "Review Quote Weight", "default": "400", "options": [
       {"value": "300", "label": "Light"}, {"value": "400", "label": "Regular"}
     ]},
-    { "type": "range", "id": "quote_line_height", "label": "Quote Line Height (%)", "min": 120, "max": 180, "step": 5, "default": 145 },
+    { "type": "range", "id": "quote_line_height", "label": "Quote Line Height (%)", "min": 120, "max": 180, "step": 5, "default": 150 },
 
     { "type": "font_picker", "id": "meta_font", "label": "Customer / Product Meta Font", "default": "helvetica_n4" },
     { "type": "range", "id": "meta_size", "label": "Meta Text Size (px)", "min": 10, "max": 16, "step": 1, "default": 12 },
 
-    { "type": "header", "content": "── MOBILE TYPOGRAPHY & SPACING ──" },
-    { "type": "range", "id": "mob_img_height", "label": "Mobile Image Height (px)", "min": 240, "max": 500, "step": 20, "default": 340 },
+    { "type": "header", "content": "── MOBILE TYPOGRAPHY & STAGE ──" },
+    { "type": "range", "id": "mob_stage_height", "label": "Mobile Review Box Height (px)", "min": 260, "max": 480, "step": 20, "default": 360 },
+    { "type": "range", "id": "mob_img_height", "label": "Mobile Image Height (px)", "min": 280, "max": 500, "step": 20, "default": 380 },
     { "type": "range", "id": "mob_eyebrow_size", "label": "Mobile Eyebrow Size (px)", "min": 9, "max": 14, "step": 1, "default": 10 },
-    { "type": "range", "id": "mob_heading_size", "label": "Mobile Heading Size (px)", "min": 24, "max": 48, "step": 2, "default": 32 },
-    { "type": "range", "id": "mob_sub_size", "label": "Mobile Supporting Size (px)", "min": 13, "max": 20, "step": 1, "default": 15 },
-    { "type": "range", "id": "mob_quote_size", "label": "Mobile Quote Size (px)", "min": 16, "max": 28, "step": 1, "default": 18 },
+    { "type": "range", "id": "mob_heading_size", "label": "Mobile Heading Size (px)", "min": 24, "max": 48, "step": 2, "default": 34 },
+    { "type": "range", "id": "mob_sub_size", "label": "Mobile Supporting Size (px)", "min": 13, "max": 20, "step": 1, "default": 16 },
+    { "type": "range", "id": "mob_quote_size", "label": "Mobile Quote Size (px)", "min": 16, "max": 30, "step": 1, "default": 20 },
     { "type": "range", "id": "mob_meta_size", "label": "Mobile Meta Size (px)", "min": 10, "max": 14, "step": 1, "default": 11 },
     { "type": "range", "id": "mob_pad_top", "label": "Mobile Padding Top (px)", "min": 0, "max": 80, "step": 8, "default": 24 },
-    { "type": "range", "id": "mob_pad_bottom", "label": "Mobile Padding Bottom (px)", "min": 16, "max": 100, "step": 4, "default": 48 },
+    { "type": "range", "id": "mob_pad_bottom", "label": "Mobile Padding Bottom (px)", "min": 16, "max": 100, "step": 4, "default": 64 },
     { "type": "range", "id": "mob_pad_h", "label": "Mobile Horizontal Padding (px)", "min": 16, "max": 48, "step": 4, "default": 24 },
 
     { "type": "header", "content": "── DESKTOP SPACING & LAYOUT ──" },
-    { "type": "range", "id": "desktop_height", "label": "Locked Section Height (px)", "min": 400, "max": 900, "step": 20, "default": 600 },
+    { "type": "range", "id": "desktop_height", "label": "Section Height (px)", "min": 400, "max": 900, "step": 20, "default": 640 },
     { "type": "range", "id": "dt_max_width", "label": "Max Content Width (px)", "min": 1000, "max": 1600, "step": 40, "default": 1400 },
-    { "type": "range", "id": "dt_pad_top", "label": "Padding Top (px)", "min": 20, "max": 140, "step": 10, "default": 40 },
-    { "type": "range", "id": "dt_pad_bottom", "label": "Padding Bottom (px)", "min": 20, "max": 140, "step": 10, "default": 40 },
-    { "type": "range", "id": "dt_pad_left", "label": "Padding Left (px)", "min": 20, "max": 120, "step": 10, "default": 50 },
-    { "type": "range", "id": "dt_pad_right", "label": "Padding Right (px)", "min": 20, "max": 120, "step": 10, "default": 50 },
+    { "type": "range", "id": "dt_pad_top", "label": "Padding Top (px)", "min": 20, "max": 140, "step": 10, "default": 60 },
+    { "type": "range", "id": "dt_pad_bottom", "label": "Padding Bottom (px)", "min": 20, "max": 140, "step": 10, "default": 60 },
+    { "type": "range", "id": "dt_pad_left", "label": "Padding Left (px)", "min": 20, "max": 120, "step": 10, "default": 60 },
+    { "type": "range", "id": "dt_pad_right", "label": "Padding Right (px)", "min": 20, "max": 120, "step": 10, "default": 60 },
     { "type": "range", "id": "margin_top", "label": "Margin Top (px)", "min": 0, "max": 120, "step": 10, "default": 0 },
     { "type": "range", "id": "margin_bottom", "label": "Margin Bottom (px)", "min": 0, "max": 120, "step": 10, "default": 0 }
   ],
