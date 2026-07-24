@@ -1711,6 +1711,84 @@
         "section_width": 1140,
         "section_min_height": 340
       }
+    },
+    "ma_editorial_social_proof_6tWRTb": {
+      "type": "ma-editorial-social-proof",
+      "blocks": {
+        "review_frjeEi": {
+          "type": "review",
+          "settings": {
+            "product": "club-nocturne",
+            "stars": 5,
+            "heading": "This oud is special",
+            "quote": "I've tried many oud fragrances over the years and Desert Velvet Oud has quickly become one of my favourites. The smoky and warmth combo is exactly what a good oud should be.",
+            "author": "aeafaefefasfef"
+          }
+        }
+      },
+      "block_order": [
+        "review_frjeEi"
+      ],
+      "name": "MA Editorial Proof",
+      "settings": {
+        "heading": "WORN. REMEMBERED.",
+        "subline": "The fragrances people mention long after you leave.",
+        "rotate_seconds": 6,
+        "eyebrow": "FROM VERIFIED CLIENTS",
+        "color_preset": "ivory",
+        "bg_color": "#f8f6f0",
+        "text_color": "#1a1510",
+        "accent_color": "#a8894e",
+        "fade_color": "#f8f6f0",
+        "image": "shopify://shop_images/8K_behind-the-scenes_luxury_202604281908_1.jpg",
+        "image_col_width": 45,
+        "image_fit": "cover",
+        "focal_x": 50,
+        "focal_y": 50,
+        "image_scale": 100,
+        "image_opacity": 100,
+        "image_brightness": 100,
+        "image_contrast": 100,
+        "image_saturation": 100,
+        "fade_strength": 40,
+        "overlay_color": "#000000",
+        "overlay_strength": 0,
+        "eyebrow_font": "sans_serif_n4",
+        "eyebrow_size": 11,
+        "eyebrow_weight": "600",
+        "eyebrow_spacing": 2,
+        "heading_font": "playfair_display_n4",
+        "heading_size": 48,
+        "heading_weight": "400",
+        "heading_line_height": 115,
+        "heading_spacing": 0,
+        "sub_font": "playfair_display_i4",
+        "sub_size": 18,
+        "sub_weight": "400",
+        "quote_font": "playfair_display_n4",
+        "quote_size": 26,
+        "quote_weight": "400",
+        "quote_line_height": 150,
+        "meta_font": "sans_serif_n4",
+        "meta_size": 10,
+        "mob_img_height": 380,
+        "mob_eyebrow_size": 10,
+        "mob_heading_size": 34,
+        "mob_sub_size": 16,
+        "mob_quote_size": 20,
+        "mob_meta_size": 11,
+        "mob_pad_top": 24,
+        "mob_pad_bottom": 64,
+        "mob_pad_h": 24,
+        "desktop_height": 640,
+        "dt_max_width": 1400,
+        "dt_pad_top": 60,
+        "dt_pad_bottom": 60,
+        "dt_pad_left": 60,
+        "dt_pad_right": 60,
+        "margin_top": 0,
+        "margin_bottom": 0
+      }
     }
   },
   "order": [
@@ -1737,6 +1815,7 @@
     "section_Rrah97",
     "ma_journal_KaX3PU",
     "video_showcase_Jgy4PX",
-    "ma_journal_editorial_jEbC6P"
+    "ma_journal_editorial_jEbC6P",
+    "ma_editorial_social_proof_6tWRTb"
   ]
 }
