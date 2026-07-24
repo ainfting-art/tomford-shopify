@@ -2,7 +2,7 @@
   MAISON AMIIR — Editorial Social Proof Section
   Preserves 100% of existing Judge.me review logic, auto-fetching, and rotation.
   Transforms presentation into a Celine / MFK luxury fashion house editorial spread.
-  FIXED: Active auto-rotation loop restored with manual pause/reset on arrow clicks.
+  UPGRADED: Centered left/right navigation arrows + indestructible oversized gold inverted commas.
 {%- endcomment -%}
 
 {%- liquid
@@ -135,12 +135,50 @@
 }
 
 /* ═══════════════════════════════════════════════
-   LOCKED REVIEW STAGE (GENEROUS HEIGHT - ZERO CLIPPING)
+   STAGE WRAPPER & CENTERED SIDE ARROWS
+═══════════════════════════════════════════════ */
+#shopify-section-{{ sid }} .ma-esp__stage-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#shopify-section-{{ sid }} .ma-esp__arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+  background: transparent;
+  border: none;
+  color: {{ accent_color }};
+  font-size: 24px;
+  cursor: pointer;
+  padding: 12px;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  user-select: none;
+}
+#shopify-section-{{ sid }} .ma-esp__arrow--prev {
+  left: -12px;
+}
+#shopify-section-{{ sid }} .ma-esp__arrow--next {
+  right: -12px;
+}
+#shopify-section-{{ sid }} .ma-esp__arrow:hover {
+  opacity: 0.6;
+  transform: translateY(-50%) scale(1.2);
+}
+
+/* ═══════════════════════════════════════════════
+   LOCKED REVIEW STAGE (GENEROUS HEIGHT)
 ═══════════════════════════════════════════════ */
 #shopify-section-{{ sid }} .ma-sproof__grid.ma-esp__grid {
   display: grid !important;
   grid-template-columns: 1fr !important;
-  max-width: 680px !important;
+  width: 100% !important;
+  max-width: 640px !important;
   margin: 0 auto !important;
   gap: 0 !important;
   position: relative !important;
@@ -151,15 +189,14 @@
   align-items: center !important;
 }
 
-/* Strip borders & boxes, style as clean editorial quote */
+/* Strip borders & boxes, add safety padding so text never touches arrows */
 #shopify-section-{{ sid }} .ma-sproof__card {
   border: none !important;
   background: transparent !important;
   box-shadow: none !important;
-  padding: 0 !important;
+  padding: 0 36px !important;
   margin: 0 auto !important;
   width: 100% !important;
-  max-width: 640px !important;
   height: 100% !important;
   text-align: center !important;
   display: flex !important;
@@ -169,7 +206,7 @@
   transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
-/* Stars styling */
+/* Stars & Title styling */
 #shopify-section-{{ sid }} .ma-sproof__stars {
   font-size: 14px !important;
   letter-spacing: 4px !important;
@@ -178,8 +215,6 @@
   line-height: 1 !important;
   flex: 0 0 auto !important;
 }
-
-/* Review Title styling */
 #shopify-section-{{ sid }} .ma-sproof__title {
   font-family: {{ section.settings.meta_font.family }}, sans-serif !important;
   font-size: 13px !important;
@@ -192,58 +227,49 @@
   flex: 0 0 auto !important;
 }
 
-/* ── OVERSIZED ARCHITECTURAL GOLD INVERTED COMMAS ── */
-#shopify-section-{{ sid }} .ma-sproof__quote {
+/* ── INDESTRUCTIBLE GOLD INVERTED COMMAS (STANDALONE HTML) ── */
+#shopify-section-{{ sid }} .ma-esp__quote-box {
   position: relative !important;
+  width: 100% !important;
+  max-width: 560px !important;
+  margin: 0 auto 20px !important;
+  padding: 0 28px !important;
+  flex: 0 1 auto !important;
+}
+#shopify-section-{{ sid }} .ma-esp__mark {
+  position: absolute !important;
+  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif !important;
+  font-size: 56px !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  line-height: 1 !important;
+  color: {{ accent_color }} !important;
+  opacity: 0.85 !important;
+  pointer-events: none !important;
+  user-select: none !important;
+}
+#shopify-section-{{ sid }} .ma-esp__mark--open {
+  top: -16px !important;
+  left: 0 !important;
+}
+#shopify-section-{{ sid }} .ma-esp__mark--close {
+  bottom: -32px !important;
+  right: 0 !important;
+}
+#shopify-section-{{ sid }} .ma-sproof__quote {
   font-family: {{ section.settings.quote_font.family }}, serif !important;
   font-size: {{ section.settings.quote_size }}px !important;
   font-weight: {{ section.settings.quote_weight }} !important;
   font-style: italic !important;
   line-height: {{ section.settings.quote_line_height | divided_by: 100.0 }} !important;
   color: {{ text_color }} !important;
-  margin: 0 auto 24px !important;
-  max-width: 580px !important;
+  margin: 0 !important;
   border: none !important;
-  padding: 0 24px !important;
-  flex: 0 1 auto !important;
-  /* Line clamp ensures long reviews never push the author thumbnail out of frame */
+  padding: 0 !important;
   display: -webkit-box !important;
   -webkit-line-clamp: 4 !important;
   -webkit-box-orient: vertical !important;
   overflow: hidden !important;
-}
-
-/* Upper-left oversized gold quote */
-#shopify-section-{{ sid }} .ma-sproof__quote::before {
-  content: '“';
-  position: absolute;
-  top: -18px;
-  left: -14px;
-  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
-  font-size: 56px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 1;
-  color: {{ accent_color }};
-  opacity: 0.85;
-  pointer-events: none;
-}
-
-/* Bottom-right oversized gold quote */
-#shopify-section-{{ sid }} .ma-sproof__quote::after {
-  content: '”';
-  position: relative;
-  display: inline-block;
-  margin-left: 6px;
-  top: 10px;
-  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
-  font-size: 56px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 0.4;
-  color: {{ accent_color }};
-  opacity: 0.85;
-  pointer-events: none;
 }
 
 /* Footer / Product Thumbnail styling (FLEX-PROTECTED AGAINST CLIPPING) */
@@ -329,30 +355,15 @@
 }
 
 /* ═══════════════════════════════════════════════
-   MANUAL NAVIGATION ARROWS & DOTS
+   BOTTOM PAGINATION DOTS
 ═══════════════════════════════════════════════ */
-#shopify-section-{{ sid }} .ma-esp__nav {
+#shopify-section-{{ sid }} .ma-esp__dots-wrap {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 32px;
   margin-top: 16px;
   z-index: 10;
   position: relative;
-}
-#shopify-section-{{ sid }} .ma-esp__arrow {
-  background: transparent;
-  border: none;
-  color: {{ accent_color }};
-  font-size: 20px;
-  cursor: pointer;
-  padding: 8px 14px;
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  user-select: none;
-}
-#shopify-section-{{ sid }} .ma-esp__arrow:hover {
-  opacity: 0.6;
-  transform: scale(1.15);
 }
 #shopify-section-{{ sid }} .ma-esp__dots {
   display: flex;
@@ -427,24 +438,31 @@
   #shopify-section-{{ sid }} .ma-esp__eyebrow { font-size: {{ section.settings.mob_eyebrow_size }}px; }
   #shopify-section-{{ sid }} .ma-sproof__h2.ma-esp__heading { font-size: {{ section.settings.mob_heading_size }}px; }
   #shopify-section-{{ sid }} .ma-sproof__sub.ma-esp__subline { font-size: {{ section.settings.mob_sub_size }}px; margin-bottom: 20px; }
+  
   #shopify-section-{{ sid }} .ma-sproof__grid.ma-esp__grid {
     height: {{ section.settings.mob_stage_height }}px !important;
     min-height: {{ section.settings.mob_stage_height }}px !important;
     max-height: {{ section.settings.mob_stage_height }}px !important;
   }
+  #shopify-section-{{ sid }} .ma-sproof__card {
+    padding: 0 28px !important;
+  }
+  #shopify-section-{{ sid }} .ma-esp__arrow--prev {
+    left: -4px;
+  }
+  #shopify-section-{{ sid }} .ma-esp__arrow--next {
+    right: -4px;
+  }
+  #shopify-section-{{ sid }} .ma-esp__mark--open {
+    font-size: 44px !important;
+    top: -12px !important;
+  }
+  #shopify-section-{{ sid }} .ma-esp__mark--close {
+    font-size: 44px !important;
+    bottom: -24px !important;
+  }
   #shopify-section-{{ sid }} .ma-sproof__quote { 
     font-size: {{ section.settings.mob_quote_size }}px !important;
-    padding: 0 16px !important;
-  }
-  #shopify-section-{{ sid }} .ma-sproof__quote::before {
-    font-size: 42px;
-    top: -14px;
-    left: -6px;
-  }
-  #shopify-section-{{ sid }} .ma-sproof__quote::after {
-    font-size: 42px;
-    top: 8px;
-    margin-left: 4px;
   }
   #shopify-section-{{ sid }} .ma-sproof__attr { font-size: {{ section.settings.mob_meta_size }}px; }
 }
@@ -479,45 +497,55 @@
         <p class="ma-sproof__sub ma-esp__subline ma-home-reveal">{{ section.settings.subline | escape }}</p>
       {%- endif -%}
 
-      <!-- EXACT PRESERVED GRID AND CARDS FOR ma-social-proof.js -->
-      <div class="ma-sproof__grid ma-esp__grid" id="ma-sproof-grid-{{ section.id }}">
-        {%- for block in section.blocks -%}
-          <figure class="ma-sproof__card ma-home-reveal{% if forloop.first %} is-live is-active{% endif %}" {{ block.shopify_attributes }}>
-            <div class="ma-sproof__stars" aria-label="{{ block.settings.stars }} out of 5 stars">
-              {%- assign full = block.settings.stars -%}
-              {%- for i in (1..5) -%}{%- if i <= full -%}★{%- else -%}☆{%- endif -%}{%- endfor -%}
-            </div>
-            {%- if block.settings.heading != blank -%}
-              <p class="ma-sproof__title">{{ block.settings.heading }}</p>
-            {%- endif -%}
-            
-            <blockquote class="ma-sproof__quote">{{ block.settings.quote }}</blockquote>
-            
-            <figcaption class="ma-sproof__foot">
-              {%- assign prod = block.settings.product -%}
-              {%- if prod != blank -%}
-                <a class="ma-sproof__prod" href="{{ prod.url }}">
-                  {%- if prod.featured_image -%}
-                    {{ prod.featured_image | image_url: width: 120 | image_tag: loading: 'lazy', alt: prod.title, class: 'ma-sproof__prod-img', width: 48, height: 48 }}
-                  {%- endif -%}
-                  <span class="ma-sproof__prod-meta">
-                    <span class="ma-sproof__attr">{{ block.settings.author }}</span>
-                    <span class="ma-sproof__prod-title">{{ prod.title }}</span>
-                  </span>
-                </a>
-              {%- else -%}
-                <span class="ma-sproof__attr">{{ block.settings.author }}</span>
+      <!-- STAGE WRAPPER WITH CENTERED SIDE ARROWS -->
+      <div class="ma-esp__stage-wrap">
+        <button class="ma-esp__arrow ma-esp__arrow--prev" aria-label="Previous review">&#8592;</button>
+
+        <!-- EXACT PRESERVED GRID AND CARDS FOR ma-social-proof.js -->
+        <div class="ma-sproof__grid ma-esp__grid" id="ma-sproof-grid-{{ section.id }}">
+          {%- for block in section.blocks -%}
+            <figure class="ma-sproof__card ma-home-reveal{% if forloop.first %} is-live is-active{% endif %}" {{ block.shopify_attributes }}>
+              <div class="ma-sproof__stars" aria-label="{{ block.settings.stars }} out of 5 stars">
+                {%- assign full = block.settings.stars -%}
+                {%- for i in (1..5) -%}{%- if i <= full -%}★{%- else -%}☆{%- endif -%}{%- endfor -%}
+              </div>
+              {%- if block.settings.heading != blank -%}
+                <p class="ma-sproof__title">{{ block.settings.heading }}</p>
               {%- endif -%}
-            </figcaption>
-          </figure>
-        {%- endfor -%}
+              
+              <!-- STANDALONE INVERTED COMMAS WRAPPER -->
+              <div class="ma-esp__quote-box">
+                <span class="ma-esp__mark ma-esp__mark--open">&#8220;</span>
+                <blockquote class="ma-sproof__quote">{{ block.settings.quote }}</blockquote>
+                <span class="ma-esp__mark ma-esp__mark--close">&#8221;</span>
+              </div>
+              
+              <figcaption class="ma-sproof__foot">
+                {%- assign prod = block.settings.product -%}
+                {%- if prod != blank -%}
+                  <a class="ma-sproof__prod" href="{{ prod.url }}">
+                    {%- if prod.featured_image -%}
+                      {{ prod.featured_image | image_url: width: 120 | image_tag: loading: 'lazy', alt: prod.title, class: 'ma-sproof__prod-img', width: 48, height: 48 }}
+                    {%- endif -%}
+                    <span class="ma-sproof__prod-meta">
+                      <span class="ma-sproof__attr">{{ block.settings.author }}</span>
+                      <span class="ma-sproof__prod-title">{{ prod.title }}</span>
+                    </span>
+                  </a>
+                {%- else -%}
+                  <span class="ma-sproof__attr">{{ block.settings.author }}</span>
+                {%- endif -%}
+              </figcaption>
+            </figure>
+          {%- endfor -%}
+        </div>
+
+        <button class="ma-esp__arrow ma-esp__arrow--next" aria-label="Next review">&#8594;</button>
       </div>
 
-      <!-- MANUAL NAVIGATION ARROWS & DOTS -->
-      <div class="ma-esp__nav">
-        <button class="ma-esp__arrow ma-esp__arrow--prev" aria-label="Previous review">&#8592;</button>
+      <!-- BOTTOM PAGINATION DOTS -->
+      <div class="ma-esp__dots-wrap">
         <div class="ma-esp__dots" id="ma-esp-dots-{{ sid }}"></div>
-        <button class="ma-esp__arrow ma-esp__arrow--next" aria-label="Next review">&#8594;</button>
       </div>
 
     </div>
@@ -559,7 +587,9 @@
     stripInlineQuotes();
     cards = Array.from(grid.querySelectorAll('.ma-sproof__card'));
     if (cards.length < 2) {
-      if (sec.querySelector('.ma-esp__nav')) sec.querySelector('.ma-esp__nav').style.display = 'none';
+      if (sec.querySelector('.ma-esp__arrow--prev')) sec.querySelector('.ma-esp__arrow--prev').style.display = 'none';
+      if (sec.querySelector('.ma-esp__arrow--next')) sec.querySelector('.ma-esp__arrow--next').style.display = 'none';
+      if (dotsWrap) dotsWrap.style.display = 'none';
       return;
     }
 
