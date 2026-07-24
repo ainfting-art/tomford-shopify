@@ -1536,7 +1536,7 @@
         "intro_width": 520,
         "desktop_columns": 3,
         "card_min_width": 200,
-        "card_gap": 40,
+        "card_gap": 20,
         "featured_image_aspect": "1 / 1",
         "mobile_layout": "full_editorial",
         "mobile_card_width": 300,
