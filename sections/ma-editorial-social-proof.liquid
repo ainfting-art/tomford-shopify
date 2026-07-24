@@ -1,7 +1,8 @@
 {%- comment -%}
   MAISON AMIIR — Editorial Social Proof Section
   Preserves 100% of existing Judge.me review logic, auto-fetching, and rotation.
-  Transforms presentation into a Celine / MFK luxury fashion house editorial spread.
+  Transforms presentation into a Celine / MFK luxury fashion house editorial spread
+  with oversized architectural gold inverted commas.
 {%- endcomment -%}
 
 {%- liquid
@@ -169,7 +170,7 @@
   font-size: 15px !important;
   letter-spacing: 4px !important;
   color: {{ accent_color }} !important;
-  margin-bottom: 14px !important;
+  margin-bottom: 18px !important;
   line-height: 1 !important;
 }
 
@@ -181,23 +182,57 @@
   letter-spacing: 0.16em !important;
   text-transform: uppercase !important;
   color: {{ text_color }} !important;
-  margin: 0 0 16px !important;
+  margin: 0 0 20px !important;
   line-height: 1.4 !important;
 }
 
-/* Large Editorial Quote styling */
+/* ── OVERSIZED ARCHITECTURAL GOLD INVERTED COMMAS ── */
 #shopify-section-{{ sid }} .ma-sproof__quote {
+  position: relative !important;
   font-family: {{ section.settings.quote_font.family }}, serif !important;
   font-size: {{ section.settings.quote_size }}px !important;
   font-weight: {{ section.settings.quote_weight }} !important;
   font-style: italic !important;
   line-height: {{ section.settings.quote_line_height | divided_by: 100.0 }} !important;
   color: {{ text_color }} !important;
-  margin: 0 0 28px !important;
-  max-width: 620px !important;
+  margin: 0 auto 32px !important;
+  max-width: 580px !important;
   border: none !important;
-  padding: 0 !important;
+  padding: 0 24px !important;
   flex: none !important;
+}
+
+/* Upper-left oversized gold quote */
+#shopify-section-{{ sid }} .ma-sproof__quote::before {
+  content: '“';
+  position: absolute;
+  top: -22px;
+  left: -16px;
+  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  font-size: 64px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1;
+  color: {{ accent_color }};
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+/* Bottom-right oversized gold quote */
+#shopify-section-{{ sid }} .ma-sproof__quote::after {
+  content: '”';
+  position: relative;
+  display: inline-block;
+  margin-left: 8px;
+  top: 12px;
+  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  font-size: 64px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 0.4;
+  color: {{ accent_color }};
+  opacity: 0.85;
+  pointer-events: none;
 }
 
 /* Footer / Product Thumbnail styling */
@@ -258,7 +293,7 @@
 #shopify-section-{{ sid }} .ma-sproof__card:nth-child(n+2) { display: none !important; }
 #shopify-section-{{ sid }} .ma-sproof__grid.ma-sproof--js .ma-sproof__card { display: none !important; opacity: 0; transform: translateY(16px); }
 
-/* Ensure only ONE review displays at a time even if external script activates multiple */
+/* Ensure only ONE review displays at a time */
 #shopify-section-{{ sid }} .ma-sproof__grid.ma-sproof--js .ma-sproof__card.is-live { display: none !important; }
 #shopify-section-{{ sid }} .ma-sproof__grid.ma-sproof--js .ma-sproof__card.is-live:first-of-type,
 #shopify-section-{{ sid }} .ma-sproof__grid.ma-sproof--js .ma-sproof__card.is-live:nth-child(1) {
@@ -323,7 +358,20 @@
   #shopify-section-{{ sid }} .ma-esp__eyebrow { font-size: {{ section.settings.mob_eyebrow_size }}px; }
   #shopify-section-{{ sid }} .ma-sproof__h2.ma-esp__heading { font-size: {{ section.settings.mob_heading_size }}px; }
   #shopify-section-{{ sid }} .ma-sproof__sub.ma-esp__subline { font-size: {{ section.settings.mob_sub_size }}px; margin-bottom: 28px; }
-  #shopify-section-{{ sid }} .ma-sproof__quote { font-size: {{ section.settings.mob_quote_size }}px; }
+  #shopify-section-{{ sid }} .ma-sproof__quote { 
+    font-size: {{ section.settings.mob_quote_size }}px !important;
+    padding: 0 16px !important;
+  }
+  #shopify-section-{{ sid }} .ma-sproof__quote::before {
+    font-size: 48px;
+    top: -16px;
+    left: -8px;
+  }
+  #shopify-section-{{ sid }} .ma-sproof__quote::after {
+    font-size: 48px;
+    top: 8px;
+    margin-left: 6px;
+  }
   #shopify-section-{{ sid }} .ma-sproof__attr { font-size: {{ section.settings.mob_meta_size }}px; }
 }
 </style>
@@ -368,7 +416,10 @@
             {%- if block.settings.heading != blank -%}
               <p class="ma-sproof__title">{{ block.settings.heading }}</p>
             {%- endif -%}
-            <blockquote class="ma-sproof__quote">&ldquo;{{ block.settings.quote }}&rdquo;</blockquote>
+            
+            <!-- Clean blockquote without inline html entities -->
+            <blockquote class="ma-sproof__quote">{{ block.settings.quote }}</blockquote>
+            
             <figcaption class="ma-sproof__foot">
               {%- assign prod = block.settings.product -%}
               {%- if prod != blank -%}
@@ -395,6 +446,35 @@
 
 <!-- EXTERNAL SCRIPT PRESERVED FOR AUTO-FETCHING AND ROTATION -->
 <script src="{{ 'ma-social-proof.js' | asset_url }}" defer></script>
+
+<!-- INLINE QUOTE STRIPPER: Prevents duplicate quotation marks when JS populates reviews -->
+<script>
+(function() {
+  var sec = document.getElementById('ma-esp-{{ sid }}');
+  if (!sec) return;
+
+  function stripInlineQuotes() {
+    var quotes = sec.querySelectorAll('.ma-sproof__quote');
+    quotes.forEach(function(el) {
+      var txt = el.innerHTML.trim();
+      // Remove leading/trailing quotes inserted by external review scripts
+      txt = txt.replace(/^(&ldquo;|&quot;|“|"|‘|')\s*/i, '');
+      txt = txt.replace(/\s*(&rdquo;|&quot;|”|"|’|')$/i, '');
+      if (el.innerHTML !== txt) {
+        el.innerHTML = txt;
+      }
+    });
+  }
+
+  // Run on initial load and observe for DOM updates from Judge.me / ma-social-proof.js
+  stripInlineQuotes();
+  var grid = document.getElementById('ma-sproof-grid-{{ section.id }}');
+  if (grid && 'MutationObserver' in window) {
+    var mo = new MutationObserver(function() { stripInlineQuotes(); });
+    mo.observe(grid, { childList: true, subtree: true, characterData: true });
+  }
+})();
+</script>
 
 {% schema %}
 {
