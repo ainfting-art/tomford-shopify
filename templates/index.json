@@ -589,19 +589,6 @@
         "sign": "The house takes the risk."
       }
     },
-    "ma_home_proof": {
-      "type": "ma-home-proof",
-      "settings": {
-        "a_big": "30% Extrait",
-        "a_sm": "above eau de parfum",
-        "b_big": "7-Day",
-        "b_sm": "risk-free returns",
-        "c_big": "100%",
-        "c_sm": "authentic international oils",
-        "d_big": "Complimentary",
-        "d_sm": "delivery across India"
-      }
-    },
     "ma_social_proof": {
       "type": "ma-social-proof",
       "blocks": {
@@ -1630,7 +1617,6 @@
     "ma_unboxing",
     "product_list_nrNjhj",
     "ma_home_risk",
-    "ma_home_proof",
     "ma_social_proof",
     "ma_quiz_invite_J9337a",
     "ma_value_story",
