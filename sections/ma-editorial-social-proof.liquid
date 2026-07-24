@@ -289,17 +289,19 @@
   border-color: {{ text_color }} !important;
 }
 
-/* ── PRESERVED JS ROTATION STATES ── */
+/* ── PRESERVED JS ROTATION STATES (FIXED ROTATION BUG) ── */
 #shopify-section-{{ sid }} .ma-sproof__card:nth-child(n+2) { display: none !important; }
 #shopify-section-{{ sid }} .ma-sproof__grid.ma-sproof--js .ma-sproof__card { display: none !important; opacity: 0; transform: translateY(16px); }
 
-/* Ensure only ONE review displays at a time */
-#shopify-section-{{ sid }} .ma-sproof__grid.ma-sproof--js .ma-sproof__card.is-live { display: none !important; }
-#shopify-section-{{ sid }} .ma-sproof__grid.ma-sproof--js .ma-sproof__card.is-live:first-of-type,
-#shopify-section-{{ sid }} .ma-sproof__grid.ma-sproof--js .ma-sproof__card.is-live:nth-child(1) {
+/* Allow any card activated by JS rotation to display immediately */
+#shopify-section-{{ sid }} .ma-sproof__grid.ma-sproof--js .ma-sproof__card.is-live {
   display: flex !important;
   opacity: 1;
   transform: none;
+}
+/* Guarantee that if JS activates multiple cards, only the first one displays */
+#shopify-section-{{ sid }} .ma-sproof__grid.ma-sproof--js .ma-sproof__card.is-live ~ .ma-sproof__card.is-live {
+  display: none !important;
 }
 #shopify-section-{{ sid }} .ma-sproof__grid.ma-sproof--js .ma-sproof__card.is-out {
   display: flex !important;
