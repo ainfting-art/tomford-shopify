@@ -1377,7 +1377,7 @@
         "overlay_color": "#464646",
         "fade_strength": 100,
         "mobile_fade_strength": 100,
-        "fade_color": "#161616",
+        "fade_color": "#464646",
         "fade_direction": "left",
         "background_color": "#464646",
         "label_font": "sans_serif_n4",
