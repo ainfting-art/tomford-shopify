@@ -1606,6 +1606,7 @@
     },
     "ma_promise_visual_LiHRX6": {
       "type": "ma-promise-visual",
+      "disabled": true,
       "name": "MA Promise Visual",
       "settings": {
         "eyebrow": "Buy Without a Doubt",
