@@ -1,9 +1,9 @@
 {%- comment -%}
   MAISON AMIIR — The Maison Promise
   High-converting trust manifesto section.
-  Desktop: 2-column split (Left visual / Right manifesto text + 2x2 grid).
+  Desktop: 2-column stretch split (Left visual fills 100% height / Right centered manifesto + 2x2 grid).
   Mobile: Independent editorial split hero + horizontal row stack.
-  Watermark: Reuses exact live CDN logo asset behind text columns.
+  FIXED: Full vertical image stretching, centered grid cells, Title Case protection, diamond ornament.
 {%- endcomment -%}
 
 {%- liquid
@@ -98,13 +98,16 @@
   position: relative;
   width: 100%;
   height: 100%;
+  min-height: 100%;
   overflow: hidden;
   background: rgba(0,0,0,0.03);
+  display: flex;
 }
 #shopify-section-{{ sid }} .ma-mp__slider {
   position: relative;
   width: 100%;
   height: 100%;
+  flex: 1 1 auto;
   overflow: hidden;
 }
 #shopify-section-{{ sid }} .ma-mp__slide {
@@ -118,6 +121,7 @@
   opacity: 1;
   pointer-events: auto;
   position: relative;
+  height: 100%;
 }
 #shopify-section-{{ sid }} .ma-mp__img {
   width: 100%;
@@ -135,7 +139,7 @@
 /* Slider Controls */
 #shopify-section-{{ sid }} .ma-mp__nav {
   position: absolute;
-  bottom: 20px;
+  bottom: 24px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -144,10 +148,10 @@
   z-index: 10;
 }
 #shopify-section-{{ sid }} .ma-mp__arrow {
-  background: rgba(255,255,255,0.7);
+  background: rgba(255,255,255,0.8);
   border: none;
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   cursor: pointer;
   display: flex;
@@ -155,9 +159,9 @@
   justify-content: center;
   font-size: 14px;
   color: #000;
-  transition: background 0.3s;
+  transition: background 0.3s, transform 0.3s;
 }
-#shopify-section-{{ sid }} .ma-mp__arrow:hover { background: #fff; }
+#shopify-section-{{ sid }} .ma-mp__arrow:hover { background: #fff; transform: scale(1.1); }
 #shopify-section-{{ sid }} .ma-mp__dots { display: flex; gap: 8px; }
 #shopify-section-{{ sid }} .ma-mp__dot {
   width: 6px;
@@ -195,7 +199,7 @@
   filter: blur({{ section.settings.wm_blur }}px);
   pointer-events: none;
   z-index: 0;
-  width: min(80%, 500px);
+  width: min(85%, 540px);
 }
 #shopify-section-{{ sid }} .ma-mp__watermark img {
   width: 100%;
@@ -209,6 +213,10 @@
 #shopify-section-{{ sid }} .ma-mp__content {
   position: relative;
   z-index: 2;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 #shopify-section-{{ sid }} .ma-mp__eyebrow {
   font-family: {{ section.settings.eyebrow_font.family }}, 'Marcellus', sans-serif;
@@ -218,16 +226,40 @@
   text-transform: uppercase;
   color: {{ eyebrow_color }};
   display: block;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 }
+
+/* Luxury Diamond Ornament */
+#shopify-section-{{ sid }} .ma-mp__diamond {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 0 auto 16px;
+  color: {{ eyebrow_color }};
+  opacity: 0.7;
+}
+#shopify-section-{{ sid }} .ma-mp__diamond::before,
+#shopify-section-{{ sid }} .ma-mp__diamond::after {
+  content: '';
+  width: 32px;
+  height: 1px;
+  background: currentColor;
+}
+#shopify-section-{{ sid }} .ma-mp__diamond-icon {
+  font-size: 10px;
+  line-height: 1;
+}
+
 #shopify-section-{{ sid }} .ma-mp__heading {
-  font-family: {{ section.settings.heading_font.family }}, 'Cormorant Garamond', serif;
-  font-size: {{ section.settings.heading_size }}px;
-  font-weight: {{ section.settings.heading_weight }};
-  letter-spacing: {{ section.settings.heading_spacing }}px;
-  line-height: {{ section.settings.heading_line_height | divided_by: 100.0 }};
-  color: {{ heading_color }};
-  margin: 0 0 20px;
+  font-family: {{ section.settings.heading_font.family }}, 'Cormorant Garamond', serif !important;
+  font-size: {{ section.settings.heading_size }}px !important;
+  font-weight: {{ section.settings.heading_weight }} !important;
+  letter-spacing: {{ section.settings.heading_spacing }}px !important;
+  line-height: {{ section.settings.heading_line_height | divided_by: 100.0 }} !important;
+  text-transform: none !important;
+  color: {{ heading_color }} !important;
+  margin: 0 0 16px !important;
 }
 #shopify-section-{{ sid }} .ma-mp__intro {
   font-family: {{ section.settings.body_font.family }}, serif;
@@ -236,25 +268,28 @@
   letter-spacing: {{ section.settings.body_spacing }}px;
   line-height: {{ section.settings.body_line_height | divided_by: 100.0 }};
   color: {{ text_color }};
+  font-style: italic;
   opacity: 0.9;
-  margin-bottom: 40px;
-  max-width: 54ch;
+  margin: 0 auto 40px;
+  max-width: 52ch;
 }
 
 /* ═══════════════════════════════════════════════
-   PROMISE BLOCKS (SHARED ELEMENTS)
+   PROMISE BLOCKS (CENTERED IN REFERENCE)
 ═══════════════════════════════════════════════ */
 #shopify-section-{{ sid }} .ma-mp__card {
   position: relative;
   z-index: 2;
   display: flex;
   flex-direction: column;
+  align-items: center !important;
+  text-align: center !important;
 }
 #shopify-section-{{ sid }} .ma-mp__icon {
   width: {{ section.settings.icon_size }}px;
   height: {{ section.settings.icon_size }}px;
   color: {{ icon_color }};
-  margin-bottom: 16px;
+  margin-bottom: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -268,19 +303,20 @@
 }
 #shopify-section-{{ sid }} .ma-mp__kicker {
   font-family: {{ section.settings.eyebrow_font.family }}, 'Marcellus', sans-serif;
-  font-size: 11px;
-  letter-spacing: 0.22em;
+  font-size: 10.5px;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
   color: {{ eyebrow_color }};
   margin-bottom: 8px;
 }
 #shopify-section-{{ sid }} .ma-mp__title {
-  font-family: {{ section.settings.promise_title_font.family }}, serif;
-  font-size: {{ section.settings.promise_title_size }}px;
-  font-weight: {{ section.settings.promise_title_weight }};
-  color: {{ heading_color }};
-  margin: 0 0 10px;
-  line-height: 1.2;
+  font-family: {{ section.settings.promise_title_font.family }}, 'Cormorant Garamond', serif !important;
+  font-size: {{ section.settings.promise_title_size }}px !important;
+  font-weight: {{ section.settings.promise_title_weight }} !important;
+  text-transform: none !important;
+  color: {{ heading_color }} !important;
+  margin: 0 0 8px !important;
+  line-height: 1.2 !important;
 }
 #shopify-section-{{ sid }} .ma-mp__desc {
   font-family: {{ section.settings.promise_body_font.family }}, serif;
@@ -289,7 +325,8 @@
   line-height: {{ section.settings.promise_body_line_height | divided_by: 100.0 }};
   color: {{ text_color }};
   opacity: 0.8;
-  margin: 0;
+  margin: 0 auto;
+  max-width: 32ch;
 }
 #shopify-section-{{ sid }} .ma-mp__num {
   position: absolute;
@@ -320,7 +357,7 @@
   max-width: 140px;
   height: {{ section.settings.emblem_line_thickness }}px;
   background: {{ emblem_color }};
-  opacity: 0.3;
+  opacity: 0.35;
 }
 #shopify-section-{{ sid }} .ma-mp__emblem {
   width: {{ section.settings.emblem_size }}px;
@@ -346,11 +383,7 @@
     min-height: {{ section.settings.section_height }}px;
     max-width: {{ section.settings.content_max_width }}px;
     margin: 0 auto;
-    align-items: center;
-  }
-  #shopify-section-{{ sid }} .ma-mp__visual {
-    height: 100%;
-    min-height: {{ section.settings.section_height }}px;
+    align-items: stretch; /* FORCES PHOTO COLUMN TO STRETCH 100% OF TEXT HEIGHT */
   }
   #shopify-section-{{ sid }} .ma-mp__content-wrap {
     padding: {{ section.settings.dt_pad_top }}px {{ section.settings.dt_pad_right }}px {{ section.settings.dt_pad_bottom }}px {{ section.settings.dt_pad_left }}px;
@@ -365,27 +398,27 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: {{ section.settings.grid_gap }}px;
-    margin-top: 20px;
+    margin-top: 10px;
     border-top: {{ section.settings.div_thickness }}px {{ section.settings.div_style }} {{ divider_color }};
     padding-top: {{ section.settings.grid_gap }}px;
   }
   #shopify-section-{{ sid }} .ma-mp__card {
-    padding: 20px;
+    padding: 24px 20px;
   }
   /* Hairline grid borders */
   #shopify-section-{{ sid }} .ma-mp__card:nth-child(1),
   #shopify-section-{{ sid }} .ma-mp__card:nth-child(2) {
     border-bottom: {{ section.settings.div_thickness }}px {{ section.settings.div_style }} {{ divider_color }};
-    padding-bottom: calc(20px + {{ section.settings.grid_gap | divided_by: 2 }}px);
+    padding-bottom: calc(24px + {{ section.settings.grid_gap | divided_by: 2 }}px);
   }
   #shopify-section-{{ sid }} .ma-mp__card:nth-child(1),
   #shopify-section-{{ sid }} .ma-mp__card:nth-child(3) {
     border-right: {{ section.settings.div_thickness }}px {{ section.settings.div_style }} {{ divider_color }};
-    padding-right: calc(20px + {{ section.settings.grid_gap | divided_by: 2 }}px);
+    padding-right: calc(24px + {{ section.settings.grid_gap | divided_by: 2 }}px);
   }
   #shopify-section-{{ sid }} .ma-mp__num {
-    top: 10px;
-    right: 15px;
+    top: 12px;
+    right: 24px;
     font-size: 64px;
   }
   
@@ -405,7 +438,7 @@
   #shopify-section-{{ sid }} .ma-mp__hero-split {
     display: grid;
     grid-template-columns: 42% 58%;
-    align-items: center;
+    align-items: stretch;
     min-height: 320px;
     position: relative;
   }
@@ -416,9 +449,12 @@
   #shopify-section-{{ sid }} .ma-mp__content-wrap {
     padding: {{ section.settings.mob_pad_top }}px {{ section.settings.mob_pad_h }}px 20px {{ section.settings.mob_pad_h }}px;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
   #shopify-section-{{ sid }} .ma-mp__eyebrow { font-size: {{ section.settings.eyebrow_size | minus: 1 }}px; }
-  #shopify-section-{{ sid }} .ma-mp__heading { font-size: clamp(28px, 7vw, 36px); }
+  #shopify-section-{{ sid }} .ma-mp__heading { font-size: clamp(28px, 7vw, 36px) !important; }
   #shopify-section-{{ sid }} .ma-mp__intro { font-size: {{ section.settings.body_size | minus: 1 }}px; margin-bottom: 20px; }
   
   /* Mobile Horizontal Row Stack */
@@ -430,7 +466,8 @@
   #shopify-section-{{ sid }} .ma-mp__card {
     display: grid;
     grid-template-columns: 32% 68%;
-    align-items: flex-start;
+    align-items: flex-start !important;
+    text-align: left !important;
     padding: 24px 0;
     border-top: {{ section.settings.div_thickness }}px {{ section.settings.div_style }} {{ divider_color }};
   }
@@ -447,11 +484,13 @@
   #shopify-section-{{ sid }} .ma-mp__col-right {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
     padding-left: 8px;
   }
   #shopify-section-{{ sid }} .ma-mp__icon { margin-bottom: 8px; }
-  #shopify-section-{{ sid }} .ma-mp__title { font-size: {{ section.settings.promise_title_size | minus: 2 }}px; }
-  #shopify-section-{{ sid }} .ma-mp__desc { font-size: {{ section.settings.promise_body_size | minus: 1 }}px; }
+  #shopify-section-{{ sid }} .ma-mp__title { font-size: {{ section.settings.promise_title_size | minus: 2 }}px !important; }
+  #shopify-section-{{ sid }} .ma-mp__desc { font-size: {{ section.settings.promise_body_size | minus: 1 }}px; max-width: 100%; margin: 0; }
   #shopify-section-{{ sid }} .ma-mp__num {
     bottom: 5px;
     left: 10px;
@@ -522,6 +561,11 @@
           {%- if section.settings.eyebrow != blank -%}
             <span class="ma-mp__eyebrow">{{ section.settings.eyebrow | escape }}</span>
           {%- endif -%}
+          
+          <div class="ma-mp__diamond" aria-hidden="true">
+            <span class="ma-mp__diamond-icon">◆</span>
+          </div>
+
           {%- if section.settings.heading != blank -%}
             <h2 class="ma-mp__heading">{{ section.settings.heading | escape }}</h2>
           {%- endif -%}
