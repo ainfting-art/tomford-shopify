@@ -1,9 +1,8 @@
 {%- comment -%}
   MAISON AMIIR — The Maison Promise (Editorial Magazine Rebuild)
-  Resolved 12 design corrections: 30/70 editorial layout ratio, seamless ivory fade edge,
-  ultra-subtle 0.06 opacity hairlines, Title Case 56px serif heading, 28px italic intro, 
-  vertically centered composition, and ghosted 4% watermark emblem.
-  All values driven from schema. 100% Theme-Editor controlled.
+  Resolved all draft database conflicts: clean decimal line-heights (no 100x division),
+  lowered schema minimums to prevent lockout from older stored values, step: 1 on sliders,
+  Title Case 56px serif heading, 28px italic intro, 30/70 editorial layout, and 4% watermark.
 {%- endcomment -%}
 
 {%- liquid
@@ -128,7 +127,6 @@
     }
   {% endif %}
 
-  /* ISSUE 10: Soft Ivory Gradient Fade Edge */
   {% if section.settings.enable_fade_edge %}
   #shopify-section-{{ sid }} .ma-pm2__left::after {
     content: '';
@@ -161,7 +159,6 @@
     opacity: 1;
     pointer-events: auto;
   }
-  /* ISSUE 2: Complete composition visibility with scale & offset controls */
   #shopify-section-{{ sid }} .ma-pm2__slide img {
     width: 100%;
     height: 100%;
@@ -174,7 +171,6 @@
     transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  /* Slider Navigation */
   #shopify-section-{{ sid }} .ma-pm2__arrow {
     position: absolute;
     bottom: 20px;
@@ -260,25 +256,23 @@
   line-height: 1;
 }
 
-/* ISSUE 6: Title Case 56px Elegant Serif Heading */
 #shopify-section-{{ sid }} .ma-pm2__heading {
   font-family: {{ section.settings.heading_font.family }}, 'Cormorant Garamond', Georgia, serif !important;
   font-size: {{ section.settings.heading_size }}px;
   font-weight: {{ section.settings.heading_weight }} !important;
   letter-spacing: {{ section.settings.heading_spacing }}px;
-  line-height: {{ section.settings.heading_line_height | divided_by: 100.0 }};
+  line-height: {{ section.settings.heading_line_height }};
   text-transform: none !important;
   color: var(--pm2-ink);
   margin: 0 0 18px;
 }
 
-/* ISSUE 7: Prominent 28px Serif Italic Statement */
 #shopify-section-{{ sid }} .ma-pm2__intro {
   font-family: {{ section.settings.body_font.family }}, 'Cormorant Garamond', Georgia, serif;
   font-size: {{ section.settings.body_size }}px;
   font-weight: {{ section.settings.body_weight }};
   font-style: italic;
-  line-height: {{ section.settings.body_line_height | divided_by: 100.0 }};
+  line-height: {{ section.settings.body_line_height }};
   letter-spacing: {{ section.settings.body_spacing }}px;
   color: var(--pm2-ink2);
   max-width: 48ch;
@@ -286,7 +280,7 @@
 }
 
 /* ═══════════════════════════════════════
-   PROMISE GRID — Ultra-Subtle 0.06 Hairlines
+   PROMISE GRID
 ═══════════════════════════════════════ */
 #shopify-section-{{ sid }} .ma-pm2__grid {
   display: grid;
@@ -296,7 +290,6 @@
   margin-bottom: {{ section.settings.grid_gap }}px;
 }
 
-/* ISSUE 5: Compact cell height and tightened padding */
 #shopify-section-{{ sid }} .ma-pm2__cell {
   position: relative;
   overflow: hidden;
@@ -379,13 +372,13 @@
   font-family: {{ section.settings.promise_body_font.family }}, 'Cormorant Garamond', Georgia, serif;
   font-size: {{ section.settings.promise_body_size }}px;
   font-weight: {{ section.settings.promise_body_weight }};
-  line-height: {{ section.settings.promise_body_line_height | divided_by: 100.0 }};
+  line-height: {{ section.settings.promise_body_line_height }};
   color: {{ section.settings.promise_body_color }};
   margin: 0;
 }
 
 /* ═══════════════════════════════════════
-   FOUNDER SEAL (+25% Prominence)
+   FOUNDER SEAL
 ═══════════════════════════════════════ */
 #shopify-section-{{ sid }} .ma-pm2__seal {
   text-align: center;
@@ -409,7 +402,6 @@
   width: 90px;
   background: linear-gradient(90deg, transparent, var(--pm2-gold), transparent);
 }
-/* ISSUE 11: Scaled up emblem badge */
 #shopify-section-{{ sid }} .ma-pm2__seal-badge {
   font-size: 18px;
   color: var(--pm2-gold);
@@ -460,7 +452,6 @@
 
 <section class="ma-pm2" id="ma-pm2-{{ sid }}">
 
-  {%- comment -%} Watermark — Reuses exact live logo src {%- endcomment -%}
   {%- if section.settings.show_watermark -%}
     <div class="ma-pm2__watermark" aria-hidden="true">
       <img src="https://maisonamiir.com/cdn/shop/files/MAISON-LOGO-NEW.png?v=1775626552&width=800"
@@ -472,7 +463,6 @@
 
   <div class="ma-pm2__layout">
 
-    {%- comment -%} ── LEFT COLUMN: 30% Visual Composition Area ── {%- endcomment -%}
     <div class="ma-pm2__left">
 
       {%- if img_count > 0 -%}
@@ -518,7 +508,6 @@
         </div>
       {%- endif -%}
 
-      {%- comment -%} Optional Floating Decorative Assets {%- endcomment -%}
       {%- for block in deco_blocks -%}
         {%- if block.settings.deco_image != blank -%}
           <div class="ma-pm2__deco"
@@ -537,7 +526,6 @@
 
     </div>
 
-    {%- comment -%} ── RIGHT COLUMN: 70% Centered Manifesto Spread ── {%- endcomment -%}
     <div class="ma-pm2__right">
 
       <div class="ma-pm2__header">
@@ -564,10 +552,8 @@
         {%- endif -%}
       </div>
 
-      {%- comment -%} Promise 2×2 Grid {%- endcomment -%}
       <div class="ma-pm2__grid">
 
-        {%- comment -%} CELL 1 — The Tester {%- endcomment -%}
         <div class="ma-pm2__cell">
           <span class="ma-pm2__cell-num" aria-hidden="true">01</span>
           <span class="ma-pm2__icon" aria-hidden="true">
@@ -585,7 +571,6 @@
           {%- if section.settings.d1 != blank -%}<p class="ma-pm2__desc">{{ section.settings.d1 | escape }}</p>{%- endif -%}
         </div>
 
-        {%- comment -%} CELL 2 — The Return {%- endcomment -%}
         <div class="ma-pm2__cell">
           <span class="ma-pm2__cell-num" aria-hidden="true">02</span>
           <span class="ma-pm2__icon" aria-hidden="true">
@@ -603,7 +588,6 @@
           {%- if section.settings.d2 != blank -%}<p class="ma-pm2__desc">{{ section.settings.d2 | escape }}</p>{%- endif -%}
         </div>
 
-        {%- comment -%} CELL 3 — The Climate {%- endcomment -%}
         <div class="ma-pm2__cell">
           <span class="ma-pm2__cell-num" aria-hidden="true">03</span>
           <span class="ma-pm2__icon" aria-hidden="true">
@@ -621,7 +605,6 @@
           {%- if section.settings.d3 != blank -%}<p class="ma-pm2__desc">{{ section.settings.d3 | escape }}</p>{%- endif -%}
         </div>
 
-        {%- comment -%} CELL 4 — The Formula {%- endcomment -%}
         <div class="ma-pm2__cell">
           <span class="ma-pm2__cell-num" aria-hidden="true">04</span>
           <span class="ma-pm2__icon" aria-hidden="true">
@@ -641,7 +624,6 @@
 
       </div>
 
-      {%- comment -%} Founder Seal Sign-off {%- endcomment -%}
       {%- if section.settings.sign != blank -%}
         <div class="ma-pm2__seal {% if section.settings.enable_animations %}ma-pm2__anim{% endif %}">
           <div class="ma-pm2__seal-rule">
@@ -774,7 +756,7 @@
     { "type": "select",  "id": "img_object_fit",  "label": "Object fit",       "default": "cover", "options": [{"value":"cover","label":"Cover"},{"value":"contain","label":"Contain"}] },
     { "type": "range",   "id": "img_focal_x",     "label": "Focal point X (%)","min": 0,  "max": 100,"step": 5, "default": 50 },
     { "type": "range",   "id": "img_focal_y",     "label": "Focal point Y (%)","min": 0,  "max": 100,"step": 5, "default": 45 },
-    { "type": "range",   "id": "img_scale",       "label": "Image scale (%)",  "min": 80, "max": 130,"step": 5, "default": 100 },
+    { "type": "range",   "id": "img_scale",       "label": "Image scale (%)",  "min": 80, "max": 130,"step": 1, "default": 100 },
     { "type": "range",   "id": "img_offset_x",    "label": "Image offset X (px)","min": -80,"max": 80,"step": 5, "default": 0 },
     { "type": "range",   "id": "img_offset_y",    "label": "Image offset Y (px)","min": -80,"max": 80,"step": 5, "default": 0 },
     { "type": "range",   "id": "img_radius",      "label": "Image radius (px)","min": 0,  "max": 32, "step": 2, "default": 0 },
@@ -786,15 +768,15 @@
     { "type": "checkbox","id": "img_shadow",      "label": "Enable luxury shadow",  "default": true },
     { "type": "checkbox","id": "full_bleed_left", "label": "Full-bleed left edge",  "default": true },
 
-    { "type": "header", "content": "── IMAGE BLEND / FADE EDGE (ISSUE 10) ──" },
+    { "type": "header", "content": "── IMAGE BLEND / FADE EDGE ──" },
     { "type": "checkbox","id": "enable_fade_edge", "label": "Enable background gradient blend", "default": true },
     { "type": "range",   "id": "fade_width",       "label": "Fade edge width (%)",  "min": 10, "max": 60, "step": 5, "default": 30 },
     { "type": "range",   "id": "fade_strength",    "label": "Fade opacity (%)",     "min": 20, "max": 100,"step": 5, "default": 95 },
 
-    { "type": "header", "content": "── WATERMARK (ISSUE 3) ──" },
+    { "type": "header", "content": "── WATERMARK ──" },
     { "type": "checkbox","id": "show_watermark", "label": "Show watermark",         "default": true },
     { "type": "range",   "id": "wm_opacity",    "label": "Watermark opacity (%)",  "min": 1,"max": 15,"step": 1,"default": 4 },
-    { "type": "range",   "id": "wm_scale",      "label": "Watermark scale (%)",    "min": 20,"max": 100,"step": 5,"default": 75 },
+    { "type": "range",   "id": "wm_scale",      "label": "Watermark scale (%)",    "min": 10,"max": 100,"step": 1,"default": 75 },
     { "type": "range",   "id": "wm_pos_x",      "label": "Watermark position X (% from right)","min": 0,"max": 60,"step": 5,"default": 15 },
     { "type": "range",   "id": "wm_pos_y",      "label": "Watermark position Y (%)", "min": 10,"max": 90,"step": 5,"default": 50 },
     { "type": "range",   "id": "wm_rotation",   "label": "Watermark rotation (deg)","min": -45,"max": 45,"step": 5,"default": 0 },
@@ -814,34 +796,34 @@
     { "type": "color", "id": "eyebrow_color",   "label": "Eyebrow / gold (Custom)",  "default": "#A8894E" },
     { "type": "color", "id": "grid_line_color", "label": "Grid line color (Custom)", "default": "rgba(23,19,16,0.06)" },
 
-    { "type": "header", "content": "── TYPOGRAPHY — HEADER (ISSUES 6 & 7) ──" },
+    { "type": "header", "content": "── TYPOGRAPHY — HEADER ──" },
     { "type": "font_picker","id": "eyebrow_font",  "label": "Eyebrow font",  "default": "helvetica_n4" },
-    { "type": "range",     "id": "eyebrow_size",   "label": "Eyebrow size (px)",  "min": 9,"max": 16,"step": 1,"default": 11 },
+    { "type": "range",     "id": "eyebrow_size",   "label": "Eyebrow size (px)",  "min": 8,"max": 20,"step": 1,"default": 11 },
     { "type": "select",    "id": "eyebrow_weight", "label": "Eyebrow weight","default": "400","options": [{"value":"300","label":"Light"},{"value":"400","label":"Regular"},{"value":"500","label":"Medium"},{"value":"600","label":"Semibold"}] },
     { "type": "range",     "id": "eyebrow_spacing","label": "Eyebrow letter spacing (px)","min": 0,"max": 10,"step": 0.5,"default": 3.5 },
 
     { "type": "font_picker","id": "heading_font",       "label": "Heading font",      "default": "playfair_display_n4" },
-    { "type": "range",     "id": "heading_size",        "label": "Heading size (px)", "min": 32,"max": 72,"step": 2,"default": 56 },
+    { "type": "range",     "id": "heading_size",        "label": "Heading size (px)", "min": 24,"max": 72,"step": 1,"default": 56 },
     { "type": "select",    "id": "heading_weight",      "label": "Heading weight",    "default": "400","options": [{"value":"300","label":"Light"},{"value":"400","label":"Regular"},{"value":"500","label":"Medium"}] },
-    { "type": "range",     "id": "heading_line_height", "label": "Heading line height (%)","min": 100,"max": 140,"step": 5,"default": 105 },
+    { "type": "range",     "id": "heading_line_height", "label": "Heading line height","min": 0.8,"max": 2.0,"step": 0.1,"default": 1.1 },
     { "type": "range",     "id": "heading_spacing",     "label": "Heading letter spacing (px)","min": -2,"max": 5,"step": 0.5,"default": 0 },
 
     { "type": "font_picker","id": "body_font",       "label": "Intro body font",      "default": "playfair_display_n4" },
-    { "type": "range",     "id": "body_size",        "label": "Intro body size (px)", "min": 18,"max": 34,"step": 1,"default": 28 },
+    { "type": "range",     "id": "body_size",        "label": "Intro body size (px)", "min": 12,"max": 36,"step": 1,"default": 28 },
     { "type": "select",    "id": "body_weight",      "label": "Intro body weight",    "default": "400","options": [{"value":"300","label":"Light"},{"value":"400","label":"Regular"}] },
-    { "type": "range",     "id": "body_line_height", "label": "Intro line height (%)", "min": 120,"max": 180,"step": 5,"default": 145 },
+    { "type": "range",     "id": "body_line_height", "label": "Intro line height",    "min": 1.0,"max": 2.5,"step": 0.1,"default": 1.5 },
     { "type": "range",     "id": "body_spacing",     "label": "Intro letter spacing (px)", "min": 0,"max": 5,"step": 0.5,"default": 0 },
 
     { "type": "header", "content": "── TYPOGRAPHY — PROMISE CARDS ──" },
     { "type": "range",     "id": "promise_kicker_size",  "label": "Kicker size (px)",   "min": 8,"max": 14,"step": 1,"default": 10 },
     { "type": "font_picker","id": "promise_title_font",  "label": "Promise title font", "default": "playfair_display_n4" },
-    { "type": "range",     "id": "promise_title_size",   "label": "Promise title size (px)",  "min": 16,"max": 30,"step": 1,"default": 22 },
+    { "type": "range",     "id": "promise_title_size",   "label": "Promise title size (px)",  "min": 14,"max": 30,"step": 1,"default": 22 },
     { "type": "select",    "id": "promise_title_weight", "label": "Promise title weight","default": "600","options": [{"value":"400","label":"Regular"},{"value":"500","label":"Medium"},{"value":"600","label":"Semibold"}] },
     { "type": "color",     "id": "promise_title_color",  "label": "Promise title color", "default": "#171310" },
     { "type": "font_picker","id": "promise_body_font",   "label": "Promise body font",   "default": "playfair_display_n4" },
-    { "type": "range",     "id": "promise_body_size",    "label": "Promise body size (px)",   "min": 12,"max": 20,"step": 1,"default": 15 },
+    { "type": "range",     "id": "promise_body_size",    "label": "Promise body size (px)",   "min": 10,"max": 20,"step": 1,"default": 15 },
     { "type": "select",    "id": "promise_body_weight",  "label": "Promise body weight", "default": "400","options": [{"value":"300","label":"Light"},{"value":"400","label":"Regular"}] },
-    { "type": "range",     "id": "promise_body_line_height","label": "Promise body line height (%)","min": 120,"max": 180,"step": 5,"default": 145 },
+    { "type": "range",     "id": "promise_body_line_height","label": "Promise body line height","min": 1.0,"max": 2.5,"step": 0.1,"default": 1.5 },
     { "type": "color",     "id": "promise_body_color",   "label": "Promise body color",  "default": "rgba(23,19,16,0.75)" },
 
     { "type": "header", "content": "── ICON SETTINGS ──" },
@@ -849,11 +831,11 @@
     { "type": "range",  "id": "icon_stroke", "label": "Icon stroke width", "min": 0.5,"max": 3.0,"step": 0.1,"default": 1.1 },
     { "type": "range",  "id": "icon_opacity","label": "Icon opacity (%)",  "min": 30,"max": 100,"step": 5,"default": 100 },
 
-    { "type": "header", "content": "── LAYOUT & COMPOSITION (ISSUES 1 & 5) ──" },
+    { "type": "header", "content": "── LAYOUT & COMPOSITION ──" },
     { "type": "range",  "id": "section_width",  "label": "Max section width (px)",  "min": 900,"max": 1600,"step": 20,"default": 1340 },
     { "type": "range",  "id": "min_height",     "label": "Min section height (px)", "min": 400,"max": 900,"step": 20,"default": 640 },
-    { "type": "range",  "id": "left_col_width", "label": "Left column fraction (3 = ~30%)",  "min": 1,"max": 5,"step": 1,"default": 3 },
-    { "type": "range",  "id": "right_col_width","label": "Right column fraction (7 = ~70%)", "min": 1,"max": 9,"step": 1,"default": 7 },
+    { "type": "range",  "id": "left_col_width", "label": "Left column fraction",    "min": 1,"max": 5,"step": 1,"default": 3 },
+    { "type": "range",  "id": "right_col_width","label": "Right column fraction",   "min": 1,"max": 9,"step": 1,"default": 7 },
     { "type": "range",  "id": "col_gap",        "label": "Column gap (px)",          "min": 0,"max": 80,"step": 4,"default": 20 },
     { "type": "range",  "id": "pad_top",        "label": "Padding top (px)",         "min": 0,"max": 80,"step": 4,"default": 40 },
     { "type": "range",  "id": "pad_bottom",     "label": "Padding bottom (px)",      "min": 0,"max": 80,"step": 4,"default": 40 },
@@ -867,7 +849,7 @@
     { "type": "select", "id": "text_align",     "label": "Text alignment",      "default": "center","options": [{"value":"left","label":"Left"},{"value":"center","label":"Center"}] },
     { "type": "select", "id": "vertical_align", "label": "Vertical alignment",  "default": "center","options": [{"value":"start","label":"Top"},{"value":"center","label":"Center"},{"value":"end","label":"Bottom"}] },
 
-    { "type": "header", "content": "── GRID LINES (ISSUE 4) ──" },
+    { "type": "header", "content": "── GRID LINES ──" },
     { "type": "range",  "id": "grid_line_thickness","label": "Line thickness (px)","min": 0,"max": 3,"step": 1,"default": 1 },
     { "type": "select", "id": "grid_line_style",    "label": "Line style",   "default": "solid","options": [{"value":"solid","label":"Solid"},{"value":"dashed","label":"Dashed"},{"value":"none","label":"None"}] },
 
