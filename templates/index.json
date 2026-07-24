@@ -1603,48 +1603,6 @@
         "section_width": 1140,
         "section_min_height": 340
       }
-    },
-    "ma_promise_visual_LiHRX6": {
-      "type": "ma-promise-visual",
-      "disabled": true,
-      "name": "MA Promise Visual",
-      "settings": {
-        "eyebrow": "Buy Without a Doubt",
-        "heading": "The Maison Promise",
-        "subline": "Wear it first. Decide after. A scent is personal — you should never commit to one you haven't lived with.",
-        "sign": "M",
-        "image": "shopify://shop_images/Perfume_bottle_and_box_banner_202607232151.jpg",
-        "mobile_image_width": 45,
-        "left_column_width": 33,
-        "k1": "The Tester",
-        "t1": "A Tester in Every Order",
-        "d1": "Live with the scent for days before you ever break the seal on the bottle.",
-        "k2": "The Return",
-        "t2": "Seven Days to Decide",
-        "d2": "Return the sealed bottle within seven days for a full refund. No questions asked.",
-        "k3": "The Climate",
-        "t3": "Crafted for India",
-        "d3": "Built for Indian skin, heat and humidity — not London winters.",
-        "k4": "The Formula",
-        "t4": "The Oil is Everything",
-        "d4": "Most of what you pay goes into the oil — not the bottle, the box, or the campaign.",
-        "watermark_opacity": 6,
-        "bg_color": "#f4eee1",
-        "ink_color": "#171310",
-        "gold_color": "#a8894e",
-        "burgundy_color": "#6e1220",
-        "heading_size": 48,
-        "mobile_heading_size": 28,
-        "body_size": 18,
-        "mobile_body_size": 14,
-        "promise_title_size_desktop": 22,
-        "promise_title_size_mobile": 18,
-        "promise_body_size_desktop": 15,
-        "promise_body_size_mobile": 13,
-        "section_width": 1240,
-        "column_gap": 48,
-        "desktop_padding": 50
-      }
     }
   },
   "order": [
@@ -1668,7 +1626,6 @@
     "ma_atelier_editorial_yJRjb6",
     "ma_journal_KaX3PU",
     "video_showcase_Jgy4PX",
-    "ma_journal_editorial_jEbC6P",
-    "ma_promise_visual_LiHRX6"
+    "ma_journal_editorial_jEbC6P"
   ]
 }
