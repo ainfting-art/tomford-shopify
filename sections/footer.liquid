@@ -14,7 +14,7 @@
   background: #EFE7DB;
   color: #000;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 100%;
   overflow-x: hidden;
@@ -22,9 +22,10 @@
 
 /* ── TOP INNER WRAPPER ── */
 .ma-footer__inner {
-  max-width: 3000px;
+  max-width: 1400px;
   margin: 0 auto;
   background: transparent !important;
+  /* responsive side padding — shrinks gracefully instead of overflowing */
   padding: clamp(40px, 5vw, 80px) clamp(20px, 5vw, 80px) 0;
 }
 
@@ -174,10 +175,10 @@
   background: #333;
 }
 
-/* ── ZONE 2: TRUST + PAYMENT BAR (white-theme adaptation) ── */
+/* ── ZONE 2: TRUST + PAYMENT BAR ── */
 .ma-footer__trust-wrap {
-  border-top: 1px solid #e0e0e0;
-  background: #EFE7DB;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  background: transparent !important;
 }
 
 .ma-footer__trust {
@@ -212,7 +213,7 @@
 .ma-footer__trust-div {
   width: 1px;
   height: 14px;
-  background: #d8d8d8;
+  background: rgba(0, 0, 0, 0.15);
   flex-shrink: 0;
 }
 
@@ -225,7 +226,7 @@
 
 .ma-footer__pay-pill {
   background: #fff;
-  border: 1px solid #d8d8d8;
+  border: 1px solid rgba(0, 0, 0, 0.15);
   border-radius: 3px;
   padding: 3px 9px;
   font-size: 9px;
@@ -260,7 +261,7 @@
 
 /* ── BOTTOM BAR ── */
 .ma-footer__bottom-wrap {
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .ma-footer__bottom {
@@ -270,7 +271,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;           /* wrap instead of clipping on mid widths */
+  flex-wrap: wrap;          /* wrap instead of clipping on mid widths */
   gap: 16px;
 }
 
@@ -353,7 +354,7 @@
 
   /* Accordion items */
   .ma-footer__accordion {
-    border-top: 1px solid #e0e0e0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
   }
 
   .ma-footer__accordion-trigger {
@@ -363,7 +364,7 @@
     width: 100%;
     background: none;
     border: none;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     padding: 17px 20px;
     font-size: 17px;
     font-weight: 700;
@@ -393,7 +394,7 @@
   .ma-footer__accordion-panel {
     display: none;
     padding: 4px 20px 18px;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   }
 
   .ma-footer__accordion-panel.is-open {
@@ -419,7 +420,7 @@
   /* Newsletter on mobile */
   .ma-footer__subscribe-mobile {
     padding: 30px 20px 36px;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   }
 
   /* Mobile readability — match Tom Ford footer type sizes */
