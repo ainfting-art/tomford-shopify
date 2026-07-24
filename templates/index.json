@@ -167,19 +167,6 @@
         "padding-block-end": 0
       }
     },
-    "ma_home_trust": {
-      "type": "ma-home-trust",
-      "disabled": true,
-      "settings": {
-        "stars": "★★★★☆",
-        "a_big": "4.3",
-        "a_sm": "From 500+ reviews",
-        "b_big": "15,000+",
-        "b_sm": "Bottles shipped",
-        "c_big": "7-Day",
-        "c_sm": "Risk-free returns"
-      }
-    },
     "ma_most_wanted_3eDjHb": {
       "type": "ma-most-wanted",
       "name": "Most Wanted Grid",
@@ -1369,169 +1356,6 @@
         "margin_bottom": 0
       }
     },
-    "section_Rrah97": {
-      "type": "section",
-      "blocks": {
-        "group_AfAKnE": {
-          "type": "group",
-          "name": "t:names.group",
-          "settings": {
-            "content_direction": "column",
-            "vertical_on_mobile": true,
-            "horizontal_alignment": "flex-start",
-            "vertical_alignment": "center",
-            "align_baseline": false,
-            "horizontal_alignment_flex_direction_column": "center",
-            "vertical_alignment_flex_direction_column": "center",
-            "gap": 10,
-            "width": "fill",
-            "custom_width": 100,
-            "width_mobile": "fill",
-            "custom_width_mobile": 100,
-            "height": "fit",
-            "custom_height": 100,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "background_media": "none",
-            "video_position": "cover",
-            "background_image_position": "cover",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "toggle_overlay": false,
-            "overlay_color": "#00000026",
-            "overlay_style": "solid",
-            "gradient_direction": "to top",
-            "link": "",
-            "open_in_new_tab": false,
-            "placeholder": "",
-            "padding-block-start": 100,
-            "padding-block-end": 100,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0,
-            "custom_class": "signi-coll not"
-          },
-          "blocks": {
-            "text_n49cFe": {
-              "type": "text",
-              "name": "t:names.text",
-              "settings": {
-                "text": "<p>ENTER THE ATELIER</p>",
-                "width": "100%",
-                "max_width": "none",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "text_M7fM9n": {
-              "type": "text",
-              "name": "t:names.heading",
-              "settings": {
-                "text": "<h2>Where Smoke Meets Soul..</h2>",
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "text_zVzcU7": {
-              "type": "text",
-              "settings": {
-                "text": "<p>Deep, resonant, and intentionally bold. We craft scents for those who move through the world with purpose. Step into our world of olfactive shadows and light, and discover a fragrance that resonates with your inner frequency.</p>",
-                "width": "100%",
-                "max_width": "none",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "text_n49cFe",
-            "text_M7fM9n",
-            "text_zVzcU7"
-          ]
-        }
-      },
-      "block_order": [
-        "group_AfAKnE"
-      ],
-      "disabled": true,
-      "name": "t:names.rich_text_section",
-      "settings": {
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "flex-start",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "flex-start",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 25,
-        "section_width": "page-width",
-        "section_height": "small",
-        "section_height_custom": 50,
-        "color_scheme": "scheme-4",
-        "background_media": "image",
-        "video_position": "cover",
-        "background_image": "shopify://shop_images/BOX_SMOKE_1920x_f88f31fc-de27-419c-bdf8-d0c3b395d241.webp",
-        "background_image_position": "cover",
-        "border": "none",
-        "border_width": 1,
-        "border_opacity": 100,
-        "border_radius": 0,
-        "toggle_overlay": true,
-        "overlay_color": "#0000008a",
-        "overlay_style": "solid",
-        "gradient_direction": "to top",
-        "padding-block-start": 100,
-        "padding-block-end": 100
-      }
-    },
     "ma_journal_KaX3PU": {
       "type": "ma-journal",
       "disabled": true,
@@ -1798,7 +1622,6 @@
     "section_wQqHde",
     "trust_banner_3_marquee_AKyjRX",
     "hero_jVaWmY",
-    "ma_home_trust",
     "ma_most_wanted_3eDjHb",
     "custom_liquid_hmfTtV",
     "ma_most_wanted_edUXRw",
@@ -1815,7 +1638,6 @@
     "ma_explore_maison",
     "ma_brand_story",
     "ma_atelier_editorial_yJRjb6",
-    "section_Rrah97",
     "ma_journal_KaX3PU",
     "video_showcase_Jgy4PX",
     "ma_journal_editorial_jEbC6P",
