@@ -214,69 +214,7 @@
         "right_label": "Maison Amiir",
         "right_value": "from ₹2,200",
         "refine_1": "30% Extrait Oil ✦ The same concentration tier as the houses that inspire us.",
-        "refine_2": "Kind to skin ✦ IFRA-compliant ✦ Last all day",
-        "color_preset": "custom",
-        "bg_color": "#f4eee1",
-        "ink_color": "#171310",
-        "gold_color": "#c6a15b",
-        "burg_color": "#6e1220",
-        "burg2_color": "#8e1b28",
-        "fade_color": "#f4eee1",
-        "cta_text": "",
-        "cta_link": "",
-        "cta_color": "#8e1b28",
-        "cta_hover_color": "#171310",
-        "image_fit": "cover",
-        "image_scale": 100,
-        "focal_x": 50,
-        "focal_y": 50,
-        "image_opacity": 100,
-        "image_brightness": 100,
-        "image_contrast": 100,
-        "image_saturation": 100,
-        "overlay_color": "#000000",
-        "overlay_strength": 0,
-        "section_height_vh": 100,
-        "content_col_width": 55,
-        "content_max_width": 640,
-        "content_align_y": "center",
-        "dt_text_align": "left",
-        "content_gap": 14,
-        "eyebrow_font": "sans_serif_n4",
-        "eyebrow_size": 11,
-        "eyebrow_weight": "400",
-        "eyebrow_spacing": 3,
-        "eyebrow_transform": "uppercase",
-        "heading_font": "garamond_n4",
-        "heading_size": 54,
-        "heading_weight": "600",
-        "heading_line_height": 110,
-        "heading_spacing": 0,
-        "heading_transform": "none",
-        "sub_font": "garamond_i4",
-        "sub_size": 18,
-        "sub_weight": "500",
-        "sub_line_height": 145,
-        "val_font": "garamond_n4",
-        "val_size": 48,
-        "cta_font": "sans_serif_n4",
-        "cta_size": 12,
-        "mob_img_height": 320,
-        "mob_focal_x": 50,
-        "mob_focal_y": 50,
-        "mob_text_align": "left",
-        "mob_eyebrow_size": 11,
-        "mob_heading_size": 34,
-        "mob_sub_size": 15,
-        "mob_pad_top": 24,
-        "mob_pad_bottom": 40,
-        "mob_pad_h": 24,
-        "dt_pad_top": 0,
-        "dt_pad_bottom": 0,
-        "dt_pad_left": 60,
-        "dt_pad_right": 50,
-        "margin_top": 0,
-        "margin_bottom": 0
+        "refine_2": "Kind to skin ✦ IFRA-compliant ✦ Last all day"
       }
     },
     "ma_most_wanted_JMH4Mt": {
@@ -756,6 +694,7 @@
         "review_10",
         "review_11"
       ],
+      "disabled": true,
       "name": "MA Social Proof",
       "settings": {
         "heading": "Worn. Remembered.",
@@ -763,6 +702,152 @@
         "rating": 4.1,
         "aggregate": "4.3 · Verified Buyers",
         "rotate_seconds": 5
+      }
+    },
+    "ma_editorial_social_proof_6tWRTb": {
+      "type": "ma-editorial-social-proof",
+      "blocks": {
+        "review_axFFD9": {
+          "type": "review",
+          "settings": {
+            "product": "desert-velvet-oud",
+            "stars": 5,
+            "heading": "My boyfriend wears it and I'm obsessed",
+            "quote": "My boyfriend bought this and honestly I want to wear it myself. The amber and oud combination smells incredible on skin. Very long lasting. I can smell it on his jacket even after he's gone for the day. Might buy my own bottle haha.",
+            "author": "Ananya T"
+          }
+        },
+        "review_BcWrR7": {
+          "type": "review",
+          "settings": {
+            "product": "earthly-accord",
+            "stars": 5,
+            "heading": "Very natural and grounded smell",
+            "quote": "Hard to describe but it smells like a walk through a forest after rain. Really natural and clean. Not synthetic at all. I'm a fitness trainer and I apply this after morning workouts before clients come. Its subtle enough to not overwhelm but present enough to smell fresh and professional. Love it.",
+            "author": "Abhishek R"
+          }
+        },
+        "review_F6UUiC": {
+          "type": "review",
+          "settings": {
+            "product": "horizon-valley",
+            "stars": 5,
+            "heading": "My husband uses it everyday",
+            "quote": "Gifted this to my husband for our anniversary trip. He wore it every single day of the trip. Says it felt right with the mountains and outdoors we were visiting. Now it's become his daily scent back home too. Very happy with this purchase.",
+            "author": "Swati N"
+          }
+        },
+        "review_AeGifM": {
+          "type": "review",
+          "settings": {
+            "product": "sailor-elixir",
+            "stars": 5,
+            "heading": "Absolute beast mode fragrance",
+            "quote": "I need to be careful how many sprays I do with this one lol. Two sprays and the whole room knows I'm there. Sailor Elixir is bold, sweet, and incredibly addictive smelling. I've had 4 different people ask about it in the last month alone. The sweet seductive combination is just irresistible.",
+            "author": "Vihaan S"
+          }
+        },
+        "review_6qdhFa": {
+          "type": "review",
+          "settings": {
+            "product": "floral-tapestry",
+            "stars": 5,
+            "heading": "Gifted to my daughter",
+            "quote": "My 21 year old daughter loves this. She's been wearing it daily since I gave it to her last month. The scent is perfect for her age - fresh, feminine, not too mature. I can smell it on her when she gives me a hug and it always makes me smile.",
+            "author": "Geeta B"
+          }
+        },
+        "review_VnbcpP": {
+          "type": "review",
+          "settings": {
+            "product": "raised-in-rome",
+            "stars": 5,
+            "heading": "My son loves this for office",
+            "quote": "Gifted to my 32 year old son who works in sales. He says his clients now remember him as the guy who smells great. Which apparently helps in his line of work. Very happy with the product and the service.",
+            "author": "Manish D"
+          }
+        },
+        "review_x9WfW3": {
+          "type": "review",
+          "settings": {
+            "product": "femme-freedom",
+            "stars": 5,
+            "heading": "A confident woman's scent",
+            "quote": "I'm 50 years old and this fragrance makes me feel young and vibrant. Not trying to be something it's not - it's just beautiful, confident, and elegant. I wore it to my daughter's wedding and received so many compliments from guests. Longevity is also excellent.",
+            "author": "Padma I"
+          }
+        }
+      },
+      "block_order": [
+        "review_axFFD9",
+        "review_BcWrR7",
+        "review_F6UUiC",
+        "review_AeGifM",
+        "review_6qdhFa",
+        "review_VnbcpP",
+        "review_x9WfW3"
+      ],
+      "name": "MA Editorial Proof",
+      "settings": {
+        "heading": "WORN. REMEMBERED.",
+        "subline": "The fragrances people mention long after you leave.",
+        "rating": 5,
+        "aggregate": "4.3 · Verified Buyers",
+        "rotate_seconds": 3,
+        "eyebrow": "FROM VERIFIED CLIENTS",
+        "color_preset": "ivory",
+        "bg_color": "#f8f6f0",
+        "text_color": "#1a1510",
+        "accent_color": "#a8894e",
+        "fade_color": "#f8f6f0",
+        "image": "shopify://shop_images/8K_behind-the-scenes_luxury_202604281908_1.jpg",
+        "image_col_width": 35,
+        "image_fit": "cover",
+        "focal_x": 50,
+        "focal_y": 50,
+        "image_scale": 100,
+        "image_opacity": 100,
+        "image_brightness": 100,
+        "image_contrast": 100,
+        "image_saturation": 100,
+        "fade_strength": 40,
+        "overlay_color": "#000000",
+        "overlay_strength": 0,
+        "eyebrow_font": "sans_serif_n4",
+        "eyebrow_size": 11,
+        "eyebrow_weight": "600",
+        "eyebrow_spacing": 2,
+        "heading_font": "playfair_display_n4",
+        "heading_size": 48,
+        "heading_weight": "400",
+        "heading_line_height": 115,
+        "heading_spacing": 0,
+        "sub_font": "playfair_display_i4",
+        "sub_size": 18,
+        "sub_weight": "400",
+        "quote_font": "playfair_display_n4",
+        "quote_size": 26,
+        "quote_weight": "400",
+        "quote_line_height": 150,
+        "meta_font": "sans_serif_n4",
+        "meta_size": 10,
+        "mob_img_height": 380,
+        "mob_eyebrow_size": 10,
+        "mob_heading_size": 34,
+        "mob_sub_size": 16,
+        "mob_quote_size": 20,
+        "mob_meta_size": 11,
+        "mob_pad_top": 24,
+        "mob_pad_bottom": 64,
+        "mob_pad_h": 24,
+        "desktop_height": 640,
+        "dt_max_width": 1400,
+        "dt_pad_top": 20,
+        "dt_pad_bottom": 20,
+        "dt_pad_left": 60,
+        "dt_pad_right": 60,
+        "margin_top": 0,
+        "margin_bottom": 0
       }
     },
     "ma_quiz_invite_J9337a": {
@@ -1584,87 +1669,6 @@
         "section_width": 1140,
         "section_min_height": 340
       }
-    },
-    "ma_editorial_social_proof_6tWRTb": {
-      "type": "ma-editorial-social-proof",
-      "blocks": {
-        "review_frjeEi": {
-          "type": "review",
-          "settings": {
-            "product": "club-nocturne",
-            "stars": 5,
-            "heading": "This oud is special",
-            "quote": "I've tried many oud fragrances over the years and Desert Velvet Oud has quickly become one of my favourites. The smoky and warmth combo is exactly what a good oud should be.",
-            "author": "aeafaefefasfef"
-          }
-        }
-      },
-      "block_order": [
-        "review_frjeEi"
-      ],
-      "disabled": true,
-      "name": "MA Editorial Proof",
-      "settings": {
-        "heading": "WORN. REMEMBERED.",
-        "subline": "The fragrances people mention long after you leave.",
-        "rating": 4.3,
-        "aggregate": "4.3 · Verified Buyers",
-        "rotate_seconds": 6,
-        "eyebrow": "FROM VERIFIED CLIENTS",
-        "color_preset": "ivory",
-        "bg_color": "#f8f6f0",
-        "text_color": "#1a1510",
-        "accent_color": "#a8894e",
-        "fade_color": "#f8f6f0",
-        "image": "shopify://shop_images/8K_behind-the-scenes_luxury_202604281908_1.jpg",
-        "image_col_width": 45,
-        "image_fit": "cover",
-        "focal_x": 50,
-        "focal_y": 50,
-        "image_scale": 100,
-        "image_opacity": 100,
-        "image_brightness": 100,
-        "image_contrast": 100,
-        "image_saturation": 100,
-        "fade_strength": 40,
-        "overlay_color": "#000000",
-        "overlay_strength": 0,
-        "eyebrow_font": "sans_serif_n4",
-        "eyebrow_size": 11,
-        "eyebrow_weight": "600",
-        "eyebrow_spacing": 2,
-        "heading_font": "playfair_display_n4",
-        "heading_size": 48,
-        "heading_weight": "400",
-        "heading_line_height": 115,
-        "heading_spacing": 0,
-        "sub_font": "playfair_display_i4",
-        "sub_size": 18,
-        "sub_weight": "400",
-        "quote_font": "playfair_display_n4",
-        "quote_size": 26,
-        "quote_weight": "400",
-        "quote_line_height": 150,
-        "meta_font": "sans_serif_n4",
-        "meta_size": 10,
-        "mob_img_height": 380,
-        "mob_eyebrow_size": 10,
-        "mob_heading_size": 34,
-        "mob_sub_size": 16,
-        "mob_quote_size": 20,
-        "mob_meta_size": 11,
-        "mob_pad_top": 24,
-        "mob_pad_bottom": 64,
-        "mob_pad_h": 24,
-        "desktop_height": 640,
-        "dt_max_width": 1400,
-        "dt_pad_top": 60,
-        "dt_pad_bottom": 60,
-        "dt_pad_left": 60,
-        "dt_pad_right": 60,
-        "margin_top": 0,
-        "margin_bottom": 0
-      }
     }
   },
   "order": [
@@ -1680,6 +1684,7 @@
     "product_list_nrNjhj",
     "ma_home_risk",
     "ma_social_proof",
+    "ma_editorial_social_proof_6tWRTb",
     "ma_quiz_invite_J9337a",
     "ma_value_story",
     "section_VhLBpg",
@@ -1688,7 +1693,6 @@
     "ma_atelier_editorial_yJRjb6",
     "ma_journal_KaX3PU",
     "video_showcase_Jgy4PX",
-    "ma_journal_editorial_jEbC6P",
-    "ma_editorial_social_proof_6tWRTb"
+    "ma_journal_editorial_jEbC6P"
   ]
 }
