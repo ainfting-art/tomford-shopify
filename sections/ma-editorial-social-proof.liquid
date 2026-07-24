@@ -2,7 +2,7 @@
   MAISON AMIIR — Editorial Social Proof Section
   Preserves 100% of existing Judge.me review logic, auto-fetching, and rotation.
   Transforms presentation into a Celine / MFK luxury fashion house editorial spread.
-  FIXED: Generous 380px stage height prevents thumbnail/author clipping while eliminating layout shaking.
+  FIXED: Active auto-rotation loop restored with manual pause/reset on arrow clicks.
 {%- endcomment -%}
 
 {%- liquid
@@ -527,7 +527,7 @@
 <!-- EXTERNAL SCRIPT PRESERVED FOR AUTO-FETCHING AND ROTATION -->
 <script src="{{ 'ma-social-proof.js' | asset_url }}" defer></script>
 
-<!-- NAVIGATION CONTROLLER & INLINE QUOTE STRIPPER -->
+<!-- NAVIGATION CONTROLLER, AUTO-ROTATION & INLINE QUOTE STRIPPER -->
 <script>
 (function() {
   var sec = document.getElementById('ma-esp-{{ sid }}');
@@ -541,6 +541,8 @@
   var cards = [];
   var dots = [];
   var currentIndex = 0;
+  var timer = null;
+  var speed = {{ section.settings.rotate_seconds | default: 6 | times: 1000 }};
 
   function stripInlineQuotes() {
     var quotes = sec.querySelectorAll('.ma-sproof__quote');
@@ -566,13 +568,14 @@
         var btn = document.createElement('button');
         btn.className = 'ma-esp__dot' + (idx === 0 ? ' is-active' : '');
         btn.setAttribute('aria-label', 'Go to review ' + (idx + 1));
-        btn.addEventListener('click', function() { goToSlide(idx); });
+        btn.addEventListener('click', function() { clearInterval(timer); goToSlide(idx); startAuto(); });
         dotsWrap.appendChild(btn);
         dots.push(btn);
       });
     } else if (dotsWrap) {
       dots = Array.from(dotsWrap.querySelectorAll('.ma-esp__dot'));
     }
+    startAuto();
   }
 
   function goToSlide(idx) {
@@ -603,30 +606,26 @@
     });
   }
 
-  if (prevBtn) prevBtn.addEventListener('click', function() { goToSlide(currentIndex - 1); });
-  if (nextBtn) nextBtn.addEventListener('click', function() { goToSlide(currentIndex + 1); });
+  function next() { goToSlide(currentIndex + 1); }
+  function prev() { goToSlide(currentIndex - 1); }
 
-  /* Background Observer: Keeps dots synchronized when external ma-social-proof.js rotates */
-  setInterval(function() {
-    if (!cards.length) initNav();
-    cards.forEach(function(card, i) {
-      var isVisible = card.classList.contains('is-live') || getComputedStyle(card).display !== 'none';
-      if (isVisible && dots[i] && !dots[i].classList.contains('is-active')) {
-        currentIndex = i;
-        dots.forEach(function(d, idx) {
-          if (idx === i) d.classList.add('is-active');
-          else d.classList.remove('is-active');
-        });
-      }
-    });
-  }, 400);
+  function startAuto() {
+    clearInterval(timer);
+    if (speed > 0) {
+      timer = setInterval(next, speed);
+    }
+  }
 
+  if (prevBtn) prevBtn.addEventListener('click', function() { clearInterval(timer); prev(); startAuto(); });
+  if (nextBtn) nextBtn.addEventListener('click', function() { clearInterval(timer); next(); startAuto(); });
+
+  /* Background Observer: Keeps dots synchronized if external ma-social-proof.js modifies DOM */
   if (grid && 'MutationObserver' in window) {
     var mo = new MutationObserver(function() { stripInlineQuotes(); initNav(); });
     mo.observe(grid, { childList: true, subtree: true });
   }
 
-  setTimeout(initNav, 300);
+  setTimeout(initNav, 400);
 })();
 </script>
 
