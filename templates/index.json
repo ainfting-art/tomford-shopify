@@ -1729,10 +1729,13 @@
       "block_order": [
         "review_frjeEi"
       ],
+      "disabled": true,
       "name": "MA Editorial Proof",
       "settings": {
         "heading": "WORN. REMEMBERED.",
         "subline": "The fragrances people mention long after you leave.",
+        "rating": 4.3,
+        "aggregate": "4.3 · Verified Buyers",
         "rotate_seconds": 6,
         "eyebrow": "FROM VERIFIED CLIENTS",
         "color_preset": "ivory",
