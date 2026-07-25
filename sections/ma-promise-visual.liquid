@@ -12,7 +12,7 @@
   assign ink_default = section.settings.ink_color
 
   assign wm_display = 'flex'
-  if section.settings.show_watermark == true
+  if section.settings.show_watermark == false
     assign wm_display = 'none'
   endif
 
@@ -713,7 +713,7 @@
     { "type": "range", "id": "img_offset_x", "label": "Shift Image Left / Right (px)", "min": -150, "max": 150, "step": 10, "default": 0 },
     { "type": "range", "id": "img_offset_y", "label": "Shift Image Up / Down (px)", "min": -150, "max": 150, "step": 10, "default": 0 },
     { "type": "range", "id": "img_radius", "label": "Border Radius (px)", "min": 0, "max": 32, "step": 2, "default": 0 },
-    { "type": "checkbox", "id": "img_shadow", "label": "Enable Soft Luxury Shadow", "default": true },
+    { "type": "checkbox", "id": "img_shadow", "label": "Enable Soft Luxury Shadow", "default": false },
     { "type": "checkbox", "id": "full_bleed_left", "label": "Pull To Left Viewport Edge", "default": true },
 
     {
@@ -734,7 +734,7 @@
       "type": "header",
       "content": "── LIGHTING & OVERLAY ──"
     },
-    { "type": "checkbox", "id": "enable_lighting", "label": "Enable Directional Studio Lighting", "default": true },
+    { "type": "checkbox", "id": "enable_lighting", "label": "Enable Directional Studio Lighting", "default": false },
     { "type": "range", "id": "highlights", "label": "Directional Highlight Strength (%)", "min": 0, "max": 40, "step": 5, "default": 15 },
     { "type": "range", "id": "shadow_strength", "label": "Vignette Shadow Strength (%)", "min": 0, "max": 60, "step": 5, "default": 20 },
     { "type": "range", "id": "img_brightness", "label": "Image Brightness (%)", "min": 60, "max": 140, "step": 5, "default": 100 },
@@ -836,7 +836,7 @@
       "type": "header",
       "content": "── PAPER TEXTURE ──"
     },
-    { "type": "checkbox", "id": "enable_texture", "label": "Enable Subtle Paper Grain", "default": true },
+    { "type": "checkbox", "id": "enable_texture", "label": "Enable Subtle Paper Grain", "default": false },
     { "type": "range", "id": "texture_opacity", "label": "Grain Opacity (%)", "min": 1, "max": 20, "step": 1, "default": 4 },
     { "type": "range", "id": "noise_strength", "label": "Noise Frequency", "min": 0.4, "max": 1.5, "step": 0.1, "default": 0.8 },
 
