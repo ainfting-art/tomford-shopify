@@ -1261,7 +1261,7 @@
         "meta_freq": "Updated Weekly",
         "blog": "blogs",
         "rotation_days": 3,
-        "num_articles": 3,
+        "num_articles": 4,
         "show_featured_image": true,
         "show_category": false,
         "show_title": true,
