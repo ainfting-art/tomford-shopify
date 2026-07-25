@@ -184,29 +184,15 @@
     "maison_amiir_coffret_iwyVwm": {
       "type": "maison-amiir-coffret",
       "blocks": {
-        "image_73LNya": {
+        "image_negdTE": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/29_3e475ee2-32c8-4602-a97f-c29976fd2f61.jpg"
-          }
-        },
-        "image_heqK4w": {
-          "type": "image",
-          "settings": {
-            "image": "shopify://shop_images/26_b6c21630-04a5-413d-ae95-70da6dbcc9f9.jpg"
-          }
-        },
-        "image_QbdLQH": {
-          "type": "image",
-          "settings": {
-            "image": "shopify://shop_images/Hands_holding_ruby_bottle_2K_202607031053.jpg"
+            "image": "shopify://shop_images/Perfume_packaging_on_silk_backgr__202607232147.jpg"
           }
         }
       },
       "block_order": [
-        "image_73LNya",
-        "image_heqK4w",
-        "image_QbdLQH"
+        "image_negdTE"
       ],
       "name": "MA Coffret",
       "settings": {
