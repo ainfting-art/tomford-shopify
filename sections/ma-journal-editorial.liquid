@@ -1,8 +1,7 @@
 {%- comment -%}
   MA Journal Editorial — standalone luxury publication-style journal section.
-  Desktop V5 Final: Approved two-column magazine spread (1 large featured story on top,
-  2 supporting stories below), top-aligned editorial intro, hardware-accelerated scroll
-  storytelling (moves down on scroll down, up on scroll up), and zero sticky pinning.
+  Desktop V5: Approved two-column magazine spread (1 large featured story on top,
+  2 supporting stories below) with the working reference scroll animation engine.
   Mobile: 100% preserved and untouched.
   Schema: 100% deduplicated and step-validated with zero ID collisions.
 {%- endcomment -%}
@@ -151,24 +150,6 @@
     overflow: visible;
     transition: background 0.35s ease, color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
   }
-  #shopify-section-{{ sid }} .ma-j__stories--magazine_cards .ma-j__card {
-    background: {{ section.settings.card_bg_color }};
-    border: 1px solid {{ section.settings.card_border_color }};
-    border-radius: {{ section.settings.image_radius }}px;
-    overflow: hidden;
-    {% if section.settings.card_shadow_strength > 0 %}box-shadow: 0 {{ section.settings.card_shadow_strength }}px {{ section.settings.card_shadow_strength | times: 2 }}px rgba(0,0,0,{{ section.settings.card_shadow_strength | times: 1.0 | divided_by: 100 }});{% endif %}
-  }
-  #shopify-section-{{ sid }} .ma-j__stories--magazine_cards .ma-j__card:hover {
-    background: {{ section.settings.card_hover_bg_color }};
-    border-color: {{ section.settings.card_hover_border_color }};
-  }
-  #shopify-section-{{ sid }} .ma-j__stories--magazine_cards .ma-j__name,
-  #shopify-section-{{ sid }} .ma-j__stories--magazine_cards .ma-j__excerpt,
-  #shopify-section-{{ sid }} .ma-j__stories--magazine_cards .ma-j__date,
-  #shopify-section-{{ sid }} .ma-j__stories--magazine_cards .ma-j__authorsssss,
-  #shopify-section-{{ sid }} .ma-j__stories--magazine_cards .ma-j__read {
-    color: #1a1a1a;
-  }
   #shopify-section-{{ sid }} .ma-j__media {
     position: relative;
     aspect-ratio: {{ section.settings.image_aspect_ratio }};
@@ -304,7 +285,7 @@
   #shopify-section-{{ sid }} .ma-j__stories { display: block; }
 
   /* ══════════════════════════════════════════════════════════════
-     DESKTOP EDITORIAL EXPERIENCE (≥ 750px) — FINAL POLISH PASS V5
+     DESKTOP EDITORIAL EXPERIENCE (≥ 750px) — BALANCED V5 POLISHED
   ══════════════════════════════════════════════════════════════ */
   @media (min-width: 750px) {
     #shopify-section-{{ sid }} .ma-j {
@@ -322,14 +303,12 @@
       overflow: visible;
     }
 
-    /* Hardware-Accelerated Vertical Scroll Storytelling (--scroll-y) & Top Alignment */
+    /* Hardware-Accelerated Reference Scroll Engine (--scroll-y tracking) */
     #shopify-section-{{ sid }} .ma-j__intro {
       --scroll-y: 0px;
       position: relative;
       margin-bottom: 0;
       transform: translate3d({{ section.settings.intro_offset_x | default: 0 }}px, calc({{ section.settings.editorial_intro_top_offset | default: 0 }}px + var(--scroll-y, 0px)), 0);
-      margin-left: {% if section.settings.text_align == 'center' %}auto{% elsif section.settings.text_align == 'right' %}auto{% else %}0{% endif %};
-      margin-right: {% if section.settings.text_align == 'center' %}auto{% elsif section.settings.text_align == 'left' %}auto{% else %}0{% endif %};
       will-change: transform;
     }
     #shopify-section-{{ sid }} .ma-j__heading {
