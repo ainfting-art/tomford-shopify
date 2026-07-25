@@ -134,7 +134,7 @@
     display: grid;
     grid-template-columns: {{ section.settings.left_column_width }}% 1fr;
     column-gap: {{ section.settings.column_gap }}px;
-    align-items: {{ section.settings.valign | default: 'center' }};
+    align-items: stretch;
     position: relative;
     z-index: 2;
   }
@@ -144,12 +144,9 @@
     position: relative;
     width: 100%;
     height: 100%;
-    min-height: {{ section.settings.img_height | default: 620 }}px;
     border-radius: {{ section.settings.img_radius | default: 0 }}px;
     overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: block;
     {% if section.settings.img_shadow %}box-shadow: 0 30px 60px -15px rgba(0,0,0,0.18);{% endif %}
     
     /* True CSS Alpha Mask: Dissolves image into 0% opacity along the right edge */
@@ -172,14 +169,26 @@
   #ma-mp3-{{ sid }} .ma-mp3__img-col img {
     width: 100%;
     height: 100%;
-    max-height: {{ section.settings.img_height | default: 680 }}px;
-    object-fit: {{ section.settings.object_fit | default: 'contain' }};
+    object-fit: {{ section.settings.object_fit | default: 'cover' }};
     object-position: {{ section.settings.img_x | default: 50 }}% {{ section.settings.img_y | default: 50 }}%;
     transform: scale({{ section.settings.img_scale | default: 100 | divided_by: 100.0 }}) translate({{ section.settings.img_offset_x | default: 0 }}px, {{ section.settings.img_offset_y | default: 0 }}px);
     filter: brightness({{ section.settings.img_brightness | default: 100 }}%) contrast({{ section.settings.img_contrast | default: 100 }}%) saturate({{ section.settings.img_saturation | default: 100 }}%);
     display: block;
     transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   }
+
+  /* Flat color overlay wash (distinct from the dissolve mask and directional lighting) */
+  {% if section.settings.overlay_strength > 0 %}
+  #ma-mp3-{{ sid }} .ma-mp3__img-col::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: {{ section.settings.overlay_color | default: '#000000' }};
+    opacity: {{ section.settings.overlay_strength | divided_by: 100.0 }};
+    pointer-events: none;
+    z-index: 1;
+  }
+  {% endif %}
 
   /* Directional Studio Lighting Overlay */
   {% if section.settings.enable_lighting %}
@@ -201,7 +210,8 @@
     z-index: 2;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: {{ section.settings.valign | default: 'center' }};
+    height: 100%;
     width: 100%;
     max-width: {{ section.settings.content_max_width | default: 760 }}px;
     margin: 0 auto;
@@ -676,8 +686,8 @@
       "type": "header",
       "content": "── MASTER TEXT POSITION ──"
     },
-    { "type": "range", "id": "content_offset_x", "label": "Shift Text Left / Right (px)", "min": -200, "max": 200, "step": 10, "default": 0 },
-    { "type": "range", "id": "content_offset_y", "label": "Shift Text Up / Down (px)", "min": -200, "max": 200, "step": 10, "default": 0 },
+    { "type": "range", "id": "content_offset_x", "label": "Move Entire Content Left / Right (px)", "min": -200, "max": 200, "step": 10, "default": 0 },
+    { "type": "range", "id": "content_offset_y", "label": "Move Entire Content Up / Down (px)", "min": -200, "max": 200, "step": 10, "default": 0 },
     { "type": "select", "id": "text_align", "label": "Text Alignment", "default": "center", "options": [{"value":"left","label":"Left"},{"value":"center","label":"Center"},{"value":"right","label":"Right"}] },
     { "type": "select", "id": "valign", "label": "Vertical Alignment", "default": "center", "options": [{"value":"flex-start","label":"Top"},{"value":"center","label":"Center"},{"value":"flex-end","label":"Bottom"}] },
     { "type": "range", "id": "content_max_width", "label": "Text Block Max Width (px)", "min": 500, "max": 900, "step": 20, "default": 760 },
@@ -691,7 +701,7 @@
     { "type": "range", "id": "left_column_width", "label": "Desktop Image Width (%)", "min": 20, "max": 60, "step": 1, "default": 35 },
     { "type": "range", "id": "mobile_image_width", "label": "Mobile Image Width (%)", "min": 35, "max": 90, "step": 5, "default": 45 },
     { "type": "range", "id": "img_height", "label": "Desktop Image Height (px)", "min": 350, "max": 900, "step": 10, "default": 620 },
-    { "type": "select", "id": "object_fit", "label": "Object Fit Mode", "default": "contain", "options": [{"value":"contain","label":"Contain (100% Uncropped)"},{"value":"cover","label":"Cover (Fill Frame)"}] },
+    { "type": "select", "id": "object_fit", "label": "Object Fit Mode", "default": "cover", "options": [{"value":"cover","label":"Cover (Fill Frame — recommended)"},{"value":"contain","label":"Contain (100% Uncropped)"}] },
 
     {
       "type": "header",
@@ -705,6 +715,13 @@
     { "type": "range", "id": "img_radius", "label": "Border Radius (px)", "min": 0, "max": 32, "step": 2, "default": 0 },
     { "type": "checkbox", "id": "img_shadow", "label": "Enable Soft Luxury Shadow", "default": false },
     { "type": "checkbox", "id": "full_bleed_left", "label": "Pull To Left Viewport Edge", "default": false },
+
+    {
+      "type": "header",
+      "content": "── IMAGE OVERLAY WASH ──"
+    },
+    { "type": "range", "id": "overlay_strength", "label": "Overlay Strength (%)", "min": 0, "max": 60, "step": 5, "default": 0 },
+    { "type": "color", "id": "overlay_color", "label": "Overlay Color", "default": "#000000" },
 
     {
       "type": "header",
