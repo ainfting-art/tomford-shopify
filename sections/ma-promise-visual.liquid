@@ -1,9 +1,9 @@
 {%- comment -%}
   MAISON AMIIR — The Maison Promise (Editorial Campaign Rebuild)
-  Features: 100% top-to-bottom vertical image bleed (zero top/bottom gaps), master text 
-  group X/Y shifting, zero-cropping image fit controls, CTA button, true CSS alpha-mask 
-  edge dissolve, directional studio lighting, and full typography sizing.
-  100% backward compatible with all existing schema IDs.
+  Desktop: 100% preserved and untouched (full vertical bleed, 30/70 spread, zero cropping).
+  Mobile: Re-engineered to match high-fashion reference spread (Image 1) with dedicated 
+  hero image, bottom dissolve alpha-mask, upper-right watermark, and 2-column cards.
+  100% deduplicated schema: zero duplicate IDs.
 {%- endcomment -%}
 
 {%- liquid
@@ -117,11 +117,10 @@
 }
 
 /* ═══════════════════════════════════════
-   4. DESKTOP SPREAD: 100% VERTICAL BLEED
+   4. DESKTOP SPREAD (100% PRESERVED & UNTOUCHED)
 ═══════════════════════════════════════ */
 @media (min-width: 900px) {
   #ma-mp3-{{ sid }}.ma-mp3 {
-    /* ZERO outer vertical padding forces the image column to touch top & bottom borders */
     padding: 0 !important;
     min-height: {{ section.settings.min_height | default: 680 }}px;
     display: flex;
@@ -136,12 +135,11 @@
     display: grid;
     grid-template-columns: {{ section.settings.left_column_width }}% 1fr;
     column-gap: {{ section.settings.column_gap }}px;
-    align-items: stretch !important; /* Stretches left image column to equal 100% section height */
+    align-items: stretch !important;
     position: relative;
     z-index: 2;
   }
 
-  /* ── LEFT: Artwork Stretches Top-to-Bottom Without Gaps ── */
   #ma-mp3-{{ sid }} .ma-mp3__img-col {
     position: relative;
     width: 100%;
@@ -154,15 +152,12 @@
     align-items: center;
     justify-content: center;
     {% if section.settings.img_shadow %}box-shadow: 0 30px 60px -15px rgba(0,0,0,0.18);{% endif %}
-    
-    /* True CSS Alpha Mask: Dissolves image along the right edge */
     {% if section.settings.enable_fade %}
     -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,1) calc(100% - {{ section.settings.fade_width | default: 40 }}%), rgba(0,0,0,0) 100%);
     mask-image: linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,1) calc(100% - {{ section.settings.fade_width | default: 40 }}%), rgba(0,0,0,0) 100%);
     {% endif %}
   }
 
-  /* Optional Full Bleed Left Viewport Edge */
   {% if section.settings.full_bleed_left %}
   #ma-mp3-{{ sid }} .ma-mp3__img-col {
     margin-left: calc(-50vw + 50%);
@@ -171,8 +166,7 @@
   }
   {% endif %}
 
-  /* ZERO CROPPING FIT: Controlled via your Theme Editor sliders */
-  #ma-mp3-{{ sid }} .ma-mp3__img-col img {
+  #ma-mp3-{{ sid }} .ma-mp3__img-col img.ma-mp3__img-desktop {
     width: 100% !important;
     height: 100% !important;
     max-height: none !important;
@@ -180,60 +174,36 @@
     object-position: {{ section.settings.img_x | default: 50 }}% {{ section.settings.img_y | default: 50 }}% !important;
     transform: scale({{ section.settings.img_scale | default: 100 | divided_by: 100.0 }}) translate({{ section.settings.img_offset_x | default: 0 }}px, {{ section.settings.img_offset_y | default: 0 }}px) !important;
     filter: brightness({{ section.settings.img_brightness | default: 100 }}%) contrast({{ section.settings.img_contrast | default: 100 }}%) saturate({{ section.settings.img_saturation | default: 100 }}%);
-    display: block;
+    display: block !important;
     transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   }
+  #ma-mp3-{{ sid }} .ma-mp3__img-col img.ma-mp3__img-mobile { display: none !important; }
 
-  /* Flat color overlay wash */
   {% if section.settings.overlay_strength > 0 %}
   #ma-mp3-{{ sid }} .ma-mp3__img-col::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: {{ section.settings.overlay_color | default: '#000000' }};
-    opacity: {{ section.settings.overlay_strength | divided_by: 100.0 }};
-    pointer-events: none;
-    z-index: 1;
+    content: ''; position: absolute; inset: 0; background: {{ section.settings.overlay_color | default: '#000000' }};
+    opacity: {{ section.settings.overlay_strength | divided_by: 100.0 }}; pointer-events: none; z-index: 1;
   }
   {% endif %}
 
-  /* Directional Studio Lighting Overlay */
   {% if section.settings.enable_lighting %}
   #ma-mp3-{{ sid }} .ma-mp3__img-col::before {
-    content: '';
-    position: absolute;
-    inset: 0;
+    content: ''; position: absolute; inset: 0;
     background: radial-gradient(circle at 30% 30%, rgba(255,255,255,{{ section.settings.highlights | default: 15 | divided_by: 100.0 }}) 0%, rgba(0,0,0,{{ section.settings.shadow_strength | default: 20 | divided_by: 100.0 }}) 100%);
-    mix-blend-mode: overlay;
-    pointer-events: none;
-    z-index: 2;
+    mix-blend-mode: overlay; pointer-events: none; z-index: 2;
   }
   {% endif %}
 
-  /* ── RIGHT: MASTER TEXT GROUP REPOSITIONING ── */
-  /* Vertical padding is applied HERE so text gets breathing room while left image touches borders */
   #ma-mp3-{{ sid }} .ma-mp3__right {
-    position: relative;
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    justify-content: {{ section.settings.valign | default: 'center' }};
-    height: 100%;
-    width: 100%;
-    max-width: {{ section.settings.content_max_width | default: 760 }}px;
-    margin: 0 auto;
+    position: relative; z-index: 2; display: flex; flex-direction: column; justify-content: {{ section.settings.valign | default: 'center' }};
+    height: 100%; width: 100%; max-width: {{ section.settings.content_max_width | default: 760 }}px; margin: 0 auto;
     padding: {{ section.settings.desktop_padding_top | default: 50 }}px 0 {{ section.settings.desktop_padding_bottom | default: 50 }}px;
     text-align: {{ text_align }};
     transform: translate({{ section.settings.content_offset_x | default: 0 }}px, {{ section.settings.content_offset_y | default: 0 }}px);
   }
-}
 
-/* Mobile Image & Layout Fallback */
-@media (max-width: 899px) {
-  #ma-mp3-{{ sid }} .ma-mp3__wrap { display: flex; flex-direction: column; gap: 24px; position: relative; z-index: 2; }
-  #ma-mp3-{{ sid }} .ma-mp3__img-col { width: {{ section.settings.mobile_image_width }}%; aspect-ratio: 4/5; overflow: hidden; border-radius: 4px; margin: 0 auto; display: flex; align-items: center; justify-content: center; }
-  #ma-mp3-{{ sid }} .ma-mp3__img-col img { width: 100%; height: 100%; object-fit: contain; }
-  #ma-mp3-{{ sid }} .ma-mp3__right { width: 100%; text-align: center; }
+  #ma-mp3-{{ sid }} .ma-mp3__c-left,
+  #ma-mp3-{{ sid }} .ma-mp3__c-right { display: flex; flex-direction: column; align-items: inherit; width: 100%; }
 }
 
 /* ═══════════════════════════════════════
@@ -253,19 +223,11 @@
 }
 
 #ma-mp3-{{ sid }} .ma-mp3__rule {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  justify-content: {{ rule_justify }};
-  margin-bottom: 20px;
+  display: flex; align-items: center; gap: 12px; justify-content: {{ rule_justify }}; margin-bottom: 20px;
 }
 #ma-mp3-{{ sid }} .ma-mp3__rule::before,
 #ma-mp3-{{ sid }} .ma-mp3__rule::after {
-  content: '';
-  display: block;
-  width: 48px;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--pm-gold), transparent);
+  content: ''; display: block; width: 48px; height: 1px; background: linear-gradient(90deg, transparent, var(--pm-gold), transparent);
 }
 #ma-mp3-{{ sid }} .ma-mp3__rule-icon { color: var(--pm-gold); font-size: 11px; line-height: 1; }
 
@@ -330,142 +292,187 @@
 }
 
 #ma-mp3-{{ sid }} .ma-mp3__num {
-  position: absolute;
-  right: 12px;
-  bottom: -14px;
+  position: absolute; right: 12px; bottom: -14px;
   font-family: {{ section.settings.heading_font.family | default: 'Cormorant Garamond' }}, Georgia, serif;
-  font-weight: 600;
-  font-size: 76px;
-  line-height: 1;
-  color: var(--pm-ink);
-  opacity: 0.035;
-  pointer-events: none;
-  user-select: none;
-  z-index: 0;
+  font-weight: 600; font-size: 76px; line-height: 1; color: var(--pm-ink); opacity: 0.035; pointer-events: none; user-select: none; z-index: 0;
 }
 
 #ma-mp3-{{ sid }} .ma-mp3__ic {
-  position: relative;
-  z-index: 1;
-  display: block;
-  margin-bottom: {{ section.settings.icon_spacing | default: 14 }}px;
-  color: {{ section.settings.icon_color | default: '#A8894E' }};
-  opacity: {{ section.settings.icon_opacity | default: 100 | divided_by: 100.0 }};
+  position: relative; z-index: 1; display: block; margin-bottom: {{ section.settings.icon_spacing | default: 14 }}px;
+  color: {{ section.settings.icon_color | default: '#A8894E' }}; opacity: {{ section.settings.icon_opacity | default: 100 | divided_by: 100.0 }};
   transform: translateY({{ section.settings.icon_pos_y | default: 0 }}px);
 }
 #ma-mp3-{{ sid }} .ma-mp3__ic svg {
-  width: {{ section.settings.icon_size | default: 28 }}px;
-  height: {{ section.settings.icon_size | default: 28 }}px;
-  display: block;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: {{ section.settings.stroke_width | default: 1.1 }};
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  width: {{ section.settings.icon_size | default: 28 }}px; height: {{ section.settings.icon_size | default: 28 }}px;
+  display: block; fill: none; stroke: currentColor; stroke-width: {{ section.settings.stroke_width | default: 1.1 }}; stroke-linecap: round; stroke-linejoin: round;
 }
 
 #ma-mp3-{{ sid }} .ma-mp3__kick {
-  position: relative;
-  z-index: 1;
-  font-family: {{ section.settings.eyebrow_font.family | default: 'Marcellus' }}, Georgia, serif;
-  font-size: {{ section.settings.promise_kicker_size | default: 9.5 }}px;
-  letter-spacing: 0.26em;
-  text-transform: uppercase;
-  color: var(--pm-gold);
-  margin: 0 0 6px;
+  position: relative; z-index: 1; font-family: {{ section.settings.eyebrow_font.family | default: 'Marcellus' }}, Georgia, serif;
+  font-size: {{ section.settings.promise_kicker_size | default: 9.5 }}px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--pm-gold); margin: 0 0 6px;
 }
 
 #ma-mp3-{{ sid }} .ma-mp3__t {
-  position: relative;
-  z-index: 1;
-  font-family: {{ section.settings.promise_title_font.family | default: 'Cormorant Garamond' }}, Georgia, serif;
+  position: relative; z-index: 1; font-family: {{ section.settings.promise_title_font.family | default: 'Cormorant Garamond' }}, Georgia, serif;
   font-size: clamp({{ section.settings.promise_title_size_mobile }}px, 1.8vw, {{ section.settings.promise_title_size_desktop }}px);
-  font-weight: {{ section.settings.promise_title_weight | default: '600' }};
-  line-height: 1.15;
-  color: var(--pm-ink);
-  margin: 0 0 8px;
+  font-weight: {{ section.settings.promise_title_weight | default: '600' }}; line-height: 1.15; color: var(--pm-ink); margin: 0 0 8px;
 }
 
 #ma-mp3-{{ sid }} .ma-mp3__d {
-  position: relative;
-  z-index: 1;
-  font-family: {{ section.settings.promise_body_font.family | default: 'Cormorant Garamond' }}, Georgia, serif;
+  position: relative; z-index: 1; font-family: {{ section.settings.promise_body_font.family | default: 'Cormorant Garamond' }}, Georgia, serif;
   font-size: clamp({{ section.settings.promise_body_size_mobile }}px, 1.4vw, {{ section.settings.promise_body_size_desktop }}px);
-  font-weight: {{ section.settings.promise_body_weight | default: '400' }};
-  line-height: {{ section.settings.promise_body_line_height | default: 145 | divided_by: 100.0 }};
-  color: var(--pm-ink2);
-  margin: 0;
-  max-width: 36ch;
+  font-weight: {{ section.settings.promise_body_weight | default: '400' }}; line-height: {{ section.settings.promise_body_line_height | default: 145 | divided_by: 100.0 }};
+  color: var(--pm-ink2); margin: 0; max-width: 36ch;
 }
 
 /* ═══════════════════════════════════════
    7. FOUNDER SEAL & CTA BUTTON
 ═══════════════════════════════════════ */
-#ma-mp3-{{ sid }} .ma-mp3__seal {
-  position: relative;
-  z-index: 2;
-  text-align: center;
-  padding: 28px 0 10px;
-  margin-top: 10px;
-}
-#ma-mp3-{{ sid }} .ma-mp3__seal-rule {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  justify-content: center;
-  margin-bottom: 14px;
-}
+#ma-mp3-{{ sid }} .ma-mp3__seal { position: relative; z-index: 2; text-align: center; padding: 28px 0 10px; margin-top: 10px; }
+#ma-mp3-{{ sid }} .ma-mp3__seal-rule { display: flex; align-items: center; gap: 16px; justify-content: center; margin-bottom: 14px; }
 #ma-mp3-{{ sid }} .ma-mp3__seal-rule::before,
-#ma-mp3-{{ sid }} .ma-mp3__seal-rule::after {
-  content: '';
-  display: block;
-  height: 1px;
-  width: 90px;
-  background: linear-gradient(90deg, transparent, var(--pm-gold), transparent);
-}
-#ma-mp3-{{ sid }} .ma-mp3__seal-mark {
-  font-size: 18px;
-  color: var(--pm-gold);
-  line-height: 1;
-  letter-spacing: 0.15em;
-}
-#ma-mp3-{{ sid }} .ma-mp3__sign {
-  font-family: {{ section.settings.heading_font.family | default: 'Cormorant Garamond' }}, Georgia, serif;
-  font-size: clamp(16px, 1.6vw, 22px);
-  font-weight: 500;
-  color: var(--pm-ink);
-}
+#ma-mp3-{{ sid }} .ma-mp3__seal-rule::after { content: ''; display: block; height: 1px; width: 90px; background: linear-gradient(90deg, transparent, var(--pm-gold), transparent); }
+#ma-mp3-{{ sid }} .ma-mp3__seal-mark { font-size: 18px; color: var(--pm-gold); line-height: 1; letter-spacing: 0.15em; }
+#ma-mp3-{{ sid }} .ma-mp3__sign { font-family: {{ section.settings.heading_font.family | default: 'Cormorant Garamond' }}, Georgia, serif; font-size: clamp(16px, 1.6vw, 22px); font-weight: 500; color: var(--pm-ink); }
 #ma-mp3-{{ sid }} .ma-mp3__sign em { font-weight: 400; font-style: italic; color: var(--pm-burg); }
 
 /* CALL TO ACTION BUTTON */
-#ma-mp3-{{ sid }} .ma-mp3__cta-wrap {
-  text-align: {{ text_align }};
-  margin-top: {{ section.settings.cta_margin_top | default: 26 }}px;
-  position: relative;
-  z-index: 2;
-}
+#ma-mp3-{{ sid }} .ma-mp3__cta-wrap { text-align: {{ text_align }}; margin-top: {{ section.settings.cta_margin_top | default: 26 }}px; position: relative; z-index: 2; }
 #ma-mp3-{{ sid }} .ma-mp3__cta-btn {
-  display: inline-block;
-  padding: {{ section.settings.cta_pad_y | default: 16 }}px {{ section.settings.cta_pad_x | default: 36 }}px;
-  background-color: var(--pm-cta-bg);
-  color: var(--pm-cta-ink);
-  font-family: {{ section.settings.eyebrow_font.family | default: 'Marcellus' }}, Georgia, serif;
-  font-size: {{ section.settings.cta_font_size | default: 12 }}px;
-  font-weight: 600;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  text-decoration: none;
-  border-radius: {{ section.settings.cta_radius | default: 0 }}px;
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  box-shadow: 0 12px 30px -8px rgba(0,0,0,0.2);
+  display: inline-block; padding: {{ section.settings.cta_pad_y | default: 16 }}px {{ section.settings.cta_pad_x | default: 36 }}px;
+  background-color: var(--pm-cta-bg); color: var(--pm-cta-ink); font-family: {{ section.settings.eyebrow_font.family | default: 'Marcellus' }}, Georgia, serif;
+  font-size: {{ section.settings.cta_font_size | default: 12 }}px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase;
+  text-decoration: none; border-radius: {{ section.settings.cta_radius | default: 0 }}px; transition: opacity 0.3s ease, transform 0.3s ease; box-shadow: 0 12px 30px -8px rgba(0,0,0,0.2);
 }
-#ma-mp3-{{ sid }} .ma-mp3__cta-btn:hover {
-  opacity: 0.88;
-  transform: translateY(-2px);
+#ma-mp3-{{ sid }} .ma-mp3__cta-btn:hover { opacity: 0.88; transform: translateY(-2px); }
+
+/* ═══════════════════════════════════════
+   8. DEDICATED MOBILE ARCHITECTURE (<900px)
+   Matches high-fashion editorial reference (Image 1) exactly.
+═══════════════════════════════════════ */
+@media (max-width: 899px) {
+  #ma-mp3-{{ sid }} .ma-mp3__wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Dedicated Mobile Hero Image & Bottom Dissolve Mask */
+  #ma-mp3-{{ sid }} .ma-mp3__img-col {
+    display: {% if section.settings.enable_mobile_image != false %}flex{% else %}none{% endif %} !important;
+    width: {{ section.settings.mobile_image_width | default: 92 }}% !important;
+    height: {{ section.settings.mobile_image_height | default: 460 }}px !important;
+    max-height: 65vh !important;
+    margin: 0 auto {{ section.settings.mobile_img_margin_bottom | default: 28 }}px !important;
+    border-radius: {{ section.settings.mobile_img_radius | default: 2 }}px !important;
+    overflow: hidden !important;
+    position: relative !important;
+    align-items: center !important;
+    justify-content: center !important;
+    {% if section.settings.mobile_img_shadow %}box-shadow: 0 20px 45px -10px rgba(0,0,0,0.18) !important;{% endif %}
+    
+    /* Alpha Mask: Dissolves bottom edge smoothly into paper background */
+    {% if section.settings.enable_mobile_fade %}
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) calc(100% - {{ section.settings.mobile_fade_height | default: 35 }}%), rgba(0,0,0,0) 100%) !important;
+    mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) calc(100% - {{ section.settings.mobile_fade_height | default: 35 }}%), rgba(0,0,0,0) 100%) !important;
+    {% else %}
+    -webkit-mask-image: none !important;
+    mask-image: none !important;
+    {% endif %}
+  }
+
+  #ma-mp3-{{ sid }} .ma-mp3__img-col img.ma-mp3__img-desktop { display: none !important; }
+  #ma-mp3-{{ sid }} .ma-mp3__img-col img.ma-mp3__img-mobile {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-height: none !important;
+    object-fit: {{ section.settings.mobile_object_fit | default: 'cover' }} !important;
+    object-position: {{ section.settings.mobile_img_x | default: 50 }}% {{ section.settings.mobile_img_y | default: 50 }}% !important;
+    transform: scale({{ section.settings.mobile_img_scale | default: 100 | divided_by: 100.0 }}) !important;
+    filter: brightness({{ section.settings.mobile_img_brightness | default: 100 }}%) contrast({{ section.settings.mobile_img_contrast | default: 100 }}%) saturate({{ section.settings.mobile_img_saturation | default: 100 }}%) !important;
+    opacity: {{ section.settings.mobile_img_opacity | default: 100 | divided_by: 100.0 }} !important;
+  }
+
+  /* Atmospheric Upper-Right Watermark Behind Heading */
+  #ma-mp3-{{ sid }} .ma-mp3__watermark {
+    display: {% if section.settings.enable_mobile_watermark != false %}flex{% else %}none{% endif %} !important;
+    right: {{ section.settings.mobile_wm_x | default: -5 }}% !important;
+    top: {{ section.settings.mobile_wm_y | default: 32 }}% !important;
+    transform: translate(0%, -50%) scale({{ section.settings.mobile_wm_scale | default: 85 | divided_by: 100.0 }}) rotate({{ section.settings.mobile_wm_rotation | default: 0 }}deg) !important;
+    width: min({{ section.settings.mobile_wm_width | default: 80 }}%, 420px) !important;
+    opacity: {{ section.settings.mobile_wm_opacity | default: 5 | divided_by: 100.0 }} !important;
+    filter: blur({{ section.settings.mobile_wm_blur | default: 0 }}px) !important;
+  }
+
+  /* Mobile Editorial Typography Hierarchy */
+  #ma-mp3-{{ sid }} .ma-mp3__right { width: 100%; text-align: center; }
+  #ma-mp3-{{ sid }} .ma-mp3__head {
+    margin-bottom: {{ section.settings.mobile_heading_gap | default: 32 }}px !important;
+    padding: 0 clamp(16px, 4vw, 32px) !important;
+  }
+  #ma-mp3-{{ sid }} .ma-mp3__k {
+    font-size: {{ section.settings.mobile_eyebrow_size | default: 10 }}px !important;
+    letter-spacing: {{ section.settings.mobile_eyebrow_spacing | default: 3 }}px !important;
+    margin-top: {{ section.settings.mobile_eyebrow_margin_top | default: 8 }}px !important;
+    margin-bottom: {{ section.settings.mobile_eyebrow_margin_bottom | default: 14 }}px !important;
+  }
+  #ma-mp3-{{ sid }} .ma-mp3__h {
+    font-size: {{ section.settings.mobile_heading_size | default: 34 }}px !important;
+    font-weight: {{ section.settings.mobile_heading_weight | default: '400' }} !important;
+    line-height: {{ section.settings.mobile_heading_line_height | default: 106 | divided_by: 100.0 }} !important;
+    letter-spacing: {{ section.settings.mobile_heading_spacing | default: 0 }}px !important;
+    margin-bottom: {{ section.settings.mobile_heading_margin_bottom | default: 16 }}px !important;
+  }
+  #ma-mp3-{{ sid }} .ma-mp3__s {
+    font-size: {{ section.settings.mobile_body_size | default: 17 }}px !important;
+    line-height: {{ section.settings.mobile_body_line_height | default: 145 | divided_by: 100.0 }} !important;
+    max-width: {{ section.settings.mobile_intro_max_width | default: 36 }}ch !important;
+    margin: 0 auto !important;
+  }
+
+  /* Reference-Accurate 2-Column Feature Cards (Icon+Label on Left, Title+Text on Right) */
+  #ma-mp3-{{ sid }} .ma-mp3__cards {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: {{ section.settings.mobile_card_gap | default: 0 }}px !important;
+    margin-top: 10px !important;
+    border-top: {{ section.settings.mobile_divider_thickness | default: 1 }}px solid rgba(23,19,16,{{ section.settings.mobile_divider_opacity | default: 10 | divided_by: 100.0 }}) !important;
+    border-bottom: {{ section.settings.mobile_divider_thickness | default: 1 }}px solid rgba(23,19,16,{{ section.settings.mobile_divider_opacity | default: 10 | divided_by: 100.0 }}) !important;
+  }
+  #ma-mp3-{{ sid }} .ma-mp3__c {
+    display: grid !important;
+    grid-template-columns: {{ section.settings.mobile_card_left_width | default: 30 }}% 1fr !important;
+    column-gap: {{ section.settings.mobile_card_col_gap | default: 14 }}px !important;
+    padding: {{ section.settings.mobile_card_padding_y | default: 26 }}px clamp(12px, 3vw, 24px) !important;
+    border-bottom: {{ section.settings.mobile_divider_thickness | default: 1 }}px solid rgba(23,19,16,{{ section.settings.mobile_divider_opacity | default: 10 | divided_by: 100.0 }}) !important;
+    border-right: 0 !important;
+    align-items: flex-start !important;
+    text-align: left !important;
+  }
+  #ma-mp3-{{ sid }} .ma-mp3__c:last-child { border-bottom: 0 !important; }
+  #ma-mp3-{{ sid }} .ma-mp3__c-left { display: flex !important; flex-direction: column !important; align-items: center !important; text-align: center !important; padding-top: 2px !important; }
+  #ma-mp3-{{ sid }} .ma-mp3__c-right { display: flex !important; flex-direction: column !important; align-items: flex-start !important; text-align: left !important; }
+  
+  #ma-mp3-{{ sid }} .ma-mp3__ic { margin-bottom: {{ section.settings.mobile_icon_spacing | default: 8 }}px !important; transform: none !important; }
+  #ma-mp3-{{ sid }} .ma-mp3__ic svg { width: {{ section.settings.mobile_icon_size | default: 30 }}px !important; height: {{ section.settings.mobile_icon_size | default: 30 }}px !important; }
+  #ma-mp3-{{ sid }} .ma-mp3__kick { font-size: {{ section.settings.mobile_kicker_size | default: 8.5 }}px !important; letter-spacing: {{ section.settings.mobile_kicker_spacing | default: 2 }}px !important; margin: 0 !important; line-height: 1.3 !important; }
+  #ma-mp3-{{ sid }} .ma-mp3__t { font-size: {{ section.settings.promise_title_size_mobile | default: 19 }}px !important; font-weight: {{ section.settings.mobile_title_weight | default: '600' }} !important; margin: 0 0 6px !important; line-height: 1.15 !important; }
+  #ma-mp3-{{ sid }} .ma-mp3__d { font-size: {{ section.settings.promise_body_size_mobile | default: 13.5 }}px !important; line-height: {{ section.settings.mobile_body_line_height | default: 145 | divided_by: 100.0 }} !important; margin: 0 !important; max-width: 100% !important; }
+  #ma-mp3-{{ sid }} .ma-mp3__num { display: none !important; }
+
+  /* Founder Seal & CTA on Mobile */
+  #ma-mp3-{{ sid }} .ma-mp3__seal { padding: {{ section.settings.mobile_seal_padding_y | default: 28 }}px 0 10px !important; margin-top: 6px !important; }
+  #ma-mp3-{{ sid }} .ma-mp3__seal-mark { font-size: {{ section.settings.mobile_seal_mark_size | default: 18 }}px !important; }
+  #ma-mp3-{{ sid }} .ma-mp3__sign { font-size: {{ section.settings.mobile_seal_text_size | default: 18 }}px !important; }
+  #ma-mp3-{{ sid }} .ma-mp3__cta-wrap { margin-top: {{ section.settings.mobile_cta_margin_top | default: 22 }}px !important; }
+  #ma-mp3-{{ sid }} .ma-mp3__cta-btn { padding: 15px 32px !important; font-size: 11.5px !important; width: auto !important; }
 }
 
 /* ═══════════════════════════════════════
-   8. EDITORIAL ANIMATIONS
+   9. EDITORIAL ANIMATIONS
 ═══════════════════════════════════════ */
 {% if section.settings.enable_animations %}
   #ma-mp3-{{ sid }} .ma-mp3__anim {
@@ -508,10 +515,13 @@
 
   <div class="ma-mp3__wrap">
 
-    <!-- ── LEFT: Campaign Artwork & True Pixel Dissolve Mask ── -->
+    <!-- ── LEFT: Campaign Artwork (Desktop + Mobile Switch) ── -->
     <div class="ma-mp3__img-col {% if section.settings.enable_animations %}ma-mp3__anim{% endif %}">
-      {%- if section.settings.image != blank -%}
-        <img src="{{ section.settings.image | image_url: width: 1400 }}" alt="{{ section.settings.image.alt | escape }}" loading="lazy">
+      {%- if section.settings.image != blank or section.settings.mobile_image != blank -%}
+        {%- assign desk_img = section.settings.image | default: section.settings.mobile_image -%}
+        {%- assign mob_img = section.settings.mobile_image | default: section.settings.image -%}
+        <img class="ma-mp3__img-desktop" src="{{ desk_img | image_url: width: 1400 }}" alt="{{ desk_img.alt | escape }}" loading="lazy">
+        <img class="ma-mp3__img-mobile" src="{{ mob_img | image_url: width: 800 }}" alt="{{ mob_img.alt | escape }}" loading="lazy">
       {%- else -%}
         {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
       {%- endif -%}
@@ -538,51 +548,67 @@
         {%- endif -%}
       </div>
 
-      <!-- Promise 2×2 Grid -->
+      <!-- Promise Grid (2-Column Row on Mobile, 2x2 on Desktop) -->
       <div class="ma-mp3__cards">
 
         <!-- Card 1 -->
         <div class="ma-mp3__c">
           <span class="ma-mp3__num" aria-hidden="true">01</span>
-          <span class="ma-mp3__ic" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><path d="M9 2.5h6M10 2.5v4.6L6.5 15.1A3 3 0 0 0 9.3 20.9h5.4a3 3 0 0 0 2.8-5.8L14 7.1V2.5"/><path d="M8 14.5h8"/></svg>
-          </span>
-          {%- if section.settings.k1 != blank -%}<span class="ma-mp3__kick">{{ section.settings.k1 | escape }}</span>{%- endif -%}
-          {%- if section.settings.t1 != blank -%}<p class="ma-mp3__t">{{ section.settings.t1 | escape }}</p>{%- endif -%}
-          {%- if section.settings.d1 != blank -%}<p class="ma-mp3__d">{{ section.settings.d1 | escape }}</p>{%- endif -%}
+          <div class="ma-mp3__c-left">
+            <span class="ma-mp3__ic" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M9 2.5h6M10 2.5v4.6L6.5 15.1A3 3 0 0 0 9.3 20.9h5.4a3 3 0 0 0 2.8-5.8L14 7.1V2.5"/><path d="M8 14.5h8"/></svg>
+            </span>
+            {%- if section.settings.k1 != blank -%}<span class="ma-mp3__kick">{{ section.settings.k1 | escape }}</span>{%- endif -%}
+          </div>
+          <div class="ma-mp3__c-right">
+            {%- if section.settings.t1 != blank -%}<p class="ma-mp3__t">{{ section.settings.t1 | escape }}</p>{%- endif -%}
+            {%- if section.settings.d1 != blank -%}<p class="ma-mp3__d">{{ section.settings.d1 | escape }}</p>{%- endif -%}
+          </div>
         </div>
 
         <!-- Card 2 -->
         <div class="ma-mp3__c">
           <span class="ma-mp3__num" aria-hidden="true">02</span>
-          <span class="ma-mp3__ic" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><path d="M12 3l7 2.6v5.1c0 4.4-3 7.4-7 8.8-4-1.4-7-4.4-7-8.8V5.6L12 3z"/><path d="M9 12l2 2 4-4.2"/></svg>
-          </span>
-          {%- if section.settings.k2 != blank -%}<span class="ma-mp3__kick">{{ section.settings.k2 | escape }}</span>{%- endif -%}
-          {%- if section.settings.t2 != blank -%}<p class="ma-mp3__t">{{ section.settings.t2 | escape }}</p>{%- endif -%}
-          {%- if section.settings.d2 != blank -%}<p class="ma-mp3__d">{{ section.settings.d2 | escape }}</p>{%- endif -%}
+          <div class="ma-mp3__c-left">
+            <span class="ma-mp3__ic" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 3l7 2.6v5.1c0 4.4-3 7.4-7 8.8-4-1.4-7-4.4-7-8.8V5.6L12 3z"/><path d="M9 12l2 2 4-4.2"/></svg>
+            </span>
+            {%- if section.settings.k2 != blank -%}<span class="ma-mp3__kick">{{ section.settings.k2 | escape }}</span>{%- endif -%}
+          </div>
+          <div class="ma-mp3__c-right">
+            {%- if section.settings.t2 != blank -%}<p class="ma-mp3__t">{{ section.settings.t2 | escape }}</p>{%- endif -%}
+            {%- if section.settings.d2 != blank -%}<p class="ma-mp3__d">{{ section.settings.d2 | escape }}</p>{%- endif -%}
+          </div>
         </div>
 
         <!-- Card 3 -->
         <div class="ma-mp3__c">
           <span class="ma-mp3__num" aria-hidden="true">03</span>
-          <span class="ma-mp3__ic" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.1"/><path d="M12 2v2.3M12 19.7V22M2 12h2.3M19.7 12H22M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M19.1 4.9l-1.6 1.6M6.5 17.5l-1.6 1.6"/></svg>
-          </span>
-          {%- if section.settings.k3 != blank -%}<span class="ma-mp3__kick">{{ section.settings.k3 | escape }}</span>{%- endif -%}
-          {%- if section.settings.t3 != blank -%}<p class="ma-mp3__t">{{ section.settings.t3 | escape }}</p>{%- endif -%}
-          {%- if section.settings.d3 != blank -%}<p class="ma-mp3__d">{{ section.settings.d3 | escape }}</p>{%- endif -%}
+          <div class="ma-mp3__c-left">
+            <span class="ma-mp3__ic" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.1"/><path d="M12 2v2.3M12 19.7V22M2 12h2.3M19.7 12H22M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M19.1 4.9l-1.6 1.6M6.5 17.5l-1.6 1.6"/></svg>
+            </span>
+            {%- if section.settings.k3 != blank -%}<span class="ma-mp3__kick">{{ section.settings.k3 | escape }}</span>{%- endif -%}
+          </div>
+          <div class="ma-mp3__c-right">
+            {%- if section.settings.t3 != blank -%}<p class="ma-mp3__t">{{ section.settings.t3 | escape }}</p>{%- endif -%}
+            {%- if section.settings.d3 != blank -%}<p class="ma-mp3__d">{{ section.settings.d3 | escape }}</p>{%- endif -%}
+          </div>
         </div>
 
         <!-- Card 4 -->
         <div class="ma-mp3__c">
           <span class="ma-mp3__num" aria-hidden="true">04</span>
-          <span class="ma-mp3__ic" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><path d="M12 3s6 6.6 6 11a6 6 0 0 1-12 0c0-4.4 6-11 6-11z"/><path d="M9.6 14.2a2.6 2.6 0 0 0 2.1 2.4"/></svg>
-          </span>
-          {%- if section.settings.k4 != blank -%}<span class="ma-mp3__kick">{{ section.settings.k4 | escape }}</span>{%- endif -%}
-          {%- if section.settings.t4 != blank -%}<p class="ma-mp3__t">{{ section.settings.t4 | escape }}</p>{%- endif -%}
-          {%- if section.settings.d4 != blank -%}<p class="ma-mp3__d">{{ section.settings.d4 | escape }}</p>{%- endif -%}
+          <div class="ma-mp3__c-left">
+            <span class="ma-mp3__ic" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 3s6 6.6 6 11a6 6 0 0 1-12 0c0-4.4 6-11 6-11z"/><path d="M9.6 14.2a2.6 2.6 0 0 0 2.1 2.4"/></svg>
+            </span>
+            {%- if section.settings.k4 != blank -%}<span class="ma-mp3__kick">{{ section.settings.k4 | escape }}</span>{%- endif -%}
+          </div>
+          <div class="ma-mp3__c-right">
+            {%- if section.settings.t4 != blank -%}<p class="ma-mp3__t">{{ section.settings.t4 | escape }}</p>{%- endif -%}
+            {%- if section.settings.d4 != blank -%}<p class="ma-mp3__d">{{ section.settings.d4 | escape }}</p>{%- endif -%}
+          </div>
         </div>
 
       </div>
@@ -702,18 +728,12 @@
 
     {
       "type": "header",
-      "content": "── HERO IMAGE & SIZING ──"
+      "content": "── DESKTOP HERO IMAGE & FIT ──"
     },
-    { "type": "image_picker", "id": "image", "label": "Hero Artwork" },
+    { "type": "image_picker", "id": "image", "label": "Desktop Hero Artwork" },
     { "type": "range", "id": "left_column_width", "label": "Desktop Image Width (%)", "min": 20, "max": 60, "step": 1, "default": 35 },
-    { "type": "range", "id": "mobile_image_width", "label": "Mobile Image Width (%)", "min": 35, "max": 90, "step": 5, "default": 45 },
     { "type": "range", "id": "img_height", "label": "Desktop Image Height (px)", "min": 350, "max": 900, "step": 10, "default": 620 },
-    { "type": "select", "id": "object_fit", "label": "Object Fit Mode", "default": "cover", "options": [{"value":"cover","label":"Cover (Fill Frame — recommended)"},{"value":"contain","label":"Contain (100% Uncropped)"}] },
-
-    {
-      "type": "header",
-      "content": "── IMAGE POSITION & FIT ──"
-    },
+    { "type": "select", "id": "object_fit", "label": "Object Fit Mode", "default": "cover", "options": [{"value":"cover","label":"Cover (Fill Frame)"},{"value":"contain","label":"Contain (100% Uncropped)"}] },
     { "type": "range", "id": "img_x", "label": "Focal Point X (%)", "min": 0, "max": 100, "step": 5, "default": 50 },
     { "type": "range", "id": "img_y", "label": "Focal Point Y (%)", "min": 0, "max": 100, "step": 5, "default": 50 },
     { "type": "range", "id": "img_scale", "label": "Image Zoom / Scale (%)", "min": 50, "max": 150, "step": 5, "default": 100 },
@@ -722,25 +742,10 @@
     { "type": "range", "id": "img_radius", "label": "Border Radius (px)", "min": 0, "max": 32, "step": 2, "default": 0 },
     { "type": "checkbox", "id": "img_shadow", "label": "Enable Soft Luxury Shadow", "default": false },
     { "type": "checkbox", "id": "full_bleed_left", "label": "Pull To Left Viewport Edge", "default": true },
-
-    {
-      "type": "header",
-      "content": "── IMAGE OVERLAY WASH ──"
-    },
     { "type": "range", "id": "overlay_strength", "label": "Overlay Strength (%)", "min": 0, "max": 60, "step": 5, "default": 0 },
     { "type": "color", "id": "overlay_color", "label": "Overlay Color", "default": "#000000" },
-
-    {
-      "type": "header",
-      "content": "── DISSOLVE FADE MASK ──"
-    },
     { "type": "checkbox", "id": "enable_fade", "label": "Enable Alpha-Mask Edge Dissolve", "default": true },
     { "type": "range", "id": "fade_width", "label": "Fade Mask Width (%)", "min": 10, "max": 80, "step": 5, "default": 40 },
-
-    {
-      "type": "header",
-      "content": "── LIGHTING & OVERLAY ──"
-    },
     { "type": "checkbox", "id": "enable_lighting", "label": "Enable Directional Studio Lighting", "default": false },
     { "type": "range", "id": "highlights", "label": "Directional Highlight Strength (%)", "min": 0, "max": 40, "step": 5, "default": 15 },
     { "type": "range", "id": "shadow_strength", "label": "Vignette Shadow Strength (%)", "min": 0, "max": 60, "step": 5, "default": 20 },
@@ -750,7 +755,7 @@
 
     {
       "type": "header",
-      "content": "── WATERMARK CREST ──"
+      "content": "── DESKTOP WATERMARK CREST ──"
     },
     { "type": "checkbox", "id": "show_watermark", "label": "Show Watermark Crest", "default": true },
     { "type": "image_picker", "id": "watermark_image", "label": "Custom Watermark Image" },
@@ -764,7 +769,7 @@
 
     {
       "type": "header",
-      "content": "── TYPOGRAPHY: HEADER ──"
+      "content": "── DESKTOP TYPOGRAPHY ──"
     },
     { "type": "font_picker", "id": "eyebrow_font", "label": "Eyebrow Font", "default": "helvetica_n4" },
     { "type": "range", "id": "eyebrow_size", "label": "Eyebrow Size (px)", "min": 9, "max": 16, "step": 1, "default": 11 },
@@ -773,7 +778,6 @@
 
     { "type": "font_picker", "id": "heading_font", "label": "Heading Font", "default": "playfair_display_n4" },
     { "type": "range", "id": "heading_size", "label": "Desktop Heading Size (px)", "min": 32, "max": 72, "step": 1, "default": 54 },
-    { "type": "range", "id": "mobile_heading_size", "label": "Mobile Heading Size (px)", "min": 22, "max": 42, "step": 1, "default": 30 },
     { "type": "select", "id": "heading_weight", "label": "Heading Weight", "default": "400", "options": [{"value":"300","label":"Light"},{"value":"400","label":"Regular"},{"value":"500","label":"Medium"}] },
     { "type": "range", "id": "heading_line_height", "label": "Heading Line Height (%)", "min": 90, "max": 140, "step": 2, "default": 108 },
     { "type": "range", "id": "heading_spacing", "label": "Heading Letter Spacing (px)", "min": -2, "max": 5, "step": 0.5, "default": 0 },
@@ -781,7 +785,6 @@
 
     { "type": "font_picker", "id": "body_font", "label": "Intro Subline Font", "default": "playfair_display_n4" },
     { "type": "range", "id": "body_size", "label": "Desktop Intro Size (px)", "min": 14, "max": 32, "step": 1, "default": 24 },
-    { "type": "range", "id": "mobile_body_size", "label": "Mobile Intro Size (px)", "min": 12, "max": 22, "step": 1, "default": 16 },
     { "type": "select", "id": "body_weight", "label": "Intro Weight", "default": "400", "options": [{"value":"300","label":"Light"},{"value":"400","label":"Regular"}] },
     { "type": "range", "id": "body_line_height", "label": "Intro Line Height (%)", "min": 120, "max": 180, "step": 5, "default": 145 },
     { "type": "range", "id": "body_spacing", "label": "Intro Letter Spacing (px)", "min": 0, "max": 4, "step": 0.5, "default": 0 },
@@ -789,16 +792,14 @@
 
     {
       "type": "header",
-      "content": "── TYPOGRAPHY: CARDS ──"
+      "content": "── DESKTOP TYPOGRAPHY: CARDS ──"
     },
     { "type": "range", "id": "promise_kicker_size", "label": "Kicker Size (px)", "min": 8, "max": 14, "step": 0.5, "default": 9.5 },
     { "type": "font_picker", "id": "promise_title_font", "label": "Promise Title Font", "default": "playfair_display_n4" },
     { "type": "range", "id": "promise_title_size_desktop", "label": "Desktop Title Size (px)", "min": 16, "max": 30, "step": 1, "default": 22 },
-    { "type": "range", "id": "promise_title_size_mobile", "label": "Mobile Title Size (px)", "min": 14, "max": 24, "step": 1, "default": 18 },
     { "type": "select", "id": "promise_title_weight", "label": "Title Weight", "default": "600", "options": [{"value":"400","label":"Regular"},{"value":"500","label":"Medium"},{"value":"600","label":"Semibold"}] },
     { "type": "font_picker", "id": "promise_body_font", "label": "Promise Body Font", "default": "playfair_display_n4" },
     { "type": "range", "id": "promise_body_size_desktop", "label": "Desktop Body Size (px)", "min": 12, "max": 20, "step": 1, "default": 15 },
-    { "type": "range", "id": "promise_body_size_mobile", "label": "Mobile Body Size (px)", "min": 11, "max": 18, "step": 1, "default": 13 },
     { "type": "select", "id": "promise_body_weight", "label": "Body Weight", "default": "400", "options": [{"value":"300","label":"Light"},{"value":"400","label":"Regular"}] },
     { "type": "range", "id": "promise_body_line_height", "label": "Body Line Height (%)", "min": 120, "max": 180, "step": 5, "default": 145 },
 
@@ -815,7 +816,7 @@
 
     {
       "type": "header",
-      "content": "── SPACING & PADDING ──"
+      "content": "── DESKTOP SPACING & PADDING ──"
     },
     { "type": "range", "id": "section_width", "label": "Max Container Width (px)", "min": 1000, "max": 1600, "step": 20, "default": 1340 },
     { "type": "range", "id": "min_height", "label": "Desktop Min Height (px)", "min": 450, "max": 900, "step": 10, "default": 680 },
@@ -824,13 +825,10 @@
     { "type": "range", "id": "desktop_padding_bottom", "label": "Desktop Bottom Padding (px)", "min": 10, "max": 120, "step": 5, "default": 50 },
     { "type": "range", "id": "margin_top", "label": "Section Margin Top (px)", "min": 0, "max": 80, "step": 5, "default": 0 },
     { "type": "range", "id": "margin_bottom", "label": "Section Margin Bottom (px)", "min": 0, "max": 80, "step": 5, "default": 0 },
-    { "type": "range", "id": "mobile_padding_top", "label": "Mobile Top Padding (px)", "min": 10, "max": 80, "step": 5, "default": 40 },
-    { "type": "range", "id": "mobile_padding_bottom", "label": "Mobile Bottom Padding (px)", "min": 10, "max": 80, "step": 5, "default": 40 },
-    { "type": "range", "id": "mobile_padding_side", "label": "Mobile Side Padding (px)", "min": 0, "max": 40, "step": 5, "default": 20 },
 
     {
       "type": "header",
-      "content": "── GRID & DIVIDERS ──"
+      "content": "── DESKTOP GRID & DIVIDERS ──"
     },
     { "type": "range", "id": "row_gap", "label": "Grid Row Gap (px)", "min": 0, "max": 40, "step": 2, "default": 0 },
     { "type": "range", "id": "col_gap_grid", "label": "Grid Column Gap (px)", "min": 0, "max": 40, "step": 2, "default": 0 },
@@ -866,6 +864,89 @@
     { "type": "text", "id": "k4", "label": "04 Kicker", "default": "The Formula" },
     { "type": "text", "id": "t4", "label": "04 Title", "default": "The Oil is Everything" },
     { "type": "textarea", "id": "d4", "label": "04 Promise", "default": "Most of what you pay goes into the oil — not the bottle, the box, or the campaign." },
+
+    {
+      "type": "header",
+      "content": "── MOBILE: HERO IMAGE & FADE ──"
+    },
+    { "type": "checkbox", "id": "enable_mobile_image", "label": "Enable Mobile Hero Image", "default": true },
+    { "type": "image_picker", "id": "mobile_image", "label": "Mobile Hero Artwork (Dedicated Crop)" },
+    { "type": "range", "id": "mobile_image_width", "label": "Mobile Image Width (%)", "min": 50, "max": 100, "step": 2, "default": 92 },
+    { "type": "range", "id": "mobile_image_height", "label": "Mobile Image Height (px)", "min": 300, "max": 700, "step": 20, "default": 460 },
+    { "type": "select", "id": "mobile_object_fit", "label": "Mobile Fit Mode", "default": "cover", "options": [{"value":"cover","label":"Cover (Fill Frame)"},{"value":"contain","label":"Contain (100% Uncropped)"}] },
+    { "type": "range", "id": "mobile_img_x", "label": "Mobile Focal X (%)", "min": 0, "max": 100, "step": 5, "default": 50 },
+    { "type": "range", "id": "mobile_img_y", "label": "Mobile Focal Y (%)", "min": 0, "max": 100, "step": 5, "default": 50 },
+    { "type": "range", "id": "mobile_img_scale", "label": "Mobile Zoom (%)", "min": 50, "max": 150, "step": 5, "default": 100 },
+    { "type": "range", "id": "mobile_img_radius", "label": "Mobile Border Radius (px)", "min": 0, "max": 24, "step": 2, "default": 2 },
+    { "type": "range", "id": "mobile_img_margin_bottom", "label": "Bottom Spacing To Eyebrow (px)", "min": 10, "max": 60, "step": 2, "default": 28 },
+    { "type": "checkbox", "id": "mobile_img_shadow", "label": "Enable Mobile Image Shadow", "default": true },
+    { "type": "range", "id": "mobile_img_brightness", "label": "Mobile Brightness (%)", "min": 60, "max": 140, "step": 5, "default": 100 },
+    { "type": "range", "id": "mobile_img_contrast", "label": "Mobile Contrast (%)", "min": 70, "max": 130, "step": 5, "default": 100 },
+    { "type": "range", "id": "mobile_img_saturation", "label": "Mobile Saturation (%)", "min": 50, "max": 150, "step": 5, "default": 100 },
+    { "type": "range", "id": "mobile_img_opacity", "label": "Mobile Opacity (%)", "min": 20, "max": 100, "step": 5, "default": 100 },
+    { "type": "checkbox", "id": "enable_mobile_fade", "label": "Enable Bottom Dissolve Fade Mask", "default": true },
+    { "type": "range", "id": "mobile_fade_height", "label": "Bottom Fade Height (%)", "min": 10, "max": 80, "step": 5, "default": 35 },
+
+    {
+      "type": "header",
+      "content": "── MOBILE: WATERMARK ──"
+    },
+    { "type": "checkbox", "id": "enable_mobile_watermark", "label": "Show Watermark On Mobile", "default": true },
+    { "type": "range", "id": "mobile_wm_width", "label": "Mobile Watermark Width (%)", "min": 30, "max": 100, "step": 5, "default": 80 },
+    { "type": "range", "id": "mobile_wm_scale", "label": "Mobile Scale (%)", "min": 30, "max": 120, "step": 5, "default": 85 },
+    { "type": "range", "id": "mobile_wm_x", "label": "Mobile Position X (% From Right)", "min": -20, "max": 40, "step": 5, "default": -5 },
+    { "type": "range", "id": "mobile_wm_y", "label": "Mobile Position Y (%)", "min": 10, "max": 90, "step": 2, "default": 32 },
+    { "type": "range", "id": "mobile_wm_rotation", "label": "Mobile Rotation (deg)", "min": -45, "max": 45, "step": 5, "default": 0 },
+    { "type": "range", "id": "mobile_wm_opacity", "label": "Mobile Opacity (%)", "min": 1, "max": 15, "step": 1, "default": 5 },
+    { "type": "range", "id": "mobile_wm_blur", "label": "Mobile Blur Filter (px)", "min": 0, "max": 8, "step": 1, "default": 0 },
+
+    {
+      "type": "header",
+      "content": "── MOBILE: TYPOGRAPHY ──"
+    },
+    { "type": "range", "id": "mobile_eyebrow_size", "label": "Eyebrow Size (px)", "min": 8, "max": 16, "step": 0.5, "default": 10 },
+    { "type": "range", "id": "mobile_eyebrow_spacing", "label": "Eyebrow Letter Spacing (px)", "min": 0, "max": 6, "step": 0.5, "default": 3 },
+    { "type": "range", "id": "mobile_eyebrow_margin_top", "label": "Eyebrow Top Spacing (px)", "min": 0, "max": 30, "step": 2, "default": 8 },
+    { "type": "range", "id": "mobile_eyebrow_margin_bottom", "label": "Eyebrow Bottom Spacing (px)", "min": 4, "max": 30, "step": 2, "default": 14 },
+    { "type": "range", "id": "mobile_heading_size", "label": "Heading Size (px)", "min": 24, "max": 48, "step": 1, "default": 34 },
+    { "type": "select", "id": "mobile_heading_weight", "label": "Heading Weight", "default": "400", "options": [{"value":"300","label":"Light"},{"value":"400","label":"Regular"},{"value":"500","label":"Medium"}] },
+    { "type": "range", "id": "mobile_heading_line_height", "label": "Heading Line Height (%)", "min": 90, "max": 130, "step": 2, "default": 106 },
+    { "type": "range", "id": "mobile_heading_spacing", "label": "Heading Letter Spacing (px)", "min": -2, "max": 4, "step": 0.5, "default": 0 },
+    { "type": "range", "id": "mobile_heading_margin_bottom", "label": "Heading Bottom Spacing (px)", "min": 8, "max": 40, "step": 2, "default": 16 },
+    { "type": "range", "id": "mobile_body_size", "label": "Intro Subline Size (px)", "min": 14, "max": 24, "step": 0.5, "default": 17 },
+    { "type": "range", "id": "mobile_body_line_height", "label": "Intro Line Height (%)", "min": 120, "max": 180, "step": 5, "default": 145 },
+    { "type": "range", "id": "mobile_intro_max_width", "label": "Intro Max Width (ch)", "min": 24, "max": 50, "step": 2, "default": 36 },
+    { "type": "range", "id": "mobile_heading_gap", "label": "Spacing Below Intro To Cards (px)", "min": 16, "max": 60, "step": 4, "default": 32 },
+
+    {
+      "type": "header",
+      "content": "── MOBILE: FEATURE CARDS ──"
+    },
+    { "type": "range", "id": "mobile_card_left_width", "label": "Left Column (Icon+Label) Width (%)", "min": 20, "max": 45, "step": 1, "default": 30 },
+    { "type": "range", "id": "mobile_card_col_gap", "label": "Gap Between Icon & Text (px)", "min": 8, "max": 32, "step": 2, "default": 14 },
+    { "type": "range", "id": "mobile_card_padding_y", "label": "Card Vertical Padding (px)", "min": 14, "max": 44, "step": 2, "default": 26 },
+    { "type": "range", "id": "mobile_card_gap", "label": "Row Gap Between Cards (px)", "min": 0, "max": 24, "step": 2, "default": 0 },
+    { "type": "range", "id": "mobile_icon_size", "label": "Icon Size (px)", "min": 20, "max": 44, "step": 2, "default": 30 },
+    { "type": "range", "id": "mobile_icon_spacing", "label": "Spacing Below Icon (px)", "min": 4, "max": 16, "step": 1, "default": 8 },
+    { "type": "range", "id": "mobile_kicker_size", "label": "Kicker Label Size (px)", "min": 7, "max": 12, "step": 0.5, "default": 8.5 },
+    { "type": "range", "id": "mobile_kicker_spacing", "label": "Kicker Letter Spacing (px)", "min": 0, "max": 4, "step": 0.5, "default": 2 },
+    { "type": "range", "id": "promise_title_size_mobile", "label": "Title Font Size (px)", "min": 15, "max": 24, "step": 0.5, "default": 19 },
+    { "type": "select", "id": "mobile_title_weight", "label": "Title Weight", "default": "600", "options": [{"value":"400","label":"Regular"},{"value":"500","label":"Medium"},{"value":"600","label":"Semibold"}] },
+    { "type": "range", "id": "promise_body_size_mobile", "label": "Description Font Size (px)", "min": 11, "max": 17, "step": 0.5, "default": 13.5 },
+
+    {
+      "type": "header",
+      "content": "── MOBILE: SPACING & DIVIDERS ──"
+    },
+    { "type": "range", "id": "mobile_padding_top", "label": "Section Top Padding (px)", "min": 10, "max": 80, "step": 5, "default": 40 },
+    { "type": "range", "id": "mobile_padding_bottom", "label": "Section Bottom Padding (px)", "min": 10, "max": 80, "step": 5, "default": 40 },
+    { "type": "range", "id": "mobile_padding_side", "label": "Section Side Padding (px)", "min": 0, "max": 40, "step": 5, "default": 20 },
+    { "type": "range", "id": "mobile_divider_thickness", "label": "Divider Line Thickness (px)", "min": 0, "max": 3, "step": 1, "default": 1 },
+    { "type": "range", "id": "mobile_divider_opacity", "label": "Divider Line Opacity (%)", "min": 0, "max": 40, "step": 2, "default": 10 },
+    { "type": "range", "id": "mobile_seal_padding_y", "label": "Seal Top Spacing (px)", "min": 16, "max": 50, "step": 2, "default": 28 },
+    { "type": "range", "id": "mobile_seal_mark_size", "label": "Seal Emblem Size (px)", "min": 14, "max": 26, "step": 1, "default": 18 },
+    { "type": "range", "id": "mobile_seal_text_size", "label": "Seal Signature Size (px)", "min": 14, "max": 24, "step": 1, "default": 18 },
+    { "type": "range", "id": "mobile_cta_margin_top", "label": "CTA Top Spacing (px)", "min": 10, "max": 50, "step": 2, "default": 22 },
 
     {
       "type": "header",
