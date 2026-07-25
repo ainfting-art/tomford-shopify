@@ -184,15 +184,29 @@
     "maison_amiir_coffret_iwyVwm": {
       "type": "maison-amiir-coffret",
       "blocks": {
-        "image_wttqkF": {
+        "image_73LNya": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/Perfume_packaging_on_silk_backgr__202607232147.jpg"
+            "image": "shopify://shop_images/29_3e475ee2-32c8-4602-a97f-c29976fd2f61.jpg"
+          }
+        },
+        "image_heqK4w": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/26_b6c21630-04a5-413d-ae95-70da6dbcc9f9.jpg"
+          }
+        },
+        "image_QbdLQH": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Hands_holding_ruby_bottle_2K_202607031053.jpg"
           }
         }
       },
       "block_order": [
-        "image_wttqkF"
+        "image_73LNya",
+        "image_heqK4w",
+        "image_QbdLQH"
       ],
       "name": "MA Coffret",
       "settings": {
@@ -219,53 +233,53 @@
         "image_saturation": 100,
         "image_shadow": false,
         "show_overlay": true,
-        "overlay_color": "#000000",
-        "overlay_strength": 25,
+        "overlay_color": "#161616",
+        "overlay_strength": 10,
         "show_vignette": true,
-        "vignette_strength": 50,
+        "vignette_strength": 60,
         "fade_color": "#0c0b0a",
-        "fade_strength": 90,
+        "fade_strength": 100,
         "eyebrow_font": "sans_serif_n4",
-        "eyebrow_size": 12,
+        "eyebrow_size": 13,
         "eyebrow_weight": "400",
         "eyebrow_color": "#a8894e",
-        "eyebrow_spacing": 2,
+        "eyebrow_spacing": 3,
         "heading_font": "playfair_display_n4",
-        "heading_size": 52,
+        "heading_size": 48,
         "heading_weight": "300",
-        "heading_color": "#f5f0e6",
+        "heading_color": "#FFFFFF",
         "heading_line_height": 120,
         "heading_spacing": 0,
         "body_font": "sans_serif_n4",
         "body_size": 16,
         "body_weight": "300",
-        "body_color": "#c9bfa8",
+        "body_color": "#D3C8AB",
         "body_line_height": 170,
         "body_spacing": 0,
         "cta_font": "sans_serif_n4",
         "cta_size": 12,
         "cta_weight": "500",
         "cta_color": "#a8894e",
-        "mob_eyebrow_size": 11,
+        "mob_eyebrow_size": 12,
         "mob_heading_size": 36,
         "mob_body_size": 15,
         "mob_cta_size": 11,
-        "mob_eyebrow_color": "#a8894e",
-        "mob_heading_color": "#f5f0e6",
+        "mob_eyebrow_color": "#C9A24B",
+        "mob_heading_color": "#FFFFFF",
         "mob_body_color": "#c9bfa8",
-        "mob_cta_color": "#a8894e",
-        "btn_style": "outline",
-        "btn_color": "#a8894e",
-        "btn_text_color": "#a8894e",
-        "btn_border_color": "#a8894e",
-        "btn_hover_color": "#a8894e",
-        "btn_hover_text_color": "#0c0b0a",
-        "btn_radius": 0,
+        "mob_cta_color": "#C9A24B",
+        "btn_style": "ghost",
+        "btn_color": "#C9A24B",
+        "btn_text_color": "#C9A24B",
+        "btn_border_color": "#C9A24B",
+        "btn_hover_color": "#FFFFFF",
+        "btn_hover_text_color": "#FFFFFF",
+        "btn_radius": 40,
         "btn_padding_v": 16,
         "btn_padding_h": 36,
         "btn_width": "auto",
         "bg_color": "#0c0b0a",
-        "mob_bg_color": "#0c0b0a",
+        "mob_bg_color": "#161616",
         "desktop_height": 600,
         "dt_max_width": 1280,
         "dt_gap": 0,
@@ -293,9 +307,9 @@
         "divider_style": "crown",
         "show_wax_seal": true,
         "show_note_card": true,
-        "show_particles": false,
-        "show_texture": false,
-        "texture_opacity": 8
+        "show_particles": true,
+        "show_texture": true,
+        "texture_opacity": 30
       }
     },
     "ma_home_risk": {
