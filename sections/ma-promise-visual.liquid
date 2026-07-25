@@ -2,7 +2,7 @@
   MAISON AMIIR — The Maison Promise (Editorial Campaign Rebuild)
   Desktop: 100% preserved and untouched (full vertical bleed, zero cropping).
   Mobile: Hero section above divider re-engineered into an independent editorial magazine 
-  spread with floating left artwork, horizontal/bottom feathered fade, upper-right watermark 
+  cover with floating left artwork, horizontal/bottom feathered fade, upper-right watermark 
   depth, and X/Y text group positioning. Feature cards below divider kept 100% intact.
   100% deduplicated and step-validated schema: zero FileSaveErrors.
 {%- endcomment -%}
@@ -349,23 +349,25 @@
 
 /* ═══════════════════════════════════════
    8. DEDICATED MOBILE HERO SPREAD (<900px)
-   Matches high-fashion editorial reference exactly without breaking cards.
+   Hero above divider built as 2 independent layers (Image + Content).
+   Feature cards below divider kept 100% untouched as requested.
 ═══════════════════════════════════════ */
 @media (max-width: 899px) {
   #ma-mp3-{{ sid }} .ma-mp3__wrap {
     display: block !important;
     position: relative !important;
     z-index: 2 !important;
+    padding-top: {{ section.settings.mob_hero_height | default: 560 }}px !important; /* Reserves exact height of magazine cover stage */
   }
 
-  /* Independent Floating Left Artwork Stage */
+  /* LAYER 1: Independent Floating Left Artwork Stage */
   #ma-mp3-{{ sid }} .ma-mp3__img-col {
     display: {% if section.settings.mob_hero_img_enable != false %}block{% else %}none{% endif %} !important;
     position: absolute !important;
     top: {{ section.settings.mob_hero_img_y | default: 0 }}px !important;
     left: {{ section.settings.mob_hero_img_x | default: 0 }}px !important;
-    width: {{ section.settings.mob_hero_img_w | default: 55 }}% !important;
-    height: {{ section.settings.mob_hero_img_h | default: 460 }}px !important;
+    width: {{ section.settings.mob_hero_img_w | default: 60 }}% !important;
+    height: {{ section.settings.mob_hero_img_h | default: 520 }}px !important;
     z-index: {{ section.settings.mob_hero_img_z | default: 1 }} !important;
     border-radius: {{ section.settings.mob_hero_img_rad | default: 0 }}px !important;
     overflow: hidden !important;
@@ -384,7 +386,7 @@
     transform: scale({{ section.settings.mob_hero_img_scale | default: 100 | divided_by: 100.0 }}) rotate({{ section.settings.mob_hero_img_rot | default: 0 }}deg) !important;
   }
 
-  /* Smooth Horizontal & Bottom Feathered Fade Overlay */
+  /* Dual Horizontal & Bottom Feathered Fade Overlay */
   {% if section.settings.mob_hero_fade_enable %}
   #ma-mp3-{{ sid }} .ma-mp3__img-col::after {
     content: '';
@@ -414,53 +416,46 @@
   #ma-mp3-{{ sid }} .ma-mp3__watermark {
     display: {% if section.settings.mob_wm_enable != false %}flex{% else %}none{% endif %} !important;
     right: {{ section.settings.mob_wm_x | default: -5 }}% !important;
-    top: {{ section.settings.mob_wm_y | default: 22 }}% !important;
+    top: {{ section.settings.mob_wm_y | default: 15 }}% !important;
     width: {{ section.settings.mob_wm_w | default: 75 }}% !important;
-    height: {{ section.settings.mob_wm_h | default: 300 }}px !important;
+    height: {{ section.settings.mob_wm_h | default: 320 }}px !important;
     transform: translate(0%, -50%) rotate({{ section.settings.mob_wm_rot | default: 0 }}deg) !important;
     opacity: {{ section.settings.mob_wm_op | default: 5 | divided_by: 100.0 }} !important;
     filter: blur({{ section.settings.mob_wm_blur | default: 0 }}px) !important;
-    z-index: 1 !important;
+    z-index: 2 !important;
     align-items: center !important;
     justify-content: center !important;
   }
 
-  /* Integrated Magazine Cover Content Stage */
-  #ma-mp3-{{ sid }} .ma-mp3__right {
-    width: 100% !important;
-    position: relative !important;
-    z-index: 2 !important;
-    transform: none !important;
-    padding: 0 !important;
-  }
-
+  /* LAYER 2: Independent Magazine Cover Content Stage in Clean Negative Space */
   #ma-mp3-{{ sid }} .ma-mp3__head {
-    position: relative !important;
-    z-index: 3 !important;
-    min-height: {{ section.settings.mob_hero_height | default: 460 }}px !important;
+    position: absolute !important;
+    top: {{ section.settings.mob_cont_y | default: 25 }}px !important;
+    left: {{ section.settings.mob_cont_x | default: 42 }}% !important;
+    width: {{ section.settings.mob_cont_w | default: 56 }}% !important;
+    z-index: {{ section.settings.mob_cont_z | default: 3 }} !important;
     display: flex !important;
     flex-direction: column !important;
-    justify-content: center !important;
-    align-items: center !important;
-    padding-top: {{ section.settings.mob_hero_pad_top | default: 20 }}px !important;
-    padding-bottom: {{ section.settings.mob_hero_pad_bot | default: 30 }}px !important;
-    margin-bottom: {{ section.settings.mobile_heading_gap | default: 28 }}px !important;
+    justify-content: {{ section.settings.mob_cont_valign | default: 'flex-start' }} !important;
+    align-items: {% if section.settings.mob_cont_align == 'left' %}flex-start{% elsif section.settings.mob_cont_align == 'right' %}flex-end{% else %}center{% endif %} !important;
+    text-align: {{ section.settings.mob_cont_align | default: 'center' }} !important;
+    margin: 0 !important;
+    padding: 0 clamp(8px, 2vw, 16px) !important;
   }
 
   #ma-mp3-{{ sid }} .ma-mp3__k {
     font-size: {{ section.settings.mobile_eyebrow_size | default: 10 }}px !important;
     letter-spacing: {{ section.settings.mobile_eyebrow_spacing | default: 3 }}px !important;
     margin-top: {{ section.settings.mobile_eyebrow_margin_top | default: 8 }}px !important;
-    margin-bottom: {{ section.settings.mobile_eyebrow_margin_bottom | default: 14 }}px !important;
-    transform: translate({{ section.settings.mob_eyebrow_x | default: 30 }}px, {{ section.settings.mob_eyebrow_y | default: 0 }}px) !important;
+    margin-bottom: {{ section.settings.mob_orn_space | default: 14 }}px !important;
   }
 
   /* Centered Decorative Ornament Divider */
   #ma-mp3-{{ sid }} .ma-mp3__rule {
     width: {{ section.settings.mob_orn_w | default: 48 }}px !important;
-    transform: scale({{ section.settings.mob_orn_scale | default: 100 | divided_by: 100.0 }}) translate({{ section.settings.mob_orn_x | default: 30 }}px, 0px) !important;
+    transform: scale({{ section.settings.mob_orn_scale | default: 100 | divided_by: 100.0 }}) !important;
     margin-bottom: {{ section.settings.mob_orn_space | default: 14 }}px !important;
-    justify-content: {{ rule_justify }} !important;
+    justify-content: center !important;
   }
   #ma-mp3-{{ sid }} .ma-mp3__rule-icon { color: {{ section.settings.mob_orn_color | default: 'var(--pm-gold)' }} !important; }
   #ma-mp3-{{ sid }} .ma-mp3__rule::before,
@@ -470,14 +465,13 @@
 
   /* Overlapping Right-Side Hierarchy */
   #ma-mp3-{{ sid }} .ma-mp3__h {
-    width: {{ section.settings.mob_head_w | default: 100 }}% !important;
+    width: 100% !important;
     max-width: none !important;
     font-size: {{ section.settings.mobile_heading_size | default: 34 }}px !important;
     font-weight: {{ section.settings.mobile_heading_weight | default: '400' }} !important;
     line-height: {{ section.settings.mobile_heading_line_height | default: 106 | divided_by: 100.0 }} !important;
     letter-spacing: {{ section.settings.mobile_heading_spacing | default: 0 }}px !important;
     margin-bottom: {{ section.settings.mobile_heading_margin_bottom | default: 16 }}px !important;
-    transform: translate({{ section.settings.mob_head_x | default: 15 }}px, {{ section.settings.mob_head_y | default: 0 }}px) !important;
   }
 
   #ma-mp3-{{ sid }} .ma-mp3__s {
@@ -485,10 +479,16 @@
     line-height: {{ section.settings.mobile_body_line_height | default: 145 | divided_by: 100.0 }} !important;
     max-width: {{ section.settings.mob_para_w | default: 36 }}ch !important;
     margin: 0 auto !important;
-    transform: translate({{ section.settings.mob_para_x | default: 15 }}px, {{ section.settings.mob_para_y | default: 0 }}px) !important;
   }
 
-  /* Feature Cards Below First Divider (Kept 100% Untouched as Requested) */
+  /* Feature Cards Below First Divider (Kept 100% Untouched in Normal Flow as Requested) */
+  #ma-mp3-{{ sid }} .ma-mp3__right {
+    position: static !important;
+    width: 100% !important;
+    transform: none !important;
+    padding: 0 !important;
+  }
+
   #ma-mp3-{{ sid }} .ma-mp3__cards {
     display: flex !important;
     flex-direction: column !important;
@@ -928,17 +928,17 @@
     },
     { "type": "checkbox", "id": "mob_hero_img_enable", "label": "Enable Floating Left Image", "default": true },
     { "type": "image_picker", "id": "mobile_image", "label": "Mobile Hero Artwork (Dedicated Crop)" },
-    { "type": "range", "id": "mob_hero_img_w", "label": "Image Width (%)", "min": 30, "max": 90, "step": 1, "default": 55 },
-    { "type": "range", "id": "mob_hero_img_h", "label": "Image Height (px)", "min": 300, "max": 700, "step": 10, "default": 460 },
+    { "type": "range", "id": "mob_hero_img_w", "label": "Image Width (%)", "min": 20, "max": 100, "step": 1, "default": 60 },
+    { "type": "range", "id": "mob_hero_img_h", "label": "Image Height (px)", "min": 200, "max": 800, "step": 10, "default": 520 },
     { "type": "select", "id": "mob_hero_img_fit", "label": "Fit Mode", "default": "cover", "options": [{"value":"cover","label":"Cover (Fill Frame)"},{"value":"contain","label":"Contain (100% Uncropped)"}] },
     { "type": "range", "id": "mob_hero_img_pos_x", "label": "Focal Point X (%)", "min": 0, "max": 100, "step": 5, "default": 50 },
     { "type": "range", "id": "mob_hero_img_pos_y", "label": "Focal Point Y (%)", "min": 0, "max": 100, "step": 5, "default": 50 },
     { "type": "range", "id": "mob_hero_img_scale", "label": "Zoom / Scale (%)", "min": 50, "max": 150, "step": 5, "default": 100 },
-    { "type": "range", "id": "mob_hero_img_x", "label": "Position X Offset (px)", "min": -50, "max": 50, "step": 1, "default": 0 },
-    { "type": "range", "id": "mob_hero_img_y", "label": "Position Y Offset (px)", "min": -50, "max": 50, "step": 1, "default": 0 },
-    { "type": "range", "id": "mob_hero_img_rot", "label": "Rotation (deg)", "min": -20, "max": 20, "step": 1, "default": 0 },
-    { "type": "range", "id": "mob_hero_img_rad", "label": "Border Radius (px)", "min": 0, "max": 24, "step": 1, "default": 0 },
-    { "type": "range", "id": "mob_hero_img_z", "label": "Z-Index Layer", "min": 1, "max": 5, "step": 1, "default": 1 },
+    { "type": "range", "id": "mob_hero_img_x", "label": "Position X Offset (px)", "min": -150, "max": 150, "step": 5, "default": 0 },
+    { "type": "range", "id": "mob_hero_img_y", "label": "Position Y Offset (px)", "min": -150, "max": 150, "step": 5, "default": 0 },
+    { "type": "range", "id": "mob_hero_img_rot", "label": "Rotation (deg)", "min": -45, "max": 45, "step": 1, "default": 0 },
+    { "type": "range", "id": "mob_hero_img_rad", "label": "Border Radius (px)", "min": 0, "max": 40, "step": 1, "default": 0 },
+    { "type": "range", "id": "mob_hero_img_z", "label": "Z-Index Layer", "min": 1, "max": 10, "step": 1, "default": 1 },
     { "type": "checkbox", "id": "mobile_img_shadow", "label": "Enable Mobile Image Shadow", "default": true },
     { "type": "range", "id": "mobile_img_brightness", "label": "Mobile Brightness (%)", "min": 60, "max": 140, "step": 5, "default": 100 },
     { "type": "range", "id": "mobile_img_contrast", "label": "Mobile Contrast (%)", "min": 70, "max": 130, "step": 5, "default": 100 },
@@ -950,12 +950,12 @@
       "content": "── MOBILE HERO: FADE ──"
     },
     { "type": "checkbox", "id": "mob_hero_fade_enable", "label": "Enable Feathered Gradient Overlay", "default": true },
-    { "type": "range", "id": "mob_hero_fade_w", "label": "Horizontal Fade Width (%)", "min": 10, "max": 80, "step": 5, "default": 45 },
-    { "type": "range", "id": "mob_hero_fade_str", "label": "Bottom Fade Strength (%)", "min": 20, "max": 100, "step": 5, "default": 95 },
-    { "type": "range", "id": "mob_hero_fade_h", "label": "Bottom Fade Height (%)", "min": 10, "max": 80, "step": 5, "default": 35 },
-    { "type": "range", "id": "mob_hero_fade_blur", "label": "Fade Edge Blur (px)", "min": 0, "max": 10, "step": 1, "default": 0 },
+    { "type": "range", "id": "mob_hero_fade_w", "label": "Horizontal Fade Width (%)", "min": 10, "max": 90, "step": 5, "default": 45 },
+    { "type": "range", "id": "mob_hero_fade_str", "label": "Bottom Fade Strength (%)", "min": 10, "max": 100, "step": 5, "default": 95 },
+    { "type": "range", "id": "mob_hero_fade_h", "label": "Bottom Fade Height (%)", "min": 10, "max": 90, "step": 5, "default": 35 },
+    { "type": "range", "id": "mob_hero_fade_blur", "label": "Fade Edge Blur (px)", "min": 0, "max": 20, "step": 1, "default": 0 },
     { "type": "color", "id": "mob_hero_fade_color", "label": "Custom Fade Wash Color", "default": "#f4eee1" },
-    { "type": "range", "id": "mob_hero_fade_op", "label": "Horizontal Fade Opacity (%)", "min": 20, "max": 100, "step": 5, "default": 100 },
+    { "type": "range", "id": "mob_hero_fade_op", "label": "Horizontal Fade Opacity (%)", "min": 10, "max": 100, "step": 5, "default": 100 },
 
     {
       "type": "header",
@@ -963,39 +963,37 @@
     },
     { "type": "checkbox", "id": "mob_wm_enable", "label": "Show Upper-Right Watermark", "default": true },
     { "type": "range", "id": "mob_wm_w", "label": "Watermark Width (%)", "min": 30, "max": 100, "step": 5, "default": 75 },
-    { "type": "range", "id": "mob_wm_h", "label": "Watermark Height (px)", "min": 150, "max": 450, "step": 10, "default": 300 },
-    { "type": "range", "id": "mob_wm_x", "label": "Position X (% From Right)", "min": -30, "max": 30, "step": 1, "default": -5 },
-    { "type": "range", "id": "mob_wm_y", "label": "Position Y (%)", "min": 0, "max": 80, "step": 2, "default": 22 },
+    { "type": "range", "id": "mob_wm_h", "label": "Watermark Height (px)", "min": 100, "max": 500, "step": 10, "default": 320 },
+    { "type": "range", "id": "mob_wm_x", "label": "Position X (% From Right)", "min": -30, "max": 50, "step": 1, "default": -5 },
+    { "type": "range", "id": "mob_wm_y", "label": "Position Y (%)", "min": 0, "max": 90, "step": 2, "default": 16 },
     { "type": "range", "id": "mob_wm_rot", "label": "Rotation (deg)", "min": -45, "max": 45, "step": 5, "default": 0 },
     { "type": "range", "id": "mob_wm_op", "label": "Opacity (%)", "min": 1, "max": 15, "step": 1, "default": 5 },
     { "type": "range", "id": "mob_wm_blur", "label": "Blur Filter (px)", "min": 0, "max": 8, "step": 1, "default": 0 },
+    { "type": "range", "id": "mob_wm_z", "label": "Z-Index Layer", "min": 1, "max": 10, "step": 1, "default": 2 },
 
     {
       "type": "header",
       "content": "── MOBILE HERO: CONTENT ──"
     },
-    { "type": "range", "id": "mob_hero_height", "label": "Hero Area Min Height (px)", "min": 350, "max": 700, "step": 10, "default": 460 },
-    { "type": "range", "id": "mob_hero_pad_top", "label": "Hero Top Padding (px)", "min": 0, "max": 60, "step": 2, "default": 30 },
-    { "type": "range", "id": "mob_hero_pad_bot", "label": "Hero Bottom Padding (px)", "min": 0, "max": 60, "step": 2, "default": 40 },
-    { "type": "range", "id": "mobile_heading_gap", "label": "Gap Below Intro To Cards (px)", "min": 10, "max": 60, "step": 2, "default": 28 },
-    { "type": "range", "id": "mob_eyebrow_x", "label": "Eyebrow X Position (px)", "min": -150, "max": 150, "step": 5, "default": 30 },
-    { "type": "range", "id": "mob_eyebrow_y", "label": "Eyebrow Y Position (px)", "min": -100, "max": 100, "step": 5, "default": 0 },
-    { "type": "range", "id": "mob_head_w", "label": "Heading Width (%)", "min": 50, "max": 100, "step": 5, "default": 100 },
-    { "type": "range", "id": "mob_head_x", "label": "Heading X Position (px)", "min": -150, "max": 150, "step": 5, "default": 15 },
-    { "type": "range", "id": "mob_head_y", "label": "Heading Y Position (px)", "min": -100, "max": 100, "step": 5, "default": 0 },
-    { "type": "range", "id": "mob_para_w", "label": "Paragraph Width (ch)", "min": 20, "max": 50, "step": 2, "default": 36 },
-    { "type": "range", "id": "mob_para_x", "label": "Paragraph X Position (px)", "min": -150, "max": 150, "step": 5, "default": 15 },
-    { "type": "range", "id": "mob_para_y", "label": "Paragraph Y Position (px)", "min": -100, "max": 100, "step": 5, "default": 0 },
+    { "type": "range", "id": "mob_hero_height", "label": "Hero Area Min Height (px)", "min": 350, "max": 800, "step": 10, "default": 560 },
+    { "type": "range", "id": "mob_hero_pad_top", "label": "Hero Top Padding (px)", "min": 0, "max": 60, "step": 2, "default": 20 },
+    { "type": "range", "id": "mob_hero_pad_bot", "label": "Hero Bottom Padding (px)", "min": 0, "max": 60, "step": 2, "default": 20 },
+    { "type": "range", "id": "mobile_heading_gap", "label": "Gap Below Intro To Cards (px)", "min": 10, "max": 60, "step": 2, "default": 24 },
+    { "type": "range", "id": "mob_cont_w", "label": "Hero Content Width (%)", "min": 30, "max": 100, "step": 1, "default": 56 },
+    { "type": "range", "id": "mob_cont_x", "label": "Hero Content X Position (% left)", "min": 0, "max": 80, "step": 1, "default": 42 },
+    { "type": "range", "id": "mob_cont_y", "label": "Hero Content Y Position (px)", "min": 0, "max": 300, "step": 5, "default": 25 },
+    { "type": "range", "id": "mob_cont_z", "label": "Z-Index Layer", "min": 1, "max": 10, "step": 1, "default": 3 },
+    { "type": "select", "id": "mob_cont_align", "label": "Horizontal Alignment", "default": "center", "options": [{"value":"left","label":"Left"},{"value":"center","label":"Center"},{"value":"right","label":"Right"}] },
+    { "type": "select", "id": "mob_cont_valign", "label": "Vertical Alignment", "default": "flex-start", "options": [{"value":"flex-start","label":"Top"},{"value":"center","label":"Center"},{"value":"flex-end","label":"Bottom"}] },
 
     {
       "type": "header",
       "content": "── MOBILE HERO: DECORATION ──"
     },
     { "type": "range", "id": "mob_orn_scale", "label": "Ornament Scale (%)", "min": 50, "max": 150, "step": 5, "default": 100 },
-    { "type": "range", "id": "mob_orn_w", "label": "Ornament Width (px)", "min": 20, "max": 100, "step": 4, "default": 48 },
+    { "type": "range", "id": "mob_orn_w", "label": "Ornament Width (px)", "min": 20, "max": 100, "step": 2, "default": 48 },
     { "type": "color", "id": "mob_orn_color", "label": "Ornament Color", "default": "#a8894e" },
     { "type": "range", "id": "mob_orn_space", "label": "Ornament Vertical Spacing (px)", "min": 4, "max": 30, "step": 2, "default": 14 },
-    { "type": "range", "id": "mob_orn_x", "label": "Ornament X Position (px)", "min": -150, "max": 150, "step": 5, "default": 30 },
 
     {
       "type": "header",
