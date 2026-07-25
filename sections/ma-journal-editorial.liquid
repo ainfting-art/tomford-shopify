@@ -1,7 +1,8 @@
 {%- comment -%}
   MA Journal Editorial — standalone luxury publication-style journal section.
-  Desktop: Refined into a publication-grade experience with featured story hierarchy,
-  650ms luxury hover interactions, left-to-right underline animations, and zero hardcoded values.
+  Desktop V2 Refined: Implements all 15 creative director specifications including
+  vertically centered intro, 3-line / 2-line title clamping, 100% vs 80% typography scale,
+  1.02 vs 1.015 hover restraint, distinct gap controls, and 100px footer cushion.
   Mobile: 100% preserved and untouched.
 {%- endcomment -%}
 
@@ -278,7 +279,7 @@
   #shopify-section-{{ section.id }} .ma-j__stories { display: block; }
 
   /* ══════════════════════════════════════════════════════════════
-     DESKTOP EDITORIAL EXPERIENCE (≥ 750px) — LUXURY REFINEMENTS
+     DESKTOP EDITORIAL EXPERIENCE (≥ 750px) — BALANCED V2 REFINED
   ══════════════════════════════════════════════════════════════ */
   @media (min-width: 750px) {
     #shopify-section-{{ section.id }} .ma-j {
@@ -286,143 +287,180 @@
       height: auto;
     }
 
+    /* Outer Proportional Grid: ~40% Intro Left | ~60% Articles Right */
+    /* Point 4: Vertically center the intro relative to the right column total height */
     #shopify-section-{{ section.id }} .ma-j__inner {
       display: grid;
-      grid-template-columns: {{ section.settings.intro_width }}px 1fr;
+      grid-template-columns: {{ 100 | minus: section.settings.right_column_width | default: 40 }}fr {{ section.settings.right_column_width | default: 60 }}fr;
       gap: {{ section.settings.content_spacing }}px;
-      align-items: start;
+      align-items: center !important;
       height: auto;
       overflow: visible;
     }
+    /* Sticky pinning completely removed: both columns scroll and finish together */
     #shopify-section-{{ section.id }} .ma-j__intro {
       margin-bottom: 0;
-      position: sticky;
-      top: 40px;
+      position: relative;
     }
     #shopify-section-{{ section.id }} .ma-j__heading {
       font-size: {{ section.settings.heading_size }}px;
     }
 
-    /* Desktop layout styles (Classic Editorial, Magazine Grid, Feature Left/Right) */
-    #shopify-section-{{ section.id }} .ma-j__stories {
+    /* Balanced Editorial Preset (1 Top Featured Story + 2 Supporting Stories) */
+    #shopify-section-{{ section.id }} .ma-j__desktop--balanced_editorial {
       display: grid !important;
-      grid-template-columns: repeat({{ section.settings.desktop_columns }}, 1fr);
-      gap: {{ section.settings.card_gap }}px;
-      overflow: visible;
-      height: auto;
+      grid-template-columns: 1fr 1fr;
+      column-gap: {{ section.settings.supporting_story_gap | default: 20 }}px;
+      row-gap: {{ section.settings.featured_story_margin_bottom | default: 40 }}px;
     }
-
-    #shopify-section-{{ section.id }} .ma-j__stories .ma-j__card {
-      display: flex;
-      flex-direction: column;
-      flex: none;
-      margin-bottom: 0;
-      overflow: visible;
-      height: 100%;
-    }
-
-    #shopify-section-{{ section.id }} .ma-j__stories .ma-j__media {
-      aspect-ratio: {{ section.settings.image_aspect_ratio }};
-      height: {{ section.settings.desktop_image_height | default: 220 }}px;
-      max-height: none;
-      width: 100%;
-      flex-shrink: 0;
-    }
-
-    #shopify-section-{{ section.id }} .ma-j__stories .ma-j__body {
-      padding: 18px 0 0 0;
-      display: flex;
-      flex-direction: column;
-      flex-grow: 1;
-    }
-
-    #shopify-section-{{ section.id }} .ma-j__stories .ma-j__category {
-      margin-bottom: 8px;
-    }
-
-    #shopify-section-{{ section.id }} .ma-j__stories .ma-j__name {
-      font-size: {{ section.settings.title_size }}px;
-      line-height: 1.3;
-      margin-bottom: 12px;
-      display: -webkit-box;
-      -webkit-line-clamp: {{ section.settings.title_line_clamp | default: 3 }};
-      -webkit-box-orient: vertical;
+    #shopify-section-{{ section.id }} .ma-j__desktop--balanced_editorial .ma-j__card:first-child {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: {{ 100 | minus: section.settings.featured_story_width | default: 45 }}fr {{ section.settings.featured_story_width | default: 55 }}fr;
+      column-gap: 36px;
+      align-items: center;
+      background: {{ section.settings.featured_card_bg | default: '#141312' }};
+      border: 1px solid {{ section.settings.card_border_color | default: 'rgba(23,19,16,0.08)' }};
+      border-radius: {{ section.settings.image_radius }}px;
       overflow: hidden;
     }
-
-    #shopify-section-{{ section.id }} .ma-j__stories .ma-j__excerpt {
-      margin-bottom: 16px;
+    /* Point 1: Visually dominant hero story image height (480px default) */
+    #shopify-section-{{ section.id }} .ma-j__desktop--balanced_editorial .ma-j__card:first-child .ma-j__media {
+      order: 2;
+      height: {{ section.settings.featured_story_height | default: 480 }}px !important;
+      aspect-ratio: auto;
+      width: 100%;
+      border-radius: 0;
+    }
+    /* Point 12: Featured hover scale 1.02 with subtle overlay brighten */
+    #shopify-section-{{ section.id }} .ma-j__desktop--balanced_editorial .ma-j__card:first-child:hover .ma-j__media img {
+      transform: scale(1.02) !important;
+      filter: brightness(1.05) !important;
+    }
+    #shopify-section-{{ section.id }} .ma-j__desktop--balanced_editorial .ma-j__card:first-child .ma-j__body {
+      order: 1;
+      padding: 36px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    /* Point 7 & 9: Featured title 100% hierarchy (default 28px) capped at max 3 lines */
+    #shopify-section-{{ section.id }} .ma-j__desktop--balanced_editorial .ma-j__card:first-child .ma-j__name {
+      font-size: {{ section.settings.featured_title_size | default: 28 }}px;
+      line-height: 1.2;
+      margin-bottom: 18px;
+      font-weight: 500;
       display: -webkit-box;
       -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
-
-    #shopify-section-{{ section.id }} .ma-j__stories .ma-j__meta {
-      display: flex;
-      margin-top: auto;
-      padding-top: 10px;
+    #shopify-section-{{ section.id }} .ma-j__desktop--balanced_editorial .ma-j__card:first-child .ma-j__category {
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      margin-bottom: 12px;
     }
-
-    #shopify-section-{{ section.id }} .ma-j__stories .ma-j__read {
+    #shopify-section-{{ section.id }} .ma-j__desktop--balanced_editorial .ma-j__card:first-child .ma-j__read {
+      font-size: 11px;
+      margin-top: 10px;
+    }
+    /* Point 6: Strictly enforce minimal metadata for balanced layout (no excerpt/author/date) */
+    #shopify-section-{{ section.id }} .ma-j__desktop--balanced_editorial .ma-j__card:first-child .ma-j__excerpt,
+    #shopify-section-{{ section.id }} .ma-j__desktop--balanced_editorial .ma-j__card:first-child .ma-j__meta {
+      display: none !important;
+    }
+    /* Responsive fallback for smaller desktop windows (750px - 1050px) */
+    @media (min-width: 750px) and (max-width: 1050px) {
+      #shopify-section-{{ section.id }} .ma-j__desktop--balanced_editorial .ma-j__card:first-child {
+        grid-template-columns: 1fr;
+      }
+      #shopify-section-{{ section.id }} .ma-j__desktop--balanced_editorial .ma-j__card:first-child .ma-j__media {
+        order: 1;
+        height: 340px !important;
+      }
+      #shopify-section-{{ section.id }} .ma-j__desktop--balanced_editorial .ma-j__card:first-child .ma-j__body {
+        order: 2;
+        padding: 24px;
+      }
+    }
+    /* Supporting Stories in Balanced Layout (Point 2, 7, 9, 10) */
+    #shopify-section-{{ section.id }} .ma-j__desktop--balanced_editorial .ma-j__card:not(:first-child) {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    /* Point 2: Supporting story image height restrained to 170px (~25% reduction) */
+    #shopify-section-{{ section.id }} .ma-j__desktop--balanced_editorial .ma-j__card:not(:first-child) .ma-j__media {
+      height: {{ section.settings.supporting_image_height | default: 170 }}px;
+      aspect-ratio: {{ section.settings.image_aspect_ratio }};
+      width: 100%;
+      flex-shrink: 0;
+    }
+    /* Point 12: Supporting hover scale restrained to 1.015 with underline draw only */
+    #shopify-section-{{ section.id }} .ma-j__desktop--balanced_editorial .ma-j__card:not(:first-child):hover .ma-j__media img {
+      transform: scale(1.015) !important;
+    }
+    #shopify-section-{{ section.id }} .ma-j__desktop--balanced_editorial .ma-j__card:not(:first-child) .ma-j__body {
+      padding: 16px 0 0 0;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      justify-content: space-between;
+    }
+    /* Point 7 & 9: Supporting title ~80% scale (default 18px) capped at max 2 lines */
+    #shopify-section-{{ section.id }} .ma-j__desktop--balanced_editorial .ma-j__card:not(:first-child) .ma-j__name {
+      font-size: {{ section.settings.supporting_title_size | default: 18 }}px;
+      line-height: 1.3;
+      margin-bottom: 14px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    #shopify-section-{{ section.id }} .ma-j__desktop--balanced_editorial .ma-j__card:not(:first-child) .ma-j__read {
       margin-top: auto;
       align-self: flex-start;
     }
 
-    /* Featured Story Editorial Hierarchy (Active on Desktop when ON) */
-    {% if section.settings.show_featured_story %}
-      #shopify-section-{{ section.id }} .ma-j__stories .ma-j__card--featured {
-        grid-column: span 2;
-        display: grid;
-        grid-template-columns: {{ section.settings.featured_story_width | default: 55 }}% 1fr;
-        gap: 32px;
-        align-items: center;
-      }
-      @media (max-width: 1050px) {
-        #shopify-section-{{ section.id }} .ma-j__stories .ma-j__card--featured {
-          grid-template-columns: 1fr;
-          gap: 18px;
-        }
-      }
-      #shopify-section-{{ section.id }} .ma-j__stories .ma-j__card--featured .ma-j__media {
-        aspect-ratio: {{ section.settings.featured_image_aspect | default: '4 / 5' }};
-        height: {{ section.settings.featured_image_height | default: 380 }}px;
-      }
-      #shopify-section-{{ section.id }} .ma-j__stories .ma-j__card--featured .ma-j__body {
-        padding: 0;
-        justify-content: center;
-      }
-      #shopify-section-{{ section.id }} .ma-j__stories .ma-j__card--featured .ma-j__name {
-        font-size: {{ section.settings.title_size | plus: 6 }}px;
-        line-height: 1.25;
-        -webkit-line-clamp: 4;
-      }
-      #shopify-section-{{ section.id }} .ma-j__stories .ma-j__card--featured .ma-j__excerpt {
-        font-size: {{ section.settings.excerpt_size | plus: 1 }}px;
-        -webkit-line-clamp: 4;
-      }
-    {% endif %}
-
-    /* Reset mobile Full Editorial overrides on desktop */
-    #shopify-section-{{ section.id }} .ma-j__stories--full_editorial .ma-j__card:first-child .ma-j__media {
-      aspect-ratio: {{ section.settings.image_aspect_ratio }};
-      height: {{ section.settings.desktop_image_height | default: 220 }}px;
+    /* Classic / Magazine / Feature Layout Options (Maintained for Customizer Flexibility) */
+    #shopify-section-{{ section.id }} .ma-j__desktop--classic_editorial,
+    #shopify-section-{{ section.id }} .ma-j__desktop--magazine_grid,
+    #shopify-section-{{ section.id }} .ma-j__desktop--feature_left,
+    #shopify-section-{{ section.id }} .ma-j__desktop--feature_right {
+      display: grid !important;
+      grid-template-columns: repeat({{ section.settings.desktop_columns }}, 1fr);
+      gap: {{ section.settings.card_gap }}px;
     }
-    #shopify-section-{{ section.id }} .ma-j__stories--full_editorial .ma-j__card:first-child .ma-j__name {
-      font-size: {{ section.settings.title_size }}px;
+    #shopify-section-{{ section.id }} .ma-j__desktop--classic_editorial .ma-j__card,
+    #shopify-section-{{ section.id }} .ma-j__desktop--magazine_grid .ma-j__card,
+    #shopify-section-{{ section.id }} .ma-j__desktop--feature_left .ma-j__card,
+    #shopify-section-{{ section.id }} .ma-j__desktop--feature_right .ma-j__card {
+      display: flex; flex-direction: column; height: 100%;
     }
-    #shopify-section-{{ section.id }} .ma-j__stories--full_editorial .ma-j__card:not(:first-child) {
-      display: flex;
-      align-items: normal;
+    #shopify-section-{{ section.id }} .ma-j__desktop--classic_editorial .ma-j__media,
+    #shopify-section-{{ section.id }} .ma-j__desktop--magazine_grid .ma-j__media,
+    #shopify-section-{{ section.id }} .ma-j__desktop--feature_left .ma-j__media,
+    #shopify-section-{{ section.id }} .ma-j__desktop--feature_right .ma-j__media {
+      height: {{ section.settings.supporting_image_height | default: 170 }}px; aspect-ratio: {{ section.settings.image_aspect_ratio }}; width: 100%;
     }
-    #shopify-section-{{ section.id }} .ma-j__stories--full_editorial .ma-j__card:not(:first-child) .ma-j__media {
-      flex: none;
-      aspect-ratio: {{ section.settings.image_aspect_ratio }};
-      height: {{ section.settings.desktop_image_height | default: 220 }}px;
+    #shopify-section-{{ section.id }} .ma-j__desktop--classic_editorial .ma-j__body,
+    #shopify-section-{{ section.id }} .ma-j__desktop--magazine_grid .ma-j__body,
+    #shopify-section-{{ section.id }} .ma-j__desktop--feature_left .ma-j__body,
+    #shopify-section-{{ section.id }} .ma-j__desktop--feature_right .ma-j__body {
+      padding: 18px 0 0 0; display: flex; flex-direction: column; flex-grow: 1;
     }
-    #shopify-section-{{ section.id }} .ma-j__stories--full_editorial .ma-j__card:not(:first-child) .ma-j__body {
-      flex: 1;
-      padding: 18px 0 0 0;
+    #shopify-section-{{ section.id }} .ma-j__desktop--classic_editorial .ma-j__name,
+    #shopify-section-{{ section.id }} .ma-j__desktop--magazine_grid .ma-j__name,
+    #shopify-section-{{ section.id }} .ma-j__desktop--feature_left .ma-j__name,
+    #shopify-section-{{ section.id }} .ma-j__desktop--feature_right .ma-j__name {
+      font-size: {{ section.settings.supporting_title_size | default: 18 }}px; line-height: 1.3; margin-bottom: 12px;
+      display: -webkit-box; -webkit-line-clamp: {{ section.settings.title_line_clamp | default: 3 }}; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    #shopify-section-{{ section.id }} .ma-j__desktop--classic_editorial .ma-j__read,
+    #shopify-section-{{ section.id }} .ma-j__desktop--magazine_grid .ma-j__read,
+    #shopify-section-{{ section.id }} .ma-j__desktop--feature_left .ma-j__read,
+    #shopify-section-{{ section.id }} .ma-j__desktop--feature_right .ma-j__read {
+      margin-top: auto; align-self: flex-start;
     }
   }
 {% endstyle %}
@@ -594,7 +632,7 @@
       "type": "header",
       "content": "Editorial Metadata (Beneath Eyebrow)"
     },
-    { "type": "checkbox", "id": "enable_editorial_meta", "label": "Enable Editorial Metadata", "default": false },
+    { "type": "checkbox", "id": "enable_editorial_meta", "label": "Enable Editorial Metadata", "default": true },
     { "type": "text", "id": "meta_volume", "label": "Volume Label", "default": "Volume 01" },
     { "type": "text", "id": "meta_issue", "label": "Issue Label", "default": "Issue 04" },
     { "type": "text", "id": "meta_freq", "label": "Frequency Label", "default": "Updated Weekly" },
@@ -622,32 +660,29 @@
 
     {
       "type": "header",
-      "content": "Desktop Grid & Layout"
+      "content": "Desktop Grid & Layout V2"
     },
-    { "type": "select", "id": "desktop_layout_style", "label": "Desktop Layout Preset", "default": "classic_editorial", "options": [
-      { "value": "classic_editorial", "label": "Classic Editorial" },
+    { "type": "select", "id": "desktop_layout_style", "label": "Desktop Article Layout", "default": "balanced_editorial", "options": [
+      { "value": "balanced_editorial", "label": "Balanced Editorial (Featured + Two)" },
+      { "value": "classic_editorial", "label": "Classic Editorial (Three Staggered)" },
       { "value": "magazine_grid", "label": "Magazine Grid" },
       { "value": "feature_left", "label": "Feature Left" },
       { "value": "feature_right", "label": "Feature Right" }
     ]},
-    { "type": "range", "id": "intro_width", "label": "Intro column width", "min": 320, "max": 700, "step": 10, "default": 520, "unit": "px" },
-    { "type": "range", "id": "desktop_columns", "label": "Number of columns", "min": 1, "max": 4, "step": 1, "default": 3 },
-    { "type": "range", "id": "card_min_width", "label": "Card minimum width", "min": 200, "max": 400, "step": 10, "default": 260, "unit": "px" },
+    { "type": "range", "id": "right_column_width", "label": "Right Column Width (%)", "min": 50, "max": 70, "step": 1, "default": 60, "unit": "%" },
+    { "type": "range", "id": "intro_width", "label": "Intro column width (Classic mode)", "min": 240, "max": 520, "step": 10, "default": 340, "unit": "px" },
+    { "type": "range", "id": "desktop_columns", "label": "Number of columns (Classic mode)", "min": 1, "max": 4, "step": 1, "default": 3 },
     { "type": "range", "id": "card_gap", "label": "Card spacing (desktop)", "min": 8, "max": 60, "step": 2, "default": 36, "unit": "px" },
-    { "type": "range", "id": "desktop_image_height", "label": "Desktop Image Height", "min": 120, "max": 320, "step": 10, "default": 220, "unit": "px" },
+    { "type": "range", "id": "supporting_image_height", "label": "Supporting Story Image Height", "min": 120, "max": 320, "step": 10, "default": 170, "unit": "px" },
     { "type": "select", "id": "title_line_clamp", "label": "Title Line Clamp", "default": "3", "options": [
       { "value": "2", "label": "2 Lines" },
       { "value": "3", "label": "3 Lines" },
       { "value": "4", "label": "4 Lines" }
     ]},
-    { "type": "range", "id": "featured_story_width", "label": "Featured Story Width", "min": 35, "max": 60, "step": 1, "default": 55, "unit": "%" },
-    { "type": "range", "id": "featured_image_height", "label": "Featured Story Image Height", "min": 250, "max": 600, "step": 10, "default": 380, "unit": "px" },
-    { "type": "select", "id": "featured_image_aspect", "label": "Featured story image ratio", "default": "4 / 5", "options": [
-      { "value": "1 / 1", "label": "Square" },
-      { "value": "4 / 5", "label": "Portrait 4:5" },
-      { "value": "3 / 4", "label": "Portrait 3:4" },
-      { "value": "16 / 9", "label": "Widescreen" }
-    ]},
+    { "type": "range", "id": "featured_story_width", "label": "Featured Story Image Proportion (%)", "min": 35, "max": 60, "step": 1, "default": 55, "unit": "%" },
+    { "type": "range", "id": "featured_story_height", "label": "Featured Story Height", "min": 300, "max": 600, "step": 10, "default": 480, "unit": "px" },
+    { "type": "range", "id": "supporting_story_gap", "label": "Supporting Story Gap", "min": 10, "max": 60, "step": 2, "default": 20, "unit": "px" },
+    { "type": "range", "id": "featured_story_margin_bottom", "label": "Featured → Bottom Gap", "min": 10, "max": 80, "step": 2, "default": 40, "unit": "px" },
 
     {
       "type": "header",
@@ -741,7 +776,9 @@
     { "type": "select", "id": "title_weight", "label": "Title weight", "default": "400", "options": [
       { "value": "400", "label": "Regular" }, { "value": "500", "label": "Medium" }, { "value": "600", "label": "Semibold" }, { "value": "700", "label": "Bold" }
     ]},
-    { "type": "range", "id": "title_size", "label": "Title size", "min": 14, "max": 26, "step": 1, "default": 18, "unit": "px" },
+    { "type": "range", "id": "title_size", "label": "Base Title Size", "min": 14, "max": 26, "step": 1, "default": 18, "unit": "px" },
+    { "type": "range", "id": "featured_title_size", "label": "Featured Title Size", "min": 20, "max": 40, "step": 1, "default": 28, "unit": "px" },
+    { "type": "range", "id": "supporting_title_size", "label": "Supporting Title Size (~80%)", "min": 14, "max": 26, "step": 1, "default": 18, "unit": "px" },
     { "type": "color", "id": "title_color", "label": "Title color", "default": "#f5f0e6" },
 
     { "type": "font_picker", "id": "excerpt_font", "label": "Excerpt font", "default": "helvetica_n4" },
@@ -786,8 +823,8 @@
       "type": "header",
       "content": "Featured Story Colors"
     },
-    { "type": "color", "id": "featured_card_bg", "label": "Featured card background", "default": "#f5f1e9" },
-    { "type": "color", "id": "featured_text_color", "label": "Featured text color", "default": "#1a1a1a" },
+    { "type": "color", "id": "featured_card_bg", "label": "Featured card background", "default": "#141312" },
+    { "type": "color", "id": "featured_text_color", "label": "Featured text color", "default": "#f5f0e6" },
 
     {
       "type": "header",
@@ -796,7 +833,7 @@
     { "type": "range", "id": "content_spacing", "label": "Space between intro and stories", "min": 12, "max": 80, "step": 4, "default": 40, "unit": "px" },
     { "type": "range", "id": "text_spacing", "label": "Space inside each card", "min": 4, "max": 32, "step": 2, "default": 10, "unit": "px" },
     { "type": "range", "id": "padding_top", "label": "Padding top", "min": 0, "max": 140, "step": 5, "default": 60, "unit": "px" },
-    { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 0, "max": 140, "step": 5, "default": 60, "unit": "px" },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom (Footer cushion)", "min": 40, "max": 140, "step": 5, "default": 100, "unit": "px" },
     { "type": "range", "id": "padding_left", "label": "Padding left", "min": 0, "max": 120, "step": 5, "default": 40, "unit": "px" },
     { "type": "range", "id": "padding_right", "label": "Padding right", "min": 0, "max": 120, "step": 5, "default": 40, "unit": "px" },
     { "type": "range", "id": "margin_top", "label": "Margin top", "min": 0, "max": 120, "step": 5, "default": 0, "unit": "px" },
