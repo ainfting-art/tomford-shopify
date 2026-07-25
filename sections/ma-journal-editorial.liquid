@@ -2,7 +2,6 @@
   MA Journal Editorial — standalone luxury publication-style journal section.
   Desktop: Refined into a publication-grade experience with featured story hierarchy,
   650ms luxury hover interactions, left-to-right underline animations, and zero hardcoded values.
-  Sticky intro pinning removed: both columns scroll and exit the viewport naturally together.
   Mobile: 100% preserved and untouched.
 {%- endcomment -%}
 
@@ -279,7 +278,7 @@
   #shopify-section-{{ section.id }} .ma-j__stories { display: block; }
 
   /* ══════════════════════════════════════════════════════════════
-     DESKTOP EDITORIAL EXPERIENCE (≥ 750px) — NATURAL SCROLLING
+     DESKTOP EDITORIAL EXPERIENCE (≥ 750px) — LUXURY REFINEMENTS
   ══════════════════════════════════════════════════════════════ */
   @media (min-width: 750px) {
     #shopify-section-{{ section.id }} .ma-j {
@@ -295,10 +294,10 @@
       height: auto;
       overflow: visible;
     }
-    /* Sticky pinning completely removed: both columns scroll and exit together */
     #shopify-section-{{ section.id }} .ma-j__intro {
       margin-bottom: 0;
-      position: relative;
+      position: sticky;
+      top: 40px;
     }
     #shopify-section-{{ section.id }} .ma-j__heading {
       font-size: {{ section.settings.heading_size }}px;
@@ -631,7 +630,7 @@
       { "value": "feature_left", "label": "Feature Left" },
       { "value": "feature_right", "label": "Feature Right" }
     ]},
-    { "type": "range", "id": "intro_width", "label": "Intro column width", "min": 240, "max": 520, "step": 10, "default": 340, "unit": "px" },
+    { "type": "range", "id": "intro_width", "label": "Intro column width", "min": 320, "max": 700, "step": 10, "default": 520, "unit": "px" },
     { "type": "range", "id": "desktop_columns", "label": "Number of columns", "min": 1, "max": 4, "step": 1, "default": 3 },
     { "type": "range", "id": "card_min_width", "label": "Card minimum width", "min": 200, "max": 400, "step": 10, "default": 260, "unit": "px" },
     { "type": "range", "id": "card_gap", "label": "Card spacing (desktop)", "min": 8, "max": 60, "step": 2, "default": 36, "unit": "px" },
