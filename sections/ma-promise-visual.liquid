@@ -1,8 +1,8 @@
 {%- comment -%}
   MAISON AMIIR — The Maison Promise (Editorial Campaign Rebuild)
-  Features: True CSS alpha-mask edge dissolve (-webkit-mask-image), uncropped full-canvas
-  fit (object-fit: contain), 30/70 editorial ratio, atmospheric watermark, ultra-thin hairlines,
-  and directional lighting overlays. 100% backward compatible with all existing schema IDs.
+  Features: Master text group X/Y shifting, zero-cropping image fit controls, CTA button,
+  true CSS alpha-mask edge dissolve, directional studio lighting, and full typography sizing.
+  100% backward compatible with all existing schema IDs.
 {%- endcomment -%}
 
 {%- liquid
@@ -40,23 +40,25 @@
 #shopify-section-{{ sid }} { opacity: 1 !important; transform: none !important; width: 100% !important; max-width: none !important; }
 
 {%- if preset == 'ivory' -%}
-  #shopify-section-{{ sid }} { --pm-bg: #F4EEE1; --pm-ink: #171310; --pm-ink2: rgba(23,19,16,0.72); --pm-gold: #A8894E; --pm-burg: #6E1220; --pm-line: rgba(23,19,16,0.07); }
+  #shopify-section-{{ sid }} { --pm-bg: #F4EEE1; --pm-ink: #171310; --pm-ink2: rgba(23,19,16,0.75); --pm-gold: #A8894E; --pm-burg: #6E1220; --pm-line: rgba(23,19,16,0.08); --pm-cta-bg: #171310; --pm-cta-ink: #F4EEE1; }
 {%- elsif preset == 'noir' -%}
-  #shopify-section-{{ sid }} { --pm-bg: #0C0B0A; --pm-ink: #F4EEE1; --pm-ink2: rgba(244,238,225,0.70); --pm-gold: #C6A15B; --pm-burg: #A8894E; --pm-line: rgba(244,238,225,0.08); }
+  #shopify-section-{{ sid }} { --pm-bg: #0C0B0A; --pm-ink: #F4EEE1; --pm-ink2: rgba(244,238,225,0.75); --pm-gold: #C6A15B; --pm-burg: #A8894E; --pm-line: rgba(244,238,225,0.08); --pm-cta-bg: #C6A15B; --pm-cta-ink: #0C0B0A; }
 {%- elsif preset == 'editorial_light' -%}
-  #shopify-section-{{ sid }} { --pm-bg: #FFFFFF; --pm-ink: #111111; --pm-ink2: rgba(17,17,17,0.68); --pm-gold: #8C703B; --pm-burg: #5A101A; --pm-line: rgba(17,17,17,0.06); }
+  #shopify-section-{{ sid }} { --pm-bg: #FFFFFF; --pm-ink: #111111; --pm-ink2: rgba(17,17,17,0.70); --pm-gold: #8C703B; --pm-burg: #5A101A; --pm-line: rgba(17,17,17,0.06); --pm-cta-bg: #111111; --pm-cta-ink: #FFFFFF; }
 {%- elsif preset == 'soft_linen' -%}
-  #shopify-section-{{ sid }} { --pm-bg: #EFE7DB; --pm-ink: #221E1B; --pm-ink2: rgba(34,30,27,0.72); --pm-gold: #9E825E; --pm-burg: #6E1220; --pm-line: rgba(34,30,27,0.07); }
+  #shopify-section-{{ sid }} { --pm-bg: #EFE7DB; --pm-ink: #221E1B; --pm-ink2: rgba(34,30,27,0.75); --pm-gold: #9E825E; --pm-burg: #6E1220; --pm-line: rgba(34,30,27,0.08); --pm-cta-bg: #221E1B; --pm-cta-ink: #EFE7DB; }
 {%- elsif preset == 'warm_paper' -%}
-  #shopify-section-{{ sid }} { --pm-bg: #F2EBE1; --pm-ink: #2A2421; --pm-ink2: rgba(42,36,33,0.75); --pm-gold: #A8894E; --pm-burg: #7A1828; --pm-line: rgba(42,36,33,0.08); }
+  #shopify-section-{{ sid }} { --pm-bg: #F2EBE1; --pm-ink: #2A2421; --pm-ink2: rgba(42,36,33,0.75); --pm-gold: #A8894E; --pm-burg: #7A1828; --pm-line: rgba(42,36,33,0.08); --pm-cta-bg: #2A2421; --pm-cta-ink: #F2EBE1; }
 {%- else -%}
   #shopify-section-{{ sid }} {
     --pm-bg: {{ bg_default }};
     --pm-ink: {{ ink_default }};
-    --pm-ink2: {{ section.settings.body_color | default: 'rgba(23,19,16,0.72)' }};
+    --pm-ink2: {{ section.settings.body_color | default: 'rgba(23,19,16,0.75)' }};
     --pm-gold: {{ section.settings.gold_color }};
     --pm-burg: {{ section.settings.burgundy_color }};
-    --pm-line: {{ section.settings.grid_line_color | default: 'rgba(23,19,16,0.07)' }};
+    --pm-line: {{ section.settings.grid_line_color | default: 'rgba(23,19,16,0.08)' }};
+    --pm-cta-bg: {{ section.settings.cta_bg_color | default: '#171310' }};
+    --pm-cta-ink: {{ section.settings.cta_text_color | default: '#F4EEE1' }};
   }
 {%- endif -%}
 
@@ -71,6 +73,8 @@
   overflow: hidden;
   border-top: {{ section.settings.grid_line_thickness }}px {{ section.settings.grid_line_style }} var(--pm-line);
   border-bottom: {{ section.settings.grid_line_thickness }}px {{ section.settings.grid_line_style }} var(--pm-line);
+  margin-top: {{ section.settings.margin_top | default: 0 }}px;
+  margin-bottom: {{ section.settings.margin_bottom | default: 0 }}px;
   padding: {{ section.settings.mobile_padding_top | default: 40 }}px {{ section.settings.mobile_padding_side | default: 20 }}px {{ section.settings.mobile_padding_bottom | default: 40 }}px;
 }
 
@@ -112,11 +116,11 @@
 }
 
 /* ═══════════════════════════════════════
-   4. DESKTOP EDITORIAL SPREAD & TRUE MASK
+   4. DESKTOP EDITORIAL SPREAD
 ═══════════════════════════════════════ */
 @media (min-width: 900px) {
   #ma-mp3-{{ sid }}.ma-mp3 {
-    padding: {{ section.settings.desktop_padding }}px 0;
+    padding: {{ section.settings.desktop_padding_top | default: 50 }}px 0 {{ section.settings.desktop_padding_bottom | default: 50 }}px;
     min-height: {{ section.settings.min_height | default: 680 }}px;
     display: flex;
     align-items: center;
@@ -135,7 +139,7 @@
     z-index: 2;
   }
 
-  /* ── LEFT: Campaign Artwork & True Pixel Dissolve Mask ── */
+  /* ── LEFT: Artwork & Alpha-Mask Dissolve ── */
   #ma-mp3-{{ sid }} .ma-mp3__img-col {
     position: relative;
     width: 100%;
@@ -148,13 +152,14 @@
     justify-content: center;
     {% if section.settings.img_shadow %}box-shadow: 0 30px 60px -15px rgba(0,0,0,0.18);{% endif %}
     
-    /* TRUE CSS PIXEL MASK: Dissolves image pixels into 0% opacity along the right edge */
+    /* True CSS Alpha Mask: Dissolves image into 0% opacity along the right edge */
     {% if section.settings.enable_fade %}
     -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,1) calc(100% - {{ section.settings.fade_width | default: 40 }}%), rgba(0,0,0,0) 100%);
     mask-image: linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,1) calc(100% - {{ section.settings.fade_width | default: 40 }}%), rgba(0,0,0,0) 100%);
     {% endif %}
   }
 
+  /* Optional Full Bleed Left Edge */
   {% if section.settings.full_bleed_left %}
   #ma-mp3-{{ sid }} .ma-mp3__img-col {
     margin-left: calc(-50vw + 50%);
@@ -163,20 +168,20 @@
   }
   {% endif %}
 
-  /* UNCROPPED FULL-FIT: Changed from cover to contain so NO artwork gets cut off */
+  /* ZERO CROPPING FIT: Controlled via object-fit and X/Y offset sliders */
   #ma-mp3-{{ sid }} .ma-mp3__img-col img {
     width: 100%;
     height: 100%;
     max-height: {{ section.settings.img_height | default: 680 }}px;
     object-fit: {{ section.settings.object_fit | default: 'contain' }};
     object-position: {{ section.settings.img_x | default: 50 }}% {{ section.settings.img_y | default: 50 }}%;
-    transform: scale({{ section.settings.img_scale | default: 100 | divided_by: 100.0 }});
+    transform: scale({{ section.settings.img_scale | default: 100 | divided_by: 100.0 }}) translate({{ section.settings.img_offset_x | default: 0 }}px, {{ section.settings.img_offset_y | default: 0 }}px);
     filter: brightness({{ section.settings.img_brightness | default: 100 }}%) contrast({{ section.settings.img_contrast | default: 100 }}%) saturate({{ section.settings.img_saturation | default: 100 }}%);
     display: block;
-    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  /* Directional Lighting Overlay */
+  /* Directional Studio Lighting Overlay */
   {% if section.settings.enable_lighting %}
   #ma-mp3-{{ sid }} .ma-mp3__img-col::before {
     content: '';
@@ -189,18 +194,20 @@
   }
   {% endif %}
 
-  /* ── RIGHT: Centered Editorial Content Spread ── */
+  /* ── RIGHT: MASTER TEXT GROUP REPOSITIONING ── */
+  /* Moves entire text block (header, grid, seal, CTA) left/right at once */
   #ma-mp3-{{ sid }} .ma-mp3__right {
     position: relative;
     z-index: 2;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    width: 100%;
     max-width: {{ section.settings.content_max_width | default: 760 }}px;
     margin: 0 auto;
     padding: {{ section.settings.content_pad | default: 30 }}px 0;
     text-align: {{ text_align }};
-    transform: translate({{ section.settings.offset_x | default: 0 }}px, {{ section.settings.offset_y | default: 0 }}px);
+    transform: translate({{ section.settings.content_offset_x | default: 0 }}px, {{ section.settings.content_offset_y | default: 0 }}px);
   }
 }
 
@@ -375,7 +382,7 @@
 }
 
 /* ═══════════════════════════════════════
-   7. FOUNDER SEAL (+25% Prominence)
+   7. FOUNDER SEAL & CTA BUTTON
 ═══════════════════════════════════════ */
 #ma-mp3-{{ sid }} .ma-mp3__seal {
   position: relative;
@@ -412,6 +419,33 @@
   color: var(--pm-ink);
 }
 #ma-mp3-{{ sid }} .ma-mp3__sign em { font-weight: 400; font-style: italic; color: var(--pm-burg); }
+
+/* CALL TO ACTION BUTTON */
+#ma-mp3-{{ sid }} .ma-mp3__cta-wrap {
+  text-align: {{ text_align }};
+  margin-top: {{ section.settings.cta_margin_top | default: 26 }}px;
+  position: relative;
+  z-index: 2;
+}
+#ma-mp3-{{ sid }} .ma-mp3__cta-btn {
+  display: inline-block;
+  padding: {{ section.settings.cta_pad_y | default: 16 }}px {{ section.settings.cta_pad_x | default: 36 }}px;
+  background-color: var(--pm-cta-bg);
+  color: var(--pm-cta-ink);
+  font-family: {{ section.settings.eyebrow_font.family | default: 'Marcellus' }}, Georgia, serif;
+  font-size: {{ section.settings.cta_font_size | default: 12 }}px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: {{ section.settings.cta_radius | default: 0 }}px;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 12px 30px -8px rgba(0,0,0,0.2);
+}
+#ma-mp3-{{ sid }} .ma-mp3__cta-btn:hover {
+  opacity: 0.88;
+  transform: translateY(-2px);
+}
 
 /* ═══════════════════════════════════════
    8. EDITORIAL ANIMATIONS
@@ -548,6 +582,13 @@
         </div>
       {%- endif -%}
 
+      <!-- Call To Action Button -->
+      {%- if section.settings.cta_text != blank and section.settings.cta_link != blank -%}
+        <div class="ma-mp3__cta-wrap {% if section.settings.enable_animations %}ma-mp3__anim{% endif %}">
+          <a href="{{ section.settings.cta_link }}" class="ma-mp3__cta-btn">{{ section.settings.cta_text | escape }}</a>
+        </div>
+      {%- endif -%}
+
     </div>
   </div>
 </section>
@@ -586,7 +627,7 @@
   "settings": [
     {
       "type": "header",
-      "content": "── COLOR PRESETS ──"
+      "content": "── COLOR PRESETS & THEME ──"
     },
     {
       "type": "select",
@@ -604,13 +645,13 @@
     },
     { "type": "color", "id": "bg_color", "label": "Background Color (Custom)", "default": "#f4eee1" },
     { "type": "color", "id": "ink_color", "label": "Heading / Ink Color (Custom)", "default": "#171310" },
-    { "type": "color", "id": "body_color", "label": "Body Text Color (Custom)", "default": "rgba(23,19,16,0.72)" },
+    { "type": "color", "id": "body_color", "label": "Body Text Color (Custom)", "default": "rgba(23,19,16,0.75)" },
     { "type": "color", "id": "gold_color", "label": "Gold Accent Color (Custom)", "default": "#a8894e" },
     { "type": "color", "id": "burgundy_color", "label": "Burgundy Accent Color (Custom)", "default": "#6e1220" },
 
     {
       "type": "header",
-      "content": "── CONTENT ──"
+      "content": "── SECTION CONTENT ──"
     },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Buy Without a Doubt" },
     { "type": "text", "id": "heading", "label": "Heading", "default": "The Maison Promise" },
@@ -619,25 +660,62 @@
 
     {
       "type": "header",
-      "content": "── HERO IMAGE & DISSOLVE MASK ──"
+      "content": "── CALL TO ACTION (CTA) ──"
+    },
+    { "type": "text", "id": "cta_text", "label": "CTA Button Text", "default": "Explore The Collection" },
+    { "type": "url", "id": "cta_link", "label": "CTA Button Link" },
+    { "type": "color", "id": "cta_bg_color", "label": "CTA Background Color", "default": "#171310" },
+    { "type": "color", "id": "cta_text_color", "label": "CTA Text Color", "default": "#f4eee1" },
+    { "type": "range", "id": "cta_font_size", "label": "CTA Font Size (px)", "min": 10, "max": 18, "step": 1, "default": 12 },
+    { "type": "range", "id": "cta_pad_x", "label": "Horizontal Padding (px)", "min": 16, "max": 60, "step": 4, "default": 36 },
+    { "type": "range", "id": "cta_pad_y", "label": "Vertical Padding (px)", "min": 10, "max": 30, "step": 2, "default": 16 },
+    { "type": "range", "id": "cta_radius", "label": "Border Radius (px)", "min": 0, "max": 40, "step": 2, "default": 0 },
+    { "type": "range", "id": "cta_margin_top", "label": "Top Spacing (px)", "min": 10, "max": 60, "step": 2, "default": 26 },
+
+    {
+      "type": "header",
+      "content": "── MASTER TEXT POSITION ──"
+    },
+    { "type": "range", "id": "content_offset_x", "label": "Shift Text Left / Right (px)", "min": -200, "max": 200, "step": 10, "default": 0 },
+    { "type": "range", "id": "content_offset_y", "label": "Shift Text Up / Down (px)", "min": -200, "max": 200, "step": 10, "default": 0 },
+    { "type": "select", "id": "text_align", "label": "Text Alignment", "default": "center", "options": [{"value":"left","label":"Left"},{"value":"center","label":"Center"},{"value":"right","label":"Right"}] },
+    { "type": "select", "id": "valign", "label": "Vertical Alignment", "default": "center", "options": [{"value":"flex-start","label":"Top"},{"value":"center","label":"Center"},{"value":"flex-end","label":"Bottom"}] },
+    { "type": "range", "id": "content_max_width", "label": "Text Block Max Width (px)", "min": 500, "max": 900, "step": 20, "default": 760 },
+    { "type": "range", "id": "content_pad", "label": "Text Vertical Padding (px)", "min": 10, "max": 80, "step": 5, "default": 30 },
+
+    {
+      "type": "header",
+      "content": "── HERO IMAGE & SIZING ──"
     },
     { "type": "image_picker", "id": "image", "label": "Hero Artwork" },
-    { "type": "range", "id": "left_column_width", "label": "Desktop Image Width (%)", "min": 20, "max": 50, "step": 1, "default": 35 },
-    { "type": "range", "id": "mobile_image_width", "label": "Mobile Image Width (%)", "min": 35, "max": 80, "step": 5, "default": 45 },
-    { "type": "range", "id": "img_height", "label": "Desktop Image Height (px)", "min": 450, "max": 900, "step": 10, "default": 620 },
-    { "type": "select", "id": "object_fit", "label": "Object Fit", "default": "contain", "options": [{"value":"cover","label":"Cover"},{"value":"contain","label":"Contain (Uncropped)"}] },
+    { "type": "range", "id": "left_column_width", "label": "Desktop Image Width (%)", "min": 20, "max": 60, "step": 1, "default": 35 },
+    { "type": "range", "id": "mobile_image_width", "label": "Mobile Image Width (%)", "min": 35, "max": 90, "step": 5, "default": 45 },
+    { "type": "range", "id": "img_height", "label": "Desktop Image Height (px)", "min": 350, "max": 900, "step": 10, "default": 620 },
+    { "type": "select", "id": "object_fit", "label": "Object Fit Mode", "default": "contain", "options": [{"value":"contain","label":"Contain (100% Uncropped)"},{"value":"cover","label":"Cover (Fill Frame)"}] },
+
+    {
+      "type": "header",
+      "content": "── IMAGE POSITION & FIT ──"
+    },
     { "type": "range", "id": "img_x", "label": "Focal Point X (%)", "min": 0, "max": 100, "step": 5, "default": 50 },
     { "type": "range", "id": "img_y", "label": "Focal Point Y (%)", "min": 0, "max": 100, "step": 5, "default": 50 },
-    { "type": "range", "id": "img_scale", "label": "Image Zoom / Scale (%)", "min": 80, "max": 140, "step": 5, "default": 100 },
+    { "type": "range", "id": "img_scale", "label": "Image Zoom / Scale (%)", "min": 50, "max": 150, "step": 5, "default": 100 },
+    { "type": "range", "id": "img_offset_x", "label": "Shift Image Left / Right (px)", "min": -150, "max": 150, "step": 10, "default": 0 },
+    { "type": "range", "id": "img_offset_y", "label": "Shift Image Up / Down (px)", "min": -150, "max": 150, "step": 10, "default": 0 },
     { "type": "range", "id": "img_radius", "label": "Border Radius (px)", "min": 0, "max": 32, "step": 2, "default": 0 },
     { "type": "checkbox", "id": "img_shadow", "label": "Enable Soft Luxury Shadow", "default": false },
-    { "type": "checkbox", "id": "full_bleed_left", "label": "Full-Bleed Left Viewport Edge", "default": true },
-    { "type": "checkbox", "id": "enable_fade", "label": "Enable Dissolve Fade Edge Mask", "default": true },
+    { "type": "checkbox", "id": "full_bleed_left", "label": "Pull To Left Viewport Edge", "default": false },
+
+    {
+      "type": "header",
+      "content": "── DISSOLVE FADE MASK ──"
+    },
+    { "type": "checkbox", "id": "enable_fade", "label": "Enable Alpha-Mask Edge Dissolve", "default": true },
     { "type": "range", "id": "fade_width", "label": "Fade Mask Width (%)", "min": 10, "max": 80, "step": 5, "default": 40 },
 
     {
       "type": "header",
-      "content": "── DIRECTIONAL LIGHTING OVERLAY ──"
+      "content": "── LIGHTING & OVERLAY ──"
     },
     { "type": "checkbox", "id": "enable_lighting", "label": "Enable Directional Studio Lighting", "default": false },
     { "type": "range", "id": "highlights", "label": "Directional Highlight Strength (%)", "min": 0, "max": 40, "step": 5, "default": 15 },
@@ -648,7 +726,7 @@
 
     {
       "type": "header",
-      "content": "── ARCHITECTURAL WATERMARK ──"
+      "content": "── WATERMARK CREST ──"
     },
     { "type": "checkbox", "id": "show_watermark", "label": "Show Watermark Crest", "default": true },
     { "type": "image_picker", "id": "watermark_image", "label": "Custom Watermark Image" },
@@ -662,7 +740,7 @@
 
     {
       "type": "header",
-      "content": "── TYPOGRAPHY — HEADER ──"
+      "content": "── TYPOGRAPHY: HEADER ──"
     },
     { "type": "font_picker", "id": "eyebrow_font", "label": "Eyebrow Font", "default": "helvetica_n4" },
     { "type": "range", "id": "eyebrow_size", "label": "Eyebrow Size (px)", "min": 9, "max": 16, "step": 1, "default": 11 },
@@ -687,7 +765,7 @@
 
     {
       "type": "header",
-      "content": "── TYPOGRAPHY — PROMISE CARDS ──"
+      "content": "── TYPOGRAPHY: CARDS ──"
     },
     { "type": "range", "id": "promise_kicker_size", "label": "Kicker Size (px)", "min": 8, "max": 14, "step": 0.5, "default": 9.5 },
     { "type": "font_picker", "id": "promise_title_font", "label": "Promise Title Font", "default": "playfair_display_n4" },
@@ -702,7 +780,7 @@
 
     {
       "type": "header",
-      "content": "── ICONS ──"
+      "content": "── ICON CONTROLS ──"
     },
     { "type": "range", "id": "icon_size", "label": "Icon Size (px)", "min": 18, "max": 48, "step": 2, "default": 28 },
     { "type": "range", "id": "stroke_width", "label": "Stroke Thickness", "min": 0.5, "max": 2.5, "step": 0.1, "default": 1.1 },
@@ -713,18 +791,15 @@
 
     {
       "type": "header",
-      "content": "── EDITORIAL LAYOUT & WHITESPACE ──"
+      "content": "── SPACING & PADDING ──"
     },
     { "type": "range", "id": "section_width", "label": "Max Container Width (px)", "min": 1000, "max": 1600, "step": 20, "default": 1340 },
     { "type": "range", "id": "min_height", "label": "Desktop Min Height (px)", "min": 450, "max": 900, "step": 10, "default": 680 },
-    { "type": "range", "id": "column_gap", "label": "Gap Between Image & Content (px)", "min": 20, "max": 100, "step": 4, "default": 48 },
-    { "type": "range", "id": "content_max_width", "label": "Right Column Max Width (px)", "min": 500, "max": 900, "step": 20, "default": 760 },
-    { "type": "range", "id": "content_pad", "label": "Content Vertical Spacing (px)", "min": 10, "max": 80, "step": 5, "default": 30 },
-    { "type": "range", "id": "offset_x", "label": "Content Offset X (px)", "min": -60, "max": 60, "step": 5, "default": 0 },
-    { "type": "range", "id": "offset_y", "label": "Content Offset Y (px)", "min": -60, "max": 60, "step": 5, "default": 0 },
-    { "type": "select", "id": "text_align", "label": "Text Alignment", "default": "center", "options": [{"value":"left","label":"Left"},{"value":"center","label":"Center"},{"value":"right","label":"Right"}] },
-    { "type": "select", "id": "valign", "label": "Vertical Alignment", "default": "center", "options": [{"value":"flex-start","label":"Top"},{"value":"center","label":"Center"},{"value":"flex-end","label":"Bottom"}] },
-    { "type": "range", "id": "desktop_padding", "label": "Desktop Vertical Padding (px)", "min": 20, "max": 120, "step": 5, "default": 50 },
+    { "type": "range", "id": "column_gap", "label": "Gap Between Columns (px)", "min": 20, "max": 100, "step": 4, "default": 48 },
+    { "type": "range", "id": "desktop_padding_top", "label": "Desktop Top Padding (px)", "min": 10, "max": 120, "step": 5, "default": 50 },
+    { "type": "range", "id": "desktop_padding_bottom", "label": "Desktop Bottom Padding (px)", "min": 10, "max": 120, "step": 5, "default": 50 },
+    { "type": "range", "id": "margin_top", "label": "Section Margin Top (px)", "min": 0, "max": 80, "step": 5, "default": 0 },
+    { "type": "range", "id": "margin_bottom", "label": "Section Margin Bottom (px)", "min": 0, "max": 80, "step": 5, "default": 0 },
     { "type": "range", "id": "mobile_padding_top", "label": "Mobile Top Padding (px)", "min": 10, "max": 80, "step": 5, "default": 40 },
     { "type": "range", "id": "mobile_padding_bottom", "label": "Mobile Bottom Padding (px)", "min": 10, "max": 80, "step": 5, "default": 40 },
     { "type": "range", "id": "mobile_padding_side", "label": "Mobile Side Padding (px)", "min": 0, "max": 40, "step": 5, "default": 20 },
@@ -738,7 +813,7 @@
     { "type": "range", "id": "feature_padding", "label": "Card Vertical Padding (px)", "min": 16, "max": 56, "step": 4, "default": 32 },
     { "type": "range", "id": "grid_line_thickness", "label": "Divider Thickness (px)", "min": 0, "max": 3, "step": 1, "default": 1 },
     { "type": "select", "id": "grid_line_style", "label": "Divider Style", "default": "solid", "options": [{"value":"solid","label":"Solid"},{"value":"dashed","label":"Dashed"},{"value":"none","label":"None"}] },
-    { "type": "color", "id": "grid_line_color", "label": "Custom Divider Color", "default": "rgba(23,19,16,0.07)" },
+    { "type": "color", "id": "grid_line_color", "label": "Custom Divider Color", "default": "rgba(23,19,16,0.08)" },
 
     {
       "type": "header",
@@ -750,7 +825,7 @@
 
     {
       "type": "header",
-      "content": "── PROMISE CARDS CONTENT ──"
+      "content": "── PROMISE CARDS DATA ──"
     },
     { "type": "text", "id": "k1", "label": "01 Kicker", "default": "The Tester" },
     { "type": "text", "id": "t1", "label": "01 Title", "default": "A Tester in Every Order" },
