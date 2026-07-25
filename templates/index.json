@@ -99,17 +99,6 @@
         "speed": 41
       }
     },
-    "ma_most_wanted_3eDjHb": {
-      "type": "ma-most-wanted",
-      "name": "Most Wanted Grid",
-      "settings": {
-        "eyebrow": "The Icons",
-        "heading": "Most Wanted",
-        "collection": "winter-collection",
-        "cta_link": "shopify://collections/all-perfumes",
-        "cta_label": "Shop All"
-      }
-    },
     "custom_liquid_hmfTtV": {
       "type": "custom-liquid",
       "name": "WORN BY THOSE WHO ARRIVE FIRST",
@@ -119,6 +108,17 @@
         "section_width": "full-width",
         "padding-block-start": 0,
         "padding-block-end": 0
+      }
+    },
+    "ma_most_wanted_3eDjHb": {
+      "type": "ma-most-wanted",
+      "name": "Most Wanted Grid",
+      "settings": {
+        "eyebrow": "The Icons",
+        "heading": "Most Wanted",
+        "collection": "winter-collection",
+        "cta_link": "shopify://collections/all-perfumes",
+        "cta_label": "Shop All"
       }
     },
     "ma_most_wanted_edUXRw": {
@@ -1135,16 +1135,16 @@
   "order": [
     "section_wQqHde",
     "trust_banner_3_marquee_AKyjRX",
-    "ma_most_wanted_3eDjHb",
     "custom_liquid_hmfTtV",
-    "ma_most_wanted_edUXRw",
+    "ma_most_wanted_3eDjHb",
     "ma_home_arith",
+    "ma_most_wanted_edUXRw",
+    "maison_amiir_coffret_iwyVwm",
     "ma_most_wanted_JMH4Mt",
     "ma_unboxing",
-    "maison_amiir_coffret_iwyVwm",
     "ma_home_risk",
-    "ma_editorial_social_proof_6tWRTb",
     "ma_quiz_invite_J9337a",
+    "ma_editorial_social_proof_6tWRTb",
     "section_VhLBpg",
     "ma_explore_maison",
     "ma_atelier_editorial_yJRjb6",
