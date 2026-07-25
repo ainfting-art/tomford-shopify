@@ -1,9 +1,9 @@
 {%- comment -%}
   MAISON AMIIR — The Maison Promise (Editorial Campaign Rebuild)
   Desktop: 100% preserved and untouched (full vertical bleed, zero cropping).
-  Mobile: Hero section above divider re-engineered into an independent editorial magazine 
-  cover with floating left artwork, horizontal/bottom feathered fade, upper-right watermark 
-  depth, and X/Y text group positioning. Feature cards below divider kept 100% intact.
+  Mobile Bottom Cards: 100% preserved and untouched.
+  Mobile Top Hero: Rebuilt with desktop-grade dual alpha-mask edge dissolve, feathered wash,
+  master X/Y text group repositioning, text resizing, and adjustable spacing.
   100% deduplicated and step-validated schema: zero FileSaveErrors.
 {%- endcomment -%}
 
@@ -349,7 +349,7 @@
 
 /* ═══════════════════════════════════════
    8. DEDICATED MOBILE HERO SPREAD (<900px)
-   Hero above divider built as 2 independent layers (Image + Content).
+   Hero above divider rebuilt to match desktop melt/fade and reference layout.
    Feature cards below divider kept 100% untouched as requested.
 ═══════════════════════════════════════ */
 @media (max-width: 899px) {
@@ -357,10 +357,9 @@
     display: block !important;
     position: relative !important;
     z-index: 2 !important;
-    padding-top: {{ section.settings.mob_hero_height | default: 560 }}px !important; /* Reserves exact height of magazine cover stage */
   }
 
-  /* LAYER 1: Independent Floating Left Artwork Stage */
+  /* Floating Left Editorial Image Stage with Dual Alpha-Mask */
   #ma-mp3-{{ sid }} .ma-mp3__img-col {
     display: {% if section.settings.mob_hero_img_enable != false %}block{% else %}none{% endif %} !important;
     position: absolute !important;
@@ -373,6 +372,12 @@
     overflow: hidden !important;
     margin: 0 !important;
     {% if section.settings.mobile_img_shadow %}box-shadow: 0 20px 45px -10px rgba(0,0,0,0.18) !important;{% endif %}
+    
+    /* True CSS Alpha Mask: Dissolves both right horizontal edge and bottom edge */
+    {% if section.settings.mob_hero_fade_enable %}
+    -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,1) calc(100% - {{ section.settings.mob_hero_fade_w | default: 45 }}%), rgba(0,0,0,0) 100%), linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) calc(100% - {{ section.settings.mob_hero_fade_h | default: 30 }}%), rgba(0,0,0,0) 100%) !important;
+    mask-image: linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,1) calc(100% - {{ section.settings.mob_hero_fade_w | default: 45 }}%), rgba(0,0,0,0) 100%), linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) calc(100% - {{ section.settings.mob_hero_fade_h | default: 30 }}%), rgba(0,0,0,0) 100%) !important;
+    {% endif %}
   }
 
   #ma-mp3-{{ sid }} .ma-mp3__img-col img.ma-mp3__img-desktop { display: none !important; }
@@ -384,9 +389,11 @@
     object-fit: {{ section.settings.mob_hero_img_fit | default: 'cover' }} !important;
     object-position: {{ section.settings.mob_hero_img_pos_x | default: 50 }}% {{ section.settings.mob_hero_img_pos_y | default: 50 }}% !important;
     transform: scale({{ section.settings.mob_hero_img_scale | default: 100 | divided_by: 100.0 }}) rotate({{ section.settings.mob_hero_img_rot | default: 0 }}deg) !important;
+    filter: brightness({{ section.settings.mobile_img_brightness | default: 100 }}%) contrast({{ section.settings.mobile_img_contrast | default: 100 }}%) saturate({{ section.settings.mobile_img_saturation | default: 100 }}%) !important;
+    opacity: {{ section.settings.mobile_img_opacity | default: 100 | divided_by: 100.0 }} !important;
   }
 
-  /* Dual Horizontal & Bottom Feathered Fade Overlay */
+  /* Dual Horizontal & Bottom Feathered Fade Overlay Wash */
   {% if section.settings.mob_hero_fade_enable %}
   #ma-mp3-{{ sid }} .ma-mp3__img-col::after {
     content: '';
@@ -427,20 +434,30 @@
     justify-content: center !important;
   }
 
-  /* LAYER 2: Independent Magazine Cover Content Stage in Clean Negative Space */
+  /* Independent Magazine Cover Content Stage in Negative Space */
+  #ma-mp3-{{ sid }} .ma-mp3__right {
+    position: static !important;
+    width: 100% !important;
+    transform: none !important;
+    padding: 0 !important;
+  }
+
   #ma-mp3-{{ sid }} .ma-mp3__head {
-    position: absolute !important;
-    top: {{ section.settings.mob_cont_y | default: 25 }}px !important;
-    left: {{ section.settings.mob_cont_x | default: 42 }}% !important;
-    width: {{ section.settings.mob_cont_w | default: 56 }}% !important;
-    z-index: {{ section.settings.mob_cont_z | default: 3 }} !important;
+    position: relative !important;
+    z-index: 3 !important;
+    width: {{ section.settings.mob_content_width | default: 100 }}% !important;
+    min-height: {{ section.settings.mob_hero_height | default: 460 }}px !important;
+    margin: 0 auto {{ section.settings.mobile_heading_gap | default: 28 }}px !important;
+    padding-top: {{ section.settings.mob_hero_pad_top | default: 20 }}px !important;
+    padding-bottom: {{ section.settings.mob_hero_pad_bot | default: 20 }}px !important;
+    padding-left: {{ section.settings.mob_hero_pad_side | default: 16 }}px !important;
+    padding-right: {{ section.settings.mob_hero_pad_side | default: 16 }}px !important;
+    transform: translate({{ section.settings.mob_content_offset_x | default: 0 }}px, {{ section.settings.mob_content_offset_y | default: 0 }}px) !important;
+    text-align: {{ section.settings.mob_text_align | default: 'center' }} !important;
     display: flex !important;
     flex-direction: column !important;
-    justify-content: {{ section.settings.mob_cont_valign | default: 'flex-start' }} !important;
-    align-items: {% if section.settings.mob_cont_align == 'left' %}flex-start{% elsif section.settings.mob_cont_align == 'right' %}flex-end{% else %}center{% endif %} !important;
-    text-align: {{ section.settings.mob_cont_align | default: 'center' }} !important;
-    margin: 0 !important;
-    padding: 0 clamp(8px, 2vw, 16px) !important;
+    justify-content: {{ section.settings.mob_cont_valign | default: 'center' }} !important;
+    align-items: {% if section.settings.mob_text_align == 'left' %}flex-start{% elsif section.settings.mob_text_align == 'right' %}flex-end{% else %}center{% endif %} !important;
   }
 
   #ma-mp3-{{ sid }} .ma-mp3__k {
@@ -448,14 +465,15 @@
     letter-spacing: {{ section.settings.mobile_eyebrow_spacing | default: 3 }}px !important;
     margin-top: {{ section.settings.mobile_eyebrow_margin_top | default: 8 }}px !important;
     margin-bottom: {{ section.settings.mob_orn_space | default: 14 }}px !important;
+    transform: translate({{ section.settings.mob_eyebrow_x | default: 30 }}px, {{ section.settings.mob_eyebrow_y | default: 0 }}px) !important;
   }
 
   /* Centered Decorative Ornament Divider */
   #ma-mp3-{{ sid }} .ma-mp3__rule {
     width: {{ section.settings.mob_orn_w | default: 48 }}px !important;
-    transform: scale({{ section.settings.mob_orn_scale | default: 100 | divided_by: 100.0 }}) !important;
+    transform: scale({{ section.settings.mob_orn_scale | default: 100 | divided_by: 100.0 }}) translate({{ section.settings.mob_orn_x | default: 30 }}px, 0px) !important;
     margin-bottom: {{ section.settings.mob_orn_space | default: 14 }}px !important;
-    justify-content: center !important;
+    justify-content: {% if section.settings.mob_text_align == 'left' %}flex-start{% elsif section.settings.mob_text_align == 'right' %}flex-end{% else %}center{% endif %} !important;
   }
   #ma-mp3-{{ sid }} .ma-mp3__rule-icon { color: {{ section.settings.mob_orn_color | default: 'var(--pm-gold)' }} !important; }
   #ma-mp3-{{ sid }} .ma-mp3__rule::before,
@@ -465,30 +483,25 @@
 
   /* Overlapping Right-Side Hierarchy */
   #ma-mp3-{{ sid }} .ma-mp3__h {
-    width: 100% !important;
+    width: {{ section.settings.mob_head_w | default: 100 }}% !important;
     max-width: none !important;
     font-size: {{ section.settings.mobile_heading_size | default: 34 }}px !important;
     font-weight: {{ section.settings.mobile_heading_weight | default: '400' }} !important;
     line-height: {{ section.settings.mobile_heading_line_height | default: 106 | divided_by: 100.0 }} !important;
     letter-spacing: {{ section.settings.mobile_heading_spacing | default: 0 }}px !important;
     margin-bottom: {{ section.settings.mobile_heading_margin_bottom | default: 16 }}px !important;
+    transform: translate({{ section.settings.mob_head_x | default: 15 }}px, {{ section.settings.mob_head_y | default: 0 }}px) !important;
   }
 
   #ma-mp3-{{ sid }} .ma-mp3__s {
     font-size: {{ section.settings.mobile_body_size | default: 17 }}px !important;
     line-height: {{ section.settings.mobile_body_line_height | default: 145 | divided_by: 100.0 }} !important;
     max-width: {{ section.settings.mob_para_w | default: 36 }}ch !important;
-    margin: 0 auto !important;
+    margin: {% if section.settings.mob_text_align == 'center' %}0 auto{% elsif section.settings.mob_text_align == 'right' %}0 0 0 auto{% else %}0{% endif %} !important;
+    transform: translate({{ section.settings.mob_para_x | default: 15 }}px, {{ section.settings.mob_para_y | default: 0 }}px) !important;
   }
 
   /* Feature Cards Below First Divider (Kept 100% Untouched in Normal Flow as Requested) */
-  #ma-mp3-{{ sid }} .ma-mp3__right {
-    position: static !important;
-    width: 100% !important;
-    transform: none !important;
-    padding: 0 !important;
-  }
-
   #ma-mp3-{{ sid }} .ma-mp3__cards {
     display: flex !important;
     flex-direction: column !important;
@@ -976,9 +989,9 @@
       "content": "── MOBILE HERO: CONTENT ──"
     },
     { "type": "range", "id": "mob_hero_height", "label": "Hero Area Min Height (px)", "min": 350, "max": 800, "step": 10, "default": 560 },
-    { "type": "range", "id": "mob_hero_pad_top", "label": "Hero Top Padding (px)", "min": 0, "max": 60, "step": 2, "default": 20 },
-    { "type": "range", "id": "mob_hero_pad_bot", "label": "Hero Bottom Padding (px)", "min": 0, "max": 60, "step": 2, "default": 20 },
-    { "type": "range", "id": "mobile_heading_gap", "label": "Gap Below Intro To Cards (px)", "min": 10, "max": 60, "step": 2, "default": 24 },
+    { "type": "range", "id": "mob_hero_pad_top", "label": "Hero Top Padding (px)", "min": 0, "max": 60, "step": 2, "default": 30 },
+    { "type": "range", "id": "mob_hero_pad_bot", "label": "Hero Bottom Padding (px)", "min": 0, "max": 60, "step": 2, "default": 40 },
+    { "type": "range", "id": "mobile_heading_gap", "label": "Gap Below Intro To Cards (px)", "min": 10, "max": 60, "step": 2, "default": 28 },
     { "type": "range", "id": "mob_cont_w", "label": "Hero Content Width (%)", "min": 30, "max": 100, "step": 1, "default": 56 },
     { "type": "range", "id": "mob_cont_x", "label": "Hero Content X Position (% left)", "min": 0, "max": 80, "step": 1, "default": 42 },
     { "type": "range", "id": "mob_cont_y", "label": "Hero Content Y Position (px)", "min": 0, "max": 300, "step": 5, "default": 25 },
