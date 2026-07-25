@@ -300,6 +300,7 @@
     },
     "ma_home_risk": {
       "type": "ma-home-risk",
+      "disabled": true,
       "settings": {
         "eyebrow": "Buy Without a Doubt",
         "heading": "The Maison Promise",
@@ -1173,7 +1174,6 @@
     },
     "ma_journal_editorial_jEbC6P": {
       "type": "ma-journal-editorial",
-      "disabled": true,
       "name": "MA Journal Editorial",
       "settings": {
         "eyebrow": "Journal",
