@@ -442,7 +442,7 @@
         "mob_hero_img_w": 40,
         "mob_hero_img_h": 550,
         "mob_hero_img_fit": "cover",
-        "mob_hero_img_pos_x": 30,
+        "mob_hero_img_pos_x": 10,
         "mob_hero_img_pos_y": 50,
         "mob_hero_img_scale": 100,
         "mob_hero_img_x": 0,
