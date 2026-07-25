@@ -167,9 +167,10 @@
 
   /* ZERO CROPPING FIT: Controlled via object-fit and X/Y offset sliders */
   #ma-mp3-{{ sid }} .ma-mp3__img-col img {
-    width: 100%;
-    height: 100%;
-    object-fit: {{ section.settings.object_fit | default: 'cover' }};
+    width: 100% !important;
+    height: 100% !important;
+    max-height: none !important;
+    object-fit: cover !important;
     object-position: {{ section.settings.img_x | default: 50 }}% {{ section.settings.img_y | default: 50 }}%;
     transform: scale({{ section.settings.img_scale | default: 100 | divided_by: 100.0 }}) translate({{ section.settings.img_offset_x | default: 0 }}px, {{ section.settings.img_offset_y | default: 0 }}px);
     filter: brightness({{ section.settings.img_brightness | default: 100 }}%) contrast({{ section.settings.img_contrast | default: 100 }}%) saturate({{ section.settings.img_saturation | default: 100 }}%);
