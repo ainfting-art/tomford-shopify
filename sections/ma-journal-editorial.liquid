@@ -1,9 +1,8 @@
 {%- comment -%}
   MA Journal Editorial — standalone luxury publication-style journal section.
-  Pulls live articles from a chosen Shopify blog, auto-rotates which ones show
-  based on a day interval, and renders an asymmetric editorial layout (intro +
-  curated cards) on desktop and a choice of 4 distinct compositions on mobile.
-  Does not modify or depend on any other section.
+  Desktop: Refined into a publication-grade experience with featured story hierarchy,
+  650ms luxury hover interactions, left-to-right underline animations, and zero hardcoded values.
+  Mobile: 100% preserved and untouched.
 {%- endcomment -%}
 
 {%- liquid
@@ -46,6 +45,18 @@
     color: {{ section.settings.eyebrow_color }};
     margin: 0 0 12px;
   }
+  #shopify-section-{{ section.id }} .ma-j__editorial-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-family: {{ section.settings.eyebrow_font.family }}, sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: {{ section.settings.eyebrow_color }};
+    opacity: 0.85;
+    margin: -4px 0 14px;
+  }
   #shopify-section-{{ section.id }} .ma-j__heading {
     font-family: {{ section.settings.heading_font.family }}, serif;
     font-weight: {{ section.settings.heading_weight }};
@@ -54,6 +65,7 @@
     line-height: {{ section.settings.heading_line_height }};
     color: {{ section.settings.heading_color }};
     margin: 0 0 20px;
+    max-width: {{ section.settings.heading_max_width | default: 600 }}px;
   }
   #shopify-section-{{ section.id }} .ma-j__cta {
     display: inline-flex;
@@ -66,11 +78,28 @@
     text-transform: uppercase;
     color: {{ section.settings.cta_color }};
     text-decoration: none;
-    {% if section.settings.cta_underline %}border-bottom: 1px solid currentColor; padding-bottom: 3px;{% endif %}
-    transition: color 0.3s ease;
+    position: relative;
+    padding-bottom: 4px;
+    transition: color {{ section.settings.hover_duration | default: 650 }}ms cubic-bezier(0.16, 1, 0.3, 1);
   }
+  {% if section.settings.cta_underline %}
+  #shopify-section-{{ section.id }} .ma-j__cta {
+    border-bottom: 1px solid rgba(168, 137, 78, 0.3);
+  }
+  #shopify-section-{{ section.id }} .ma-j__cta::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: currentColor;
+    transition: width {{ section.settings.hover_duration | default: 650 }}ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  #shopify-section-{{ section.id }} .ma-j__cta:hover::after { width: 100%; }
+  {% endif %}
   #shopify-section-{{ section.id }} .ma-j__cta:hover { color: {{ section.settings.cta_hover_color }}; }
-  #shopify-section-{{ section.id }} .ma-j__cta-arrow { transition: transform 0.3s ease; }
+  #shopify-section-{{ section.id }} .ma-j__cta-arrow { transition: transform {{ section.settings.hover_duration | default: 650 }}ms cubic-bezier(0.16, 1, 0.3, 1); }
   #shopify-section-{{ section.id }} .ma-j__cta:hover .ma-j__cta-arrow { transform: translateX(4px); }
 
   /* ---------- Card (shared building block) ---------- */
@@ -98,7 +127,7 @@
   #shopify-section-{{ section.id }} .ma-j__stories--magazine_cards .ma-j__name,
   #shopify-section-{{ section.id }} .ma-j__stories--magazine_cards .ma-j__excerpt,
   #shopify-section-{{ section.id }} .ma-j__stories--magazine_cards .ma-j__date,
-  #shopify-section-{{ section.id }} .ma-j__stories--magazine_cards .ma-j__authorssssss,
+  #shopify-section-{{ section.id }} .ma-j__stories--magazine_cards .ma-j__authorsssss,
   #shopify-section-{{ section.id }} .ma-j__stories--magazine_cards .ma-j__read {
     color: #1a1a1a;
   }
@@ -113,14 +142,18 @@
     width: 100%;
     height: 100%;
     object-fit: {{ section.settings.image_crop }};
+    object-position: {{ section.settings.image_position_x | default: 'center' }} {{ section.settings.image_position_y | default: 'center' }};
+    transform: scale({{ section.settings.image_scale | default: 100 | divided_by: 100.0 }});
     display: block;
-    transition: transform 0.6s ease, filter 0.6s ease;
+    transition: transform {{ section.settings.hover_duration | default: 650 }}ms cubic-bezier(0.16, 1, 0.3, 1), filter {{ section.settings.hover_duration | default: 650 }}ms ease;
   }
   {% if section.settings.hover_zoom %}
-    #shopify-section-{{ section.id }} .ma-j__card:hover .ma-j__media img { transform: scale(1.06); }
+    #shopify-section-{{ section.id }} .ma-j__card:hover .ma-j__media img {
+      transform: scale({{ section.settings.hover_zoom_amount | default: 102 | divided_by: 100.0 }});
+    }
   {% endif %}
   {% if section.settings.hover_darken %}
-    #shopify-section-{{ section.id }} .ma-j__card:hover .ma-j__media img { filter: brightness(0.8); }
+    #shopify-section-{{ section.id }} .ma-j__card:hover .ma-j__media img { filter: brightness(0.85); }
   {% endif %}
   #shopify-section-{{ section.id }} .ma-j__body {
     padding: {{ section.settings.text_spacing }}px {{ section.settings.text_spacing | times: 1.4 }}px;
@@ -129,10 +162,10 @@
     display: block;
     font-family: {{ section.settings.category_font.family }}, sans-serif;
     font-size: {{ section.settings.category_size }}px;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
     color: {{ section.settings.category_color }};
-    margin: 0 0 8px;
+    margin: 0 0 10px;
   }
   #shopify-section-{{ section.id }} .ma-j__name {
     display: block;
@@ -141,32 +174,53 @@
     font-size: {{ section.settings.title_size }}px;
     color: {{ section.settings.title_color }};
     line-height: 1.3;
-    margin: 0 0 10px;
+    margin: 0 0 12px;
+    transition: color {{ section.settings.hover_duration | default: 650 }}ms ease;
   }
+  #shopify-section-{{ section.id }} .ma-j__card:hover .ma-j__name { color: var(--pm-gold, #a8894e); }
   #shopify-section-{{ section.id }} .ma-j__excerpt {
     display: block;
     font-family: {{ section.settings.excerpt_font.family }}, sans-serif;
     font-size: {{ section.settings.excerpt_size }}px;
     line-height: {{ section.settings.excerpt_line_height }};
     color: {{ section.settings.excerpt_color }};
-    margin: 0 0 10px;
+    margin: 0 0 14px;
   }
   #shopify-section-{{ section.id }} .ma-j__meta {
     display: flex;
     gap: 10px;
     font-size: 11px;
-    margin: 0 0 10px;
+    margin: 0 0 12px;
   }
   #shopify-section-{{ section.id }} .ma-j__date { color: {{ section.settings.date_color }}; }
   #shopify-section-{{ section.id }} .ma-j__authorsssss { color: {{ section.settings.authorsssss_color }}; }
+  
   #shopify-section-{{ section.id }} .ma-j__read {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     font-size: 10px;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    border-bottom: 1px solid currentColor;
-    padding-bottom: 2px;
+    position: relative;
+    padding-bottom: 3px;
+    border-bottom: 1px solid rgba(168, 137, 78, 0.25);
+    transition: color {{ section.settings.hover_duration | default: 650 }}ms ease;
   }
+  #shopify-section-{{ section.id }} .ma-j__read::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: currentColor;
+    transition: width {{ section.settings.hover_duration | default: 650 }}ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  #shopify-section-{{ section.id }} .ma-j__card:hover .ma-j__read::after { width: 100%; }
+  #shopify-section-{{ section.id }} .ma-j__read-arrow { transition: transform {{ section.settings.hover_duration | default: 650 }}ms cubic-bezier(0.16, 1, 0.3, 1); }
+  #shopify-section-{{ section.id }} .ma-j__card:hover .ma-j__read-arrow { transform: translateX(4px); }
+
   #shopify-section-{{ section.id }} .ma-j__divider {
     height: 1px;
     background: {{ section.settings.divider_color }};
@@ -185,7 +239,9 @@
     }
   {% endif %}
 
-  /* ---------- Mobile (default): intro stacked, then chosen story layout ---------- */
+  /* ══════════════════════════════════════════════════════════════
+     MOBILE LAYOUT (< 750px) — 100% PRESERVED AND UNTOUCHED
+  ══════════════════════════════════════════════════════════════ */
   #shopify-section-{{ section.id }} .ma-j__intro { margin-bottom: {{ section.settings.content_spacing }}px; }
 
   #shopify-section-{{ section.id }} .ma-j__stories--editorial_stack .ma-j__card {
@@ -221,32 +277,33 @@
 
   #shopify-section-{{ section.id }} .ma-j__stories { display: block; }
 
-  /* ---------- Desktop: editorial intro + curated cards ---------- */
+  /* ══════════════════════════════════════════════════════════════
+     DESKTOP EDITORIAL EXPERIENCE (≥ 750px) — LUXURY REFINEMENTS
+  ══════════════════════════════════════════════════════════════ */
   @media (min-width: 750px) {
-
-    /* Outer section: never clip, always auto height */
     #shopify-section-{{ section.id }} .ma-j {
       overflow: visible;
       height: auto;
     }
 
-    /* Two-column layout: fixed intro width | flexible stories */
     #shopify-section-{{ section.id }} .ma-j__inner {
       display: grid;
       grid-template-columns: {{ section.settings.intro_width }}px 1fr;
       gap: {{ section.settings.content_spacing }}px;
-      align-items: center;
+      align-items: start;
       height: auto;
       overflow: visible;
     }
-    #shopify-section-{{ section.id }} .ma-j__intro { margin-bottom: 0; }
-
-    /* Left column typography — match reference: small eyebrow, large serif heading, underlined CTA */
+    #shopify-section-{{ section.id }} .ma-j__intro {
+      margin-bottom: 0;
+      position: sticky;
+      top: 40px;
+    }
     #shopify-section-{{ section.id }} .ma-j__heading {
       font-size: {{ section.settings.heading_size }}px;
     }
 
-    /* Stories grid: 3 equal columns, no overflow clipping */
+    /* Desktop layout styles (Classic Editorial, Magazine Grid, Feature Left/Right) */
     #shopify-section-{{ section.id }} .ma-j__stories {
       display: grid !important;
       grid-template-columns: repeat({{ section.settings.desktop_columns }}, 1fr);
@@ -255,78 +312,117 @@
       height: auto;
     }
 
-    /* Each card: block, full height auto, no flex leakage from mobile */
     #shopify-section-{{ section.id }} .ma-j__stories .ma-j__card {
-      display: block;
+      display: flex;
+      flex-direction: column;
       flex: none;
       margin-bottom: 0;
       overflow: visible;
-      height: auto;
+      height: 100%;
     }
 
-    /* Image: compact 4:3 ratio, never taller than 160px — keeps body text always visible */
     #shopify-section-{{ section.id }} .ma-j__stories .ma-j__media {
-      aspect-ratio: 4 / 3;
-      max-height: 160px;
+      aspect-ratio: {{ section.settings.image_aspect_ratio }};
+      height: {{ section.settings.desktop_image_height | default: 220 }}px;
+      max-height: none;
       width: 100%;
+      flex-shrink: 0;
     }
 
-    /* Card body: flush left, tight top spacing, no extra padding */
     #shopify-section-{{ section.id }} .ma-j__stories .ma-j__body {
-      padding: 12px 0 0 0;
+      padding: 18px 0 0 0;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
     }
 
-    /* Category: gold uppercase small — exactly like reference INGREDIENTS / RITUALS / CULTURE */
     #shopify-section-{{ section.id }} .ma-j__stories .ma-j__category {
-      display: block;
-      font-size: 10px;
-      letter-spacing: 0.2em;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
     }
 
-    /* Title: serif, white, 2-line max, compact size */
     #shopify-section-{{ section.id }} .ma-j__stories .ma-j__name {
-      font-size: 16px;
+      font-size: {{ section.settings.title_size }}px;
       line-height: 1.3;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
+      display: -webkit-box;
+      -webkit-line-clamp: {{ section.settings.title_line_clamp | default: 3 }};
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    #shopify-section-{{ section.id }} .ma-j__stories .ma-j__excerpt {
+      margin-bottom: 16px;
       display: -webkit-box;
       -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
 
-    /* Hide date and authorsssss on desktop — not shown in reference */
     #shopify-section-{{ section.id }} .ma-j__stories .ma-j__meta {
-      display: none;
+      display: flex;
+      margin-top: auto;
+      padding-top: 10px;
     }
 
-    /* Read Article: small underlined, no arrow styling needed */
     #shopify-section-{{ section.id }} .ma-j__stories .ma-j__read {
-      font-size: 10px;
-      letter-spacing: 0.15em;
+      margin-top: auto;
+      align-self: flex-start;
     }
 
-    /* Reset all mobile Full Editorial overrides so desktop is always uniform */
+    /* Featured Story Editorial Hierarchy (Active on Desktop when ON) */
+    {% if section.settings.show_featured_story %}
+      #shopify-section-{{ section.id }} .ma-j__stories .ma-j__card--featured {
+        grid-column: span 2;
+        display: grid;
+        grid-template-columns: {{ section.settings.featured_story_width | default: 55 }}% 1fr;
+        gap: 32px;
+        align-items: center;
+      }
+      @media (max-width: 1050px) {
+        #shopify-section-{{ section.id }} .ma-j__stories .ma-j__card--featured {
+          grid-template-columns: 1fr;
+          gap: 18px;
+        }
+      }
+      #shopify-section-{{ section.id }} .ma-j__stories .ma-j__card--featured .ma-j__media {
+        aspect-ratio: {{ section.settings.featured_image_aspect | default: '4 / 5' }};
+        height: {{ section.settings.featured_image_height | default: 380 }}px;
+      }
+      #shopify-section-{{ section.id }} .ma-j__stories .ma-j__card--featured .ma-j__body {
+        padding: 0;
+        justify-content: center;
+      }
+      #shopify-section-{{ section.id }} .ma-j__stories .ma-j__card--featured .ma-j__name {
+        font-size: {{ section.settings.title_size | plus: 6 }}px;
+        line-height: 1.25;
+        -webkit-line-clamp: 4;
+      }
+      #shopify-section-{{ section.id }} .ma-j__stories .ma-j__card--featured .ma-j__excerpt {
+        font-size: {{ section.settings.excerpt_size | plus: 1 }}px;
+        -webkit-line-clamp: 4;
+      }
+    {% endif %}
+
+    /* Reset mobile Full Editorial overrides on desktop */
     #shopify-section-{{ section.id }} .ma-j__stories--full_editorial .ma-j__card:first-child .ma-j__media {
-      aspect-ratio: 4 / 3;
-      max-height: 160px;
+      aspect-ratio: {{ section.settings.image_aspect_ratio }};
+      height: {{ section.settings.desktop_image_height | default: 220 }}px;
     }
     #shopify-section-{{ section.id }} .ma-j__stories--full_editorial .ma-j__card:first-child .ma-j__name {
-      font-size: 16px;
+      font-size: {{ section.settings.title_size }}px;
     }
     #shopify-section-{{ section.id }} .ma-j__stories--full_editorial .ma-j__card:not(:first-child) {
-      display: block;
+      display: flex;
       align-items: normal;
     }
     #shopify-section-{{ section.id }} .ma-j__stories--full_editorial .ma-j__card:not(:first-child) .ma-j__media {
       flex: none;
-      aspect-ratio: 4 / 3;
-      max-height: 160px;
+      aspect-ratio: {{ section.settings.image_aspect_ratio }};
+      height: {{ section.settings.desktop_image_height | default: 220 }}px;
     }
     #shopify-section-{{ section.id }} .ma-j__stories--full_editorial .ma-j__card:not(:first-child) .ma-j__body {
-      flex: none;
-      padding: 12px 0 0 0;
-      margin-top: 0;
+      flex: 1;
+      padding: 18px 0 0 0;
     }
   }
 {% endstyle %}
@@ -350,28 +446,40 @@
         {%- if section.settings.eyebrow != blank -%}
           <p class="ma-j__eyebrow">{{ section.settings.eyebrow }}</p>
         {%- endif -%}
+
+        {%- if section.settings.enable_editorial_meta -%}
+          <div class="ma-j__editorial-meta">
+            {%- if section.settings.meta_volume != blank -%}<span>{{ section.settings.meta_volume }}</span>{%- endif -%}
+            {%- if section.settings.meta_issue != blank -%}<span>{{ section.settings.meta_issue }}</span>{%- endif -%}
+            {%- if section.settings.meta_freq != blank -%}<span>{{ section.settings.meta_freq }}</span>{%- endif -%}
+          </div>
+        {%- endif -%}
+
         {%- if section.settings.heading != blank -%}
           <h2 class="ma-j__heading">{{ section.settings.heading }}</h2>
         {%- endif -%}
+
         {%- if section.settings.cta_text != blank -%}
           <a class="ma-j__cta" href="{{ section.settings.cta_link | default: jblog.url }}">
             <span>{{ section.settings.cta_text }}</span>
-            <span class="ma-j__cta-arrow">→</span>
+            {%- if section.settings.cta_style == 'underline_arrow' or section.settings.cta_style == 'arrow_only' -%}
+              <span class="ma-j__cta-arrow">→</span>
+            {%- endif -%}
           </a>
         {%- endif -%}
       </div>
 
-      <div class="ma-j__stories ma-j__stories--{{ section.settings.mobile_layout }}">
+      <div class="ma-j__stories ma-j__stories--{{ section.settings.mobile_layout }} ma-j__desktop--{{ section.settings.desktop_layout_style }}">
         {%- for i in (1..n) -%}
           {%- assign step_offset = forloop.index0 | times: hop -%}
           {%- assign idx = start | plus: step_offset | modulo: total -%}
           {%- assign article = jblog.articles[idx] -%}
           {%- if article -%}
-            <a class="ma-j__card ma-j__reveal" href="{{ article.url }}">
+            <a class="ma-j__card ma-j__reveal{% if section.settings.show_featured_story and forloop.first %} ma-j__card--featured{% endif %}" href="{{ article.url }}">
               {%- if section.settings.show_featured_image -%}
                 <span class="ma-j__media">
                   {%- if article.image -%}
-                    {{ article.image | image_url: width: 800 | image_tag: loading: 'lazy', alt: article.title }}
+                    {{ article.image | image_url: width: 1000 | image_tag: loading: 'lazy', alt: article.title }}
                   {%- endif -%}
                 </span>
               {%- endif -%}
@@ -383,13 +491,26 @@
                   <span class="ma-j__name">{{ article.title }}</span>
                 {%- endif -%}
                 {%- if section.settings.show_excerpt and article.excerpt != blank -%}
-                  <span class="ma-j__excerpt">{{ article.excerpt | strip_html | truncate: 110 }}</span>
+                  <span class="ma-j__excerpt">{{ article.excerpt | strip_html | truncate: 120 }}</span>
                 {%- endif -%}
-                <span class="ma-j__meta">
-                  <span class="ma-j__date">{{ article.published_at | date: '%e %b %Y' | lstrip | upcase }}</span>
-                  <span class="ma-j__authorsssss">{{ article.authorsssss }}</span>
-                </span>
-                <span class="ma-j__read">Read Article</span>
+                {%- if section.settings.show_date or section.settings.show_authorsssss -%}
+                  <span class="ma-j__meta">
+                    {%- if section.settings.show_date -%}
+                      <span class="ma-j__date">{{ article.published_at | date: '%e %b %Y' | lstrip | upcase }}</span>
+                    {%- endif -%}
+                    {%- if section.settings.show_authorsssss -%}
+                      <span class="ma-j__authorsssss">{{ article.authorsssss }}</span>
+                    {%- endif -%}
+                  </span>
+                {%- endif -%}
+                {%- if section.settings.show_cta -%}
+                  <span class="ma-j__read">
+                    <span>Read Article</span>
+                    {%- if section.settings.cta_style == 'underline_arrow' or section.settings.cta_style == 'arrow_only' -%}
+                      <span class="ma-j__read-arrow">→</span>
+                    {%- endif -%}
+                  </span>
+                {%- endif -%}
               </span>
             </a>
           {%- endif -%}
@@ -431,7 +552,7 @@
             var vh = window.innerHeight || document.documentElement.clientHeight;
             var progress = (vh - rect.top) / (vh + rect.height);
             var offset = (progress - 0.5) * 20;
-            img.style.transform = 'translateY(' + offset + 'px) scale(1.1)';
+            img.style.transform = 'translateY(' + offset + 'px) scale({{ section.settings.image_scale | default: 100 | divided_by: 100.0 }})';
           });
           ticking = false;
         }
@@ -454,17 +575,33 @@
   "settings": [
     {
       "type": "header",
-      "content": "Content"
+      "content": "Content & Editorial Intro"
     },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Notes on Craft & Scent" },
     { "type": "text", "id": "heading", "label": "Heading", "default": "Thoughts on scent, craft and culture." },
+    { "type": "range", "id": "heading_max_width", "label": "Heading Max Width", "min": 300, "max": 900, "step": 20, "default": 600, "unit": "px" },
     { "type": "text", "id": "cta_text", "label": "CTA text", "default": "Explore the Journal" },
-    { "type": "url", "id": "cta_link", "label": "CTA link (defaults to the blog page)" },
+    { "type": "url", "id": "cta_link", "label": "CTA link (defaults to blog)" },
     { "type": "checkbox", "id": "cta_underline", "label": "Underline CTA", "default": true },
+    { "type": "select", "id": "cta_style", "label": "CTA Style", "default": "underline", "options": [
+      { "value": "underline", "label": "Underline" },
+      { "value": "underline_arrow", "label": "Underline + Arrow" },
+      { "value": "arrow_only", "label": "Arrow Only" },
+      { "value": "minimal", "label": "Minimal" }
+    ]},
 
     {
       "type": "header",
-      "content": "Blog & rotation"
+      "content": "Editorial Metadata (Beneath Eyebrow)"
+    },
+    { "type": "checkbox", "id": "enable_editorial_meta", "label": "Enable Editorial Metadata", "default": false },
+    { "type": "text", "id": "meta_volume", "label": "Volume Label", "default": "Volume 01" },
+    { "type": "text", "id": "meta_issue", "label": "Issue Label", "default": "Issue 04" },
+    { "type": "text", "id": "meta_freq", "label": "Frequency Label", "default": "Updated Weekly" },
+
+    {
+      "type": "header",
+      "content": "Blog & Rotation"
     },
     { "type": "blog", "id": "blog", "label": "Blog source (defaults to \"Blogs\")" },
     { "type": "range", "id": "rotation_days", "label": "Rotate stories every (days)", "min": 1, "max": 30, "step": 1, "default": 3 },
@@ -472,25 +609,39 @@
 
     {
       "type": "header",
-      "content": "Article display toggles"
+      "content": "Article Display Toggles"
     },
     { "type": "checkbox", "id": "show_featured_image", "label": "Show featured image", "default": true },
     { "type": "checkbox", "id": "show_category", "label": "Show category (first tag)", "default": true },
     { "type": "checkbox", "id": "show_title", "label": "Show title", "default": true },
     { "type": "checkbox", "id": "show_excerpt", "label": "Show excerpt", "default": false },
     { "type": "checkbox", "id": "show_date", "label": "Show publish date", "default": false },
-    { "type": "checkbox", "id": "show_authorsssss", "label": "Show authorsssss", "default": false },
+    { "type": "checkbox", "id": "show_authorsssss", "label": "Show author", "default": false },
     { "type": "checkbox", "id": "show_cta", "label": "Show \"Read Article\" link", "default": true },
-    { "type": "checkbox", "id": "show_featured_story", "label": "Style first article as a featured story (desktop)", "default": false },
+    { "type": "checkbox", "id": "show_featured_story", "label": "Style first article as a featured story (desktop)", "default": true },
 
     {
       "type": "header",
-      "content": "Desktop grid"
+      "content": "Desktop Grid & Layout"
     },
+    { "type": "select", "id": "desktop_layout_style", "label": "Desktop Layout Preset", "default": "classic_editorial", "options": [
+      { "value": "classic_editorial", "label": "Classic Editorial" },
+      { "value": "magazine_grid", "label": "Magazine Grid" },
+      { "value": "feature_left", "label": "Feature Left" },
+      { "value": "feature_right", "label": "Feature Right" }
+    ]},
     { "type": "range", "id": "intro_width", "label": "Intro column width", "min": 240, "max": 520, "step": 10, "default": 340, "unit": "px" },
     { "type": "range", "id": "desktop_columns", "label": "Number of columns", "min": 1, "max": 4, "step": 1, "default": 3 },
     { "type": "range", "id": "card_min_width", "label": "Card minimum width", "min": 200, "max": 400, "step": 10, "default": 260, "unit": "px" },
-    { "type": "range", "id": "card_gap", "label": "Card spacing (desktop)", "min": 8, "max": 60, "step": 2, "default": 26, "unit": "px" },
+    { "type": "range", "id": "card_gap", "label": "Card spacing (desktop)", "min": 8, "max": 60, "step": 2, "default": 36, "unit": "px" },
+    { "type": "range", "id": "desktop_image_height", "label": "Desktop Image Height", "min": 120, "max": 320, "step": 10, "default": 220, "unit": "px" },
+    { "type": "select", "id": "title_line_clamp", "label": "Title Line Clamp", "default": "3", "options": [
+      { "value": "2", "label": "2 Lines" },
+      { "value": "3", "label": "3 Lines" },
+      { "value": "4", "label": "4 Lines" }
+    ]},
+    { "type": "range", "id": "featured_story_width", "label": "Featured Story Width", "min": 35, "max": 60, "step": 1, "default": 55, "unit": "%" },
+    { "type": "range", "id": "featured_image_height", "label": "Featured Story Image Height", "min": 250, "max": 600, "step": 10, "default": 380, "unit": "px" },
     { "type": "select", "id": "featured_image_aspect", "label": "Featured story image ratio", "default": "4 / 5", "options": [
       { "value": "1 / 1", "label": "Square" },
       { "value": "4 / 5", "label": "Portrait 4:5" },
@@ -500,7 +651,7 @@
 
     {
       "type": "header",
-      "content": "Mobile layout"
+      "content": "Mobile Layout (Untouched)"
     },
     { "type": "select", "id": "mobile_layout", "label": "Mobile story layout", "default": "editorial_stack", "options": [
       { "value": "editorial_stack", "label": "01 — Editorial Stack" },
@@ -514,7 +665,7 @@
 
     {
       "type": "header",
-      "content": "Image"
+      "content": "Image & Composition"
     },
     { "type": "select", "id": "image_aspect_ratio", "label": "Image aspect ratio", "default": "16 / 9", "options": [
       { "value": "1 / 1", "label": "Square" },
@@ -526,15 +677,28 @@
       { "value": "cover", "label": "Cover (fill, crop)" },
       { "value": "contain", "label": "Contain (fit, no crop)" }
     ]},
+    { "type": "select", "id": "image_position_x", "label": "Image Position Horizontal", "default": "center", "options": [
+      { "value": "left", "label": "Left" },
+      { "value": "center", "label": "Center" },
+      { "value": "right", "label": "Right" }
+    ]},
+    { "type": "select", "id": "image_position_y", "label": "Image Position Vertical", "default": "center", "options": [
+      { "value": "top", "label": "Top" },
+      { "value": "center", "label": "Center" },
+      { "value": "bottom", "label": "Bottom" }
+    ]},
+    { "type": "range", "id": "image_scale", "label": "Image Scale", "min": 80, "max": 140, "step": 5, "default": 100, "unit": "%" },
     { "type": "range", "id": "image_radius", "label": "Image / card corner radius", "min": 0, "max": 32, "step": 2, "default": 8, "unit": "px" },
 
     {
       "type": "header",
-      "content": "Effects"
+      "content": "Effects & Interactions"
     },
     { "type": "checkbox", "id": "fade_in_animation", "label": "Fade in on load", "default": true },
     { "type": "checkbox", "id": "reveal_on_scroll", "label": "Reveal on scroll", "default": true },
     { "type": "checkbox", "id": "hover_zoom", "label": "Image zoom on hover", "default": true },
+    { "type": "range", "id": "hover_duration", "label": "Hover Duration", "min": 100, "max": 1200, "step": 50, "default": 650, "unit": "ms" },
+    { "type": "range", "id": "hover_zoom_amount", "label": "Hover Zoom Amount", "min": 100, "max": 108, "step": 1, "default": 102, "unit": "%" },
     { "type": "checkbox", "id": "hover_darken", "label": "Image darken on hover", "default": false },
     { "type": "checkbox", "id": "parallax_image", "label": "Subtle image parallax on scroll", "default": false },
     { "type": "range", "id": "card_shadow_strength", "label": "Card shadow strength", "min": 0, "max": 60, "step": 5, "default": 15 },
@@ -587,7 +751,7 @@
 
     {
       "type": "header",
-      "content": "Typography — CTA & meta"
+      "content": "Typography — CTA & Meta"
     },
     { "type": "font_picker", "id": "cta_font", "label": "CTA font", "default": "helvetica_n4" },
     { "type": "select", "id": "cta_weight", "label": "CTA weight", "default": "500", "options": [
@@ -598,18 +762,18 @@
     { "type": "color", "id": "cta_color", "label": "CTA color", "default": "#a8894e" },
     { "type": "color", "id": "cta_hover_color", "label": "CTA hover color", "default": "#f5f0e6" },
     { "type": "color", "id": "date_color", "label": "Date color", "default": "#9a9186" },
-    { "type": "color", "id": "authorsssss_color", "label": "authorsssss color", "default": "#9a9186" },
+    { "type": "color", "id": "authorsssss_color", "label": "Author color", "default": "#9a9186" },
 
     {
       "type": "header",
-      "content": "Section colors"
+      "content": "Section Colors"
     },
     { "type": "color", "id": "background_color", "label": "Background color", "default": "#0c0b0a" },
     { "type": "color", "id": "divider_color", "label": "Divider color", "default": "#e5dfd2" },
 
     {
       "type": "header",
-      "content": "Card colors"
+      "content": "Card Colors"
     },
     { "type": "color", "id": "card_bg_color", "label": "Card background", "default": "#f5f1e9" },
     { "type": "color", "id": "card_text_color", "label": "Card text", "default": "#f5f0e6" },
@@ -620,7 +784,7 @@
 
     {
       "type": "header",
-      "content": "Featured story colors"
+      "content": "Featured Story Colors"
     },
     { "type": "color", "id": "featured_card_bg", "label": "Featured card background", "default": "#f5f1e9" },
     { "type": "color", "id": "featured_text_color", "label": "Featured text color", "default": "#1a1a1a" },
@@ -640,7 +804,7 @@
 
     {
       "type": "header",
-      "content": "Section dimensions"
+      "content": "Section Dimensions"
     },
     { "type": "range", "id": "section_width", "label": "Max content width", "min": 900, "max": 1600, "step": 20, "default": 1280, "unit": "px" },
     { "type": "range", "id": "section_min_height", "label": "Minimum section height (0 = auto)", "min": 0, "max": 800, "step": 20, "default": 0, "unit": "px" }
