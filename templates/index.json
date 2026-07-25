@@ -1270,7 +1270,7 @@
         "show_authorsssss": false,
         "show_cta": false,
         "show_featured_story": true,
-        "desktop_layout_style": "classic_editorial",
+        "desktop_layout_style": "magazine_grid",
         "intro_width": 560,
         "desktop_columns": 3,
         "card_min_width": 200,
