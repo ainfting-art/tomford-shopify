@@ -642,7 +642,7 @@
         "image": "shopify://shop_images/Perfume_bottle_on_tissue_paper_202607250508122.jpg",
         "image_col_width": 35,
         "image_fit": "cover",
-        "focal_x": 0,
+        "focal_x": 100,
         "focal_y": 50,
         "image_scale": 110,
         "image_opacity": 100,
