@@ -331,7 +331,7 @@
         "gold_color": "#C9A24B",
         "burgundy_color": "#6e1220",
         "eyebrow": "Buy Without a Doubt",
-        "heading": "The Maison Promise",
+        "heading": "THE MAISON PROMISE",
         "subline": "Wear it first. Decide after. A scent is personal — you should never commit to one you haven't lived with.",
         "sign": "♛",
         "cta_text": "Explore The Collection",
@@ -372,7 +372,7 @@
         "img_contrast": 100,
         "img_saturation": 100,
         "show_watermark": true,
-        "watermark_opacity": 5,
+        "watermark_opacity": 10,
         "wm_width": 70,
         "wm_scale": 75,
         "wm_pos_x": 0,
@@ -519,8 +519,8 @@
         "mobile_cta_margin_top": 22,
         "enable_animations": true,
         "anim_type": "fade_up",
-        "anim_speed": 800,
-        "anim_delay": 100
+        "anim_speed": 700,
+        "anim_delay": 50
       }
     },
     "ma_quiz_invite_J9337a": {
