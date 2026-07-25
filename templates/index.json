@@ -121,18 +121,6 @@
         "cta_label": "Shop All"
       }
     },
-    "ma_most_wanted_edUXRw": {
-      "type": "ma-most-wanted",
-      "custom_css": [],
-      "name": "FOR HER",
-      "settings": {
-        "eyebrow": "Feminine",
-        "heading": "For Her",
-        "collection": "womens-collection",
-        "cta_link": "shopify://collections/womens-collection",
-        "cta_label": "View all"
-      }
-    },
     "ma_home_arith": {
       "type": "ma-home-arith",
       "settings": {
@@ -149,36 +137,16 @@
         "refine_2": "Kind to skin ✦ IFRA-compliant ✦ Last all day"
       }
     },
-    "ma_most_wanted_JMH4Mt": {
+    "ma_most_wanted_edUXRw": {
       "type": "ma-most-wanted",
-      "name": "FOR HIM",
+      "custom_css": [],
+      "name": "FOR HER",
       "settings": {
-        "eyebrow": "Masculine",
-        "heading": "For Him",
-        "collection": "mens-collection",
-        "cta_link": "shopify://collections/mens-collection",
+        "eyebrow": "Feminine",
+        "heading": "For Her",
+        "collection": "womens-collection",
+        "cta_link": "shopify://collections/womens-collection",
         "cta_label": "View all"
-      }
-    },
-    "ma_unboxing": {
-      "type": "ma-unboxing",
-      "disabled": true,
-      "name": "MA Unboxing",
-      "settings": {
-        "image_1": "shopify://shop_images/29_3e475ee2-32c8-4602-a97f-c29976fd2f61.jpg",
-        "image_2": "shopify://shop_images/26.jpg",
-        "image_3": "shopify://shop_images/Hands_holding_ruby_bottle_2K_202607031053.jpg",
-        "image_4": "shopify://shop_images/27.jpg",
-        "cap_1": "The Coffret",
-        "cap_2": "The Reveal",
-        "cap_3": "The Bottle",
-        "cap_4": "The Note",
-        "eyebrow": "The Maison Amiir Coffret",
-        "heading": "Every order arrives as a gift.",
-        "body": "",
-        "gift_line": "Gift-ready, always. Add a note at checkout — complimentary",
-        "button_label": "Explore the Collection",
-        "button_link": "/collections/all-perfumes"
       }
     },
     "maison_amiir_coffret_iwyVwm": {
@@ -288,7 +256,7 @@
         "enable_animations": true,
         "anim_type": "fade_up",
         "anim_speed": 700,
-        "anim_delay": 100,
+        "anim_delay": 300,
         "show_divider": true,
         "divider_style": "crown",
         "show_wax_seal": true,
@@ -296,6 +264,38 @@
         "show_particles": true,
         "show_texture": true,
         "texture_opacity": 30
+      }
+    },
+    "ma_most_wanted_JMH4Mt": {
+      "type": "ma-most-wanted",
+      "name": "FOR HIM",
+      "settings": {
+        "eyebrow": "Masculine",
+        "heading": "For Him",
+        "collection": "mens-collection",
+        "cta_link": "shopify://collections/mens-collection",
+        "cta_label": "View all"
+      }
+    },
+    "ma_unboxing": {
+      "type": "ma-unboxing",
+      "disabled": true,
+      "name": "MA Unboxing",
+      "settings": {
+        "image_1": "shopify://shop_images/29_3e475ee2-32c8-4602-a97f-c29976fd2f61.jpg",
+        "image_2": "shopify://shop_images/26.jpg",
+        "image_3": "shopify://shop_images/Hands_holding_ruby_bottle_2K_202607031053.jpg",
+        "image_4": "shopify://shop_images/27.jpg",
+        "cap_1": "The Coffret",
+        "cap_2": "The Reveal",
+        "cap_3": "The Bottle",
+        "cap_4": "The Note",
+        "eyebrow": "The Maison Amiir Coffret",
+        "heading": "Every order arrives as a gift.",
+        "body": "",
+        "gift_line": "Gift-ready, always. Add a note at checkout — complimentary",
+        "button_label": "Explore the Collection",
+        "button_link": "/collections/all-perfumes"
       }
     },
     "ma_home_risk": {
@@ -317,6 +317,26 @@
         "t4": "The Oil is Everything",
         "d4": "Most of what you pay goes into the oil — not the bottle, the box, or the campaign.",
         "sign": "The house takes the risk."
+      }
+    },
+    "ma_quiz_invite_J9337a": {
+      "type": "ma-quiz-invite",
+      "name": "Quiz Invite",
+      "settings": {
+        "bg_image": "shopify://shop_images/gif.gif",
+        "bg_video": "shopify://files/videos/0626 (1)(1).mp4",
+        "media_opacity": 50,
+        "brand_line": "Maison Amiir",
+        "eyebrow": "too many fragrances?",
+        "headline": "Find the one made for you",
+        "subtext": "Answer six quick questions and receive personalised fragrance recommendations based on what you already love.",
+        "pill1": "6 Questions",
+        "pill2": "Under 2 Minutes",
+        "pill3": "",
+        "hint": "No account required",
+        "cta_label": "Find Your Signature",
+        "quiz_url": "/pages/find-your-signature",
+        "accent_color": "#000000"
       }
     },
     "ma_editorial_social_proof_6tWRTb": {
@@ -465,26 +485,6 @@
         "dt_pad_right": 60,
         "margin_top": 0,
         "margin_bottom": 0
-      }
-    },
-    "ma_quiz_invite_J9337a": {
-      "type": "ma-quiz-invite",
-      "name": "Quiz Invite",
-      "settings": {
-        "bg_image": "shopify://shop_images/gif.gif",
-        "bg_video": "shopify://files/videos/0626 (1)(1).mp4",
-        "media_opacity": 50,
-        "brand_line": "Maison Amiir",
-        "eyebrow": "too many fragrances?",
-        "headline": "Find the one made for you",
-        "subtext": "Answer six quick questions and receive personalised fragrance recommendations based on what you already love.",
-        "pill1": "6 Questions",
-        "pill2": "Under 2 Minutes",
-        "pill3": "",
-        "hint": "No account required",
-        "cta_label": "Find Your Signature",
-        "quiz_url": "/pages/find-your-signature",
-        "accent_color": "#000000"
       }
     },
     "section_VhLBpg": {
