@@ -1,9 +1,8 @@
 {%- comment -%}
   MAISON AMIIR — The Maison Promise (Editorial Campaign Rebuild)
-  Standalone section re-engineered to high-fashion print magazine standards.
-  Features: Seamless edge dissolve mask, 30/70 editorial ratio, atmospheric watermark,
-  ultra-thin 0.06 hairlines, directional lighting overlays, and subtle paper texture depth.
-  100% backward compatible with existing schema IDs (k1-k4, t1-t4, d1-d4, etc.).
+  Features: True CSS alpha-mask edge dissolve (-webkit-mask-image), uncropped full-canvas
+  fit (object-fit: contain), 30/70 editorial ratio, atmospheric watermark, ultra-thin hairlines,
+  and directional lighting overlays. 100% backward compatible with all existing schema IDs.
 {%- endcomment -%}
 
 {%- liquid
@@ -113,7 +112,7 @@
 }
 
 /* ═══════════════════════════════════════
-   4. DESKTOP EDITORIAL SPREAD (30% / 70%)
+   4. DESKTOP EDITORIAL SPREAD & TRUE MASK
 ═══════════════════════════════════════ */
 @media (min-width: 900px) {
   #ma-mp3-{{ sid }}.ma-mp3 {
@@ -136,7 +135,7 @@
     z-index: 2;
   }
 
-  /* ── LEFT: Campaign Artwork & Dissolve Mask ── */
+  /* ── LEFT: Campaign Artwork & True Pixel Dissolve Mask ── */
   #ma-mp3-{{ sid }} .ma-mp3__img-col {
     position: relative;
     width: 100%;
@@ -144,7 +143,16 @@
     min-height: {{ section.settings.img_height | default: 620 }}px;
     border-radius: {{ section.settings.img_radius | default: 0 }}px;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     {% if section.settings.img_shadow %}box-shadow: 0 30px 60px -15px rgba(0,0,0,0.18);{% endif %}
+    
+    /* TRUE CSS PIXEL MASK: Dissolves image pixels into 0% opacity along the right edge */
+    {% if section.settings.enable_fade %}
+    -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,1) calc(100% - {{ section.settings.fade_width | default: 40 }}%), rgba(0,0,0,0) 100%);
+    mask-image: linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,1) calc(100% - {{ section.settings.fade_width | default: 40 }}%), rgba(0,0,0,0) 100%);
+    {% endif %}
   }
 
   {% if section.settings.full_bleed_left %}
@@ -155,31 +163,18 @@
   }
   {% endif %}
 
+  /* UNCROPPED FULL-FIT: Changed from cover to contain so NO artwork gets cut off */
   #ma-mp3-{{ sid }} .ma-mp3__img-col img {
     width: 100%;
     height: 100%;
-    object-fit: {{ section.settings.object_fit | default: 'cover' }};
-    object-position: {{ section.settings.img_x | default: 50 }}% {{ section.settings.img_y | default: 45 }}%;
+    max-height: {{ section.settings.img_height | default: 680 }}px;
+    object-fit: {{ section.settings.object_fit | default: 'contain' }};
+    object-position: {{ section.settings.img_x | default: 50 }}% {{ section.settings.img_y | default: 50 }}%;
     transform: scale({{ section.settings.img_scale | default: 100 | divided_by: 100.0 }});
     filter: brightness({{ section.settings.img_brightness | default: 100 }}%) contrast({{ section.settings.img_contrast | default: 100 }}%) saturate({{ section.settings.img_saturation | default: 100 }}%);
     display: block;
     transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
   }
-
-  /* THE DISSOLVE: Melts image seamlessly into the page background */
-  {% if section.settings.enable_fade %}
-  #ma-mp3-{{ sid }} .ma-mp3__img-col::after {
-    content: '';
-    position: absolute;
-    top: 0; right: 0; bottom: 0;
-    width: {{ section.settings.fade_width | default: 35 }}%;
-    background: linear-gradient(to right, rgba(244,238,225,0) 0%, var(--pm-bg) 100%);
-    opacity: {{ section.settings.fade_strength | default: 95 | divided_by: 100.0 }};
-    mix-blend-mode: {{ section.settings.blend_mode | default: 'normal' }};
-    pointer-events: none;
-    z-index: 3;
-  }
-  {% endif %}
 
   /* Directional Lighting Overlay */
   {% if section.settings.enable_lighting %}
@@ -212,8 +207,8 @@
 /* Mobile Image & Layout Fallback */
 @media (max-width: 899px) {
   #ma-mp3-{{ sid }} .ma-mp3__wrap { display: flex; flex-direction: column; gap: 24px; position: relative; z-index: 2; }
-  #ma-mp3-{{ sid }} .ma-mp3__img-col { width: {{ section.settings.mobile_image_width }}%; aspect-ratio: 4/5; overflow: hidden; border-radius: 4px; margin: 0 auto; }
-  #ma-mp3-{{ sid }} .ma-mp3__img-col img { width: 100%; height: 100%; object-fit: cover; }
+  #ma-mp3-{{ sid }} .ma-mp3__img-col { width: {{ section.settings.mobile_image_width }}%; aspect-ratio: 4/5; overflow: hidden; border-radius: 4px; margin: 0 auto; display: flex; align-items: center; justify-content: center; }
+  #ma-mp3-{{ sid }} .ma-mp3__img-col img { width: 100%; height: 100%; object-fit: contain; }
   #ma-mp3-{{ sid }} .ma-mp3__right { width: 100%; text-align: center; }
 }
 
@@ -462,7 +457,7 @@
 
   <div class="ma-mp3__wrap">
 
-    <!-- ── LEFT: Campaign Artwork & Dissolve Mask ── -->
+    <!-- ── LEFT: Campaign Artwork & True Pixel Dissolve Mask ── -->
     <div class="ma-mp3__img-col {% if section.settings.enable_animations %}ma-mp3__anim{% endif %}">
       {%- if section.settings.image != blank -%}
         <img src="{{ section.settings.image | image_url: width: 1400 }}" alt="{{ section.settings.image.alt | escape }}" loading="lazy">
@@ -627,26 +622,24 @@
       "content": "── HERO IMAGE & DISSOLVE MASK ──"
     },
     { "type": "image_picker", "id": "image", "label": "Hero Artwork" },
-    { "type": "range", "id": "left_column_width", "label": "Desktop Image Width (%)", "min": 20, "max": 50, "step": 1, "default": 33 },
+    { "type": "range", "id": "left_column_width", "label": "Desktop Image Width (%)", "min": 20, "max": 50, "step": 1, "default": 35 },
     { "type": "range", "id": "mobile_image_width", "label": "Mobile Image Width (%)", "min": 35, "max": 80, "step": 5, "default": 45 },
     { "type": "range", "id": "img_height", "label": "Desktop Image Height (px)", "min": 450, "max": 900, "step": 10, "default": 620 },
-    { "type": "select", "id": "object_fit", "label": "Object Fit", "default": "cover", "options": [{"value":"cover","label":"Cover"},{"value":"contain","label":"Contain"}] },
+    { "type": "select", "id": "object_fit", "label": "Object Fit", "default": "contain", "options": [{"value":"cover","label":"Cover"},{"value":"contain","label":"Contain (Uncropped)"}] },
     { "type": "range", "id": "img_x", "label": "Focal Point X (%)", "min": 0, "max": 100, "step": 5, "default": 50 },
-    { "type": "range", "id": "img_y", "label": "Focal Point Y (%)", "min": 0, "max": 100, "step": 5, "default": 45 },
+    { "type": "range", "id": "img_y", "label": "Focal Point Y (%)", "min": 0, "max": 100, "step": 5, "default": 50 },
     { "type": "range", "id": "img_scale", "label": "Image Zoom / Scale (%)", "min": 80, "max": 140, "step": 5, "default": 100 },
     { "type": "range", "id": "img_radius", "label": "Border Radius (px)", "min": 0, "max": 32, "step": 2, "default": 0 },
-    { "type": "checkbox", "id": "img_shadow", "label": "Enable Soft Luxury Shadow", "default": true },
+    { "type": "checkbox", "id": "img_shadow", "label": "Enable Soft Luxury Shadow", "default": false },
     { "type": "checkbox", "id": "full_bleed_left", "label": "Full-Bleed Left Viewport Edge", "default": true },
     { "type": "checkbox", "id": "enable_fade", "label": "Enable Dissolve Fade Edge Mask", "default": true },
-    { "type": "range", "id": "fade_width", "label": "Fade Mask Width (%)", "min": 10, "max": 60, "step": 5, "default": 35 },
-    { "type": "range", "id": "fade_strength", "label": "Fade Opacity (%)", "min": 20, "max": 100, "step": 5, "default": 95 },
-    { "type": "select", "id": "blend_mode", "label": "Fade Blend Mode", "default": "normal", "options": [{"value":"normal","label":"Normal"},{"value":"multiply","label":"Multiply"},{"value":"overlay","label":"Overlay"}] },
+    { "type": "range", "id": "fade_width", "label": "Fade Mask Width (%)", "min": 10, "max": 80, "step": 5, "default": 40 },
 
     {
       "type": "header",
       "content": "── DIRECTIONAL LIGHTING OVERLAY ──"
     },
-    { "type": "checkbox", "id": "enable_lighting", "label": "Enable Directional Studio Lighting", "default": true },
+    { "type": "checkbox", "id": "enable_lighting", "label": "Enable Directional Studio Lighting", "default": false },
     { "type": "range", "id": "highlights", "label": "Directional Highlight Strength (%)", "min": 0, "max": 40, "step": 5, "default": 15 },
     { "type": "range", "id": "shadow_strength", "label": "Vignette Shadow Strength (%)", "min": 0, "max": 60, "step": 5, "default": 20 },
     { "type": "range", "id": "img_brightness", "label": "Image Brightness (%)", "min": 60, "max": 140, "step": 5, "default": 100 },
