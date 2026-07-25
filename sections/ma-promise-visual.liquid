@@ -1,287 +1,792 @@
 {%- comment -%}
-  MA Maison Promise — Visual. Standalone section (does not modify ma-home-risk.liquid).
-  Same typography/color system and watermark as the current live section, plus a hero
-  image. Mobile: image beside header only, then promises as a stacked list below.
-  Desktop: image spans full height on the left, promises become a 2x2 grid on the right.
+  MAISON AMIIR — The Maison Promise (Editorial Campaign Rebuild)
+  Standalone section re-engineered to high-fashion print magazine standards.
+  Features: Seamless edge dissolve mask, 30/70 editorial ratio, atmospheric watermark,
+  ultra-thin 0.06 hairlines, directional lighting overlays, and subtle paper texture depth.
+  100% backward compatible with existing schema IDs (k1-k4, t1-t4, d1-d4, etc.).
 {%- endcomment -%}
 
-<section class="ma-mp3" id="ma-mp3-{{ section.id }}">
+{%- liquid
+  assign sid = section.id
+  assign preset = section.settings.color_preset
+  assign bg_default = section.settings.bg_color
+  assign ink_default = section.settings.ink_color
+
+  assign wm_display = 'flex'
+  if section.settings.show_watermark == false
+    assign wm_display = 'none'
+  endif
+
+  assign text_align = section.settings.text_align
+  assign rule_justify = 'flex-start'
+  assign cell_align = 'flex-start'
+  if text_align == 'center'
+    assign rule_justify = 'center'
+    assign cell_align = 'center'
+  elsif text_align == 'right'
+    assign rule_justify = 'flex-end'
+    assign cell_align = 'flex-end'
+  endif
+-%}
+
+<style>
+/* ═══════════════════════════════════════
+   1. RESET & PRESET ARCHITECTURE
+═══════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Marcellus&display=swap');
+
+#shopify-section-{{ sid }} *,
+#shopify-section-{{ sid }} *::before,
+#shopify-section-{{ sid }} *::after { box-sizing: border-box; margin: 0; padding: 0; }
+#shopify-section-{{ sid }} { opacity: 1 !important; transform: none !important; width: 100% !important; max-width: none !important; }
+
+{%- if preset == 'ivory' -%}
+  #shopify-section-{{ sid }} { --pm-bg: #F4EEE1; --pm-ink: #171310; --pm-ink2: rgba(23,19,16,0.72); --pm-gold: #A8894E; --pm-burg: #6E1220; --pm-line: rgba(23,19,16,0.07); }
+{%- elsif preset == 'noir' -%}
+  #shopify-section-{{ sid }} { --pm-bg: #0C0B0A; --pm-ink: #F4EEE1; --pm-ink2: rgba(244,238,225,0.70); --pm-gold: #C6A15B; --pm-burg: #A8894E; --pm-line: rgba(244,238,225,0.08); }
+{%- elsif preset == 'editorial_light' -%}
+  #shopify-section-{{ sid }} { --pm-bg: #FFFFFF; --pm-ink: #111111; --pm-ink2: rgba(17,17,17,0.68); --pm-gold: #8C703B; --pm-burg: #5A101A; --pm-line: rgba(17,17,17,0.06); }
+{%- elsif preset == 'soft_linen' -%}
+  #shopify-section-{{ sid }} { --pm-bg: #EFE7DB; --pm-ink: #221E1B; --pm-ink2: rgba(34,30,27,0.72); --pm-gold: #9E825E; --pm-burg: #6E1220; --pm-line: rgba(34,30,27,0.07); }
+{%- elsif preset == 'warm_paper' -%}
+  #shopify-section-{{ sid }} { --pm-bg: #F2EBE1; --pm-ink: #2A2421; --pm-ink2: rgba(42,36,33,0.75); --pm-gold: #A8894E; --pm-burg: #7A1828; --pm-line: rgba(42,36,33,0.08); }
+{%- else -%}
+  #shopify-section-{{ sid }} {
+    --pm-bg: {{ bg_default }};
+    --pm-ink: {{ ink_default }};
+    --pm-ink2: {{ section.settings.body_color | default: 'rgba(23,19,16,0.72)' }};
+    --pm-gold: {{ section.settings.gold_color }};
+    --pm-burg: {{ section.settings.burgundy_color }};
+    --pm-line: {{ section.settings.grid_line_color | default: 'rgba(23,19,16,0.07)' }};
+  }
+{%- endif -%}
+
+/* ═══════════════════════════════════════
+   2. SECTION SHELL & PAPER GRAIN
+═══════════════════════════════════════ */
+#ma-mp3-{{ sid }}.ma-mp3 {
+  position: relative;
+  background-color: var(--pm-bg);
+  color: var(--pm-ink);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  overflow: hidden;
+  border-top: {{ section.settings.grid_line_thickness }}px {{ section.settings.grid_line_style }} var(--pm-line);
+  border-bottom: {{ section.settings.grid_line_thickness }}px {{ section.settings.grid_line_style }} var(--pm-line);
+  padding: {{ section.settings.mobile_padding_top | default: 40 }}px {{ section.settings.mobile_padding_side | default: 20 }}px {{ section.settings.mobile_padding_bottom | default: 40 }}px;
+}
+
+{% if section.settings.enable_texture %}
+#ma-mp3-{{ sid }} .ma-mp3__grain {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='{{ section.settings.noise_strength | default: 0.8 }}' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='{{ section.settings.texture_opacity | divided_by: 100.0 }}'/%3E%3C/svg%3E");
+  opacity: {{ section.settings.texture_opacity | divided_by: 100.0 }};
+  pointer-events: none;
+  z-index: 1;
+}
+{% endif %}
+
+/* ═══════════════════════════════════════
+   3. ARCHITECTURAL WATERMARK LOGO
+═══════════════════════════════════════ */
+#ma-mp3-{{ sid }} .ma-mp3__watermark {
+  display: {{ wm_display }};
+  position: absolute;
+  right: {{ section.settings.wm_pos_x | default: 8 }}%;
+  top: {{ section.settings.wm_pos_y | default: 35 }}%;
+  transform: translate(50%, -50%) scale({{ section.settings.wm_scale | default: 75 | divided_by: 100.0 }}) rotate({{ section.settings.wm_rotation | default: 0 }}deg);
+  width: min({{ section.settings.wm_width | default: 70 }}%, 680px);
+  opacity: {{ section.settings.watermark_opacity | divided_by: 100.0 }};
+  filter: blur({{ section.settings.wm_blur | default: 0 }}px);
+  pointer-events: none;
+  z-index: 1;
+  user-select: none;
+  align-items: center;
+  justify-content: center;
+}
+#ma-mp3-{{ sid }} .ma-mp3__watermark img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ═══════════════════════════════════════
+   4. DESKTOP EDITORIAL SPREAD (30% / 70%)
+═══════════════════════════════════════ */
+@media (min-width: 900px) {
+  #ma-mp3-{{ sid }}.ma-mp3 {
+    padding: {{ section.settings.desktop_padding }}px 0;
+    min-height: {{ section.settings.min_height | default: 680 }}px;
+    display: flex;
+    align-items: center;
+  }
+
+  #ma-mp3-{{ sid }} .ma-mp3__wrap {
+    width: 100%;
+    max-width: {{ section.settings.section_width }}px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 4vw, 60px);
+    display: grid;
+    grid-template-columns: {{ section.settings.left_column_width }}% 1fr;
+    column-gap: {{ section.settings.column_gap }}px;
+    align-items: {{ section.settings.valign | default: 'center' }};
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ── LEFT: Campaign Artwork & Dissolve Mask ── */
+  #ma-mp3-{{ sid }} .ma-mp3__img-col {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: {{ section.settings.img_height | default: 620 }}px;
+    border-radius: {{ section.settings.img_radius | default: 0 }}px;
+    overflow: hidden;
+    {% if section.settings.img_shadow %}box-shadow: 0 30px 60px -15px rgba(0,0,0,0.18);{% endif %}
+  }
+
+  {% if section.settings.full_bleed_left %}
+  #ma-mp3-{{ sid }} .ma-mp3__img-col {
+    margin-left: calc(-50vw + 50%);
+    width: calc(100% + 50vw - 50%);
+    border-radius: 0 {{ section.settings.img_radius | default: 0 }}px {{ section.settings.img_radius | default: 0 }}px 0;
+  }
+  {% endif %}
+
+  #ma-mp3-{{ sid }} .ma-mp3__img-col img {
+    width: 100%;
+    height: 100%;
+    object-fit: {{ section.settings.object_fit | default: 'cover' }};
+    object-position: {{ section.settings.img_x | default: 50 }}% {{ section.settings.img_y | default: 45 }}%;
+    transform: scale({{ section.settings.img_scale | default: 100 | divided_by: 100.0 }});
+    filter: brightness({{ section.settings.img_brightness | default: 100 }}%) contrast({{ section.settings.img_contrast | default: 100 }}%) saturate({{ section.settings.img_saturation | default: 100 }}%);
+    display: block;
+    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* THE DISSOLVE: Melts image seamlessly into the page background */
+  {% if section.settings.enable_fade %}
+  #ma-mp3-{{ sid }} .ma-mp3__img-col::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; bottom: 0;
+    width: {{ section.settings.fade_width | default: 35 }}%;
+    background: linear-gradient(to right, rgba(244,238,225,0) 0%, var(--pm-bg) 100%);
+    opacity: {{ section.settings.fade_strength | default: 95 | divided_by: 100.0 }};
+    mix-blend-mode: {{ section.settings.blend_mode | default: 'normal' }};
+    pointer-events: none;
+    z-index: 3;
+  }
+  {% endif %}
+
+  /* Directional Lighting Overlay */
+  {% if section.settings.enable_lighting %}
+  #ma-mp3-{{ sid }} .ma-mp3__img-col::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,{{ section.settings.highlights | default: 15 | divided_by: 100.0 }}) 0%, rgba(0,0,0,{{ section.settings.shadow_strength | default: 20 | divided_by: 100.0 }}) 100%);
+    mix-blend-mode: overlay;
+    pointer-events: none;
+    z-index: 2;
+  }
+  {% endif %}
+
+  /* ── RIGHT: Centered Editorial Content Spread ── */
+  #ma-mp3-{{ sid }} .ma-mp3__right {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: {{ section.settings.content_max_width | default: 760 }}px;
+    margin: 0 auto;
+    padding: {{ section.settings.content_pad | default: 30 }}px 0;
+    text-align: {{ text_align }};
+    transform: translate({{ section.settings.offset_x | default: 0 }}px, {{ section.settings.offset_y | default: 0 }}px);
+  }
+}
+
+/* Mobile Image & Layout Fallback */
+@media (max-width: 899px) {
+  #ma-mp3-{{ sid }} .ma-mp3__wrap { display: flex; flex-direction: column; gap: 24px; position: relative; z-index: 2; }
+  #ma-mp3-{{ sid }} .ma-mp3__img-col { width: {{ section.settings.mobile_image_width }}%; aspect-ratio: 4/5; overflow: hidden; border-radius: 4px; margin: 0 auto; }
+  #ma-mp3-{{ sid }} .ma-mp3__img-col img { width: 100%; height: 100%; object-fit: cover; }
+  #ma-mp3-{{ sid }} .ma-mp3__right { width: 100%; text-align: center; }
+}
+
+/* ═══════════════════════════════════════
+   5. TYPOGRAPHY HIERARCHY
+═══════════════════════════════════════ */
+#ma-mp3-{{ sid }} .ma-mp3__head { position: relative; z-index: 2; margin-bottom: {{ section.settings.grid_gap | default: 36 }}px; }
+
+#ma-mp3-{{ sid }} .ma-mp3__k {
+  font-family: {{ section.settings.eyebrow_font.family | default: 'Marcellus' }}, Georgia, serif;
+  font-size: {{ section.settings.eyebrow_size | default: 11 }}px;
+  font-weight: {{ section.settings.eyebrow_weight | default: '400' }};
+  letter-spacing: {{ section.settings.eyebrow_spacing | default: 3.5 }}px;
+  text-transform: uppercase;
+  color: var(--pm-gold);
+  margin: 0 0 14px;
+  display: block;
+}
+
+#ma-mp3-{{ sid }} .ma-mp3__rule {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: {{ rule_justify }};
+  margin-bottom: 20px;
+}
+#ma-mp3-{{ sid }} .ma-mp3__rule::before,
+#ma-mp3-{{ sid }} .ma-mp3__rule::after {
+  content: '';
+  display: block;
+  width: 48px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--pm-gold), transparent);
+}
+#ma-mp3-{{ sid }} .ma-mp3__rule-icon { color: var(--pm-gold); font-size: 11px; line-height: 1; }
+
+#ma-mp3-{{ sid }} .ma-mp3__h {
+  font-family: {{ section.settings.heading_font.family | default: 'Cormorant Garamond' }}, Georgia, serif !important;
+  font-size: clamp({{ section.settings.mobile_heading_size }}px, 4vw, {{ section.settings.heading_size }}px);
+  font-weight: {{ section.settings.heading_weight | default: '400' }} !important;
+  letter-spacing: {{ section.settings.heading_spacing | default: 0 }}px;
+  line-height: {{ section.settings.heading_line_height | default: 108 | divided_by: 100.0 }};
+  text-transform: {{ section.settings.heading_transform | default: 'none' }} !important;
+  color: var(--pm-ink);
+  margin: 0 0 18px;
+}
+
+#ma-mp3-{{ sid }} .ma-mp3__s {
+  font-family: {{ section.settings.body_font.family | default: 'Cormorant Garamond' }}, Georgia, serif;
+  font-size: clamp({{ section.settings.mobile_body_size }}px, 2vw, {{ section.settings.body_size }}px);
+  font-weight: {{ section.settings.body_weight | default: '400' }};
+  font-style: italic;
+  line-height: {{ section.settings.body_line_height | default: 145 | divided_by: 100.0 }};
+  letter-spacing: {{ section.settings.body_spacing | default: 0 }}px;
+  color: var(--pm-ink2);
+  max-width: {{ section.settings.intro_max_width | default: 52 }}ch;
+  margin: 0 auto;
+}
+@media (min-width: 900px) {
+  #ma-mp3-{{ sid }} .ma-mp3__s {
+    margin: {% if text_align == 'center' %}0 auto{% elsif text_align == 'right' %}0 0 0 auto{% else %}0{% endif %};
+  }
+}
+
+/* ═══════════════════════════════════════
+   6. PROMISE 2×2 EDITORIAL GRID
+═══════════════════════════════════════ */
+#ma-mp3-{{ sid }} .ma-mp3__cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: {{ section.settings.row_gap | default: 0 }}px {{ section.settings.col_gap_grid | default: 0 }}px;
+  border-top: {{ section.settings.grid_line_thickness }}px {{ section.settings.grid_line_style }} var(--pm-line);
+  border-bottom: {{ section.settings.grid_line_thickness }}px {{ section.settings.grid_line_style }} var(--pm-line);
+  position: relative;
+  z-index: 2;
+}
+@media (min-width: 600px) {
+  #ma-mp3-{{ sid }} .ma-mp3__cards { grid-template-columns: 1fr 1fr; }
+}
+
+#ma-mp3-{{ sid }} .ma-mp3__c {
+  position: relative;
+  overflow: hidden;
+  padding: {{ section.settings.feature_padding | default: 32 }}px 24px;
+  text-align: {{ text_align }};
+  display: flex;
+  flex-direction: column;
+  align-items: {{ cell_align }};
+  border-bottom: {{ section.settings.grid_line_thickness }}px {{ section.settings.grid_line_style }} var(--pm-line);
+}
+@media (min-width: 600px) {
+  #ma-mp3-{{ sid }} .ma-mp3__c:nth-child(odd) { border-right: {{ section.settings.grid_line_thickness }}px {{ section.settings.grid_line_style }} var(--pm-line); }
+  #ma-mp3-{{ sid }} .ma-mp3__c:nth-child(3),
+  #ma-mp3-{{ sid }} .ma-mp3__c:nth-child(4) { border-bottom: 0; }
+}
+
+#ma-mp3-{{ sid }} .ma-mp3__num {
+  position: absolute;
+  right: 12px;
+  bottom: -14px;
+  font-family: {{ section.settings.heading_font.family | default: 'Cormorant Garamond' }}, Georgia, serif;
+  font-weight: 600;
+  font-size: 76px;
+  line-height: 1;
+  color: var(--pm-ink);
+  opacity: 0.035;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+}
+
+#ma-mp3-{{ sid }} .ma-mp3__ic {
+  position: relative;
+  z-index: 1;
+  display: block;
+  margin-bottom: {{ section.settings.icon_spacing | default: 14 }}px;
+  color: {{ section.settings.icon_color | default: '#A8894E' }};
+  opacity: {{ section.settings.icon_opacity | default: 100 | divided_by: 100.0 }};
+  transform: translateY({{ section.settings.icon_pos_y | default: 0 }}px);
+}
+#ma-mp3-{{ sid }} .ma-mp3__ic svg {
+  width: {{ section.settings.icon_size | default: 28 }}px;
+  height: {{ section.settings.icon_size | default: 28 }}px;
+  display: block;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: {{ section.settings.stroke_width | default: 1.1 }};
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+#ma-mp3-{{ sid }} .ma-mp3__kick {
+  position: relative;
+  z-index: 1;
+  font-family: {{ section.settings.eyebrow_font.family | default: 'Marcellus' }}, Georgia, serif;
+  font-size: {{ section.settings.promise_kicker_size | default: 9.5 }}px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--pm-gold);
+  margin: 0 0 6px;
+}
+
+#ma-mp3-{{ sid }} .ma-mp3__t {
+  position: relative;
+  z-index: 1;
+  font-family: {{ section.settings.promise_title_font.family | default: 'Cormorant Garamond' }}, Georgia, serif;
+  font-size: clamp({{ section.settings.promise_title_size_mobile }}px, 1.8vw, {{ section.settings.promise_title_size_desktop }}px);
+  font-weight: {{ section.settings.promise_title_weight | default: '600' }};
+  line-height: 1.15;
+  color: var(--pm-ink);
+  margin: 0 0 8px;
+}
+
+#ma-mp3-{{ sid }} .ma-mp3__d {
+  position: relative;
+  z-index: 1;
+  font-family: {{ section.settings.promise_body_font.family | default: 'Cormorant Garamond' }}, Georgia, serif;
+  font-size: clamp({{ section.settings.promise_body_size_mobile }}px, 1.4vw, {{ section.settings.promise_body_size_desktop }}px);
+  font-weight: {{ section.settings.promise_body_weight | default: '400' }};
+  line-height: {{ section.settings.promise_body_line_height | default: 145 | divided_by: 100.0 }};
+  color: var(--pm-ink2);
+  margin: 0;
+  max-width: 36ch;
+}
+
+/* ═══════════════════════════════════════
+   7. FOUNDER SEAL (+25% Prominence)
+═══════════════════════════════════════ */
+#ma-mp3-{{ sid }} .ma-mp3__seal {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 28px 0 10px;
+  margin-top: 10px;
+}
+#ma-mp3-{{ sid }} .ma-mp3__seal-rule {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+#ma-mp3-{{ sid }} .ma-mp3__seal-rule::before,
+#ma-mp3-{{ sid }} .ma-mp3__seal-rule::after {
+  content: '';
+  display: block;
+  height: 1px;
+  width: 90px;
+  background: linear-gradient(90deg, transparent, var(--pm-gold), transparent);
+}
+#ma-mp3-{{ sid }} .ma-mp3__seal-mark {
+  font-size: 18px;
+  color: var(--pm-gold);
+  line-height: 1;
+  letter-spacing: 0.15em;
+}
+#ma-mp3-{{ sid }} .ma-mp3__sign {
+  font-family: {{ section.settings.heading_font.family | default: 'Cormorant Garamond' }}, Georgia, serif;
+  font-size: clamp(16px, 1.6vw, 22px);
+  font-weight: 500;
+  color: var(--pm-ink);
+}
+#ma-mp3-{{ sid }} .ma-mp3__sign em { font-weight: 400; font-style: italic; color: var(--pm-burg); }
+
+/* ═══════════════════════════════════════
+   8. EDITORIAL ANIMATIONS
+═══════════════════════════════════════ */
+{% if section.settings.enable_animations %}
+  #ma-mp3-{{ sid }} .ma-mp3__anim {
+    opacity: 0;
+    {% if section.settings.anim_type == 'fade_up' %}transform: translateY(22px);{% endif %}
+    transition: opacity {{ section.settings.anim_speed | default: 700 }}ms ease, transform {{ section.settings.anim_speed | default: 700 }}ms cubic-bezier(0.16,1,0.3,1);
+  }
+  #ma-mp3-{{ sid }} .ma-mp3__anim.is-visible { opacity: 1; transform: none; }
+  #ma-mp3-{{ sid }} .ma-mp3__anim:nth-child(2) { transition-delay: {{ section.settings.anim_delay | default: 100 }}ms; }
+  #ma-mp3-{{ sid }} .ma-mp3__anim:nth-child(3) { transition-delay: {{ section.settings.anim_delay | default: 100 | times: 2 }}ms; }
+  #ma-mp3-{{ sid }} .ma-mp3__c { opacity: 0; transform: translateY(18px); transition: opacity 0.65s ease, transform 0.65s cubic-bezier(0.16,1,0.3,1); }
+  #ma-mp3-{{ sid }} .ma-mp3__c.is-visible { opacity: 1; transform: none; }
+  #ma-mp3-{{ sid }} .ma-mp3__c:nth-child(2) { transition-delay: 90ms; }
+  #ma-mp3-{{ sid }} .ma-mp3__c:nth-child(3) { transition-delay: 180ms; }
+  #ma-mp3-{{ sid }} .ma-mp3__c:nth-child(4) { transition-delay: 270ms; }
+{% endif %}
+
+@media (prefers-reduced-motion: reduce) {
+  #ma-mp3-{{ sid }} * { transition: none !important; animation: none !important; }
+}
+</style>
+
+{%- comment -%} ── HTML STRUCTURE ── {%- endcomment -%}
+
+<section class="ma-mp3" id="ma-mp3-{{ sid }}">
+
+  {%- if section.settings.enable_texture -%}
+    <div class="ma-mp3__grain" aria-hidden="true"></div>
+  {%- endif -%}
+
+  {%- if section.settings.show_watermark -%}
+    <div class="ma-mp3__watermark" aria-hidden="true">
+      {%- if section.settings.watermark_image != blank -%}
+        <img src="{{ section.settings.watermark_image | image_url: width: 800 }}" alt="" loading="lazy">
+      {%- else -%}
+        <img src="https://maisonamiir.com/cdn/shop/files/MAISON-LOGO-NEW.png?v=1775626552&width=800" alt="" loading="lazy">
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
   <div class="ma-mp3__wrap">
-    <div class="ma-mp3__img">
+
+    <!-- ── LEFT: Campaign Artwork & Dissolve Mask ── -->
+    <div class="ma-mp3__img-col {% if section.settings.enable_animations %}ma-mp3__anim{% endif %}">
       {%- if section.settings.image != blank -%}
-        <img src="{{ section.settings.image | image_url: width: 1000 }}" alt="{{ section.settings.image.alt | escape }}" loading="lazy">
+        <img src="{{ section.settings.image | image_url: width: 1400 }}" alt="{{ section.settings.image.alt | escape }}" loading="lazy">
+      {%- else -%}
+        {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
       {%- endif -%}
     </div>
 
+    <!-- ── RIGHT: Centered Editorial Content Spread ── -->
     <div class="ma-mp3__right">
-      <img class="ma-mp3__logo" src="https://maisonamiir.com/cdn/shop/files/MAISON-LOGO-NEW.png?v=1775626552&width=800" alt="" aria-hidden="true" loading="lazy">
 
-      <div class="ma-mp3__head">
-        {%- if section.settings.eyebrow != blank -%}<p class="ma-mp3__k">{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
-        {%- if section.settings.heading != blank -%}<h2 class="ma-mp3__h">{{ section.settings.heading | escape }}</h2>{%- endif -%}
-        {%- if section.settings.subline != blank -%}<p class="ma-mp3__s">{{ section.settings.subline | escape }}</p>{%- endif -%}
+      <div class="ma-mp3__head {% if section.settings.enable_animations %}ma-mp3__anim{% endif %}">
+        {%- if section.settings.eyebrow != blank -%}
+          <span class="ma-mp3__k">{{ section.settings.eyebrow | escape }}</span>
+        {%- endif -%}
+
+        <div class="ma-mp3__rule">
+          <span class="ma-mp3__rule-icon">✦</span>
+        </div>
+
+        {%- if section.settings.heading != blank -%}
+          <h2 class="ma-mp3__h">{{ section.settings.heading | escape }}</h2>
+        {%- endif -%}
+
+        {%- if section.settings.subline != blank -%}
+          <p class="ma-mp3__s">{{ section.settings.subline | escape }}</p>
+        {%- endif -%}
       </div>
 
+      <!-- Promise 2×2 Grid -->
       <div class="ma-mp3__cards">
+
+        <!-- Card 1 -->
         <div class="ma-mp3__c">
           <span class="ma-mp3__num" aria-hidden="true">01</span>
-          <span class="ma-mp3__ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 2.5h6M10 2.5v4.6L6.5 15.1A3 3 0 0 0 9.3 20.9h5.4a3 3 0 0 0 2.8-5.8L14 7.1V2.5"/><path d="M8 14.5h8"/></svg></span>
-          {%- if section.settings.k1 != blank -%}<p class="ma-mp3__kick">{{ section.settings.k1 | escape }}</p>{%- endif -%}
-          <p class="ma-mp3__t">{{ section.settings.t1 | escape }}</p>
-          <p class="ma-mp3__d">{{ section.settings.d1 | escape }}</p>
+          <span class="ma-mp3__ic" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M9 2.5h6M10 2.5v4.6L6.5 15.1A3 3 0 0 0 9.3 20.9h5.4a3 3 0 0 0 2.8-5.8L14 7.1V2.5"/><path d="M8 14.5h8"/></svg>
+          </span>
+          {%- if section.settings.k1 != blank -%}<span class="ma-mp3__kick">{{ section.settings.k1 | escape }}</span>{%- endif -%}
+          {%- if section.settings.t1 != blank -%}<p class="ma-mp3__t">{{ section.settings.t1 | escape }}</p>{%- endif -%}
+          {%- if section.settings.d1 != blank -%}<p class="ma-mp3__d">{{ section.settings.d1 | escape }}</p>{%- endif -%}
         </div>
+
+        <!-- Card 2 -->
         <div class="ma-mp3__c">
           <span class="ma-mp3__num" aria-hidden="true">02</span>
-          <span class="ma-mp3__ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3l7 2.6v5.1c0 4.4-3 7.4-7 8.8-4-1.4-7-4.4-7-8.8V5.6L12 3z"/><path d="M9 12l2 2 4-4.2"/></svg></span>
-          {%- if section.settings.k2 != blank -%}<p class="ma-mp3__kick">{{ section.settings.k2 | escape }}</p>{%- endif -%}
-          <p class="ma-mp3__t">{{ section.settings.t2 | escape }}</p>
-          <p class="ma-mp3__d">{{ section.settings.d2 | escape }}</p>
+          <span class="ma-mp3__ic" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M12 3l7 2.6v5.1c0 4.4-3 7.4-7 8.8-4-1.4-7-4.4-7-8.8V5.6L12 3z"/><path d="M9 12l2 2 4-4.2"/></svg>
+          </span>
+          {%- if section.settings.k2 != blank -%}<span class="ma-mp3__kick">{{ section.settings.k2 | escape }}</span>{%- endif -%}
+          {%- if section.settings.t2 != blank -%}<p class="ma-mp3__t">{{ section.settings.t2 | escape }}</p>{%- endif -%}
+          {%- if section.settings.d2 != blank -%}<p class="ma-mp3__d">{{ section.settings.d2 | escape }}</p>{%- endif -%}
         </div>
+
+        <!-- Card 3 -->
         <div class="ma-mp3__c">
           <span class="ma-mp3__num" aria-hidden="true">03</span>
-          <span class="ma-mp3__ic" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.1"/><path d="M12 2v2.3M12 19.7V22M2 12h2.3M19.7 12H22M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M19.1 4.9l-1.6 1.6M6.5 17.5l-1.6 1.6"/></svg></span>
-          {%- if section.settings.k3 != blank -%}<p class="ma-mp3__kick">{{ section.settings.k3 | escape }}</p>{%- endif -%}
-          <p class="ma-mp3__t">{{ section.settings.t3 | escape }}</p>
-          <p class="ma-mp3__d">{{ section.settings.d3 | escape }}</p>
+          <span class="ma-mp3__ic" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.1"/><path d="M12 2v2.3M12 19.7V22M2 12h2.3M19.7 12H22M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M19.1 4.9l-1.6 1.6M6.5 17.5l-1.6 1.6"/></svg>
+          </span>
+          {%- if section.settings.k3 != blank -%}<span class="ma-mp3__kick">{{ section.settings.k3 | escape }}</span>{%- endif -%}
+          {%- if section.settings.t3 != blank -%}<p class="ma-mp3__t">{{ section.settings.t3 | escape }}</p>{%- endif -%}
+          {%- if section.settings.d3 != blank -%}<p class="ma-mp3__d">{{ section.settings.d3 | escape }}</p>{%- endif -%}
         </div>
+
+        <!-- Card 4 -->
         <div class="ma-mp3__c">
           <span class="ma-mp3__num" aria-hidden="true">04</span>
-          <span class="ma-mp3__ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3s6 6.6 6 11a6 6 0 0 1-12 0c0-4.4 6-11 6-11z"/><path d="M9.6 14.2a2.6 2.6 0 0 0 2.1 2.4"/></svg></span>
-          {%- if section.settings.k4 != blank -%}<p class="ma-mp3__kick">{{ section.settings.k4 | escape }}</p>{%- endif -%}
-          <p class="ma-mp3__t">{{ section.settings.t4 | escape }}</p>
-          <p class="ma-mp3__d">{{ section.settings.d4 | escape }}</p>
+          <span class="ma-mp3__ic" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M12 3s6 6.6 6 11a6 6 0 0 1-12 0c0-4.4 6-11 6-11z"/><path d="M9.6 14.2a2.6 2.6 0 0 0 2.1 2.4"/></svg>
+          </span>
+          {%- if section.settings.k4 != blank -%}<span class="ma-mp3__kick">{{ section.settings.k4 | escape }}</span>{%- endif -%}
+          {%- if section.settings.t4 != blank -%}<p class="ma-mp3__t">{{ section.settings.t4 | escape }}</p>{%- endif -%}
+          {%- if section.settings.d4 != blank -%}<p class="ma-mp3__d">{{ section.settings.d4 | escape }}</p>{%- endif -%}
         </div>
+
       </div>
 
+      <!-- Founder Signature Seal -->
       {%- if section.settings.sign != blank -%}
-        <div class="ma-mp3__seal">
-          <div class="ma-mp3__seal-rule" aria-hidden="true"></div>
-          <span class="ma-mp3__seal-mark" aria-hidden="true">M</span>
-          <div class="ma-mp3__seal-rule" aria-hidden="true"></div>
+        <div class="ma-mp3__seal {% if section.settings.enable_animations %}ma-mp3__anim{% endif %}">
+          <div class="ma-mp3__seal-rule">
+            <span class="ma-mp3__seal-mark">✦ {{ section.settings.sign | escape }} ✦</span>
+          </div>
+          <p class="ma-mp3__sign">
+            The house takes the risk. <em>&mdash; Amiir</em>
+          </p>
         </div>
       {%- endif -%}
+
     </div>
   </div>
 </section>
 
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Marcellus&display=swap');
+{%- comment -%} ── JAVASCRIPT ANIMATIONS ── {%- endcomment -%}
+<script>
+(function () {
+  var sec = document.getElementById('ma-mp3-{{ sid }}');
+  if (!sec) return;
 
-  #shopify-section-{{ section.id }} { opacity: 1 !important; transform: none !important; }
-
-  #ma-mp3-{{ section.id }}.ma-mp3 {
-    --pm-cream: {{ section.settings.bg_color }};
-    --pm-ink: {{ section.settings.ink_color }};
-    --pm-ink2: {{ section.settings.ink_color }}b3;
-    --pm-gold: {{ section.settings.gold_color }};
-    --pm-burg: {{ section.settings.burgundy_color }};
-    --pm-line: {{ section.settings.ink_color }}24;
-    --pm-serif: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
-    --pm-label: 'Marcellus', Georgia, serif;
-    position: relative;
-    background: var(--pm-cream);
-    color: var(--pm-ink);
-    font-family: var(--pm-serif);
-    border-top: 1px solid var(--pm-line);
-    border-bottom: 1px solid var(--pm-line);
-  }
-
-  #ma-mp3-{{ section.id }} .ma-mp3__wrap { position: relative; padding: 20px 20px 0; }
-  #ma-mp3-{{ section.id }} .ma-mp3__img {
-    float: left;
-    width: {{ section.settings.mobile_image_width }}%;
-    margin: 0 16px 12px 0;
-    aspect-ratio: 3 / 4;
-    overflow: hidden;
-    border-radius: 2px;
-  }
-  #ma-mp3-{{ section.id }} .ma-mp3__img img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  #ma-mp3-{{ section.id }} .ma-mp3__right { position: relative; }
-  #ma-mp3-{{ section.id }} .ma-mp3__logo {
-    display: block;
-    position: absolute;
-    right: -6%;
-    top: -4%;
-    width: 62%;
-    opacity: {{ section.settings.watermark_opacity | times: 1.0 | divided_by: 100 }};
-    z-index: 0;
-    pointer-events: none;
-  }
-
-  #ma-mp3-{{ section.id }} .ma-mp3__head { position: relative; z-index: 1; padding-top: 6px; }
-  #ma-mp3-{{ section.id }} .ma-mp3__k {
-    font-family: var(--pm-label); font-size: 9.5px; letter-spacing: .3em; text-transform: uppercase;
-    color: var(--pm-burg); margin: 0 0 10px;
-  }
-  #ma-mp3-{{ section.id }} .ma-mp3__h {
-    font-family: var(--pm-serif) !important; font-weight: 500 !important;
-    text-transform: none !important; letter-spacing: .005em !important;
-    font-size: {{ section.settings.mobile_heading_size }}px; line-height: 1.08; color: var(--pm-ink); margin: 0;
-  }
-  #ma-mp3-{{ section.id }} .ma-mp3__s {
-    font-family: var(--pm-serif); font-style: italic; font-size: {{ section.settings.mobile_body_size }}px;
-    line-height: 1.4; color: var(--pm-ink2); margin: 8px 0 0;
-  }
-
-  #ma-mp3-{{ section.id }} .ma-mp3__cards { clear: both; position: relative; z-index: 1; margin-top: 22px; }
-  #ma-mp3-{{ section.id }} .ma-mp3__c {
-    position: relative; overflow: hidden; padding: 18px 0; text-align: left;
-    border-top: 1px solid var(--pm-line);
-  }
-  #ma-mp3-{{ section.id }} .ma-mp3__c:first-child { border-top: 0; }
-  #ma-mp3-{{ section.id }} .ma-mp3__num {
-    position: absolute; right: 4px; bottom: -12px; z-index: 0; pointer-events: none;
-    font-family: var(--pm-serif); font-weight: 600; font-size: 60px; line-height: 1;
-    color: {{ section.settings.burgundy_color }}12;
-  }
-  #ma-mp3-{{ section.id }} .ma-mp3__ic { display: block; position: relative; z-index: 1; width: 24px; height: 24px; color: var(--pm-gold); margin: 0 0 10px; }
-  #ma-mp3-{{ section.id }} .ma-mp3__ic svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.15; stroke-linecap: round; stroke-linejoin: round; }
-  #ma-mp3-{{ section.id }} .ma-mp3__kick { position: relative; z-index: 1; font-family: var(--pm-label); font-size: 8.5px; letter-spacing: .2em; text-transform: uppercase; color: var(--pm-gold); margin: 0 0 6px; }
-  #ma-mp3-{{ section.id }} .ma-mp3__t { position: relative; z-index: 1; font-family: var(--pm-serif); font-weight: 600; font-size: {{ section.settings.promise_title_size_mobile }}px; line-height: 1.1; color: var(--pm-ink); margin: 0 0 6px; }
-  #ma-mp3-{{ section.id }} .ma-mp3__d { position: relative; z-index: 1; font-family: var(--pm-serif); font-size: {{ section.settings.promise_body_size_mobile }}px; line-height: 1.4; color: var(--pm-ink2); margin: 0; }
-
-  #ma-mp3-{{ section.id }} .ma-mp3__seal { position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; gap: 12px; padding: 20px 0 26px; margin-top: 6px; border-top: 1px solid var(--pm-line); }
-  #ma-mp3-{{ section.id }} .ma-mp3__seal-rule { height: 1px; width: 60px; background: linear-gradient(90deg, transparent, var(--pm-gold), transparent); }
-  #ma-mp3-{{ section.id }} .ma-mp3__seal-mark {
-    width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--pm-gold);
-    display: flex; align-items: center; justify-content: center;
-    font-family: var(--pm-serif); font-size: 14px; color: var(--pm-ink);
-  }
-
-  /* ---------- DESKTOP: image spans full height left, 2x2 grid right ---------- */
-  @media (min-width: 900px) {
-    #ma-mp3-{{ section.id }} .ma-mp3__wrap {
-      max-width: {{ section.settings.section_width }}px;
-      margin: 0 auto;
-      padding: {{ section.settings.desktop_padding }}px 40px;
-      display: grid;
-      grid-template-columns: {{ section.settings.left_column_width }}% 1fr;
-      column-gap: {{ section.settings.column_gap }}px;
-      align-items: stretch;
+  {% if section.settings.enable_animations %}
+  (function () {
+    var els = sec.querySelectorAll('.ma-mp3__anim, .ma-mp3__c');
+    if (!els.length || !('IntersectionObserver' in window)) {
+      els.forEach(function (el) { el.classList.add('is-visible'); });
+      return;
     }
-    #ma-mp3-{{ section.id }} .ma-mp3__img {
-      float: none; width: 100%; height: 100%; margin: 0; aspect-ratio: auto;
-    }
-    #ma-mp3-{{ section.id }} .ma-mp3__right { display: flex; flex-direction: column; justify-content: center; }
-    #ma-mp3-{{ section.id }} .ma-mp3__logo { right: 0; top: 0; width: 55%; }
-    #ma-mp3-{{ section.id }} .ma-mp3__k { font-size: 11px; letter-spacing: .4em; margin-bottom: 18px; }
-    #ma-mp3-{{ section.id }} .ma-mp3__h { font-size: {{ section.settings.heading_size }}px; }
-    #ma-mp3-{{ section.id }} .ma-mp3__s { font-size: {{ section.settings.body_size }}px; margin-top: 16px; max-width: 46ch; }
-    #ma-mp3-{{ section.id }} .ma-mp3__cards {
-      display: grid; grid-template-columns: 1fr 1fr; margin-top: 38px;
-      border-top: 1px solid var(--pm-line); border-bottom: 1px solid var(--pm-line);
-    }
-    #ma-mp3-{{ section.id }} .ma-mp3__c { border-top: 0; padding: 30px 26px; }
-    #ma-mp3-{{ section.id }} .ma-mp3__c:nth-child(1),
-    #ma-mp3-{{ section.id }} .ma-mp3__c:nth-child(2) { border-bottom: 1px solid var(--pm-line); }
-    #ma-mp3-{{ section.id }} .ma-mp3__c:nth-child(odd) { border-right: 1px solid var(--pm-line); padding-left: 0; }
-    #ma-mp3-{{ section.id }} .ma-mp3__c:nth-child(even) { padding-right: 0; }
-    #ma-mp3-{{ section.id }} .ma-mp3__num { right: 10px; bottom: -16px; font-size: 76px; }
-    #ma-mp3-{{ section.id }} .ma-mp3__ic { width: 28px; height: 28px; margin-bottom: 14px; }
-    #ma-mp3-{{ section.id }} .ma-mp3__t { font-size: {{ section.settings.promise_title_size_desktop }}px; margin-bottom: 10px; }
-    #ma-mp3-{{ section.id }} .ma-mp3__d { font-size: {{ section.settings.promise_body_size_desktop }}px; line-height: 1.5; }
-    #ma-mp3-{{ section.id }} .ma-mp3__seal { padding: 26px 0; }
-    #ma-mp3-{{ section.id }} .ma-mp3__seal-rule { width: 90px; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    #ma-mp3-{{ section.id }} * { transition: none !important; }
-  }
-</style>
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    els.forEach(function (el) { io.observe(el); });
+  })();
+  {% endif %}
+})();
+</script>
 
 {% schema %}
 {
-  "name": "MA Promise Visual",
+  "name": "MA Promise Editorial",
   "tag": "section",
   "settings": [
     {
       "type": "header",
-      "content": "Content"
+      "content": "── COLOR PRESETS ──"
+    },
+    {
+      "type": "select",
+      "id": "color_preset",
+      "label": "Theme Mode Preset",
+      "options": [
+        { "value": "ivory", "label": "Maison Ivory (Warm Cream & Gold)" },
+        { "value": "noir", "label": "Maison Noir (Black & Gold)" },
+        { "value": "editorial_light", "label": "Editorial Light (Minimal White)" },
+        { "value": "soft_linen", "label": "Soft Linen (Earth Luxury)" },
+        { "value": "warm_paper", "label": "Warm Paper (Rich Heritage)" },
+        { "value": "custom", "label": "Custom (Use Pickers Below)" }
+      ],
+      "default": "ivory"
+    },
+    { "type": "color", "id": "bg_color", "label": "Background Color (Custom)", "default": "#f4eee1" },
+    { "type": "color", "id": "ink_color", "label": "Heading / Ink Color (Custom)", "default": "#171310" },
+    { "type": "color", "id": "body_color", "label": "Body Text Color (Custom)", "default": "rgba(23,19,16,0.72)" },
+    { "type": "color", "id": "gold_color", "label": "Gold Accent Color (Custom)", "default": "#a8894e" },
+    { "type": "color", "id": "burgundy_color", "label": "Burgundy Accent Color (Custom)", "default": "#6e1220" },
+
+    {
+      "type": "header",
+      "content": "── CONTENT ──"
     },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Buy Without a Doubt" },
     { "type": "text", "id": "heading", "label": "Heading", "default": "The Maison Promise" },
-    { "type": "text", "id": "subline", "label": "Sub-line", "default": "Wear it first. Decide after. A scent is personal — you should never commit to one you haven't lived with." },
-    { "type": "text", "id": "sign", "label": "Show signature emblem (leave blank to hide)", "default": "M" },
+    { "type": "textarea", "id": "subline", "label": "Sub-line Intro", "default": "Wear it first. Decide after. A scent is personal — you should never commit to one you haven't lived with." },
+    { "type": "text", "id": "sign", "label": "Founder Emblem Badge Letter", "default": "M" },
 
     {
       "type": "header",
-      "content": "Hero image"
+      "content": "── HERO IMAGE & DISSOLVE MASK ──"
     },
-    { "type": "image_picker", "id": "image", "label": "Image" },
-    { "type": "range", "id": "mobile_image_width", "label": "Image width (mobile)", "min": 35, "max": 55, "step": 1, "default": 45, "unit": "%" },
-    { "type": "range", "id": "left_column_width", "label": "Image column width (desktop)", "min": 25, "max": 45, "step": 1, "default": 33, "unit": "%" },
+    { "type": "image_picker", "id": "image", "label": "Hero Artwork" },
+    { "type": "range", "id": "left_column_width", "label": "Desktop Image Width (%)", "min": 20, "max": 50, "step": 1, "default": 33 },
+    { "type": "range", "id": "mobile_image_width", "label": "Mobile Image Width (%)", "min": 35, "max": 80, "step": 5, "default": 45 },
+    { "type": "range", "id": "img_height", "label": "Desktop Image Height (px)", "min": 450, "max": 900, "step": 10, "default": 620 },
+    { "type": "select", "id": "object_fit", "label": "Object Fit", "default": "cover", "options": [{"value":"cover","label":"Cover"},{"value":"contain","label":"Contain"}] },
+    { "type": "range", "id": "img_x", "label": "Focal Point X (%)", "min": 0, "max": 100, "step": 5, "default": 50 },
+    { "type": "range", "id": "img_y", "label": "Focal Point Y (%)", "min": 0, "max": 100, "step": 5, "default": 45 },
+    { "type": "range", "id": "img_scale", "label": "Image Zoom / Scale (%)", "min": 80, "max": 140, "step": 5, "default": 100 },
+    { "type": "range", "id": "img_radius", "label": "Border Radius (px)", "min": 0, "max": 32, "step": 2, "default": 0 },
+    { "type": "checkbox", "id": "img_shadow", "label": "Enable Soft Luxury Shadow", "default": true },
+    { "type": "checkbox", "id": "full_bleed_left", "label": "Full-Bleed Left Viewport Edge", "default": true },
+    { "type": "checkbox", "id": "enable_fade", "label": "Enable Dissolve Fade Edge Mask", "default": true },
+    { "type": "range", "id": "fade_width", "label": "Fade Mask Width (%)", "min": 10, "max": 60, "step": 5, "default": 35 },
+    { "type": "range", "id": "fade_strength", "label": "Fade Opacity (%)", "min": 20, "max": 100, "step": 5, "default": 95 },
+    { "type": "select", "id": "blend_mode", "label": "Fade Blend Mode", "default": "normal", "options": [{"value":"normal","label":"Normal"},{"value":"multiply","label":"Multiply"},{"value":"overlay","label":"Overlay"}] },
 
     {
       "type": "header",
-      "content": "Promise 01 — The Tester"
+      "content": "── DIRECTIONAL LIGHTING OVERLAY ──"
     },
-    { "type": "text", "id": "k1", "label": "Kicker", "default": "The Tester" },
-    { "type": "text", "id": "t1", "label": "Title", "default": "A Tester in Every Order" },
-    { "type": "textarea", "id": "d1", "label": "Promise", "default": "Live with the scent for days before you ever break the seal on the bottle." },
+    { "type": "checkbox", "id": "enable_lighting", "label": "Enable Directional Studio Lighting", "default": true },
+    { "type": "range", "id": "highlights", "label": "Directional Highlight Strength (%)", "min": 0, "max": 40, "step": 5, "default": 15 },
+    { "type": "range", "id": "shadow_strength", "label": "Vignette Shadow Strength (%)", "min": 0, "max": 60, "step": 5, "default": 20 },
+    { "type": "range", "id": "img_brightness", "label": "Image Brightness (%)", "min": 60, "max": 140, "step": 5, "default": 100 },
+    { "type": "range", "id": "img_contrast", "label": "Image Contrast (%)", "min": 70, "max": 130, "step": 5, "default": 100 },
+    { "type": "range", "id": "img_saturation", "label": "Image Saturation (%)", "min": 50, "max": 150, "step": 5, "default": 100 },
 
     {
       "type": "header",
-      "content": "Promise 02 — The Return"
+      "content": "── ARCHITECTURAL WATERMARK ──"
     },
-    { "type": "text", "id": "k2", "label": "Kicker", "default": "The Return" },
-    { "type": "text", "id": "t2", "label": "Title", "default": "Seven Days to Decide" },
-    { "type": "textarea", "id": "d2", "label": "Promise", "default": "Return the sealed bottle within seven days for a full refund. No questions asked." },
+    { "type": "checkbox", "id": "show_watermark", "label": "Show Watermark Crest", "default": true },
+    { "type": "image_picker", "id": "watermark_image", "label": "Custom Watermark Image" },
+    { "type": "range", "id": "watermark_opacity", "label": "Opacity (%)", "min": 1, "max": 15, "step": 1, "default": 5 },
+    { "type": "range", "id": "wm_width", "label": "Max Width (%)", "min": 30, "max": 100, "step": 5, "default": 70 },
+    { "type": "range", "id": "wm_scale", "label": "Scale (%)", "min": 30, "max": 120, "step": 5, "default": 75 },
+    { "type": "range", "id": "wm_pos_x", "label": "Position X (% From Right)", "min": 0, "max": 50, "step": 2, "default": 8 },
+    { "type": "range", "id": "wm_pos_y", "label": "Position Y (%)", "min": 10, "max": 90, "step": 5, "default": 35 },
+    { "type": "range", "id": "wm_rotation", "label": "Rotation (deg)", "min": -45, "max": 45, "step": 5, "default": 0 },
+    { "type": "range", "id": "wm_blur", "label": "Blur Filter (px)", "min": 0, "max": 8, "step": 1, "default": 0 },
 
     {
       "type": "header",
-      "content": "Promise 03 — The Climate"
+      "content": "── TYPOGRAPHY — HEADER ──"
     },
-    { "type": "text", "id": "k3", "label": "Kicker", "default": "The Climate" },
-    { "type": "text", "id": "t3", "label": "Title", "default": "Crafted for India" },
-    { "type": "textarea", "id": "d3", "label": "Promise", "default": "Built for Indian skin, heat and humidity — not London winters." },
+    { "type": "font_picker", "id": "eyebrow_font", "label": "Eyebrow Font", "default": "helvetica_n4" },
+    { "type": "range", "id": "eyebrow_size", "label": "Eyebrow Size (px)", "min": 9, "max": 16, "step": 1, "default": 11 },
+    { "type": "select", "id": "eyebrow_weight", "label": "Eyebrow Weight", "default": "400", "options": [{"value":"300","label":"Light"},{"value":"400","label":"Regular"},{"value":"500","label":"Medium"},{"value":"600","label":"Semibold"}] },
+    { "type": "range", "id": "eyebrow_spacing", "label": "Eyebrow Letter Spacing (px)", "min": 0, "max": 8, "step": 0.5, "default": 3.5 },
+
+    { "type": "font_picker", "id": "heading_font", "label": "Heading Font", "default": "playfair_display_n4" },
+    { "type": "range", "id": "heading_size", "label": "Desktop Heading Size (px)", "min": 32, "max": 72, "step": 1, "default": 54 },
+    { "type": "range", "id": "mobile_heading_size", "label": "Mobile Heading Size (px)", "min": 22, "max": 42, "step": 1, "default": 30 },
+    { "type": "select", "id": "heading_weight", "label": "Heading Weight", "default": "400", "options": [{"value":"300","label":"Light"},{"value":"400","label":"Regular"},{"value":"500","label":"Medium"}] },
+    { "type": "range", "id": "heading_line_height", "label": "Heading Line Height (%)", "min": 90, "max": 140, "step": 2, "default": 108 },
+    { "type": "range", "id": "heading_spacing", "label": "Heading Letter Spacing (px)", "min": -2, "max": 5, "step": 0.5, "default": 0 },
+    { "type": "select", "id": "heading_transform", "label": "Heading Text Transform", "default": "none", "options": [{"value":"none","label":"Normal (Title Case)"},{"value":"uppercase","label":"Uppercase"}] },
+
+    { "type": "font_picker", "id": "body_font", "label": "Intro Subline Font", "default": "playfair_display_n4" },
+    { "type": "range", "id": "body_size", "label": "Desktop Intro Size (px)", "min": 14, "max": 32, "step": 1, "default": 24 },
+    { "type": "range", "id": "mobile_body_size", "label": "Mobile Intro Size (px)", "min": 12, "max": 22, "step": 1, "default": 16 },
+    { "type": "select", "id": "body_weight", "label": "Intro Weight", "default": "400", "options": [{"value":"300","label":"Light"},{"value":"400","label":"Regular"}] },
+    { "type": "range", "id": "body_line_height", "label": "Intro Line Height (%)", "min": 120, "max": 180, "step": 5, "default": 145 },
+    { "type": "range", "id": "body_spacing", "label": "Intro Letter Spacing (px)", "min": 0, "max": 4, "step": 0.5, "default": 0 },
+    { "type": "range", "id": "intro_max_width", "label": "Intro Max Width (ch)", "min": 30, "max": 70, "step": 2, "default": 52 },
 
     {
       "type": "header",
-      "content": "Promise 04 — The Formula"
+      "content": "── TYPOGRAPHY — PROMISE CARDS ──"
     },
-    { "type": "text", "id": "k4", "label": "Kicker", "default": "The Formula" },
-    { "type": "text", "id": "t4", "label": "Title", "default": "The Oil is Everything" },
-    { "type": "textarea", "id": "d4", "label": "Promise", "default": "Most of what you pay goes into the oil — not the bottle, the box, or the campaign." },
+    { "type": "range", "id": "promise_kicker_size", "label": "Kicker Size (px)", "min": 8, "max": 14, "step": 0.5, "default": 9.5 },
+    { "type": "font_picker", "id": "promise_title_font", "label": "Promise Title Font", "default": "playfair_display_n4" },
+    { "type": "range", "id": "promise_title_size_desktop", "label": "Desktop Title Size (px)", "min": 16, "max": 30, "step": 1, "default": 22 },
+    { "type": "range", "id": "promise_title_size_mobile", "label": "Mobile Title Size (px)", "min": 14, "max": 24, "step": 1, "default": 18 },
+    { "type": "select", "id": "promise_title_weight", "label": "Title Weight", "default": "600", "options": [{"value":"400","label":"Regular"},{"value":"500","label":"Medium"},{"value":"600","label":"Semibold"}] },
+    { "type": "font_picker", "id": "promise_body_font", "label": "Promise Body Font", "default": "playfair_display_n4" },
+    { "type": "range", "id": "promise_body_size_desktop", "label": "Desktop Body Size (px)", "min": 12, "max": 20, "step": 1, "default": 15 },
+    { "type": "range", "id": "promise_body_size_mobile", "label": "Mobile Body Size (px)", "min": 11, "max": 18, "step": 1, "default": 13 },
+    { "type": "select", "id": "promise_body_weight", "label": "Body Weight", "default": "400", "options": [{"value":"300","label":"Light"},{"value":"400","label":"Regular"}] },
+    { "type": "range", "id": "promise_body_line_height", "label": "Body Line Height (%)", "min": 120, "max": 180, "step": 5, "default": 145 },
 
     {
       "type": "header",
-      "content": "Watermark"
+      "content": "── ICONS ──"
     },
-    { "type": "range", "id": "watermark_opacity", "label": "Opacity", "min": 0, "max": 20, "step": 1, "default": 6, "unit": "%" },
+    { "type": "range", "id": "icon_size", "label": "Icon Size (px)", "min": 18, "max": 48, "step": 2, "default": 28 },
+    { "type": "range", "id": "stroke_width", "label": "Stroke Thickness", "min": 0.5, "max": 2.5, "step": 0.1, "default": 1.1 },
+    { "type": "range", "id": "icon_opacity", "label": "Icon Opacity (%)", "min": 30, "max": 100, "step": 5, "default": 100 },
+    { "type": "color", "id": "icon_color", "label": "Custom Icon Color", "default": "#a8894e" },
+    { "type": "range", "id": "icon_spacing", "label": "Bottom Spacing (px)", "min": 6, "max": 24, "step": 2, "default": 14 },
+    { "type": "range", "id": "icon_pos_y", "label": "Vertical Offset Y (px)", "min": -10, "max": 10, "step": 1, "default": 0 },
 
     {
       "type": "header",
-      "content": "Colors"
+      "content": "── EDITORIAL LAYOUT & WHITESPACE ──"
     },
-    { "type": "color", "id": "bg_color", "label": "Background", "default": "#f4eee1" },
-    { "type": "color", "id": "ink_color", "label": "Text (ink)", "default": "#171310" },
-    { "type": "color", "id": "gold_color", "label": "Gold accent", "default": "#a8894e" },
-    { "type": "color", "id": "burgundy_color", "label": "Burgundy accent (kicker)", "default": "#6e1220" },
+    { "type": "range", "id": "section_width", "label": "Max Container Width (px)", "min": 1000, "max": 1600, "step": 20, "default": 1340 },
+    { "type": "range", "id": "min_height", "label": "Desktop Min Height (px)", "min": 450, "max": 900, "step": 10, "default": 680 },
+    { "type": "range", "id": "column_gap", "label": "Gap Between Image & Content (px)", "min": 20, "max": 100, "step": 4, "default": 48 },
+    { "type": "range", "id": "content_max_width", "label": "Right Column Max Width (px)", "min": 500, "max": 900, "step": 20, "default": 760 },
+    { "type": "range", "id": "content_pad", "label": "Content Vertical Spacing (px)", "min": 10, "max": 80, "step": 5, "default": 30 },
+    { "type": "range", "id": "offset_x", "label": "Content Offset X (px)", "min": -60, "max": 60, "step": 5, "default": 0 },
+    { "type": "range", "id": "offset_y", "label": "Content Offset Y (px)", "min": -60, "max": 60, "step": 5, "default": 0 },
+    { "type": "select", "id": "text_align", "label": "Text Alignment", "default": "center", "options": [{"value":"left","label":"Left"},{"value":"center","label":"Center"},{"value":"right","label":"Right"}] },
+    { "type": "select", "id": "valign", "label": "Vertical Alignment", "default": "center", "options": [{"value":"flex-start","label":"Top"},{"value":"center","label":"Center"},{"value":"flex-end","label":"Bottom"}] },
+    { "type": "range", "id": "desktop_padding", "label": "Desktop Vertical Padding (px)", "min": 20, "max": 120, "step": 5, "default": 50 },
+    { "type": "range", "id": "mobile_padding_top", "label": "Mobile Top Padding (px)", "min": 10, "max": 80, "step": 5, "default": 40 },
+    { "type": "range", "id": "mobile_padding_bottom", "label": "Mobile Bottom Padding (px)", "min": 10, "max": 80, "step": 5, "default": 40 },
+    { "type": "range", "id": "mobile_padding_side", "label": "Mobile Side Padding (px)", "min": 0, "max": 40, "step": 5, "default": 20 },
 
     {
       "type": "header",
-      "content": "Typography sizes"
+      "content": "── GRID & DIVIDERS ──"
     },
-    { "type": "range", "id": "heading_size", "label": "Heading size (desktop)", "min": 32, "max": 64, "step": 1, "default": 48, "unit": "px" },
-    { "type": "range", "id": "mobile_heading_size", "label": "Heading size (mobile)", "min": 22, "max": 40, "step": 1, "default": 28, "unit": "px" },
-    { "type": "range", "id": "body_size", "label": "Sub-line size (desktop)", "min": 14, "max": 22, "step": 1, "default": 18, "unit": "px" },
-    { "type": "range", "id": "mobile_body_size", "label": "Sub-line size (mobile)", "min": 12, "max": 18, "step": 1, "default": 14, "unit": "px" },
-    { "type": "range", "id": "promise_title_size_desktop", "label": "Promise title size (desktop)", "min": 16, "max": 28, "step": 1, "default": 22, "unit": "px" },
-    { "type": "range", "id": "promise_title_size_mobile", "label": "Promise title size (mobile)", "min": 14, "max": 22, "step": 1, "default": 18, "unit": "px" },
-    { "type": "range", "id": "promise_body_size_desktop", "label": "Promise body size (desktop)", "min": 12, "max": 18, "step": 1, "default": 15, "unit": "px" },
-    { "type": "range", "id": "promise_body_size_mobile", "label": "Promise body size (mobile)", "min": 11, "max": 16, "step": 1, "default": 13, "unit": "px" },
+    { "type": "range", "id": "row_gap", "label": "Grid Row Gap (px)", "min": 0, "max": 40, "step": 2, "default": 0 },
+    { "type": "range", "id": "col_gap_grid", "label": "Grid Column Gap (px)", "min": 0, "max": 40, "step": 2, "default": 0 },
+    { "type": "range", "id": "feature_padding", "label": "Card Vertical Padding (px)", "min": 16, "max": 56, "step": 4, "default": 32 },
+    { "type": "range", "id": "grid_line_thickness", "label": "Divider Thickness (px)", "min": 0, "max": 3, "step": 1, "default": 1 },
+    { "type": "select", "id": "grid_line_style", "label": "Divider Style", "default": "solid", "options": [{"value":"solid","label":"Solid"},{"value":"dashed","label":"Dashed"},{"value":"none","label":"None"}] },
+    { "type": "color", "id": "grid_line_color", "label": "Custom Divider Color", "default": "rgba(23,19,16,0.07)" },
 
     {
       "type": "header",
-      "content": "Layout — Desktop"
+      "content": "── PAPER TEXTURE ──"
     },
-    { "type": "range", "id": "section_width", "label": "Max width", "min": 1000, "max": 1500, "step": 20, "default": 1240, "unit": "px" },
-    { "type": "range", "id": "column_gap", "label": "Gap between image and content", "min": 20, "max": 80, "step": 4, "default": 48, "unit": "px" },
-    { "type": "range", "id": "desktop_padding", "label": "Vertical padding", "min": 20, "max": 100, "step": 5, "default": 50, "unit": "px" }
+    { "type": "checkbox", "id": "enable_texture", "label": "Enable Subtle Paper Grain", "default": false },
+    { "type": "range", "id": "texture_opacity", "label": "Grain Opacity (%)", "min": 1, "max": 20, "step": 1, "default": 4 },
+    { "type": "range", "id": "noise_strength", "label": "Noise Frequency", "min": 0.4, "max": 1.5, "step": 0.1, "default": 0.8 },
+
+    {
+      "type": "header",
+      "content": "── PROMISE CARDS CONTENT ──"
+    },
+    { "type": "text", "id": "k1", "label": "01 Kicker", "default": "The Tester" },
+    { "type": "text", "id": "t1", "label": "01 Title", "default": "A Tester in Every Order" },
+    { "type": "textarea", "id": "d1", "label": "01 Promise", "default": "Live with the scent for days before you ever break the seal on the bottle." },
+
+    { "type": "text", "id": "k2", "label": "02 Kicker", "default": "The Return" },
+    { "type": "text", "id": "t2", "label": "02 Title", "default": "Seven Days to Decide" },
+    { "type": "textarea", "id": "d2", "label": "02 Promise", "default": "Return the sealed bottle within seven days for a full refund. No questions asked." },
+
+    { "type": "text", "id": "k3", "label": "03 Kicker", "default": "The Climate" },
+    { "type": "text", "id": "t3", "label": "03 Title", "default": "Crafted for India" },
+    { "type": "textarea", "id": "d3", "label": "03 Promise", "default": "Built for Indian skin, heat and humidity — not London winters." },
+
+    { "type": "text", "id": "k4", "label": "04 Kicker", "default": "The Formula" },
+    { "type": "text", "id": "t4", "label": "04 Title", "default": "The Oil is Everything" },
+    { "type": "textarea", "id": "d4", "label": "04 Promise", "default": "Most of what you pay goes into the oil — not the bottle, the box, or the campaign." },
+
+    {
+      "type": "header",
+      "content": "── ANIMATIONS ──"
+    },
+    { "type": "checkbox", "id": "enable_animations", "label": "Enable Editorial Reveal Motion", "default": true },
+    { "type": "select", "id": "anim_type", "label": "Animation Motion", "default": "fade_up", "options": [{"value":"fade_up","label":"Fade Up"},{"value":"fade_in","label":"Fade In"},{"value":"none","label":"None"}] },
+    { "type": "range", "id": "anim_speed", "label": "Animation Speed (ms)", "min": 300, "max": 1200, "step": 100, "default": 700 },
+    { "type": "range", "id": "anim_delay", "label": "Stagger Delay (ms)", "min": 50, "max": 300, "step": 25, "default": 100 }
   ],
   "presets": [
     {
-      "name": "MA Promise Visual"
+      "name": "MA Promise Editorial"
     }
   ]
 }
