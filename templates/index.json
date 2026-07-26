@@ -234,7 +234,7 @@
         "btn_width": "auto",
         "bg_color": "#000000",
         "mob_bg_color": "#050505",
-        "desktop_height": 660,
+        "desktop_height": 580,
         "dt_max_width": 1600,
         "dt_gap": 0,
         "dt_pad_top": 0,
