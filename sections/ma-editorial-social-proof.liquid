@@ -3,6 +3,7 @@
   Preserves 100% of existing Judge.me review logic, auto-fetching, and rotation.
   Transforms presentation into a Celine / MFK luxury fashion house editorial spread.
   UPGRADED: Centered left/right navigation arrows + indestructible oversized gold inverted commas.
+  EXTENDED: 8 optional editorial art-direction control groups (Desktop-only, 100% Mobile preserved).
 {%- endcomment -%}
 
 {%- liquid
@@ -411,6 +412,128 @@
     justify-content: center;
     height: {{ section.settings.desktop_height }}px;
   }
+
+  /* ── 1. REVIEW TRANSITION ANIMATION (DESKTOP) ── */
+  {% if section.settings.enable_editorial_transition %}
+    #shopify-section-{{ sid }} .ma-sproof__card {
+      transition: opacity {{ section.settings.quote_fade_duration | default: 550 }}ms ease, transform {{ section.settings.quote_fade_duration | default: 550 }}ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+    #shopify-section-{{ sid }} .ma-sproof__grid.ma-sproof--js .ma-sproof__card {
+      transform: translateY({{ section.settings.quote_vertical_movement | default: 12 }}px);
+    }
+    #shopify-section-{{ sid }} .ma-sproof__grid.ma-sproof--js .ma-sproof__card.is-out {
+      transform: translateY(-{{ section.settings.quote_vertical_movement | default: 12 }}px);
+    }
+    #shopify-section-{{ sid }} .ma-sproof__card.is-live .ma-sproof__foot {
+      animation: maMetaStagger {{ section.settings.quote_fade_duration | default: 550 }}ms cubic-bezier(0.16, 1, 0.3, 1) {{ section.settings.meta_stagger_delay | default: 80 }}ms both;
+    }
+    @keyframes maMetaStagger {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  {% endif %}
+
+  /* ── 2. NAVIGATION HOVER ANIMATION (DESKTOP) ── */
+  {% if section.settings.enable_arrow_hover %}
+    #shopify-section-{{ sid }} .ma-esp__arrow {
+      transition: opacity {{ section.settings.arrow_hover_duration | default: 250 }}ms ease, transform {{ section.settings.arrow_hover_duration | default: 250 }}ms ease !important;
+    }
+    #shopify-section-{{ sid }} .ma-esp__arrow--prev:hover {
+      transform: translateY(-50%) translateX(-{{ section.settings.arrow_slide_distance | default: 4 }}px) scale(1.2) !important;
+    }
+    #shopify-section-{{ sid }} .ma-esp__arrow--next:hover {
+      transform: translateY(-50%) translateX({{ section.settings.arrow_slide_distance | default: 4 }}px) scale(1.2) !important;
+    }
+  {% endif %}
+
+  /* ── 3. EDITORIAL DIVIDER (DESKTOP) ── */
+  {% if section.settings.enable_divider %}
+    #shopify-section-{{ sid }} .ma-sproof__stars::before {
+      content: '';
+      display: block;
+      margin: 0 auto 16px;
+      background: {{ section.settings.divider_color | default: accent_color }};
+      opacity: {{ section.settings.divider_opacity | default: 40 | divided_by: 100.0 }};
+      {% if section.settings.divider_style == 'horizontal' %}
+        width: {{ section.settings.divider_width | default: 40 }}px;
+        height: {{ section.settings.divider_thickness | default: 1 }}px;
+      {% else %}
+        width: {{ section.settings.divider_thickness | default: 1 }}px;
+        height: {{ section.settings.divider_width | default: 40 }}px;
+      {% endif %}
+    }
+  {% endif %}
+
+  /* ── 4. QUOTE EMPHASIS (DESKTOP) ── */
+  #shopify-section-{{ sid }} .ma-esp__quote-box {
+    max-width: {{ section.settings.quote_max_width | default: 680 }}px !important;
+    text-align: {{ section.settings.quote_alignment | default: 'center' | downcase }} !important;
+  }
+  #shopify-section-{{ sid }} .ma-sproof__quote {
+    text-align: {{ section.settings.quote_alignment | default: 'center' | downcase }} !important;
+  }
+  #shopify-section-{{ sid }} .ma-esp__mark--open {
+    font-size: {{ section.settings.open_quote_size | default: 48 }}px !important;
+    opacity: {{ section.settings.quote_mark_opacity | default: 70 | divided_by: 100.0 }} !important;
+  }
+  #shopify-section-{{ sid }} .ma-esp__mark--close {
+    font-size: {{ section.settings.close_quote_size | default: 48 }}px !important;
+    opacity: {{ section.settings.quote_mark_opacity | default: 70 | divided_by: 100.0 }} !important;
+  }
+
+  /* ── 5. CUSTOMER CARD (DESKTOP) ── */
+  #shopify-section-{{ sid }} .ma-sproof__foot {
+    margin-top: {{ section.settings.meta_top_spacing | default: 8 }}px !important;
+  }
+  #shopify-section-{{ sid }} .ma-sproof__prod-img {
+    width: {{ section.settings.customer_img_size | default: 48 }}px !important;
+    height: {{ section.settings.customer_img_size | default: 48 }}px !important;
+    border-radius: {{ section.settings.customer_img_radius | default: 10 }}px !important;
+  }
+
+  /* ── 6. IMAGE MOTION (DESKTOP) ── */
+  {% if section.settings.enable_image_hover_zoom %}
+    #shopify-section-{{ sid }} .ma-esp__img {
+      transition: transform {{ section.settings.image_hover_duration | default: 800 }}ms ease !important;
+    }
+    #shopify-section-{{ sid }} .ma-esp__visual:hover .ma-esp__img {
+      transform: scale({{ section.settings.image_hover_scale | default: 102 | divided_by: 100.0 }}) !important;
+    }
+  {% endif %}
+
+  /* ── 7. REVIEW STAGE WIDTH (DESKTOP) ── */
+  #shopify-section-{{ sid }} .ma-esp__stage-wrap {
+    max-width: {{ section.settings.review_max_width | default: 760 }}px !important;
+  }
+  #shopify-section-{{ sid }} .ma-sproof__grid.ma-esp__grid {
+    max-width: {{ section.settings.review_max_width | default: 760 | minus: 80 }}px !important;
+  }
+  #shopify-section-{{ sid }} .ma-sproof__prod {
+    max-width: {{ section.settings.customer_meta_width | default: 280 }}px !important;
+  }
+
+  /* ── 8. EDITORIAL FADE (DESKTOP) ── */
+  #shopify-section-{{ sid }} .ma-esp__fade {
+    {% assign fade_pos = section.settings.fade_position | default: 10 %}
+    {% assign fade_str = section.settings.fade_strength | default: 40 %}
+    {% assign fade_start = 100 | minus: fade_str | minus: fade_pos %}
+    {% if fade_start < 0 %}{% assign fade_start = 0 %}{% endif %}
+
+    {% if section.settings.fade_curve == 'soft' %}
+      background: linear-gradient(to right, transparent {{ fade_start }}%, {{ fade_color }} 100%) !important;
+    {% elsif section.settings.fade_curve == 'strong' %}
+      background: linear-gradient(to right, transparent {{ fade_start }}%, {{ fade_color }} {{ fade_start | plus: 15 }}%, {{ fade_color }} 100%) !important;
+    {% else %}
+      background: linear-gradient(to right, transparent {{ fade_start }}%, {{ fade_color }} {{ fade_start | plus: 25 }}%, {{ fade_color }} 100%) !important;
+    {% endif %}
+
+    {% if section.settings.fade_blur > 0 %}
+      backdrop-filter: blur({{ section.settings.fade_blur }}px);
+      -webkit-backdrop-filter: blur({{ section.settings.fade_blur }}px);
+      -webkit-mask-image: linear-gradient(to right, transparent {{ fade_start }}%, black 100%);
+      mask-image: linear-gradient(to right, transparent {{ fade_start }}%, black 100%);
+    {% endif %}
+  }
 }
 
 /* ═══════════════════════════════════════════════
@@ -656,6 +779,41 @@
   }
 
   setTimeout(initNav, 400);
+
+  /* ── 6. IMAGE PARALLAX ENGINE (DESKTOP ONLY) ── */
+  {% if section.settings.enable_image_parallax %}
+    var img = sec.querySelector('.ma-esp__img');
+    if (img && window.innerWidth >= 750) {
+      var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!prefersReducedMotion) {
+        var ticking = false;
+        var pStrength = {{ section.settings.parallax_strength | default: 8 }};
+        function updateParallax() {
+          if (window.innerWidth < 750) {
+            img.style.transform = '';
+            ticking = false;
+            return;
+          }
+          var rect = sec.getBoundingClientRect();
+          var vh = window.innerHeight || document.documentElement.clientHeight;
+          if (rect.top <= vh && rect.bottom >= 0) {
+            var progress = (vh - rect.top) / (vh + rect.height);
+            var yOffset = (progress - 0.5) * (pStrength * 6);
+            var baseScale = {{ section.settings.image_scale | default: 100 | divided_by: 100.0 }};
+            img.style.transform = 'scale(' + baseScale + ') translate3d(0, ' + yOffset.toFixed(2) + 'px, 0)';
+          }
+          ticking = false;
+        }
+        window.addEventListener('scroll', function() {
+          if (!ticking) {
+            window.requestAnimationFrame(updateParallax);
+            ticking = true;
+          }
+        }, { passive: true });
+        updateParallax();
+      }
+    }
+  {% endif %}
 })();
 </script>
 
@@ -755,7 +913,64 @@
     { "type": "range", "id": "dt_pad_left", "label": "Padding Left (px)", "min": 20, "max": 120, "step": 10, "default": 60 },
     { "type": "range", "id": "dt_pad_right", "label": "Padding Right (px)", "min": 20, "max": 120, "step": 10, "default": 60 },
     { "type": "range", "id": "margin_top", "label": "Margin Top (px)", "min": 0, "max": 120, "step": 10, "default": 0 },
-    { "type": "range", "id": "margin_bottom", "label": "Margin Bottom (px)", "min": 0, "max": 120, "step": 10, "default": 0 }
+    { "type": "range", "id": "margin_bottom", "label": "Margin Bottom (px)", "min": 0, "max": 120, "step": 10, "default": 0 },
+
+    { "type": "header", "content": "── 1. REVIEW TRANSITION ──" },
+    { "type": "checkbox", "id": "enable_editorial_transition", "label": "Enable Editorial Transition", "default": true },
+    { "type": "range", "id": "quote_fade_duration", "label": "Quote Fade Duration", "min": 200, "max": 1200, "step": 50, "default": 550, "unit": "ms" },
+    { "type": "range", "id": "quote_vertical_movement", "label": "Quote Vertical Movement", "min": 0, "max": 30, "step": 1, "default": 12, "unit": "px" },
+    { "type": "range", "id": "meta_stagger_delay", "label": "Meta Stagger Delay", "min": 0, "max": 300, "step": 10, "default": 80, "unit": "ms" },
+
+    { "type": "header", "content": "── 2. NAVIGATION HOVER ──" },
+    { "type": "checkbox", "id": "enable_arrow_hover", "label": "Enable Arrow Hover Animation", "default": true },
+    { "type": "range", "id": "arrow_slide_distance", "label": "Arrow Slide Distance", "min": 0, "max": 12, "step": 1, "default": 4, "unit": "px" },
+    { "type": "range", "id": "arrow_hover_duration", "label": "Arrow Hover Duration", "min": 100, "max": 600, "step": 10, "default": 250, "unit": "ms" },
+
+    { "type": "header", "content": "── 3. EDITORIAL DIVIDER ──" },
+    { "type": "checkbox", "id": "enable_divider", "label": "Enable Divider", "default": false },
+    { "type": "select", "id": "divider_style", "label": "Divider Style", "default": "vertical", "options": [
+      { "value": "vertical", "label": "Vertical" },
+      { "value": "horizontal", "label": "Horizontal" }
+    ]},
+    { "type": "range", "id": "divider_width", "label": "Divider Width", "min": 20, "max": 120, "step": 5, "default": 40, "unit": "px" },
+    { "type": "range", "id": "divider_thickness", "label": "Divider Thickness", "min": 1, "max": 3, "step": 1, "default": 1, "unit": "px" },
+    { "type": "range", "id": "divider_opacity", "label": "Divider Opacity", "min": 0, "max": 100, "step": 5, "default": 40, "unit": "%" },
+    { "type": "color", "id": "divider_color", "label": "Divider Color", "default": "#a8894e" },
+
+    { "type": "header", "content": "── 4. QUOTE STYLING ──" },
+    { "type": "range", "id": "quote_max_width", "label": "Quote Max Width", "min": 500, "max": 900, "step": 10, "default": 680, "unit": "px" },
+    { "type": "select", "id": "quote_alignment", "label": "Quote Alignment", "default": "center", "options": [
+      { "value": "left", "label": "Left" },
+      { "value": "center", "label": "Center" }
+    ]},
+    { "type": "range", "id": "open_quote_size", "label": "Opening Quote Size", "min": 20, "max": 80, "step": 2, "default": 48, "unit": "px" },
+    { "type": "range", "id": "close_quote_size", "label": "Closing Quote Size", "min": 20, "max": 80, "step": 2, "default": 48, "unit": "px" },
+    { "type": "range", "id": "quote_mark_opacity", "label": "Quote Mark Opacity", "min": 0, "max": 100, "step": 5, "default": 70, "unit": "%" },
+
+    { "type": "header", "content": "── 5. CUSTOMER META ──" },
+    { "type": "range", "id": "meta_top_spacing", "label": "Meta Top Spacing", "min": 0, "max": 40, "step": 2, "default": 8, "unit": "px" },
+    { "type": "range", "id": "customer_img_size", "label": "Customer Image Size", "min": 30, "max": 80, "step": 2, "default": 48, "unit": "px" },
+    { "type": "range", "id": "customer_img_radius", "label": "Customer Image Radius", "min": 0, "max": 100, "step": 5, "default": 10, "unit": "px" },
+
+    { "type": "header", "content": "── 6. IMAGE MOTION ──" },
+    { "type": "checkbox", "id": "enable_image_parallax", "label": "Enable Image Parallax", "default": true },
+    { "type": "range", "id": "parallax_strength", "label": "Parallax Strength", "min": 0, "max": 25, "step": 1, "default": 8 },
+    { "type": "checkbox", "id": "enable_image_hover_zoom", "label": "Enable Image Hover Zoom", "default": true },
+    { "type": "range", "id": "image_hover_scale", "label": "Image Hover Scale", "min": 100, "max": 110, "step": 1, "default": 102, "unit": "%" },
+    { "type": "range", "id": "image_hover_duration", "label": "Hover Duration", "min": 200, "max": 1200, "step": 50, "default": 800, "unit": "ms" },
+
+    { "type": "header", "content": "── 7. REVIEW LAYOUT ──" },
+    { "type": "range", "id": "review_max_width", "label": "Review Content Max Width", "min": 600, "max": 1000, "step": 10, "default": 760, "unit": "px" },
+    { "type": "range", "id": "customer_meta_width", "label": "Customer Meta Width", "min": 200, "max": 500, "step": 10, "default": 280, "unit": "px" },
+
+    { "type": "header", "content": "── 8. IMAGE FADE ──" },
+    { "type": "range", "id": "fade_blur", "label": "Fade Blur", "min": 0, "max": 60, "step": 2, "default": 20, "unit": "px" },
+    { "type": "range", "id": "fade_position", "label": "Fade Position", "min": 0, "max": 50, "step": 2, "default": 10, "unit": "%" },
+    { "type": "select", "id": "fade_curve", "label": "Fade Curve", "default": "balanced", "options": [
+      { "value": "soft", "label": "Soft" },
+      { "value": "balanced", "label": "Balanced" },
+      { "value": "strong", "label": "Strong" }
+    ]}
   ],
   "blocks": [
     {
