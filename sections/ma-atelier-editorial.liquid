@@ -3,25 +3,10 @@
   Desktop V3: Two-column editorial layout with customizable motion controls,
   independent mobile/desktop spacing, custom content/image offsets, width controls, 
   fine-tuned mask-fade settings, and Theme Customizer motion panel.
-  Mobile V7: Perfected post-save persistence via root CSS variables, strict mobile spacing enforcement, and connected mobile fade system (blur/width/position).
+  Mobile V8: Direct inline style binding for all mobile spacing and fade controls to guarantee 100% post-save customizer persistence.
 {%- endcomment -%}
 
 {% style %}
-  #shopify-section-{{ section.id }} {
-    --mobile-padding-top: {{ section.settings.mobile_padding_top | default: 30 }}px;
-    --mobile-padding-bottom: {{ section.settings.mobile_padding_bottom | default: 45 }}px;
-    --mobile-padding-x: {{ section.settings.mobile_padding_x | default: 24 }}px;
-    --mobile-story-top-offset: {{ section.settings.mobile_story_top_offset | default: 0 }}px;
-    --mobile-image-height: {{ section.settings.mobile_image_height | default: 480 }}px;
-    --mobile-image-height-portrait: {{ section.settings.mobile_image_height_portrait | default: 360 }}px;
-    --mobile-image-bottom-spacing: {{ section.settings.mobile_image_bottom_spacing | default: 24 }}px;
-    --mobile-fade-strength: {{ section.settings.mobile_fade_strength | default: 60 }}%;
-    --fade-width: {{ section.settings.fade_width | default: 600 }}px;
-    --fade-blur: {{ section.settings.fade_blur | default: 0 }}px;
-    --fade-position: {{ section.settings.fade_position | default: 0 }}px;
-    --fade-color: {{ section.settings.fade_color | default: '#0c0b0a' }};
-  }
-
   #shopify-section-{{ section.id }} .ma-atelier {
     position: relative;
     overflow: hidden;
@@ -68,28 +53,11 @@
     pointer-events: none;
   }
 
-  /* Fade System Base */
-  #shopify-section-{{ section.id }} .ma-atelier__fade {
-    position: absolute;
-    inset: 0;
-    background: {{ section.settings.fade_color }};
-    opacity: {{ section.settings.mobile_fade_strength | default: 60 | times: 1.0 | divided_by: 100 }};
-    pointer-events: none;
-    {% if section.settings.fade_blur > 0 %}
-      filter: blur({{ section.settings.fade_blur }}px);
-      -webkit-filter: blur({{ section.settings.fade_blur }}px);
-    {% endif %}
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 100%);
-    mask-image: linear-gradient(to bottom, transparent 0%, black 100%);
-  }
-
-  /* ---------- Content ---------- */
+  /* ---------- Content Base ---------- */
   #shopify-section-{{ section.id }} .ma-atelier__content {
     position: relative;
     z-index: 2;
     margin-top: 0;
-    padding: {{ section.settings.mobile_padding_top | default: 30 }}px {{ section.settings.mobile_padding_x | default: 24 }}px {{ section.settings.mobile_padding_bottom | default: 45 }}px;
-    text-align: {{ section.settings.mobile_content_align | default: 'left' }};
     max-width: none;
   }
 
@@ -220,18 +188,6 @@
       margin: 0 !important;
       transform: none !important;
     }
-    #shopify-section-{{ section.id }} .ma-atelier__content {
-      position: relative !important;
-      z-index: 2 !important;
-      margin: 0 !important;
-      padding-top: var(--mobile-padding-top) !important;
-      padding-right: var(--mobile-padding-x) !important;
-      padding-bottom: var(--mobile-padding-bottom) !important;
-      padding-left: var(--mobile-padding-x) !important;
-      text-align: {{ section.settings.mobile_content_align | default: 'left' }} !important;
-      max-width: none !important;
-      width: 100% !important;
-    }
 
     /* Layout 01: Story (Text top, Image bottom) */
     #shopify-section-{{ section.id }} .ma-atelier--mobile-01 .ma-atelier__content-col {
@@ -247,27 +203,9 @@
     #shopify-section-{{ section.id }} .ma-atelier--mobile-01 .ma-atelier__media {
       position: relative !important;
       width: 100% !important;
-      height: var(--mobile-image-height) !important;
-      transform: translateY(var(--mobile-story-top-offset)) !important;
+      height: {{ section.settings.mobile_image_height | default: 480 }}px !important;
+      transform: translateY({{ section.settings.mobile_story_top_offset | default: 0 }}px) !important;
       inset: auto !important;
-    }
-    #shopify-section-{{ section.id }} .ma-atelier--mobile-01 .ma-atelier__fade {
-      position: absolute !important;
-      top: 0 !important;
-      left: -10% !important;
-      right: -10% !important;
-      width: 120% !important;
-      bottom: auto !important;
-      height: var(--fade-width) !important;
-      max-height: 100% !important;
-      background: linear-gradient(to bottom, var(--fade-color) 0%, transparent var(--mobile-fade-strength)) !important;
-      transform: translateY(var(--fade-position)) !important;
-      {% if section.settings.fade_blur > 0 %}
-        filter: blur(var(--fade-blur)) !important;
-        -webkit-filter: blur(var(--fade-blur)) !important;
-      {% endif %}
-      -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 100%) !important;
-      mask-image: linear-gradient(to bottom, black 0%, transparent 100%) !important;
     }
 
     /* Layout 02: Portrait (Image top, Story bottom) */
@@ -284,31 +222,13 @@
     #shopify-section-{{ section.id }} .ma-atelier--mobile-02 .ma-atelier__media {
       position: relative !important;
       width: 100% !important;
-      height: var(--mobile-image-height-portrait) !important;
-      margin-bottom: var(--mobile-image-bottom-spacing) !important;
+      height: {{ section.settings.mobile_image_height_portrait | default: 360 }}px !important;
+      margin-bottom: {{ section.settings.mobile_image_bottom_spacing | default: 24 }}px !important;
       transform: none !important;
       inset: auto !important;
     }
     #shopify-section-{{ section.id }} .ma-atelier--mobile-02 .ma-atelier__media img {
       object-position: center {{ section.settings.mobile_image_position | default: 'center' }} !important;
-    }
-    #shopify-section-{{ section.id }} .ma-atelier--mobile-02 .ma-atelier__fade {
-      position: absolute !important;
-      top: auto !important;
-      left: -10% !important;
-      right: -10% !important;
-      width: 120% !important;
-      bottom: 0 !important;
-      height: var(--fade-width) !important;
-      max-height: 100% !important;
-      background: linear-gradient(to top, var(--fade-color) 0%, transparent var(--mobile-fade-strength)) !important;
-      transform: translateY(var(--fade-position)) !important;
-      {% if section.settings.fade_blur > 0 %}
-        filter: blur(var(--fade-blur)) !important;
-        -webkit-filter: blur(var(--fade-blur)) !important;
-      {% endif %}
-      -webkit-mask-image: linear-gradient(to top, black 0%, transparent 100%) !important;
-      mask-image: linear-gradient(to top, black 0%, transparent 100%) !important;
     }
   }
 
@@ -430,7 +350,7 @@
 <section class="ma-atelier{% unless section.settings.enable_motion %} is-revealed{% endunless %} ma-atelier--mobile-{{ section.settings.mobile_layout_style | default: '01' }}" id="atelier-section-{{ section.id }}">
   <div class="ma-atelier__wrapper">
     <div class="ma-atelier__content-col">
-      <div class="ma-atelier__content">
+      <div class="ma-atelier__content" style="padding-top: {{ section.settings.mobile_padding_top | default: 30 }}px; padding-bottom: {{ section.settings.mobile_padding_bottom | default: 45 }}px; padding-left: {{ section.settings.mobile_padding_x | default: 24 }}px; padding-right: {{ section.settings.mobile_padding_x | default: 24 }}px; text-align: {{ section.settings.mobile_content_align | default: 'left' }};">
         {%- if section.settings.label != blank -%}
           <p class="ma-atelier__label">{{ section.settings.label }}</p>
         {%- endif -%}
@@ -462,7 +382,7 @@
           >
         {%- endif -%}
         <div class="ma-atelier__overlay"></div>
-        <div class="ma-atelier__fade"></div>
+        <div class="ma-atelier__fade" style="background: linear-gradient({% if section.settings.mobile_layout_style == '02' %}to top{% else %}to bottom{% endif %}, {{ section.settings.fade_color | default: '#0c0b0a' }} 0%, transparent {{ section.settings.mobile_fade_strength | default: 60 }}%); width: {{ section.settings.fade_width | default: 600 }}px; transform: translateX({{ section.settings.fade_position | default: 0 }}px); {% if section.settings.fade_blur > 0 %}filter: blur({{ section.settings.fade_blur }}px); -webkit-filter: blur({{ section.settings.fade_blur }}px);{% endif %} -webkit-mask-image: linear-gradient({% if section.settings.mobile_layout_style == '02' %}to top{% else %}to bottom{% endif %}, black 0%, transparent 100%); mask-image: linear-gradient({% if section.settings.mobile_layout_style == '02' %}to top{% else %}to bottom{% endif %}, black 0%, transparent 100%);"></div>
       </div>
     </div>
   </div>
