@@ -3,7 +3,8 @@
   Desktop V3: Two-column editorial layout with customizable motion controls,
   independent mobile/desktop spacing, custom content/image offsets, width controls, 
   fine-tuned mask-fade settings, and Theme Customizer motion panel.
-  Mobile: 100% preserved and untouched.
+  Mobile V4 Expansion: Adds independent Layout Style selector (01 Story vs 02 Portrait)
+  with dedicated mobile image height, spacing, focal positioning, and top offset controls.
 {%- endcomment -%}
 
 {% style %}
@@ -183,6 +184,37 @@
     }
   {% endif %}
 
+  /* ══════════════════════════════════════════════════════════════
+     MOBILE EDITORIAL LAYOUT EXPANSION (< 750px)
+     Strictly encapsulated to mobile screens. Zero impact on desktop.
+  ══════════════════════════════════════════════════════════════ */
+  @media (max-width: 749px) {
+    #shopify-section-{{ section.id }} .ma-atelier--mobile-01 .ma-atelier__media {
+      transform: translateY({{ section.settings.mobile_story_top_offset | default: 0 }}px);
+    }
+    
+    #shopify-section-{{ section.id }} .ma-atelier--mobile-02 .ma-atelier__wrapper {
+      display: flex;
+      flex-direction: column;
+    }
+    #shopify-section-{{ section.id }} .ma-atelier--mobile-02 .ma-atelier__media-col {
+      order: 1;
+    }
+    #shopify-section-{{ section.id }} .ma-atelier--mobile-02 .ma-atelier__content-col {
+      order: 2;
+    }
+    #shopify-section-{{ section.id }} .ma-atelier--mobile-02 .ma-atelier__media {
+      height: {{ section.settings.mobile_image_height_portrait | default: 360 }}px;
+      margin-bottom: {{ section.settings.mobile_image_bottom_spacing | default: 24 }}px;
+    }
+    #shopify-section-{{ section.id }} .ma-atelier--mobile-02 .ma-atelier__media img {
+      object-position: center {{ section.settings.mobile_image_position | default: 'center' }};
+    }
+    #shopify-section-{{ section.id }} .ma-atelier--mobile-02 .ma-atelier__content {
+      margin-top: 0;
+    }
+  }
+
   /* ---------- Desktop: two-column editorial split layout ---------- */
   @media (min-width: 750px) {
     #shopify-section-{{ section.id }} .ma-atelier {
@@ -296,7 +328,7 @@
   }
 {% endstyle %}
 
-<section class="ma-atelier{% unless section.settings.enable_motion %} is-revealed{% endunless %}" id="atelier-section-{{ section.id }}">
+<section class="ma-atelier{% unless section.settings.enable_motion %} is-revealed{% endunless %} ma-atelier--mobile-{{ section.settings.mobile_layout_style | default: '01' }}" id="atelier-section-{{ section.id }}">
   <div class="ma-atelier__wrapper">
     <div class="ma-atelier__content-col">
       <div class="ma-atelier__content">
@@ -577,6 +609,23 @@
     { "type": "range", "id": "mobile_padding_top", "label": "Content padding top (mobile)", "min": 0, "max": 80, "step": 5, "default": 30, "unit": "px" },
     { "type": "range", "id": "mobile_padding_bottom", "label": "Content padding bottom (mobile)", "min": 0, "max": 80, "step": 5, "default": 45, "unit": "px" },
     { "type": "range", "id": "mobile_padding_x", "label": "Content side padding (mobile)", "min": 12, "max": 40, "step": 2, "default": 24, "unit": "px" },
+
+    {
+      "type": "header",
+      "content": "Mobile Editorial Layout"
+    },
+    { "type": "select", "id": "mobile_layout_style", "label": "Layout Style", "default": "01", "options": [
+      { "value": "01", "label": "01 — Editorial Story (Text → Image)" },
+      { "value": "02", "label": "02 — Editorial Portrait (Image → Story)" }
+    ]},
+    { "type": "select", "id": "mobile_image_position", "label": "Mobile Image Position (Layout 02)", "default": "center", "options": [
+      { "value": "top", "label": "Top" },
+      { "value": "center", "label": "Center" },
+      { "value": "bottom", "label": "Bottom" }
+    ]},
+    { "type": "range", "id": "mobile_image_height_portrait", "label": "Mobile Image Height (Layout 02)", "min": 250, "max": 500, "step": 10, "default": 360, "unit": "px" },
+    { "type": "range", "id": "mobile_image_bottom_spacing", "label": "Mobile Image Bottom Spacing (Layout 02)", "min": 0, "max": 80, "step": 2, "default": 24, "unit": "px" },
+    { "type": "range", "id": "mobile_story_top_offset", "label": "Mobile Story Top Offset (Layout 01)", "min": -100, "max": 100, "step": 5, "default": 0, "unit": "px" },
 
     {
       "type": "header",
