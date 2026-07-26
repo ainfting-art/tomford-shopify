@@ -1,7 +1,7 @@
 {%- comment -%}
   MA Journal Editorial — standalone luxury publication-style journal section.
-  Desktop V6: Perfected natural scroll synchronization. The left editorial block moves
-  fluidly down and up together with the page scroll using a direct scroll-top percentage calculation.
+  Desktop V7: Approved two-column magazine spread (1 large featured story on top,
+  2 supporting stories below) with the working reference scroll animation engine.
   Mobile: 100% preserved and untouched.
   Schema: 100% deduplicated and step-validated with zero ID collisions.
 {%- endcomment -%}
@@ -285,7 +285,7 @@
   #shopify-section-{{ sid }} .ma-j__stories { display: block; }
 
   /* ══════════════════════════════════════════════════════════════
-     DESKTOP EDITORIAL EXPERIENCE (≥ 750px) — BALANCED V5 POLISHED
+     DESKTOP EDITORIAL EXPERIENCE (≥ 750px) — BALANCED V7
   ══════════════════════════════════════════════════════════════ */
   @media (min-width: 750px) {
     #shopify-section-{{ sid }} .ma-j {
@@ -298,18 +298,16 @@
       display: grid;
       grid-template-columns: {{ 100 | minus: section.settings.right_column_width | default: 40 }}fr {{ section.settings.right_column_width | default: 60 }}fr;
       column-gap: {{ section.settings.column_gap | default: 48 }}px;
-      align-items: {% if section.settings.editorial_alignment == 'center' %}center{% elsif section.settings.editorial_alignment == 'bottom' %}end{% else %}start{% endif %} !important;
+      align-items: start !important;
       height: auto;
       overflow: visible;
     }
 
-    /* Live Scroll Storytelling Engine: Tracks section entry and moves INTRO DOWN on scroll down, UP on scroll up */
+    /* Exact working reference sticky / scroll tracking from your reference snippet */
     #shopify-section-{{ sid }} .ma-j__intro {
-      --scroll-y: 0px;
-      position: relative;
       margin-bottom: 0;
-      transform: translate3d({{ section.settings.intro_offset_x | default: 0 }}px, calc({{ section.settings.editorial_intro_top_offset | default: 0 }}px + var(--scroll-y, 0px)), 0);
-      will-change: transform;
+      position: sticky;
+      top: 40px;
     }
     #shopify-section-{{ sid }} .ma-j__heading {
       font-size: {{ section.settings.heading_size }}px;
@@ -598,98 +596,6 @@
     </script>
   {% endif %}
 
-  {% if section.settings.enable_scroll_animation %}
-    <script>
-      (function () {
-        function initScrollAnim() {
-          if (window.innerWidth < 750) return;
-          var sec = document.getElementById('shopify-section-{{ sid }}');
-          if (!sec) return;
-          var intro = sec.querySelector('.ma-j__intro');
-          if (!intro) return;
-
-          var maxStrength = {{ section.settings.animation_strength | default: 120 }};
-          var smoothness = {{ section.settings.animation_smoothness | default: 0.1 }};
-          var currentY = 0;
-          var targetY = 0;
-          var isVisible = false;
-          var ticking = false;
-
-          function update() {
-            if (window.innerWidth < 750) {
-              intro.style.setProperty('--scroll-y', '0px');
-              ticking = false;
-              return;
-            }
-            if (!isVisible && Math.abs(targetY - currentY) < 0.1) {
-              ticking = false;
-              return;
-            }
-            var rect = sec.getBoundingClientRect();
-            var vh = window.innerHeight || document.documentElement.clientHeight;
-            
-            /* Calculate scroll progress relative to section position in viewport */
-            var startScroll = vh * 0.75;
-            var scrolled = startScroll - rect.top;
-            
-            if (scrolled > 0) {
-              var totalDist = (rect.height || 800) * 0.7;
-              var progress = Math.max(0, Math.min(1, scrolled / totalDist));
-              targetY = progress * maxStrength;
-            } else {
-              targetY = 0;
-            }
-            
-            currentY += (targetY - currentY) * smoothness;
-            intro.style.setProperty('--scroll-y', currentY.toFixed(2) + 'px');
-            
-            if (isVisible || Math.abs(targetY - currentY) >= 0.1) {
-              requestAnimationFrame(update);
-            } else {
-              ticking = false;
-            }
-          }
-
-          function onScroll() {
-            if (isVisible && !ticking) {
-              ticking = true;
-              requestAnimationFrame(update);
-            }
-          }
-
-          if ('IntersectionObserver' in window) {
-            var io = new IntersectionObserver(function (entries) {
-              entries.forEach(function (entry) {
-                isVisible = entry.isIntersecting;
-                if (isVisible && !ticking) {
-                  ticking = true;
-                  requestAnimationFrame(update);
-                }
-              });
-            }, { threshold: 0 });
-            io.observe(sec);
-          } else {
-            isVisible = true;
-          }
-
-          window.addEventListener('scroll', onScroll, { passive: true });
-        }
-
-        if (document.readyState === 'loading') {
-          document.addEventListener('DOMContentLoaded', initScrollAnim);
-        } else {
-          initScrollAnim();
-        }
-
-        document.addEventListener('shopify:section:load', function(event) {
-          if (event.detail && event.detail.sectionId === '{{ sid }}') {
-            initScrollAnim();
-          }
-        });
-      })();
-    </script>
-  {% endif %}
-
   {% if section.settings.parallax_image %}
     <script>
       (function () {
@@ -754,14 +660,6 @@
     { "type": "text", "id": "meta_volume", "label": "Volume Label", "default": "Volume 01" },
     { "type": "text", "id": "meta_issue", "label": "Issue Label", "default": "Issue 04" },
     { "type": "text", "id": "meta_freq", "label": "Frequency Label", "default": "Updated Weekly" },
-
-    {
-      "type": "header",
-      "content": "8. Editorial Scroll Animation"
-    },
-    { "type": "checkbox", "id": "enable_scroll_animation", "label": "Enable Scroll Animation", "default": true },
-    { "type": "range", "id": "animation_strength", "label": "Animation Strength", "min": 0, "max": 300, "step": 10, "default": 120, "unit": "px" },
-    { "type": "range", "id": "animation_smoothness", "label": "Animation Smoothness", "min": 0.1, "max": 0.5, "step": 0.1, "default": 0.1 },
 
     {
       "type": "header",
@@ -933,14 +831,14 @@
 
     {
       "type": "header",
-      "content": "Article Display Toggles"
+      "content": "Article DisplayToggles"
     },
     { "type": "checkbox", "id": "show_featured_image", "label": "Show featured image", "default": true },
     { "type": "checkbox", "id": "show_category", "label": "Show category (first tag)", "default": true },
     { "type": "checkbox", "id": "show_title", "label": "Show title", "default": true },
     { "type": "checkbox", "id": "show_excerpt", "label": "Show excerpt", "default": false },
     { "type": "checkbox", "id": "show_date", "label": "Show publish date", "default": false },
-    { "type": "checkbox", "id": "show_authorsssss", "label": "Author", "default": false },
+    { "type": "checkbox", "id": "show_authorsssss", "label": "Show author", "default": false },
     { "type": "checkbox", "id": "show_cta", "label": "Show \"Read Article\" link", "default": true },
 
     {
