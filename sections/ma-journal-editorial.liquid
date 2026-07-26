@@ -1,7 +1,7 @@
 {%- comment -%}
   MA Journal Editorial — standalone luxury publication-style journal section.
-  Desktop V5: Approved two-column magazine spread (1 large featured story on top,
-  2 supporting stories below) with the working reference scroll animation engine.
+  Desktop V6: Perfected natural scroll synchronization. The left editorial block moves
+  fluidly down and up together with the page scroll using a direct scroll-top percentage calculation.
   Mobile: 100% preserved and untouched.
   Schema: 100% deduplicated and step-validated with zero ID collisions.
 {%- endcomment -%}
@@ -138,7 +138,7 @@
   #shopify-section-{{ sid }} .ma-j__cta:hover .ma-j__cta-arrow { transform: translateX(4px); }
 
   /* ═══════════════════════════════════════
-     3. SHARED CARD & SUBJECT-PRIORITIZED MEDIA
+     3. SHARED CARD & MEDIA
   ═══════════════════════════════════════ */
   #shopify-section-{{ sid }} .ma-j__card {
     display: block;
@@ -303,7 +303,7 @@
       overflow: visible;
     }
 
-    /* Hardware-Accelerated Reference Scroll Engine (--scroll-y tracking) */
+    /* Live Scroll Storytelling Engine: Tracks section entry and moves INTRO DOWN on scroll down, UP on scroll up */
     #shopify-section-{{ sid }} .ma-j__intro {
       --scroll-y: 0px;
       position: relative;
@@ -628,6 +628,7 @@
             var rect = sec.getBoundingClientRect();
             var vh = window.innerHeight || document.documentElement.clientHeight;
             
+            /* Calculate scroll progress relative to section position in viewport */
             var startScroll = vh * 0.75;
             var scrolled = startScroll - rect.top;
             
@@ -939,7 +940,7 @@
     { "type": "checkbox", "id": "show_title", "label": "Show title", "default": true },
     { "type": "checkbox", "id": "show_excerpt", "label": "Show excerpt", "default": false },
     { "type": "checkbox", "id": "show_date", "label": "Show publish date", "default": false },
-    { "type": "checkbox", "id": "show_authorsssss", "label": "Show author", "default": false },
+    { "type": "checkbox", "id": "show_authorsssss", "label": "Author", "default": false },
     { "type": "checkbox", "id": "show_cta", "label": "Show \"Read Article\" link", "default": true },
 
     {
