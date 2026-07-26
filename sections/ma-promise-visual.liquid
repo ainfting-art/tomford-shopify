@@ -435,15 +435,28 @@
 
   /* Dual Horizontal & Bottom Feathered Fade Overlay */
   {% if section.settings.mob_hero_fade_enable %}
-  #ma-mp3-{{ sid }} .ma-mp3__img-col::after {
-    content: '';
-    position: absolute !important;
-    top: 0 !important; right: 0 !important; bottom: 0 !important;
-    width: {{ section.settings.mob_hero_fade_w | default: 45 }}% !important;
-    background: linear-gradient(to right, rgba(244,238,225,0) 0%, {{ section.settings.mob_hero_fade_color | default: 'var(--pm-bg)' }} 100%) !important;
-    pointer-events: none !important;
-    z-index: 2 !important;
-  }
+  #ma-mp3-{{ sid }} .ma-mp3__img-col{
+
+    -webkit-mask-image:
+    linear-gradient(
+        to right,
+        black 0%,
+        black 55%,
+        rgba(0,0,0,.85) 70%,
+        rgba(0,0,0,.45) 82%,
+        transparent 100%
+    );
+
+    mask-image:
+    linear-gradient(
+        to right,
+        black 0%,
+        black 55%,
+        rgba(0,0,0,.85) 70%,
+        rgba(0,0,0,.45) 82%,
+        transparent 100%
+    );
+}
   #ma-mp3-{{ sid }} .ma-mp3__img-col::before {
     content: '';
     position: absolute !important;
