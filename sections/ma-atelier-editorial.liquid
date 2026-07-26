@@ -1,6 +1,8 @@
 {%- comment -%}
   MA Atelier Editorial — standalone luxury storytelling section.
-  Does not modify or depend on any other section. Add via Theme Customizer.
+  Desktop V2: Two-column editorial layout with precise art-direction controls,
+  independent mobile/desktop spacing, custom content/image offsets, width controls, and fine-tuned fade settings.
+  Mobile: 100% preserved and untouched.
 {%- endcomment -%}
 
 {% style %}
@@ -26,7 +28,8 @@
     height: 100%;
     object-fit: {{ section.settings.image_sizing }};
     object-position: {{ section.settings.image_position_x }}% {{ section.settings.image_position_y }}%;
-    transform: scale({{ section.settings.image_scale | times: 1.0 | divided_by: 100 }});
+    transform: scale({{ section.settings.image_scale | times: 1.0 | divided_by: 100 }}) translate({{ section.settings.image_offset_x | default: 0 }}px, {{ section.settings.image_offset_y | default: 0 }}px);
+    transform-origin: center;
     opacity: {{ section.settings.image_opacity | times: 1.0 | divided_by: 100 }};
   }
   #shopify-section-{{ section.id }} .ma-atelier__overlay {
@@ -64,7 +67,7 @@
     color: {{ section.settings.label_color }};
     letter-spacing: {{ section.settings.label_letter_spacing }}px;
     text-transform: {{ section.settings.label_transform }};
-    margin: 0 0 {{ section.settings.content_spacing }}px;
+    margin: 0 0 {{ section.settings.label_bottom_margin | default: section.settings.content_spacing }}px;
   }
 
   #shopify-section-{{ section.id }} .ma-atelier__headline {
@@ -74,7 +77,7 @@
     color: {{ section.settings.headline_color }};
     letter-spacing: {{ section.settings.headline_letter_spacing }}px;
     line-height: {{ section.settings.headline_line_height }};
-    margin: 0 0 {{ section.settings.content_spacing }}px;
+    margin: 0 0 {{ section.settings.heading_bottom_margin | default: section.settings.content_spacing }}px;
     max-width: 100%;
   }
 
@@ -83,7 +86,7 @@
     font-size: {{ section.settings.paragraph_size_mobile }}px;
     color: {{ section.settings.paragraph_color }};
     line-height: {{ section.settings.paragraph_line_height }};
-    margin: 0 0 {{ section.settings.content_spacing }}px;
+    margin: 0 0 {{ section.settings.paragraph_bottom_margin | default: section.settings.content_spacing }}px;
     max-width: 100%;
   }
 
@@ -99,6 +102,7 @@
     text-decoration: none;
     border-bottom: 1px solid currentColor;
     padding-bottom: 3px;
+    margin-top: {{ section.settings.cta_top_margin | default: 0 }}px;
     transition: color 0.35s ease;
   }
   #shopify-section-{{ section.id }} .ma-atelier__cta:hover {
@@ -111,83 +115,131 @@
     transform: translateX(5px);
   }
 
-  /* ---------- Desktop: independent composition, image + text integrated ---------- */
+  /* ---------- Desktop: two-column editorial split layout ---------- */
   @media (min-width: 750px) {
     #shopify-section-{{ section.id }} .ma-atelier {
       min-height: {{ section.settings.section_height }}px;
       display: flex;
       align-items: {% case section.settings.text_position_y %}{% when 'top' %}flex-start{% when 'bottom' %}flex-end{% else %}center{% endcase %};
-      justify-content: {% case section.settings.text_position_x %}{% when 'center' %}center{% when 'right' %}flex-end{% else %}flex-start{% endcase %};
-      padding: {{ section.settings.padding_top }}px {{ section.settings.content_padding_desktop }}px {{ section.settings.padding_bottom }}px;
+      justify-content: flex-start;
+      padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
     }
+    
+    #shopify-section-{{ section.id }} .ma-atelier__wrapper {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      min-height: {{ section.settings.section_height }}px;
+      position: relative;
+    }
+
+    #shopify-section-{{ section.id }} .ma-atelier__content-col {
+      width: {{ section.settings.content_width | default: 42 }}%;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: {% case section.settings.text_position_y %}{% when 'top' %}flex-start{% when 'bottom' %}flex-end{% else %}center{% endcase %};
+      padding: 0 {{ section.settings.content_padding_desktop }}px;
+      position: relative;
+      z-index: 2;
+      transform: translate({{ section.settings.content_offset_x | default: 0 }}px, {{ section.settings.content_offset_y | default: 0 }}px);
+    }
+
+    #shopify-section-{{ section.id }} .ma-atelier__media-col {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
     #shopify-section-{{ section.id }} .ma-atelier__media {
       position: absolute;
       inset: 0;
       height: 100%;
       width: 100%;
     }
+
     #shopify-section-{{ section.id }} .ma-atelier__fade {
+      backdrop-filter: blur({{ section.settings.fade_blur | default: 0 }}px);
+      -webkit-backdrop-filter: blur({{ section.settings.fade_blur | default: 0 }}px);
       background: linear-gradient(
         to {% if section.settings.fade_direction == 'left' %}right{% else %}left{% endif %},
         {{ section.settings.fade_color }} 0%,
         transparent {{ section.settings.fade_strength }}%
       );
+      width: {{ section.settings.fade_width | default: 600 }}px;
+      transform: translateX({{ section.settings.fade_position | default: 0 }}px);
     }
+
     #shopify-section-{{ section.id }} .ma-atelier__content {
       position: relative;
       z-index: 2;
-      width: {{ section.settings.content_width }}%;
+      width: 100%;
       max-width: {{ section.settings.content_max_width }}px;
       margin-top: 0;
       padding: 0;
-      text-align: {% if section.settings.text_position_x == 'right' %}right{% elsif section.settings.text_position_x == 'center' %}center{% else %}left{% endif %};
+      text-align: {{ section.settings.content_alignment | default: 'left' }};
     }
+
     #shopify-section-{{ section.id }} .ma-atelier__label {
       font-size: {{ section.settings.label_size }}px;
+      margin-bottom: {{ section.settings.label_bottom_margin | default: section.settings.content_spacing }}px;
     }
     #shopify-section-{{ section.id }} .ma-atelier__headline {
       font-size: {{ section.settings.headline_size }}px;
       max-width: {{ section.settings.headline_max_width }}px;
+      margin-bottom: {{ section.settings.heading_bottom_margin | default: section.settings.content_spacing }}px;
     }
     #shopify-section-{{ section.id }} .ma-atelier__paragraph {
       font-size: {{ section.settings.paragraph_size }}px;
       max-width: {{ section.settings.paragraph_max_width }}px;
+      margin-bottom: {{ section.settings.paragraph_bottom_margin | default: section.settings.content_spacing }}px;
+    }
+    #shopify-section-{{ section.id }} .ma-atelier__cta {
+      margin-top: {{ section.settings.cta_top_margin | default: 0 }}px;
     }
   }
 {% endstyle %}
 
 <section class="ma-atelier">
-  <div class="ma-atelier__media">
-    {%- if section.settings.image != blank -%}
-      <img
-        src="{{ section.settings.image | image_url: width: 1800 }}"
-        alt="{{ section.settings.image.alt | default: section.settings.headline | escape }}"
-        loading="lazy"
-      >
-    {%- endif -%}
-    <div class="ma-atelier__overlay"></div>
-    <div class="ma-atelier__fade"></div>
-  </div>
+  <div class="ma-atelier__wrapper">
+    <div class="ma-atelier__content-col">
+      <div class="ma-atelier__content">
+        {%- if section.settings.label != blank -%}
+          <p class="ma-atelier__label">{{ section.settings.label }}</p>
+        {%- endif -%}
 
-  <div class="ma-atelier__content">
-    {%- if section.settings.label != blank -%}
-      <p class="ma-atelier__label">{{ section.settings.label }}</p>
-    {%- endif -%}
+        {%- if section.settings.headline != blank -%}
+          <h2 class="ma-atelier__headline">{{ section.settings.headline }}</h2>
+        {%- endif -%}
 
-    {%- if section.settings.headline != blank -%}
-      <h2 class="ma-atelier__headline">{{ section.settings.headline }}</h2>
-    {%- endif -%}
+        {%- if section.settings.paragraph != blank -%}
+          <p class="ma-atelier__paragraph">{{ section.settings.paragraph }}</p>
+        {%- endif -%}
 
-    {%- if section.settings.paragraph != blank -%}
-      <p class="ma-atelier__paragraph">{{ section.settings.paragraph }}</p>
-    {%- endif -%}
+        {%- if section.settings.cta_text != blank -%}
+          <a class="ma-atelier__cta" href="{{ section.settings.cta_link | default: '#' }}">
+            <span>{{ section.settings.cta_text }}</span>
+            <span class="ma-atelier__cta-arrow">→</span>
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
 
-    {%- if section.settings.cta_text != blank -%}
-      <a class="ma-atelier__cta" href="{{ section.settings.cta_link | default: '#' }}">
-        <span>{{ section.settings.cta_text }}</span>
-        <span class="ma-atelier__cta-arrow">→</span>
-      </a>
-    {%- endif -%}
+    <div class="ma-atelier__media-col">
+      <div class="ma-atelier__media">
+        {%- if section.settings.image != blank -%}
+          <img
+            src="{{ section.settings.image | image_url: width: 1800 }}"
+            alt="{{ section.settings.image.alt | default: section.settings.headline | escape }}"
+            loading="lazy"
+          >
+        {%- endif -%}
+        <div class="ma-atelier__overlay"></div>
+        <div class="ma-atelier__fade"></div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -208,7 +260,7 @@
 
     {
       "type": "header",
-      "content": "Image"
+      "content": "Image Controls"
     },
     { "type": "image_picker", "id": "image", "label": "Image" },
     { "type": "select", "id": "image_sizing", "label": "Image sizing", "default": "cover", "options": [
@@ -216,16 +268,27 @@
       { "value": "contain", "label": "Contain (fit, no crop)" }
     ]},
     { "type": "range", "id": "image_scale", "label": "Image scale", "min": 100, "max": 160, "step": 2, "default": 100, "unit": "%" },
+    { "type": "select", "id": "image_zoom_origin", "label": "Image Zoom Origin", "default": "center", "options": [
+      { "value": "center", "label": "Center" },
+      { "value": "left", "label": "Left" },
+      { "value": "right", "label": "Right" },
+      { "value": "top", "label": "Top" },
+      { "value": "bottom", "label": "Bottom" }
+    ]},
     { "type": "range", "id": "image_position_x", "label": "Image focal point — X", "min": 0, "max": 100, "step": 5, "default": 50, "unit": "%" },
     { "type": "range", "id": "image_position_y", "label": "Image focal point — Y", "min": 0, "max": 100, "step": 5, "default": 50, "unit": "%" },
+    { "type": "range", "id": "image_offset_x", "label": "Image Offset X", "min": -250, "max": 250, "step": 10, "default": 0, "unit": "px" },
+    { "type": "range", "id": "image_offset_y", "label": "Image Offset Y", "min": -250, "max": 250, "step": 10, "default": 0, "unit": "px" },
     { "type": "range", "id": "image_opacity", "label": "Image opacity", "min": 40, "max": 100, "step": 5, "default": 100, "unit": "%" },
+    { "type": "paragraph", "content": "Image Safe Area Preview: Adjust focal point and offsets above to maintain primary visual subjects within the safe crop zone." },
 
     {
       "type": "header",
-      "content": "Effects — overlay & fade"
+      "content": "Fade Controls"
     },
-    { "type": "range", "id": "overlay_strength", "label": "Overlay strength", "min": 0, "max": 90, "step": 5, "default": 35, "unit": "%" },
-    { "type": "color", "id": "overlay_color", "label": "Overlay color", "default": "#000000" },
+    { "type": "range", "id": "fade_width", "label": "Fade Width", "min": 100, "max": 900, "step": 50, "default": 600, "unit": "px" },
+    { "type": "range", "id": "fade_blur", "label": "Fade Blur", "min": 0, "max": 300, "step": 10, "default": 0, "unit": "px" },
+    { "type": "range", "id": "fade_position", "label": "Fade Position", "min": -200, "max": 200, "step": 10, "default": 0, "unit": "px" },
     { "type": "range", "id": "fade_strength", "label": "Fade strength (desktop, side)", "min": 0, "max": 100, "step": 5, "default": 70, "unit": "%" },
     { "type": "range", "id": "mobile_fade_strength", "label": "Fade strength (mobile, bottom)", "min": 0, "max": 100, "step": 5, "default": 60, "unit": "%" },
     { "type": "color", "id": "fade_color", "label": "Fade color", "default": "#0c0b0a" },
@@ -233,6 +296,13 @@
       { "value": "left", "label": "Text on left — fade from left" },
       { "value": "right", "label": "Text on right — fade from right" }
     ]},
+
+    {
+      "type": "header",
+      "content": "Effects — Overlay"
+    },
+    { "type": "range", "id": "overlay_strength", "label": "Overlay strength", "min": 0, "max": 90, "step": 5, "default": 35, "unit": "%" },
+    { "type": "color", "id": "overlay_color", "label": "Overlay color", "default": "#000000" },
     { "type": "color", "id": "background_color", "label": "Section background color", "default": "#0c0b0a" },
 
     {
@@ -299,9 +369,11 @@
       "content": "Layout — Desktop"
     },
     { "type": "range", "id": "section_height", "label": "Section height", "min": 400, "max": 900, "step": 10, "default": 640, "unit": "px" },
-    { "type": "range", "id": "content_width", "label": "Content column width", "min": 30, "max": 70, "step": 1, "default": 42, "unit": "%" },
+    { "type": "range", "id": "content_width", "label": "Content Width %", "min": 30, "max": 50, "step": 1, "default": 42, "unit": "%" },
     { "type": "range", "id": "content_max_width", "label": "Content max width", "min": 300, "max": 700, "step": 10, "default": 520, "unit": "px" },
-    { "type": "select", "id": "text_position_x", "label": "Text position — horizontal", "default": "left", "options": [
+    { "type": "range", "id": "content_offset_x", "label": "Content Offset X", "min": -150, "max": 150, "step": 5, "default": 0, "unit": "px" },
+    { "type": "range", "id": "content_offset_y", "label": "Content Offset Y", "min": -250, "max": 250, "step": 5, "default": 0, "unit": "px" },
+    { "type": "select", "id": "content_alignment", "label": "Content Alignment", "default": "left", "options": [
       { "value": "left", "label": "Left" },
       { "value": "center", "label": "Center" },
       { "value": "right", "label": "Right" }
@@ -314,6 +386,7 @@
     { "type": "range", "id": "content_padding_desktop", "label": "Content side padding (desktop)", "min": 20, "max": 120, "step": 5, "default": 60, "unit": "px" },
     { "type": "range", "id": "padding_top", "label": "Section padding top (desktop)", "min": 0, "max": 160, "step": 5, "default": 0, "unit": "px" },
     { "type": "range", "id": "padding_bottom", "label": "Section padding bottom (desktop)", "min": 0, "max": 160, "step": 5, "default": 0, "unit": "px" },
+    { "type": "range", "id": "column_gap", "label": "Column Gap", "min": 40, "max": 180, "step": 10, "default": 60, "unit": "px" },
 
     {
       "type": "header",
@@ -330,9 +403,13 @@
 
     {
       "type": "header",
-      "content": "Spacing — shared"
+      "content": "Spacing — shared & individual margins"
     },
-    { "type": "range", "id": "content_spacing", "label": "Space between elements", "min": 8, "max": 48, "step": 2, "default": 20, "unit": "px" },
+    { "type": "range", "id": "content_spacing", "label": "Space between elements (default)", "min": 8, "max": 48, "step": 2, "default": 20, "unit": "px" },
+    { "type": "range", "id": "label_bottom_margin", "label": "Label Bottom Margin", "min": 0, "max": 60, "step": 2, "default": 20, "unit": "px" },
+    { "type": "range", "id": "heading_bottom_margin", "label": "Heading Bottom Margin", "min": 0, "max": 100, "step": 2, "default": 20, "unit": "px" },
+    { "type": "range", "id": "paragraph_bottom_margin", "label": "Paragraph Bottom Margin", "min": 0, "max": 80, "step": 2, "default": 20, "unit": "px" },
+    { "type": "range", "id": "cta_top_margin", "label": "CTA Top Margin", "min": 0, "max": 80, "step": 2, "default": 0, "unit": "px" },
     { "type": "range", "id": "margin_top", "label": "Section margin top", "min": 0, "max": 120, "step": 5, "default": 0, "unit": "px" },
     { "type": "range", "id": "margin_bottom", "label": "Section margin bottom", "min": 0, "max": 120, "step": 5, "default": 0, "unit": "px" }
   ],
