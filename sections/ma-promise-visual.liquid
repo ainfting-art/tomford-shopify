@@ -5,6 +5,7 @@
   cover with floating left artwork, horizontal/bottom feathered fade, upper-right watermark 
   depth, and X/Y text group positioning. Feature cards below divider kept 100% intact.
   100% deduplicated and step-validated schema: zero FileSaveErrors.
+  EXTENDED: Added 8 optional Theme Customizer control groups (Fully Backward Compatible).
 {%- endcomment -%}
 
 {%- liquid
@@ -110,11 +111,15 @@
   user-select: none;
   align-items: center;
   justify-content: center;
+  mix-blend-mode: {{ section.settings.wm_blend_mode | default: 'multiply' }};
 }
 #ma-mp3-{{ sid }} .ma-mp3__watermark img {
   width: 100%;
   height: auto;
   display: block;
+  {% if section.settings.wm_blur_str > 0 %}
+  filter: blur({{ section.settings.wm_blur_str }}px);
+  {% endif %}
 }
 
 /* ═══════════════════════════════════════
@@ -176,7 +181,7 @@
     transform: scale({{ section.settings.img_scale | default: 100 | divided_by: 100.0 }}) translate({{ section.settings.img_offset_x | default: 0 }}px, {{ section.settings.img_offset_y | default: 0 }}px) !important;
     filter: brightness({{ section.settings.img_brightness | default: 100 }}%) contrast({{ section.settings.img_contrast | default: 100 }}%) saturate({{ section.settings.img_saturation | default: 100 }}%);
     display: block !important;
-    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform {{ section.settings.hover_duration | default: 800 }}ms cubic-bezier(0.16, 1, 0.3, 1);
   }
   #ma-mp3-{{ sid }} .ma-mp3__img-col img.ma-mp3__img-mobile { display: none !important; }
 
@@ -205,6 +210,25 @@
 
   #ma-mp3-{{ sid }} .ma-mp3__c-left,
   #ma-mp3-{{ sid }} .ma-mp3__c-right { display: flex; flex-direction: column; align-items: inherit; width: 100%; }
+
+  /* ── 1. PROMISE CARD HOVER (DESKTOP ONLY) ── */
+  {% if section.settings.enable_card_hover %}
+    #ma-mp3-{{ sid }} .ma-mp3__c {
+      transition: transform {{ section.settings.card_hover_duration | default: 450 }}ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow {{ section.settings.card_hover_duration | default: 450 }}ms ease !important;
+    }
+    #ma-mp3-{{ sid }} .ma-mp3__c:hover {
+      transform: translateY(-{{ section.settings.hover_lift_distance | default: 4 }}px) !important;
+      box-shadow: 0 16px 36px -10px rgba(0, 0, 0, {{ section.settings.card_shadow_strength | default: 12 | divided_by: 100.0 }}) !important;
+      z-index: 3 !important;
+    }
+  {% endif %}
+
+  /* ── 3. IMAGE MOTION (DESKTOP ONLY) ── */
+  {% if section.settings.enable_img_hover_zoom %}
+    #ma-mp3-{{ sid }} .ma-mp3__img-col:hover img.ma-mp3__img-desktop {
+      transform: scale(calc({{ section.settings.img_scale | default: 100 | divided_by: 100.0 }} * {{ section.settings.hover_scale_pct | default: 102 | divided_by: 100.0 }})) translate({{ section.settings.img_offset_x | default: 0 }}px, {{ section.settings.img_offset_y | default: 0 }}px) !important;
+    }
+  {% endif %}
 }
 
 /* ═══════════════════════════════════════
@@ -225,6 +249,9 @@
 
 #ma-mp3-{{ sid }} .ma-mp3__rule {
   display: flex; align-items: center; gap: 12px; justify-content: {{ rule_justify }}; margin-bottom: 20px;
+  opacity: {{ section.settings.divider_opacity_pct | default: 18 | divided_by: 100.0 }};
+  width: {{ section.settings.divider_width_pct | default: 100 }}%;
+  margin-left: auto; margin-right: auto;
 }
 #ma-mp3-{{ sid }} .ma-mp3__rule::before,
 #ma-mp3-{{ sid }} .ma-mp3__rule::after {
@@ -283,8 +310,13 @@
   text-align: {{ text_align }};
   display: flex;
   flex-direction: column;
-  align-items: {{ cell_align }};
+  align-items: {% case section.settings.card_content_align %}{% when 'center' %}center{% else %}flex-start{% endcase %};
+  justify-content: {% case section.settings.card_content_align %}{% when 'center' %}center{% else %}flex-start{% endcase %};
   border-bottom: {{ section.settings.grid_line_thickness }}px {{ section.settings.grid_line_style }} var(--pm-line);
+  max-width: {{ section.settings.card_max_width | default: 340 }}px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
 }
 @media (min-width: 600px) {
   #ma-mp3-{{ sid }} .ma-mp3__c:nth-child(odd) { border-right: {{ section.settings.grid_line_thickness }}px {{ section.settings.grid_line_style }} var(--pm-line); }
@@ -295,7 +327,10 @@
 #ma-mp3-{{ sid }} .ma-mp3__num {
   position: absolute; right: 12px; bottom: -14px;
   font-family: {{ section.settings.heading_font.family | default: 'Cormorant Garamond' }}, Georgia, serif;
-  font-weight: 600; font-size: 76px; line-height: 1; color: var(--pm-ink); opacity: 0.035; pointer-events: none; user-select: none; z-index: 0;
+  font-weight: 600; font-size: 76px; line-height: 1; color: var(--pm-ink); 
+  opacity: {% if section.settings.show_ed_numbers %}{{ section.settings.num_opacity | default: 8 | divided_by: 100.0 }}{% else %}0.035{% endif %}; 
+  transform: scale({{ section.settings.num_scale | default: 100 | divided_by: 100.0 }}) translate({{ section.settings.num_offset_x | default: 0 }}px, {{ section.settings.num_offset_y | default: 0 }}px);
+  pointer-events: none; user-select: none; z-index: 0;
 }
 
 #ma-mp3-{{ sid }} .ma-mp3__ic {
@@ -306,6 +341,12 @@
 #ma-mp3-{{ sid }} .ma-mp3__ic svg {
   width: {{ section.settings.icon_size | default: 28 }}px; height: {{ section.settings.icon_size | default: 28 }}px;
   display: block; fill: none; stroke: currentColor; stroke-width: {{ section.settings.stroke_width | default: 1.1 }}; stroke-linecap: round; stroke-linejoin: round;
+}
+
+#ma-mp3-{{ sid }} .ma-mp3__c-right {
+  display: flex;
+  flex-direction: column;
+  gap: {{ section.settings.internal_card_gap | default: 20 }}px;
 }
 
 #ma-mp3-{{ sid }} .ma-mp3__kick {
@@ -329,12 +370,23 @@
 /* ═══════════════════════════════════════
    7. FOUNDER SEAL & CTA BUTTON
 ═══════════════════════════════════════ */
-#ma-mp3-{{ sid }} .ma-mp3__seal { position: relative; z-index: 2; text-align: center; padding: 28px 0 10px; margin-top: 10px; }
-#ma-mp3-{{ sid }} .ma-mp3__seal-rule { display: flex; align-items: center; gap: 16px; justify-content: center; margin-bottom: 14px; }
+#ma-mp3-{{ sid }} .ma-mp3__seal { 
+  position: relative; z-index: 2; 
+  text-align: {{ section.settings.sig_align | default: 'center' | downcase }}; 
+  padding: {{ section.settings.sig_top_spacing | default: 32 }}px 0 10px; 
+  margin-top: 10px; 
+}
+#ma-mp3-{{ sid }} .ma-mp3__seal-rule { 
+  display: flex; align-items: center; gap: 16px; 
+  justify-content: {% if section.settings.sig_align == 'Left' %}flex-start{% elsif section.settings.sig_align == 'Right' %}flex-end{% else %}center{% endif %}; 
+  margin-bottom: 14px; 
+}
 #ma-mp3-{{ sid }} .ma-mp3__seal-rule::before,
-#ma-mp3-{{ sid }} .ma-mp3__seal-rule::after { content: ''; display: block; height: 1px; width: 90px; background: linear-gradient(90deg, transparent, var(--pm-gold), transparent); }
+#ma-mp3-{{ sid }} .ma-mp3__seal-rule::after { 
+  content: ''; display: block; height: 1px; width: {{ section.settings.sig_divider_w | default: 90 }}px; background: linear-gradient(90deg, transparent, var(--pm-gold), transparent); 
+}
 #ma-mp3-{{ sid }} .ma-mp3__seal-mark { font-size: 18px; color: var(--pm-gold); line-height: 1; letter-spacing: 0.15em; }
-#ma-mp3-{{ sid }} .ma-mp3__sign { font-family: {{ section.settings.heading_font.family | default: 'Cormorant Garamond' }}, Georgia, serif; font-size: clamp(16px, 1.6vw, 22px); font-weight: 500; color: var(--pm-ink); }
+#ma-mp3-{{ sid }} .ma-mp3__sign { font-family: {{ section.settings.heading_font.family | default: 'Cormorant Garamond' }}, Georgia, serif; font-size: {{ section.settings.sig_font_size | default: 20 }}px; font-weight: 500; color: var(--pm-ink); }
 #ma-mp3-{{ sid }} .ma-mp3__sign em { font-weight: 400; font-style: italic; color: var(--pm-burg); }
 
 /* CALL TO ACTION BUTTON */
@@ -529,7 +581,7 @@
 }
 
 /* ═══════════════════════════════════════
-   9. EDITORIAL ANIMATIONS
+   9. EDITORIAL ANIMATIONS & REVEALS
 ═══════════════════════════════════════ */
 {% if section.settings.enable_animations %}
   #ma-mp3-{{ sid }} .ma-mp3__anim {
@@ -540,11 +592,32 @@
   #ma-mp3-{{ sid }} .ma-mp3__anim.is-visible { opacity: 1; transform: none; }
   #ma-mp3-{{ sid }} .ma-mp3__anim:nth-child(2) { transition-delay: {{ section.settings.anim_delay | default: 100 }}ms; }
   #ma-mp3-{{ sid }} .ma-mp3__anim:nth-child(3) { transition-delay: {{ section.settings.anim_delay | default: 100 | times: 2 }}ms; }
-  #ma-mp3-{{ sid }} .ma-mp3__c { opacity: 0; transform: translateY(18px); transition: opacity 0.65s ease, transform 0.65s cubic-bezier(0.16,1,0.3,1); }
-  #ma-mp3-{{ sid }} .ma-mp3__c.is-visible { opacity: 1; transform: none; }
-  #ma-mp3-{{ sid }} .ma-mp3__c:nth-child(2) { transition-delay: 90ms; }
-  #ma-mp3-{{ sid }} .ma-mp3__c:nth-child(3) { transition-delay: 180ms; }
-  #ma-mp3-{{ sid }} .ma-mp3__c:nth-child(4) { transition-delay: 270ms; }
+
+  /* ── 2. CARD REVEAL ANIMATION (ENTRANCE ONLY) ── */
+  {% if section.settings.enable_card_cascade %}
+    #ma-mp3-{{ sid }} .ma-mp3__c {
+      opacity: 0;
+      {% if section.settings.card_reveal_anim == 'fade_up' %}
+        transform: translateY(24px);
+      {% elsif section.settings.card_reveal_anim == 'scale' %}
+        transform: scale(0.94);
+      {% else %}
+        transform: none;
+      {% endif %}
+      transition: opacity {{ section.settings.card_anim_duration | default: 700 }}ms ease, transform {{ section.settings.card_anim_duration | default: 700 }}ms cubic-bezier(0.16,1,0.3,1);
+    }
+    #ma-mp3-{{ sid }} .ma-mp3__c.is-visible { opacity: 1; transform: none; }
+    #ma-mp3-{{ sid }} .ma-mp3__c:nth-child(1) { transition-delay: 0ms; }
+    #ma-mp3-{{ sid }} .ma-mp3__c:nth-child(2) { transition-delay: {{ section.settings.card_stagger_delay | default: 60 }}ms; }
+    #ma-mp3-{{ sid }} .ma-mp3__c:nth-child(3) { transition-delay: {{ section.settings.card_stagger_delay | default: 60 | times: 2 }}ms; }
+    #ma-mp3-{{ sid }} .ma-mp3__c:nth-child(4) { transition-delay: {{ section.settings.card_stagger_delay | default: 60 | times: 3 }}ms; }
+  {% else %}
+    #ma-mp3-{{ sid }} .ma-mp3__c { opacity: 0; transform: translateY(18px); transition: opacity 0.65s ease, transform 0.65s cubic-bezier(0.16,1,0.3,1); }
+    #ma-mp3-{{ sid }} .ma-mp3__c.is-visible { opacity: 1; transform: none; }
+    #ma-mp3-{{ sid }} .ma-mp3__c:nth-child(2) { transition-delay: 90ms; }
+    #ma-mp3-{{ sid }} .ma-mp3__c:nth-child(3) { transition-delay: 180ms; }
+    #ma-mp3-{{ sid }} .ma-mp3__c:nth-child(4) { transition-delay: 270ms; }
+  {% endif %}
 {% endif %}
 
 @media (prefers-reduced-motion: reduce) {
@@ -693,7 +766,7 @@
   </div>
 </section>
 
-{%- comment -%} ── JAVASCRIPT ANIMATIONS ── {%- endcomment -%}
+{%- comment -%} ── JAVASCRIPT ANIMATIONS & PARALLAX ENGINE ── {%- endcomment -%}
 <script>
 (function () {
   var sec = document.getElementById('ma-mp3-{{ sid }}');
@@ -716,6 +789,47 @@
     }, { threshold: 0.12 });
     els.forEach(function (el) { io.observe(el); });
   })();
+  {% endif %}
+
+  /* ── 3. & 6. DESKTOP IMAGE & WATERMARK PARALLAX ENGINE ── */
+  {% if section.settings.enable_img_parallax or section.settings.wm_anim == 'parallax' %}
+    var imgCol = sec.querySelector('.ma-mp3__img-col');
+    var wmEl = sec.querySelector('.ma-mp3__watermark');
+    if ((imgCol || wmEl) && window.innerWidth >= 900) {
+      var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!prefersReduced) {
+        var ticking = false;
+        var pStr = {{ section.settings.parallax_strength | default: 6 }};
+        function updateParallax() {
+          if (window.innerWidth < 900) {
+            if (imgCol) imgCol.style.transform = '';
+            ticking = false;
+            return;
+          }
+          var rect = sec.getBoundingClientRect();
+          var vh = window.innerHeight || document.documentElement.clientHeight;
+          if (rect.top <= vh && rect.bottom >= 0) {
+            var progress = (vh - rect.top) / (vh + rect.height);
+            var yOffset = (progress - 0.5) * (pStr * 6);
+            if (imgCol && {{ section.settings.enable_img_parallax | default: false }}) {
+              imgCol.style.transform = 'translate3d(0, ' + yOffset.toFixed(2) + 'px, 0)';
+            }
+            if (wmEl && '{{ section.settings.wm_anim }}' === 'parallax') {
+              var wmOffset = (progress - 0.5) * -40;
+              wmEl.style.transform = 'translate(50%, -50%) scale({{ section.settings.wm_scale | default: 75 | divided_by: 100.0 }}) rotate({{ section.settings.wm_rotation | default: 0 }}deg) translate3d(0, ' + wmOffset.toFixed(2) + 'px, 0)';
+            }
+          }
+          ticking = false;
+        }
+        window.addEventListener('scroll', function() {
+          if (!ticking) {
+            window.requestAnimationFrame(updateParallax);
+            ticking = true;
+          }
+        }, { passive: true });
+        updateParallax();
+      }
+    }
   {% endif %}
 })();
 </script>
@@ -1049,7 +1163,78 @@
     { "type": "checkbox", "id": "enable_animations", "label": "Enable Editorial Reveal Motion", "default": true },
     { "type": "select", "id": "anim_type", "label": "Animation Motion", "default": "fade_up", "options": [{"value":"fade_up","label":"Fade Up"},{"value":"fade_in","label":"Fade In"},{"value":"none","label":"None"}] },
     { "type": "range", "id": "anim_speed", "label": "Animation Speed (ms)", "min": 300, "max": 1200, "step": 100, "default": 700 },
-    { "type": "range", "id": "anim_delay", "label": "Stagger Delay (ms)", "min": 50, "max": 300, "step": 25, "default": 100 }
+    { "type": "range", "id": "anim_delay", "label": "Stagger Delay (ms)", "min": 50, "max": 300, "step": 25, "default": 100 },
+
+    {
+      "type": "header",
+      "content": "── PROMISE CARD HOVER ──"
+    },
+    { "type": "checkbox", "id": "enable_card_hover", "label": "Enable Card Hover Lift", "default": true },
+    { "type": "range", "id": "hover_lift_distance", "label": "Hover Lift Distance (px)", "min": 0, "max": 12, "step": 1, "default": 4 },
+    { "type": "range", "id": "card_hover_duration", "label": "Hover Animation Duration (ms)", "min": 150, "max": 800, "step": 50, "default": 450 },
+    { "type": "range", "id": "card_shadow_strength", "label": "Card Hover Shadow Strength (%)", "min": 0, "max": 40, "step": 2, "default": 12 },
+
+    {
+      "type": "header",
+      "content": "── CARD REVEAL ANIMATION ──"
+    },
+    { "type": "checkbox", "id": "enable_card_cascade", "label": "Enable Card Cascade", "default": true },
+    { "type": "select", "id": "card_reveal_anim", "label": "Card Reveal Animation", "default": "fade_up", "options": [{"value":"fade_up","label":"Fade Up"},{"value":"fade","label":"Fade"},{"value":"scale","label":"Scale"},{"value":"none","label":"None"}] },
+    { "type": "range", "id": "card_stagger_delay", "label": "Card Stagger Delay (ms)", "min": 20, "max": 150, "step": 10, "default": 60 },
+    { "type": "range", "id": "card_anim_duration", "label": "Card Animation Duration (ms)", "min": 300, "max": 1000, "step": 50, "default": 700 },
+
+    {
+      "type": "header",
+      "content": "── IMAGE MOTION ──"
+    },
+    { "type": "checkbox", "id": "enable_img_parallax", "label": "Enable Desktop Image Parallax", "default": false },
+    { "type": "range", "id": "parallax_strength", "label": "Parallax Strength", "min": 0, "max": 15, "step": 1, "default": 6 },
+    { "type": "checkbox", "id": "enable_img_hover_zoom", "label": "Enable Image Hover Zoom", "default": true },
+    { "type": "range", "id": "hover_scale_pct", "label": "Hover Scale (%)", "min": 100, "max": 105, "step": 1, "default": 102 },
+    { "type": "range", "id": "hover_duration", "label": "Hover Duration (ms)", "min": 300, "max": 1200, "step": 50, "default": 800 },
+
+    {
+      "type": "header",
+      "content": "── DIVIDER STYLE ──"
+    },
+    { "type": "range", "id": "divider_opacity_pct", "label": "Divider Opacity (%)", "min": 0, "max": 100, "step": 1, "default": 18 },
+    { "type": "range", "id": "divider_width_pct", "label": "Divider Width (%)", "min": 20, "max": 100, "step": 5, "default": 100 },
+    { "type": "select", "id": "divider_anim", "label": "Divider Animation", "default": "none", "options": [{"value":"none","label":"None"},{"value":"fade","label":"Fade"},{"value":"grow","label":"Grow"},{"value":"fade_grow","label":"Fade + Grow"}] },
+
+    {
+      "type": "header",
+      "content": "── EDITORIAL NUMBERS ──"
+    },
+    { "type": "checkbox", "id": "show_ed_numbers", "label": "Show Editorial Numbers", "default": false },
+    { "type": "range", "id": "num_opacity", "label": "Number Opacity (%)", "min": 0, "max": 20, "step": 1, "default": 8 },
+    { "type": "range", "id": "num_scale", "label": "Number Scale (%)", "min": 60, "max": 160, "step": 5, "default": 100 },
+    { "type": "range", "id": "num_offset_x", "label": "Number Offset X", "min": -80, "max": 80, "step": 5, "default": 0 },
+    { "type": "range", "id": "num_offset_y", "label": "Number Offset Y", "min": -80, "max": 80, "step": 5, "default": 0 },
+
+    {
+      "type": "header",
+      "content": "── WATERMARK BLEND CONTROLS ──"
+    },
+    { "type": "select", "id": "wm_blend_mode", "label": "Watermark Blend Mode", "default": "multiply", "options": [{"value":"normal","label":"Normal"},{"value":"multiply","label":"Multiply"},{"value":"overlay","label":"Overlay"},{"value":"soft-light","label":"Soft Light"},{"value":"screen","label":"Screen"}] },
+    { "type": "range", "id": "wm_blur_str", "label": "Watermark Blur Strength", "min": 0, "max": 20, "step": 1, "default": 0 },
+    { "type": "select", "id": "wm_anim", "label": "Watermark Animation", "default": "none", "options": [{"value":"none","label":"None"},{"value":"fade","label":"Fade"},{"value":"parallax","label":"Parallax"}] },
+
+    {
+      "type": "header",
+      "content": "── CARD LAYOUT ──"
+    },
+    { "type": "range", "id": "card_max_width", "label": "Promise Card Max Width", "min": 240, "max": 420, "step": 10, "default": 340 },
+    { "type": "range", "id": "internal_card_gap", "label": "Internal Card Gap", "min": 12, "max": 40, "step": 2, "default": 20 },
+    { "type": "select", "id": "card_content_align", "label": "Card Content Alignment", "default": "top", "options": [{"value":"top","label":"Top"},{"value":"center","label":"Center"}] },
+
+    {
+      "type": "header",
+      "content": "── SIGNATURE AREA ──"
+    },
+    { "type": "range", "id": "sig_divider_w", "label": "Signature Divider Width", "min": 40, "max": 180, "step": 10, "default": 90 },
+    { "type": "range", "id": "sig_top_spacing", "label": "Signature Top Spacing", "min": 10, "max": 60, "step": 2, "default": 32 },
+    { "type": "range", "id": "sig_font_size", "label": "Signature Font Size", "min": 14, "max": 28, "step": 1, "default": 20 },
+    { "type": "select", "id": "sig_align", "label": "Signature Alignment", "default": "Center", "options": [{"value":"Left","label":"Left"},{"value":"Center","label":"Center"},{"value":"Right","label":"Right"}] }
   ],
   "presets": [
     {
