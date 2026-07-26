@@ -3,10 +3,25 @@
   Desktop V3: Two-column editorial layout with customizable motion controls,
   independent mobile/desktop spacing, custom content/image offsets, width controls, 
   fine-tuned mask-fade settings, and Theme Customizer motion panel.
-  Mobile V6: Perfected setting persistence with explicit Liquid default filters across all mobile properties to prevent post-save spacing collapse.
+  Mobile V7: Perfected post-save persistence via root CSS variables, strict mobile spacing enforcement, and connected mobile fade system (blur/width/position).
 {%- endcomment -%}
 
 {% style %}
+  #shopify-section-{{ section.id }} {
+    --mobile-padding-top: {{ section.settings.mobile_padding_top | default: 30 }}px;
+    --mobile-padding-bottom: {{ section.settings.mobile_padding_bottom | default: 45 }}px;
+    --mobile-padding-x: {{ section.settings.mobile_padding_x | default: 24 }}px;
+    --mobile-story-top-offset: {{ section.settings.mobile_story_top_offset | default: 0 }}px;
+    --mobile-image-height: {{ section.settings.mobile_image_height | default: 480 }}px;
+    --mobile-image-height-portrait: {{ section.settings.mobile_image_height_portrait | default: 360 }}px;
+    --mobile-image-bottom-spacing: {{ section.settings.mobile_image_bottom_spacing | default: 24 }}px;
+    --mobile-fade-strength: {{ section.settings.mobile_fade_strength | default: 60 }}%;
+    --fade-width: {{ section.settings.fade_width | default: 600 }}px;
+    --fade-blur: {{ section.settings.fade_blur | default: 0 }}px;
+    --fade-position: {{ section.settings.fade_position | default: 0 }}px;
+    --fade-color: {{ section.settings.fade_color | default: '#0c0b0a' }};
+  }
+
   #shopify-section-{{ section.id }} .ma-atelier {
     position: relative;
     overflow: hidden;
@@ -53,7 +68,7 @@
     pointer-events: none;
   }
 
-  /* Fade System with Masking and Blur */
+  /* Fade System Base */
   #shopify-section-{{ section.id }} .ma-atelier__fade {
     position: absolute;
     inset: 0;
@@ -68,7 +83,7 @@
     mask-image: linear-gradient(to bottom, transparent 0%, black 100%);
   }
 
-  /* ---------- Content (mobile: margin-top 0 to prevent clipping label, explicit defaults to prevent collapse) ---------- */
+  /* ---------- Content ---------- */
   #shopify-section-{{ section.id }} .ma-atelier__content {
     position: relative;
     z-index: 2;
@@ -184,36 +199,116 @@
   {% endif %}
 
   /* ══════════════════════════════════════════════════════════════
-     MOBILE EDITORIAL LAYOUT EXPANSION (< 750px)
+     MOBILE EDITORIAL LAYOUT & SPACING ENFORCEMENT (< 750px)
      Strictly encapsulated to mobile screens. Zero impact on desktop.
   ══════════════════════════════════════════════════════════════ */
-  @media (max-width: 749px) {
-    #shopify-section-{{ section.id }} .ma-atelier__wrapper {
-      display: flex;
-      flex-direction: column;
+  @media screen and (max-width: 749px) {
+    #shopify-section-{{ section.id }} .ma-atelier {
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+      min-height: auto !important;
     }
+    #shopify-section-{{ section.id }} .ma-atelier__wrapper {
+      display: flex !important;
+      flex-direction: column !important;
+      width: 100% !important;
+      min-height: auto !important;
+    }
+    #shopify-section-{{ section.id }} .ma-atelier__content-col {
+      width: 100% !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      transform: none !important;
+    }
+    #shopify-section-{{ section.id }} .ma-atelier__content {
+      position: relative !important;
+      z-index: 2 !important;
+      margin: 0 !important;
+      padding-top: var(--mobile-padding-top) !important;
+      padding-right: var(--mobile-padding-x) !important;
+      padding-bottom: var(--mobile-padding-bottom) !important;
+      padding-left: var(--mobile-padding-x) !important;
+      text-align: {{ section.settings.mobile_content_align | default: 'left' }} !important;
+      max-width: none !important;
+      width: 100% !important;
+    }
+
+    /* Layout 01: Story (Text top, Image bottom) */
     #shopify-section-{{ section.id }} .ma-atelier--mobile-01 .ma-atelier__content-col {
-      order: 1;
+      order: 1 !important;
     }
     #shopify-section-{{ section.id }} .ma-atelier--mobile-01 .ma-atelier__media-col {
-      order: 2;
+      order: 2 !important;
+      position: relative !important;
+      width: 100% !important;
+      height: auto !important;
+      inset: auto !important;
     }
     #shopify-section-{{ section.id }} .ma-atelier--mobile-01 .ma-atelier__media {
-      transform: translateY({{ section.settings.mobile_story_top_offset | default: 0 }}px);
+      position: relative !important;
+      width: 100% !important;
+      height: var(--mobile-image-height) !important;
+      transform: translateY(var(--mobile-story-top-offset)) !important;
+      inset: auto !important;
     }
-    
+    #shopify-section-{{ section.id }} .ma-atelier--mobile-01 .ma-atelier__fade {
+      position: absolute !important;
+      top: 0 !important;
+      left: -10% !important;
+      right: -10% !important;
+      width: 120% !important;
+      bottom: auto !important;
+      height: var(--fade-width) !important;
+      max-height: 100% !important;
+      background: linear-gradient(to bottom, var(--fade-color) 0%, transparent var(--mobile-fade-strength)) !important;
+      transform: translateY(var(--fade-position)) !important;
+      {% if section.settings.fade_blur > 0 %}
+        filter: blur(var(--fade-blur)) !important;
+        -webkit-filter: blur(var(--fade-blur)) !important;
+      {% endif %}
+      -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 100%) !important;
+      mask-image: linear-gradient(to bottom, black 0%, transparent 100%) !important;
+    }
+
+    /* Layout 02: Portrait (Image top, Story bottom) */
     #shopify-section-{{ section.id }} .ma-atelier--mobile-02 .ma-atelier__media-col {
-      order: 1;
+      order: 1 !important;
+      position: relative !important;
+      width: 100% !important;
+      height: auto !important;
+      inset: auto !important;
     }
     #shopify-section-{{ section.id }} .ma-atelier--mobile-02 .ma-atelier__content-col {
-      order: 2;
+      order: 2 !important;
     }
     #shopify-section-{{ section.id }} .ma-atelier--mobile-02 .ma-atelier__media {
-      height: {{ section.settings.mobile_image_height_portrait | default: 360 }}px;
-      margin-bottom: {{ section.settings.mobile_image_bottom_spacing | default: 24 }}px;
+      position: relative !important;
+      width: 100% !important;
+      height: var(--mobile-image-height-portrait) !important;
+      margin-bottom: var(--mobile-image-bottom-spacing) !important;
+      transform: none !important;
+      inset: auto !important;
     }
     #shopify-section-{{ section.id }} .ma-atelier--mobile-02 .ma-atelier__media img {
-      object-position: center {{ section.settings.mobile_image_position | default: 'center' }};
+      object-position: center {{ section.settings.mobile_image_position | default: 'center' }} !important;
+    }
+    #shopify-section-{{ section.id }} .ma-atelier--mobile-02 .ma-atelier__fade {
+      position: absolute !important;
+      top: auto !important;
+      left: -10% !important;
+      right: -10% !important;
+      width: 120% !important;
+      bottom: 0 !important;
+      height: var(--fade-width) !important;
+      max-height: 100% !important;
+      background: linear-gradient(to top, var(--fade-color) 0%, transparent var(--mobile-fade-strength)) !important;
+      transform: translateY(var(--fade-position)) !important;
+      {% if section.settings.fade_blur > 0 %}
+        filter: blur(var(--fade-blur)) !important;
+        -webkit-filter: blur(var(--fade-blur)) !important;
+      {% endif %}
+      -webkit-mask-image: linear-gradient(to top, black 0%, transparent 100%) !important;
+      mask-image: linear-gradient(to top, black 0%, transparent 100%) !important;
     }
   }
 
@@ -320,12 +415,14 @@
       transform: none !important;
       transition: none !important;
     }
-    #shopify-section-{{ section.id }} .ma-atelier__media img {
-      transform: scale({{ section.settings.image_scale | times: 1.0 | divided_by: 100 }}) translate({{ section.settings.image_offset_x | default: 0 }}px, {{ section.settings.image_offset_y | default: 0 }}px) !important;
-      transition: none !important;
-    }
-    #shopify-section-{{ section.id }} .ma-atelier__media {
-      transform: none !important;
+    @media (min-width: 750px) {
+      #shopify-section-{{ section.id }} .ma-atelier__media img {
+        transform: scale({{ section.settings.image_scale | times: 1.0 | divided_by: 100 }}) translate({{ section.settings.image_offset_x | default: 0 }}px, {{ section.settings.image_offset_y | default: 0 }}px) !important;
+        transition: none !important;
+      }
+      #shopify-section-{{ section.id }} .ma-atelier__media {
+        transform: none !important;
+      }
     }
   }
 {% endstyle %}
@@ -372,69 +469,86 @@
 </section>
 
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const sectionEl = document.getElementById("atelier-section-{{ section.id }}");
-    if (!sectionEl) return;
+  (function () {
+    function initAtelierSection() {
+      const sectionEl = document.getElementById("atelier-section-{{ section.id }}");
+      if (!sectionEl) return;
 
-    {% if section.settings.enable_motion %}
-      // 1. Text Reveal Observer
-      {% if section.settings.enable_text_reveal %}
-        const observerOptions = {
-          root: null,
-          threshold: 0.15
-        };
+      {% if section.settings.enable_motion %}
+        // 1. Text Reveal Observer
+        {% if section.settings.enable_text_reveal %}
+          if (!sectionEl.classList.contains("is-revealed")) {
+            const observerOptions = {
+              root: null,
+              threshold: 0.15
+            };
 
-        const revealObserver = new IntersectionObserver((entries, observer) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              sectionEl.classList.add("is-revealed");
-              observer.unobserve(entry.target);
+            const revealObserver = new IntersectionObserver((entries, observer) => {
+              entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                  sectionEl.classList.add("is-revealed");
+                  observer.unobserve(entry.target);
+                }
+              });
+            }, observerOptions);
+
+            revealObserver.observe(sectionEl);
+          }
+        {% else %}
+          sectionEl.classList.add("is-revealed");
+        {% endif %}
+
+        // 2. Parallax Scroll
+        {% if section.settings.parallax_strength > 0 %}
+          const mediaCol = sectionEl.querySelector(".ma-atelier__media");
+          if (mediaCol && window.innerWidth >= 750) {
+            const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+            
+            if (!prefersReducedMotion) {
+              let ticking = false;
+              const pStrength = {{ section.settings.parallax_strength | default: 12 }};
+
+              function updateParallax() {
+                const rect = sectionEl.getBoundingClientRect();
+                const windowHeight = window.innerHeight;
+
+                if (rect.top <= windowHeight && rect.bottom >= 0) {
+                  const scrollProgress = (windowHeight - rect.top) / (windowHeight + rect.height);
+                  const yOffset = (scrollProgress - 0.5) * (pStrength * 6.67);
+                  mediaCol.style.transform = `translate3d(0, ${yOffset.toFixed(2)}px, 0)`;
+                }
+                ticking = false;
+              }
+
+              window.addEventListener("scroll", function () {
+                if (!ticking) {
+                  window.requestAnimationFrame(updateParallax);
+                  ticking = true;
+                }
+              }, { passive: true });
+
+              updateParallax();
             }
-          });
-        }, observerOptions);
-
-        revealObserver.observe(sectionEl);
+          }
+        {% endif %}
       {% else %}
         sectionEl.classList.add("is-revealed");
       {% endif %}
+    }
 
-      // 2. Parallax Scroll
-      {% if section.settings.parallax_strength > 0 %}
-        const mediaCol = sectionEl.querySelector(".ma-atelier__media");
-        if (mediaCol && window.innerWidth >= 750) {
-          const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-          
-          if (!prefersReducedMotion) {
-            let ticking = false;
-            const pStrength = {{ section.settings.parallax_strength | default: 12 }};
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initAtelierSection);
+    } else {
+      initAtelierSection();
+    }
 
-            function updateParallax() {
-              const rect = sectionEl.getBoundingClientRect();
-              const windowHeight = window.innerHeight;
-
-              if (rect.top <= windowHeight && rect.bottom >= 0) {
-                const scrollProgress = (windowHeight - rect.top) / (windowHeight + rect.height);
-                const yOffset = (scrollProgress - 0.5) * (pStrength * 6.67);
-                mediaCol.style.transform = `translate3d(0, ${yOffset.toFixed(2)}px, 0)`;
-              }
-              ticking = false;
-            }
-
-            window.addEventListener("scroll", function () {
-              if (!ticking) {
-                window.requestAnimationFrame(updateParallax);
-                ticking = true;
-              }
-            }, { passive: true });
-
-            updateParallax();
-          }
-        }
-      {% endif %}
-    {% else %}
-      sectionEl.classList.add("is-revealed");
-    {% endif %}
-  });
+    // Re-init upon Shopify Theme Customizer section save/reload
+    document.addEventListener("shopify:section:load", function (event) {
+      if (event.detail && event.detail.sectionId === "{{ section.id }}") {
+        initAtelierSection();
+      }
+    });
+  })();
 </script>
 
 {% schema %}
@@ -497,9 +611,9 @@
       "type": "header",
       "content": "Fade Controls"
     },
-    { "type": "range", "id": "fade_width", "label": "Fade Width (desktop only)", "min": 100, "max": 900, "step": 50, "default": 600, "unit": "px" },
-    { "type": "range", "id": "fade_blur", "label": "Fade Blur (desktop + mobile)", "min": 0, "max": 300, "step": 10, "default": 0, "unit": "px" },
-    { "type": "range", "id": "fade_position", "label": "Fade Position (desktop only)", "min": -200, "max": 200, "step": 10, "default": 0, "unit": "px" },
+    { "type": "range", "id": "fade_width", "label": "Fade Width", "min": 100, "max": 900, "step": 50, "default": 600, "unit": "px" },
+    { "type": "range", "id": "fade_blur", "label": "Fade Blur", "min": 0, "max": 300, "step": 10, "default": 0, "unit": "px" },
+    { "type": "range", "id": "fade_position", "label": "Fade Position", "min": -200, "max": 200, "step": 10, "default": 0, "unit": "px" },
     { "type": "range", "id": "fade_strength", "label": "Fade strength (desktop, side)", "min": 0, "max": 100, "step": 5, "default": 70, "unit": "%" },
     { "type": "range", "id": "mobile_fade_strength", "label": "Fade strength (mobile, bottom)", "min": 0, "max": 100, "step": 5, "default": 60, "unit": "%" },
     { "type": "color", "id": "fade_color", "label": "Fade color", "default": "#0c0b0a" },
