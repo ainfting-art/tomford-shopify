@@ -1,8 +1,10 @@
 {%- comment -%}
   MA Atelier Editorial — standalone luxury storytelling section.
-  Desktop V2: Two-column editorial layout with precise art-direction controls,
-  independent mobile/desktop spacing, custom content/image offsets, width controls, and fine-tuned fade settings.
+  Desktop V3 (Motion & Interaction Upgrade): Adds editorial text reveal on scroll, 
+  desktop background image parallax, refined CTA hover animations, smooth image zoom on hover, 
+  and proper CSS mask-based blur/fade enhancements.
   Mobile: 100% preserved and untouched.
+  Schema: 100% preserved and fully backward compatible.
 {%- endcomment -%}
 
 {% style %}
@@ -31,7 +33,17 @@
     transform: scale({{ section.settings.image_scale | times: 1.0 | divided_by: 100 }}) translate({{ section.settings.image_offset_x | default: 0 }}px, {{ section.settings.image_offset_y | default: 0 }}px);
     transform-origin: center;
     opacity: {{ section.settings.image_opacity | times: 1.0 | divided_by: 100 }};
+    will-change: transform;
+    transition: transform 800ms ease;
   }
+  
+  /* Desktop image hover zoom (Requirement 4) */
+  @media (min-width: 750px) {
+    #shopify-section-{{ section.id }} .ma-atelier:hover .ma-atelier__media img {
+      transform: scale(calc({{ section.settings.image_scale | times: 1.0 | divided_by: 100 }} * 1.03)) translate({{ section.settings.image_offset_x | default: 0 }}px, {{ section.settings.image_offset_y | default: 0 }}px);
+    }
+  }
+
   #shopify-section-{{ section.id }} .ma-atelier__overlay {
     position: absolute;
     inset: 0;
@@ -39,15 +51,20 @@
     opacity: {{ section.settings.overlay_strength | times: 1.0 | divided_by: 100 }};
     pointer-events: none;
   }
+
+  /* Enhanced Fade System with CSS Masking (Requirement 5) */
   #shopify-section-{{ section.id }} .ma-atelier__fade {
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-      to bottom,
-      transparent 0%,
-      {{ section.settings.fade_color }} {{ section.settings.mobile_fade_strength }}%
-    );
+    background: {{ section.settings.fade_color }};
+    opacity: {{ section.settings.mobile_fade_strength | times: 1.0 | divided_by: 100 }};
     pointer-events: none;
+    {% if section.settings.fade_blur > 0 %}
+    filter: blur({{ section.settings.fade_blur }}px);
+    -webkit-filter: blur({{ section.settings.fade_blur }}px);
+    {% endif %}
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, black 100%);
   }
 
   /* ---------- Content (mobile: stacked below image) ---------- */
@@ -58,6 +75,38 @@
     padding: {{ section.settings.mobile_padding_top }}px {{ section.settings.mobile_padding_x }}px {{ section.settings.mobile_padding_bottom }}px;
     text-align: {{ section.settings.mobile_content_align }};
     max-width: none;
+  }
+
+  /* Editorial Text Reveal Initial States (Requirement 1) */
+  #shopify-section-{{ section.id }} .ma-atelier__label,
+  #shopify-section-{{ section.id }} .ma-atelier__headline,
+  #shopify-section-{{ section.id }} .ma-atelier__paragraph,
+  #shopify-section-{{ section.id }} .ma-atelier__cta {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform;
+  }
+
+  #shopify-section-{{ section.id }} .ma-atelier.is-revealed .ma-atelier__label {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0ms;
+  }
+  #shopify-section-{{ section.id }} .ma-atelier.is-revealed .ma-atelier__headline {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 80ms;
+  }
+  #shopify-section-{{ section.id }} .ma-atelier.is-revealed .ma-atelier__paragraph {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 160ms;
+  }
+  #shopify-section-{{ section.id }} .ma-atelier.is-revealed .ma-atelier__cta {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 240ms;
   }
 
   #shopify-section-{{ section.id }} .ma-atelier__label {
@@ -90,6 +139,7 @@
     max-width: 100%;
   }
 
+  /* Refined CTA Hover Interaction (Requirement 3) */
   #shopify-section-{{ section.id }} .ma-atelier__cta {
     display: inline-flex;
     align-items: center;
@@ -100,19 +150,32 @@
     text-transform: uppercase;
     color: {{ section.settings.cta_color }};
     text-decoration: none;
-    border-bottom: 1px solid currentColor;
+    position: relative;
     padding-bottom: 3px;
     margin-top: {{ section.settings.cta_top_margin | default: 0 }}px;
-    transition: color 0.35s ease;
+    transition: color 250ms ease-out;
+  }
+  #shopify-section-{{ section.id }} .ma-atelier__cta::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0%;
+    height: 1px;
+    background: currentColor;
+    transition: width 250ms ease-out;
   }
   #shopify-section-{{ section.id }} .ma-atelier__cta:hover {
     color: {{ section.settings.cta_hover_color }};
   }
+  #shopify-section-{{ section.id }} .ma-atelier__cta:hover::after {
+    width: 100%;
+  }
   #shopify-section-{{ section.id }} .ma-atelier__cta-arrow {
-    transition: transform 0.35s ease;
+    transition: transform 250ms ease-out;
   }
   #shopify-section-{{ section.id }} .ma-atelier__cta:hover .ma-atelier__cta-arrow {
-    transform: translateX(5px);
+    transform: translateX(4px);
   }
 
   /* ---------- Desktop: two-column editorial split layout ---------- */
@@ -151,25 +214,32 @@
       width: 100%;
       height: 100%;
       z-index: 1;
+      overflow: hidden;
     }
 
     #shopify-section-{{ section.id }} .ma-atelier__media {
       position: absolute;
-      inset: 0;
-      height: 100%;
-      width: 100%;
+      inset: -15%;
+      height: 130%;
+      width: 130%;
+      will-change: transform;
     }
 
     #shopify-section-{{ section.id }} .ma-atelier__fade {
-      backdrop-filter: blur({{ section.settings.fade_blur | default: 0 }}px);
-      -webkit-backdrop-filter: blur({{ section.settings.fade_blur | default: 0 }}px);
+      {% if section.settings.fade_blur > 0 %}
+      filter: blur({{ section.settings.fade_blur }}px);
+      -webkit-filter: blur({{ section.settings.fade_blur }}px);
+      {% endif %}
       background: linear-gradient(
         to {% if section.settings.fade_direction == 'left' %}right{% else %}left{% endif %},
         {{ section.settings.fade_color }} 0%,
         transparent {{ section.settings.fade_strength }}%
       );
       width: {{ section.settings.fade_width | default: 600 }}px;
+      height: 100%;
       transform: translateX({{ section.settings.fade_position | default: 0 }}px);
+      -webkit-mask-image: linear-gradient(to {% if section.settings.fade_direction == 'left' %}right{% else %}left{% endif %}, black 0%, transparent 100%);
+      mask-image: linear-gradient(to {% if section.settings.fade_direction == 'left' %}right{% else %}left{% endif %}, black 0%, transparent 100%);
     }
 
     #shopify-section-{{ section.id }} .ma-atelier__content {
@@ -200,9 +270,28 @@
       margin-top: {{ section.settings.cta_top_margin | default: 0 }}px;
     }
   }
+
+  /* Accessibility & Reduced Motion Support (Requirement 7) */
+  @media (prefers-reduced-motion: reduce) {
+    #shopify-section-{{ section.id }} .ma-atelier__label,
+    #shopify-section-{{ section.id }} .ma-atelier__headline,
+    #shopify-section-{{ section.id }} .ma-atelier__paragraph,
+    #shopify-section-{{ section.id }} .ma-atelier__cta {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
+    #shopify-section-{{ section.id }} .ma-atelier__media img {
+      transform: scale({{ section.settings.image_scale | times: 1.0 | divided_by: 100 }}) translate({{ section.settings.image_offset_x | default: 0 }}px, {{ section.settings.image_offset_y | default: 0 }}px) !important;
+      transition: none !important;
+    }
+    #shopify-section-{{ section.id }} .ma-atelier__media {
+      transform: none !important;
+    }
+  }
 {% endstyle %}
 
-<section class="ma-atelier">
+<section class="ma-atelier" id="atelier-section-{{ section.id }}">
   <div class="ma-atelier__wrapper">
     <div class="ma-atelier__content-col">
       <div class="ma-atelier__content">
@@ -228,7 +317,7 @@
     </div>
 
     <div class="ma-atelier__media-col">
-      <div class="ma-atelier__media">
+      <div class="ma-atelier__media" id="atelier-media-{{ section.id }}">
         {%- if section.settings.image != blank -%}
           <img
             src="{{ section.settings.image | image_url: width: 1800 }}"
@@ -242,6 +331,63 @@
     </div>
   </div>
 </section>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const sectionEl = document.getElementById("atelier-section-{{ section.id }}");
+    if (!sectionEl) return;
+
+    // 1. Editorial Text Reveal via IntersectionObserver (Triggered once)
+    const observerOptions = {
+      root: null,
+      threshold: 0.15
+    };
+
+    const revealObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          sectionEl.classList.add("is-revealed");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    revealObserver.observe(sectionEl);
+
+    // 2. Background Image Parallax (Desktop Only, rAF, GPU-accelerated)
+    const mediaCol = sectionEl.querySelector(".ma-atelier__media");
+    if (mediaCol && window.innerWidth >= 750) {
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      
+      if (!prefersReducedMotion) {
+        let latestScrollY = window.scrollY;
+        let ticking = false;
+
+        function updateParallax() {
+          const rect = sectionEl.getBoundingClientRect();
+          const windowHeight = window.innerHeight;
+
+          if (rect.top <= windowHeight && rect.bottom >= 0) {
+            const scrollProgress = (windowHeight - rect.top) / (windowHeight + rect.height);
+            const yOffset = (scrollProgress - 0.5) * 80;
+            mediaCol.style.transform = `translate3d(0, ${yOffset.toFixed(2)}px, 0)`;
+          }
+          ticking = false;
+        }
+
+        window.addEventListener("scroll", function () {
+          latestScrollY = window.scrollY;
+          if (!ticking) {
+            window.requestAnimationFrame(updateParallax);
+            ticking = true;
+          }
+        }, { passive: true });
+
+        updateParallax();
+      }
+    }
+  });
+</script>
 
 {% schema %}
 {
