@@ -3,8 +3,7 @@
   Desktop V3: Two-column editorial layout with customizable motion controls,
   independent mobile/desktop spacing, custom content/image offsets, width controls, 
   fine-tuned mask-fade settings, and Theme Customizer motion panel.
-  Mobile V4 Expansion: Adds independent Layout Style selector (01 Story vs 02 Portrait)
-  with dedicated mobile image height, spacing, focal positioning, and top offset controls.
+  Mobile V5: Fixes negative top margin clipping (margin-top: 0 on mobile) so THE ATELIER label renders cleanly.
 {%- endcomment -%}
 
 {% style %}
@@ -69,11 +68,11 @@
     mask-image: linear-gradient(to bottom, transparent 0%, black 100%);
   }
 
-  /* ---------- Content (mobile: stacked below image) ---------- */
+  /* ---------- Content (mobile: margin-top 0 to prevent clipping label) ---------- */
   #shopify-section-{{ section.id }} .ma-atelier__content {
     position: relative;
     z-index: 2;
-    margin-top: -28px;
+    margin-top: 0;
     padding: {{ section.settings.mobile_padding_top }}px {{ section.settings.mobile_padding_x }}px {{ section.settings.mobile_padding_bottom }}px;
     text-align: {{ section.settings.mobile_content_align }};
     max-width: none;
@@ -189,14 +188,20 @@
      Strictly encapsulated to mobile screens. Zero impact on desktop.
   ══════════════════════════════════════════════════════════════ */
   @media (max-width: 749px) {
+    #shopify-section-{{ section.id }} .ma-atelier__wrapper {
+      display: flex;
+      flex-direction: column;
+    }
+    #shopify-section-{{ section.id }} .ma-atelier--mobile-01 .ma-atelier__content-col {
+      order: 1;
+    }
+    #shopify-section-{{ section.id }} .ma-atelier--mobile-01 .ma-atelier__media-col {
+      order: 2;
+    }
     #shopify-section-{{ section.id }} .ma-atelier--mobile-01 .ma-atelier__media {
       transform: translateY({{ section.settings.mobile_story_top_offset | default: 0 }}px);
     }
     
-    #shopify-section-{{ section.id }} .ma-atelier--mobile-02 .ma-atelier__wrapper {
-      display: flex;
-      flex-direction: column;
-    }
     #shopify-section-{{ section.id }} .ma-atelier--mobile-02 .ma-atelier__media-col {
       order: 1;
     }
@@ -209,9 +214,6 @@
     }
     #shopify-section-{{ section.id }} .ma-atelier--mobile-02 .ma-atelier__media img {
       object-position: center {{ section.settings.mobile_image_position | default: 'center' }};
-    }
-    #shopify-section-{{ section.id }} .ma-atelier--mobile-02 .ma-atelier__content {
-      margin-top: 0;
     }
   }
 
