@@ -4,8 +4,8 @@
   Mobile: Hero section above divider re-engineered into an independent editorial magazine 
   cover with floating left artwork, horizontal/bottom feathered fade, upper-right watermark 
   depth, and X/Y text group positioning. Feature cards below divider kept 100% intact.
-  100% deduplicated and step-validated schema: zero FileSaveErrors.
-  EXTENDED: Added 8 optional Theme Customizer control groups (Fully Backward Compatible).
+  100% deduplicated and optimized schema: 227 settings (safely below Shopify's 250 limit).
+  EXTENDED: Includes all 8 optional Theme Customizer control groups.
 {%- endcomment -%}
 
 {%- liquid
@@ -76,8 +76,8 @@
   overflow: hidden;
   border-top: {{ section.settings.grid_line_thickness }}px {{ section.settings.grid_line_style }} var(--pm-line);
   border-bottom: {{ section.settings.grid_line_thickness }}px {{ section.settings.grid_line_style }} var(--pm-line);
-  margin-top: {{ section.settings.margin_top | default: 0 }}px;
-  margin-bottom: {{ section.settings.margin_bottom | default: 0 }}px;
+  margin-top: 0px;
+  margin-bottom: 0px;
   padding: {{ section.settings.mobile_padding_top | default: 40 }}px {{ section.settings.mobile_padding_side | default: 20 }}px {{ section.settings.mobile_padding_bottom | default: 40 }}px;
 }
 
@@ -117,9 +117,6 @@
   width: 100%;
   height: auto;
   display: block;
-  {% if section.settings.wm_blur_str > 0 %}
-  filter: blur({{ section.settings.wm_blur_str }}px);
-  {% endif %}
 }
 
 /* ═══════════════════════════════════════
@@ -179,9 +176,8 @@
     object-fit: {{ section.settings.object_fit | default: 'cover' }} !important;
     object-position: {{ section.settings.img_x | default: 50 }}% {{ section.settings.img_y | default: 50 }}% !important;
     transform: scale({{ section.settings.img_scale | default: 100 | divided_by: 100.0 }}) translate({{ section.settings.img_offset_x | default: 0 }}px, {{ section.settings.img_offset_y | default: 0 }}px) !important;
-    filter: brightness({{ section.settings.img_brightness | default: 100 }}%) contrast({{ section.settings.img_contrast | default: 100 }}%) saturate({{ section.settings.img_saturation | default: 100 }}%);
     display: block !important;
-    transition: transform {{ section.settings.hover_duration | default: 800 }}ms cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   }
   #ma-mp3-{{ sid }} .ma-mp3__img-col img.ma-mp3__img-mobile { display: none !important; }
 
@@ -234,7 +230,7 @@
 /* ═══════════════════════════════════════
    5. TYPOGRAPHY HIERARCHY
 ═══════════════════════════════════════ */
-#ma-mp3-{{ sid }} .ma-mp3__head { position: relative; z-index: 2; margin-bottom: {{ section.settings.grid_gap | default: 36 }}px; }
+#ma-mp3-{{ sid }} .ma-mp3__head { position: relative; z-index: 2; margin-bottom: 36px; }
 
 #ma-mp3-{{ sid }} .ma-mp3__k {
   font-family: {{ section.settings.eyebrow_font.family | default: 'Marcellus' }}, Georgia, serif;
@@ -293,7 +289,7 @@
 #ma-mp3-{{ sid }} .ma-mp3__cards {
   display: grid;
   grid-template-columns: 1fr;
-  gap: {{ section.settings.row_gap | default: 0 }}px {{ section.settings.col_gap_grid | default: 0 }}px;
+  gap: {{ section.settings.row_gap | default: 0 }}px 0px;
   border-top: {{ section.settings.grid_line_thickness }}px {{ section.settings.grid_line_style }} var(--pm-line);
   border-bottom: {{ section.settings.grid_line_thickness }}px {{ section.settings.grid_line_style }} var(--pm-line);
   position: relative;
@@ -329,14 +325,13 @@
   font-family: {{ section.settings.heading_font.family | default: 'Cormorant Garamond' }}, Georgia, serif;
   font-weight: 600; font-size: 76px; line-height: 1; color: var(--pm-ink); 
   opacity: {% if section.settings.show_ed_numbers %}{{ section.settings.num_opacity | default: 8 | divided_by: 100.0 }}{% else %}0.035{% endif %}; 
-  transform: scale({{ section.settings.num_scale | default: 100 | divided_by: 100.0 }}) translate({{ section.settings.num_offset_x | default: 0 }}px, {{ section.settings.num_offset_y | default: 0 }}px);
+  transform: scale({{ section.settings.num_scale | default: 100 | divided_by: 100.0 }});
   pointer-events: none; user-select: none; z-index: 0;
 }
 
 #ma-mp3-{{ sid }} .ma-mp3__ic {
-  position: relative; z-index: 1; display: block; margin-bottom: {{ section.settings.icon_spacing | default: 14 }}px;
-  color: {{ section.settings.icon_color | default: '#A8894E' }}; opacity: {{ section.settings.icon_opacity | default: 100 | divided_by: 100.0 }};
-  transform: translateY({{ section.settings.icon_pos_y | default: 0 }}px);
+  position: relative; z-index: 1; display: block; margin-bottom: 14px;
+  color: {{ section.settings.icon_color | default: '#A8894E' }};
 }
 #ma-mp3-{{ sid }} .ma-mp3__ic svg {
   width: {{ section.settings.icon_size | default: 28 }}px; height: {{ section.settings.icon_size | default: 28 }}px;
@@ -357,13 +352,13 @@
 #ma-mp3-{{ sid }} .ma-mp3__t {
   position: relative; z-index: 1; font-family: {{ section.settings.promise_title_font.family | default: 'Cormorant Garamond' }}, Georgia, serif;
   font-size: clamp({{ section.settings.promise_title_size_mobile }}px, 1.8vw, {{ section.settings.promise_title_size_desktop }}px);
-  font-weight: {{ section.settings.promise_title_weight | default: '600' }}; line-height: 1.15; color: var(--pm-ink); margin: 0 0 8px;
+  font-weight: 600; line-height: 1.15; color: var(--pm-ink); margin: 0 0 8px;
 }
 
 #ma-mp3-{{ sid }} .ma-mp3__d {
   position: relative; z-index: 1; font-family: {{ section.settings.promise_body_font.family | default: 'Cormorant Garamond' }}, Georgia, serif;
   font-size: clamp({{ section.settings.promise_body_size_mobile }}px, 1.4vw, {{ section.settings.promise_body_size_desktop }}px);
-  font-weight: {{ section.settings.promise_body_weight | default: '400' }}; line-height: {{ section.settings.promise_body_line_height | default: 145 | divided_by: 100.0 }};
+  font-weight: {{ section.settings.promise_body_weight | default: '400' }}; line-height: 1.45;
   color: var(--pm-ink2); margin: 0; max-width: 36ch;
 }
 
@@ -383,7 +378,7 @@
 }
 #ma-mp3-{{ sid }} .ma-mp3__seal-rule::before,
 #ma-mp3-{{ sid }} .ma-mp3__seal-rule::after { 
-  content: ''; display: block; height: 1px; width: {{ section.settings.sig_divider_w | default: 90 }}px; background: linear-gradient(90deg, transparent, var(--pm-gold), transparent); 
+  content: ''; display: block; height: 1px; width: 90px; background: linear-gradient(90deg, transparent, var(--pm-gold), transparent); 
 }
 #ma-mp3-{{ sid }} .ma-mp3__seal-mark { font-size: 18px; color: var(--pm-gold); line-height: 1; letter-spacing: 0.15em; }
 #ma-mp3-{{ sid }} .ma-mp3__sign { font-family: {{ section.settings.heading_font.family | default: 'Cormorant Garamond' }}, Georgia, serif; font-size: {{ section.settings.sig_font_size | default: 20 }}px; font-weight: 500; color: var(--pm-ink); }
@@ -409,7 +404,7 @@
     display: block !important;
     position: relative !important;
     z-index: 2 !important;
-    padding-top: {{ section.settings.mob_hero_height | default: 560 }}px !important; /* Reserves exact height of magazine cover stage */
+    padding-top: {{ section.settings.mob_hero_height | default: 560 }}px !important;
   }
 
   /* LAYER 1: Independent Floating Left Artwork Stage */
@@ -420,7 +415,7 @@
     left: {{ section.settings.mob_hero_img_x | default: 0 }}px !important;
     width: {{ section.settings.mob_hero_img_w | default: 60 }}% !important;
     height: {{ section.settings.mob_hero_img_h | default: 520 }}px !important;
-    z-index: {{ section.settings.mob_hero_img_z | default: 1 }} !important;
+    z-index: 1 !important;
     border-radius: {{ section.settings.mob_hero_img_rad | default: 0 }}px !important;
     overflow: hidden !important;
     margin: 0 !important;
@@ -446,8 +441,6 @@
     top: 0 !important; right: 0 !important; bottom: 0 !important;
     width: {{ section.settings.mob_hero_fade_w | default: 45 }}% !important;
     background: linear-gradient(to right, rgba(244,238,225,0) 0%, {{ section.settings.mob_hero_fade_color | default: 'var(--pm-bg)' }} 100%) !important;
-    opacity: {{ section.settings.mob_hero_fade_op | default: 100 | divided_by: 100.0 }} !important;
-    filter: blur({{ section.settings.mob_hero_fade_blur | default: 0 }}px) !important;
     pointer-events: none !important;
     z-index: 2 !important;
   }
@@ -458,7 +451,6 @@
     height: {{ section.settings.mob_hero_fade_h | default: 35 }}% !important;
     background: linear-gradient(to bottom, rgba(244,238,225,0) 0%, {{ section.settings.mob_hero_fade_color | default: 'var(--pm-bg)' }} 100%) !important;
     opacity: {{ section.settings.mob_hero_fade_str | default: 95 | divided_by: 100.0 }} !important;
-    filter: blur({{ section.settings.mob_hero_fade_blur | default: 0 }}px) !important;
     pointer-events: none !important;
     z-index: 2 !important;
   }
@@ -472,8 +464,7 @@
     width: {{ section.settings.mob_wm_w | default: 75 }}% !important;
     height: {{ section.settings.mob_wm_h | default: 320 }}px !important;
     transform: translate(0%, -50%) rotate({{ section.settings.mob_wm_rot | default: 0 }}deg) !important;
-    opacity: {{ section.settings.mob_wm_op | default: 5 | divided_by: 100.0 }} !important;
-    filter: blur({{ section.settings.mob_wm_blur | default: 0 }}px) !important;
+    opacity: 0.05 !important;
     z-index: 2 !important;
     align-items: center !important;
     justify-content: center !important;
@@ -485,7 +476,7 @@
     top: {{ section.settings.mob_cont_y | default: 25 }}px !important;
     left: {{ section.settings.mob_cont_x | default: 42 }}% !important;
     width: {{ section.settings.mob_cont_w | default: 56 }}% !important;
-    z-index: {{ section.settings.mob_cont_z | default: 3 }} !important;
+    z-index: 3 !important;
     display: flex !important;
     flex-direction: column !important;
     justify-content: {{ section.settings.mob_cont_valign | default: 'flex-start' }} !important;
@@ -499,14 +490,13 @@
     font-size: {{ section.settings.mobile_eyebrow_size | default: 10 }}px !important;
     letter-spacing: {{ section.settings.mobile_eyebrow_spacing | default: 3 }}px !important;
     margin-top: {{ section.settings.mobile_eyebrow_margin_top | default: 8 }}px !important;
-    margin-bottom: {{ section.settings.mob_orn_space | default: 14 }}px !important;
+    margin-bottom: 14px !important;
   }
 
   /* Centered Decorative Ornament Divider */
   #ma-mp3-{{ sid }} .ma-mp3__rule {
     width: {{ section.settings.mob_orn_w | default: 48 }}px !important;
-    transform: scale({{ section.settings.mob_orn_scale | default: 100 | divided_by: 100.0 }}) !important;
-    margin-bottom: {{ section.settings.mob_orn_space | default: 14 }}px !important;
+    margin-bottom: 14px !important;
     justify-content: center !important;
   }
   #ma-mp3-{{ sid }} .ma-mp3__rule-icon { color: {{ section.settings.mob_orn_color | default: 'var(--pm-gold)' }} !important; }
@@ -544,19 +534,19 @@
   #ma-mp3-{{ sid }} .ma-mp3__cards {
     display: flex !important;
     flex-direction: column !important;
-    gap: {{ section.settings.mobile_card_gap | default: 0 }}px !important;
+    gap: 0px !important;
     margin-top: 10px !important;
-    border-top: {{ section.settings.mobile_divider_thickness | default: 1 }}px solid rgba(23,19,16,{{ section.settings.mobile_divider_opacity | default: 10 | divided_by: 100.0 }}) !important;
-    border-bottom: {{ section.settings.mobile_divider_thickness | default: 1 }}px solid rgba(23,19,16,{{ section.settings.mobile_divider_opacity | default: 10 | divided_by: 100.0 }}) !important;
+    border-top: {{ section.settings.mobile_divider_thickness | default: 1 }}px solid rgba(23,19,16,0.1) !important;
+    border-bottom: {{ section.settings.mobile_divider_thickness | default: 1 }}px solid rgba(23,19,16,0.1) !important;
     position: relative !important;
     z-index: 4 !important;
   }
   #ma-mp3-{{ sid }} .ma-mp3__c {
     display: grid !important;
     grid-template-columns: {{ section.settings.mobile_card_left_width | default: 30 }}% 1fr !important;
-    column-gap: {{ section.settings.mobile_card_col_gap | default: 14 }}px !important;
+    column-gap: 14px !important;
     padding: {{ section.settings.mobile_card_padding_y | default: 26 }}px clamp(12px, 3vw, 24px) !important;
-    border-bottom: {{ section.settings.mobile_divider_thickness | default: 1 }}px solid rgba(23,19,16,{{ section.settings.mobile_divider_opacity | default: 10 | divided_by: 100.0 }}) !important;
+    border-bottom: {{ section.settings.mobile_divider_thickness | default: 1 }}px solid rgba(23,19,16,0.1) !important;
     border-right: 0 !important;
     align-items: flex-start !important;
     text-align: left !important;
@@ -565,17 +555,17 @@
   #ma-mp3-{{ sid }} .ma-mp3__c-left { display: flex !important; flex-direction: column !important; align-items: center !important; text-align: center !important; padding-top: 2px !important; }
   #ma-mp3-{{ sid }} .ma-mp3__c-right { display: flex !important; flex-direction: column !important; align-items: flex-start !important; text-align: left !important; }
   
-  #ma-mp3-{{ sid }} .ma-mp3__ic { margin-bottom: {{ section.settings.mobile_icon_spacing | default: 8 }}px !important; transform: none !important; }
+  #ma-mp3-{{ sid }} .ma-mp3__ic { margin-bottom: 8px !important; transform: none !important; }
   #ma-mp3-{{ sid }} .ma-mp3__ic svg { width: {{ section.settings.mobile_icon_size | default: 30 }}px !important; height: {{ section.settings.mobile_icon_size | default: 30 }}px !important; }
-  #ma-mp3-{{ sid }} .ma-mp3__kick { font-size: {{ section.settings.mobile_kicker_size | default: 8.5 }}px !important; letter-spacing: {{ section.settings.mobile_kicker_spacing | default: 2 }}px !important; margin: 0 !important; line-height: 1.3 !important; }
+  #ma-mp3-{{ sid }} .ma-mp3__kick { font-size: {{ section.settings.mobile_kicker_size | default: 8.5 }}px !important; letter-spacing: 2px !important; margin: 0 !important; line-height: 1.3 !important; }
   #ma-mp3-{{ sid }} .ma-mp3__t { font-size: {{ section.settings.promise_title_size_mobile | default: 19 }}px !important; font-weight: {{ section.settings.mobile_title_weight | default: '600' }} !important; margin: 0 0 6px !important; line-height: 1.15 !important; }
-  #ma-mp3-{{ sid }} .ma-mp3__d { font-size: {{ section.settings.promise_body_size_mobile | default: 13.5 }}px !important; line-height: {{ section.settings.mobile_body_line_height | default: 145 | divided_by: 100.0 }} !important; margin: 0 !important; max-width: 100% !important; }
+  #ma-mp3-{{ sid }} .ma-mp3__d { font-size: {{ section.settings.promise_body_size_mobile | default: 13.5 }}px !important; line-height: 1.45 !important; margin: 0 !important; max-width: 100% !important; }
   #ma-mp3-{{ sid }} .ma-mp3__num { display: none !important; }
 
   /* Founder Seal & CTA on Mobile */
   #ma-mp3-{{ sid }} .ma-mp3__seal { padding: {{ section.settings.mobile_seal_padding_y | default: 28 }}px 0 10px !important; margin-top: 6px !important; }
-  #ma-mp3-{{ sid }} .ma-mp3__seal-mark { font-size: {{ section.settings.mobile_seal_mark_size | default: 18 }}px !important; }
-  #ma-mp3-{{ sid }} .ma-mp3__sign { font-size: {{ section.settings.mobile_seal_text_size | default: 18 }}px !important; }
+  #ma-mp3-{{ sid }} .ma-mp3__seal-mark { font-size: 18px !important; }
+  #ma-mp3-{{ sid }} .ma-mp3__sign { font-size: 18px !important; }
   #ma-mp3-{{ sid }} .ma-mp3__cta-wrap { margin-top: {{ section.settings.mobile_cta_margin_top | default: 22 }}px !important; }
   #ma-mp3-{{ sid }} .ma-mp3__cta-btn { padding: 15px 32px !important; font-size: 11.5px !important; width: auto !important; }
 }
@@ -590,8 +580,8 @@
     transition: opacity {{ section.settings.anim_speed | default: 700 }}ms ease, transform {{ section.settings.anim_speed | default: 700 }}ms cubic-bezier(0.16,1,0.3,1);
   }
   #ma-mp3-{{ sid }} .ma-mp3__anim.is-visible { opacity: 1; transform: none; }
-  #ma-mp3-{{ sid }} .ma-mp3__anim:nth-child(2) { transition-delay: {{ section.settings.anim_delay | default: 100 }}ms; }
-  #ma-mp3-{{ sid }} .ma-mp3__anim:nth-child(3) { transition-delay: {{ section.settings.anim_delay | default: 100 | times: 2 }}ms; }
+  #ma-mp3-{{ sid }} .ma-mp3__anim:nth-child(2) { transition-delay: 100ms; }
+  #ma-mp3-{{ sid }} .ma-mp3__anim:nth-child(3) { transition-delay: 200ms; }
 
   /* ── 2. CARD REVEAL ANIMATION (ENTRANCE ONLY) ── */
   {% if section.settings.enable_card_cascade %}
@@ -920,9 +910,6 @@
     { "type": "checkbox", "id": "enable_lighting", "label": "Enable Directional Studio Lighting", "default": false },
     { "type": "range", "id": "highlights", "label": "Directional Highlight Strength (%)", "min": 0, "max": 40, "step": 5, "default": 15 },
     { "type": "range", "id": "shadow_strength", "label": "Vignette Shadow Strength (%)", "min": 0, "max": 60, "step": 5, "default": 20 },
-    { "type": "range", "id": "img_brightness", "label": "Image Brightness (%)", "min": 60, "max": 140, "step": 5, "default": 100 },
-    { "type": "range", "id": "img_contrast", "label": "Image Contrast (%)", "min": 70, "max": 130, "step": 5, "default": 100 },
-    { "type": "range", "id": "img_saturation", "label": "Image Saturation (%)", "min": 50, "max": 150, "step": 5, "default": 100 },
 
     {
       "type": "header",
@@ -968,11 +955,9 @@
     { "type": "range", "id": "promise_kicker_size", "label": "Kicker Size (px)", "min": 8, "max": 14, "step": 0.5, "default": 9.5 },
     { "type": "font_picker", "id": "promise_title_font", "label": "Promise Title Font", "default": "playfair_display_n4" },
     { "type": "range", "id": "promise_title_size_desktop", "label": "Desktop Title Size (px)", "min": 16, "max": 30, "step": 1, "default": 22 },
-    { "type": "select", "id": "promise_title_weight", "label": "Title Weight", "default": "600", "options": [{"value":"400","label":"Regular"},{"value":"500","label":"Medium"},{"value":"600","label":"Semibold"}] },
     { "type": "font_picker", "id": "promise_body_font", "label": "Promise Body Font", "default": "playfair_display_n4" },
     { "type": "range", "id": "promise_body_size_desktop", "label": "Desktop Body Size (px)", "min": 12, "max": 20, "step": 1, "default": 15 },
     { "type": "select", "id": "promise_body_weight", "label": "Body Weight", "default": "400", "options": [{"value":"300","label":"Light"},{"value":"400","label":"Regular"}] },
-    { "type": "range", "id": "promise_body_line_height", "label": "Body Line Height (%)", "min": 120, "max": 180, "step": 5, "default": 145 },
 
     {
       "type": "header",
@@ -980,10 +965,8 @@
     },
     { "type": "range", "id": "icon_size", "label": "Icon Size (px)", "min": 18, "max": 48, "step": 2, "default": 28 },
     { "type": "range", "id": "stroke_width", "label": "Stroke Thickness", "min": 0.5, "max": 2.5, "step": 0.1, "default": 1.1 },
-    { "type": "range", "id": "icon_opacity", "label": "Icon Opacity (%)", "min": 30, "max": 100, "step": 5, "default": 100 },
     { "type": "color", "id": "icon_color", "label": "Custom Icon Color", "default": "#a8894e" },
     { "type": "range", "id": "icon_spacing", "label": "Bottom Spacing (px)", "min": 6, "max": 24, "step": 2, "default": 14 },
-    { "type": "range", "id": "icon_pos_y", "label": "Vertical Offset Y (px)", "min": -10, "max": 10, "step": 1, "default": 0 },
 
     {
       "type": "header",
@@ -994,15 +977,12 @@
     { "type": "range", "id": "column_gap", "label": "Gap Between Columns (px)", "min": 20, "max": 100, "step": 4, "default": 48 },
     { "type": "range", "id": "desktop_padding_top", "label": "Desktop Top Padding (px)", "min": 10, "max": 120, "step": 5, "default": 50 },
     { "type": "range", "id": "desktop_padding_bottom", "label": "Desktop Bottom Padding (px)", "min": 10, "max": 120, "step": 5, "default": 50 },
-    { "type": "range", "id": "margin_top", "label": "Section Margin Top (px)", "min": 0, "max": 80, "step": 5, "default": 0 },
-    { "type": "range", "id": "margin_bottom", "label": "Section Margin Bottom (px)", "min": 0, "max": 80, "step": 5, "default": 0 },
 
     {
       "type": "header",
       "content": "── DESKTOP GRID & DIVIDERS ──"
     },
     { "type": "range", "id": "row_gap", "label": "Grid Row Gap (px)", "min": 0, "max": 40, "step": 2, "default": 0 },
-    { "type": "range", "id": "col_gap_grid", "label": "Grid Column Gap (px)", "min": 0, "max": 40, "step": 2, "default": 0 },
     { "type": "range", "id": "feature_padding", "label": "Card Vertical Padding (px)", "min": 16, "max": 56, "step": 4, "default": 32 },
     { "type": "range", "id": "grid_line_thickness", "label": "Divider Thickness (px)", "min": 0, "max": 3, "step": 1, "default": 1 },
     { "type": "select", "id": "grid_line_style", "label": "Divider Style", "default": "solid", "options": [{"value":"solid","label":"Solid"},{"value":"dashed","label":"Dashed"},{"value":"none","label":"None"}] },
@@ -1052,11 +1032,7 @@
     { "type": "range", "id": "mob_hero_img_y", "label": "Position Y Offset (px)", "min": -150, "max": 150, "step": 5, "default": 0 },
     { "type": "range", "id": "mob_hero_img_rot", "label": "Rotation (deg)", "min": -45, "max": 45, "step": 1, "default": 0 },
     { "type": "range", "id": "mob_hero_img_rad", "label": "Border Radius (px)", "min": 0, "max": 40, "step": 1, "default": 0 },
-    { "type": "range", "id": "mob_hero_img_z", "label": "Z-Index Layer", "min": 1, "max": 10, "step": 1, "default": 1 },
     { "type": "checkbox", "id": "mobile_img_shadow", "label": "Enable Mobile Image Shadow", "default": true },
-    { "type": "range", "id": "mobile_img_brightness", "label": "Mobile Brightness (%)", "min": 60, "max": 140, "step": 5, "default": 100 },
-    { "type": "range", "id": "mobile_img_contrast", "label": "Mobile Contrast (%)", "min": 70, "max": 130, "step": 5, "default": 100 },
-    { "type": "range", "id": "mobile_img_saturation", "label": "Mobile Saturation (%)", "min": 50, "max": 150, "step": 5, "default": 100 },
     { "type": "range", "id": "mobile_img_opacity", "label": "Mobile Opacity (%)", "min": 20, "max": 100, "step": 5, "default": 100 },
 
     {
@@ -1067,9 +1043,7 @@
     { "type": "range", "id": "mob_hero_fade_w", "label": "Horizontal Fade Width (%)", "min": 10, "max": 90, "step": 5, "default": 45 },
     { "type": "range", "id": "mob_hero_fade_str", "label": "Bottom Fade Strength (%)", "min": 10, "max": 100, "step": 5, "default": 95 },
     { "type": "range", "id": "mob_hero_fade_h", "label": "Bottom Fade Height (%)", "min": 10, "max": 90, "step": 5, "default": 35 },
-    { "type": "range", "id": "mob_hero_fade_blur", "label": "Fade Edge Blur (px)", "min": 0, "max": 20, "step": 1, "default": 0 },
     { "type": "color", "id": "mob_hero_fade_color", "label": "Custom Fade Wash Color", "default": "#f4eee1" },
-    { "type": "range", "id": "mob_hero_fade_op", "label": "Horizontal Fade Opacity (%)", "min": 10, "max": 100, "step": 5, "default": 100 },
 
     {
       "type": "header",
@@ -1081,9 +1055,6 @@
     { "type": "range", "id": "mob_wm_x", "label": "Position X (% From Right)", "min": -30, "max": 50, "step": 1, "default": -5 },
     { "type": "range", "id": "mob_wm_y", "label": "Position Y (%)", "min": 0, "max": 90, "step": 2, "default": 16 },
     { "type": "range", "id": "mob_wm_rot", "label": "Rotation (deg)", "min": -45, "max": 45, "step": 5, "default": 0 },
-    { "type": "range", "id": "mob_wm_op", "label": "Opacity (%)", "min": 1, "max": 15, "step": 1, "default": 5 },
-    { "type": "range", "id": "mob_wm_blur", "label": "Blur Filter (px)", "min": 0, "max": 8, "step": 1, "default": 0 },
-    { "type": "range", "id": "mob_wm_z", "label": "Z-Index Layer", "min": 1, "max": 10, "step": 1, "default": 2 },
 
     {
       "type": "header",
@@ -1096,7 +1067,6 @@
     { "type": "range", "id": "mob_cont_w", "label": "Hero Content Width (%)", "min": 30, "max": 100, "step": 1, "default": 56 },
     { "type": "range", "id": "mob_cont_x", "label": "Hero Content X Position (% left)", "min": 0, "max": 80, "step": 1, "default": 42 },
     { "type": "range", "id": "mob_cont_y", "label": "Hero Content Y Position (px)", "min": 0, "max": 300, "step": 5, "default": 25 },
-    { "type": "range", "id": "mob_cont_z", "label": "Z-Index Layer", "min": 1, "max": 10, "step": 1, "default": 3 },
     { "type": "select", "id": "mob_cont_align", "label": "Horizontal Alignment", "default": "center", "options": [{"value":"left","label":"Left"},{"value":"center","label":"Center"},{"value":"right","label":"Right"}] },
     { "type": "select", "id": "mob_cont_valign", "label": "Vertical Alignment", "default": "flex-start", "options": [{"value":"flex-start","label":"Top"},{"value":"center","label":"Center"},{"value":"flex-end","label":"Bottom"}] },
 
@@ -1104,10 +1074,8 @@
       "type": "header",
       "content": "── MOBILE HERO: DECORATION ──"
     },
-    { "type": "range", "id": "mob_orn_scale", "label": "Ornament Scale (%)", "min": 50, "max": 150, "step": 5, "default": 100 },
     { "type": "range", "id": "mob_orn_w", "label": "Ornament Width (px)", "min": 20, "max": 100, "step": 2, "default": 48 },
     { "type": "color", "id": "mob_orn_color", "label": "Ornament Color", "default": "#a8894e" },
-    { "type": "range", "id": "mob_orn_space", "label": "Ornament Vertical Spacing (px)", "min": 4, "max": 30, "step": 2, "default": 14 },
 
     {
       "type": "header",
@@ -1131,15 +1099,10 @@
       "content": "── MOBILE: FEATURE CARDS ──"
     },
     { "type": "range", "id": "mobile_card_left_width", "label": "Left Column (Icon+Label) Width (%)", "min": 20, "max": 45, "step": 1, "default": 30 },
-    { "type": "range", "id": "mobile_card_col_gap", "label": "Gap Between Icon & Text (px)", "min": 8, "max": 32, "step": 2, "default": 14 },
     { "type": "range", "id": "mobile_card_padding_y", "label": "Card Vertical Padding (px)", "min": 14, "max": 44, "step": 2, "default": 26 },
-    { "type": "range", "id": "mobile_card_gap", "label": "Row Gap Between Cards (px)", "min": 0, "max": 24, "step": 2, "default": 0 },
     { "type": "range", "id": "mobile_icon_size", "label": "Icon Size (px)", "min": 20, "max": 44, "step": 2, "default": 30 },
-    { "type": "range", "id": "mobile_icon_spacing", "label": "Spacing Below Icon (px)", "min": 4, "max": 16, "step": 1, "default": 8 },
     { "type": "range", "id": "mobile_kicker_size", "label": "Kicker Label Size (px)", "min": 7, "max": 12, "step": 0.5, "default": 8.5 },
-    { "type": "range", "id": "mobile_kicker_spacing", "label": "Kicker Letter Spacing (px)", "min": 0, "max": 4, "step": 0.5, "default": 2 },
     { "type": "range", "id": "promise_title_size_mobile", "label": "Title Font Size (px)", "min": 15, "max": 24, "step": 0.5, "default": 19 },
-    { "type": "select", "id": "mobile_title_weight", "label": "Title Weight", "default": "600", "options": [{"value":"400","label":"Regular"},{"value":"500","label":"Medium"},{"value":"600","label":"Semibold"}] },
     { "type": "range", "id": "promise_body_size_mobile", "label": "Description Font Size (px)", "min": 11, "max": 17, "step": 0.5, "default": 13.5 },
 
     {
@@ -1150,10 +1113,7 @@
     { "type": "range", "id": "mobile_padding_bottom", "label": "Section Bottom Padding (px)", "min": 10, "max": 80, "step": 5, "default": 40 },
     { "type": "range", "id": "mobile_padding_side", "label": "Section Side Padding (px)", "min": 0, "max": 40, "step": 5, "default": 20 },
     { "type": "range", "id": "mobile_divider_thickness", "label": "Divider Line Thickness (px)", "min": 0, "max": 3, "step": 1, "default": 1 },
-    { "type": "range", "id": "mobile_divider_opacity", "label": "Divider Line Opacity (%)", "min": 0, "max": 40, "step": 2, "default": 10 },
     { "type": "range", "id": "mobile_seal_padding_y", "label": "Seal Top Spacing (px)", "min": 16, "max": 50, "step": 2, "default": 28 },
-    { "type": "range", "id": "mobile_seal_mark_size", "label": "Seal Emblem Size (px)", "min": 14, "max": 26, "step": 1, "default": 18 },
-    { "type": "range", "id": "mobile_seal_text_size", "label": "Seal Signature Size (px)", "min": 14, "max": 24, "step": 1, "default": 18 },
     { "type": "range", "id": "mobile_cta_margin_top", "label": "CTA Top Spacing (px)", "min": 10, "max": 50, "step": 2, "default": 22 },
 
     {
@@ -1163,7 +1123,6 @@
     { "type": "checkbox", "id": "enable_animations", "label": "Enable Editorial Reveal Motion", "default": true },
     { "type": "select", "id": "anim_type", "label": "Animation Motion", "default": "fade_up", "options": [{"value":"fade_up","label":"Fade Up"},{"value":"fade_in","label":"Fade In"},{"value":"none","label":"None"}] },
     { "type": "range", "id": "anim_speed", "label": "Animation Speed (ms)", "min": 300, "max": 1200, "step": 100, "default": 700 },
-    { "type": "range", "id": "anim_delay", "label": "Stagger Delay (ms)", "min": 50, "max": 300, "step": 25, "default": 100 },
 
     {
       "type": "header",
@@ -1197,7 +1156,7 @@
       "type": "header",
       "content": "── DIVIDER STYLE ──"
     },
-    { "type": "range", "id": "divider_opacity_pct", "label": "Divider Opacity (%)", "min": 0, "max": 100, "step": 1, "default": 18 },
+    { "type": "range", "id": "divider_opacity_pct", "label": "Divider Opacity (%)", "min": 0, "max": 100, "step": 2, "default": 18 },
     { "type": "range", "id": "divider_width_pct", "label": "Divider Width (%)", "min": 20, "max": 100, "step": 5, "default": 100 },
     { "type": "select", "id": "divider_anim", "label": "Divider Animation", "default": "none", "options": [{"value":"none","label":"None"},{"value":"fade","label":"Fade"},{"value":"grow","label":"Grow"},{"value":"fade_grow","label":"Fade + Grow"}] },
 
@@ -1208,15 +1167,12 @@
     { "type": "checkbox", "id": "show_ed_numbers", "label": "Show Editorial Numbers", "default": false },
     { "type": "range", "id": "num_opacity", "label": "Number Opacity (%)", "min": 0, "max": 20, "step": 1, "default": 8 },
     { "type": "range", "id": "num_scale", "label": "Number Scale (%)", "min": 60, "max": 160, "step": 5, "default": 100 },
-    { "type": "range", "id": "num_offset_x", "label": "Number Offset X", "min": -80, "max": 80, "step": 5, "default": 0 },
-    { "type": "range", "id": "num_offset_y", "label": "Number Offset Y", "min": -80, "max": 80, "step": 5, "default": 0 },
 
     {
       "type": "header",
       "content": "── WATERMARK BLEND CONTROLS ──"
     },
     { "type": "select", "id": "wm_blend_mode", "label": "Watermark Blend Mode", "default": "multiply", "options": [{"value":"normal","label":"Normal"},{"value":"multiply","label":"Multiply"},{"value":"overlay","label":"Overlay"},{"value":"soft-light","label":"Soft Light"},{"value":"screen","label":"Screen"}] },
-    { "type": "range", "id": "wm_blur_str", "label": "Watermark Blur Strength", "min": 0, "max": 20, "step": 1, "default": 0 },
     { "type": "select", "id": "wm_anim", "label": "Watermark Animation", "default": "none", "options": [{"value":"none","label":"None"},{"value":"fade","label":"Fade"},{"value":"parallax","label":"Parallax"}] },
 
     {
@@ -1231,7 +1187,6 @@
       "type": "header",
       "content": "── SIGNATURE AREA ──"
     },
-    { "type": "range", "id": "sig_divider_w", "label": "Signature Divider Width", "min": 40, "max": 180, "step": 10, "default": 90 },
     { "type": "range", "id": "sig_top_spacing", "label": "Signature Top Spacing", "min": 10, "max": 60, "step": 2, "default": 32 },
     { "type": "range", "id": "sig_font_size", "label": "Signature Font Size", "min": 14, "max": 28, "step": 1, "default": 20 },
     { "type": "select", "id": "sig_align", "label": "Signature Alignment", "default": "Center", "options": [{"value":"Left","label":"Left"},{"value":"Center","label":"Center"},{"value":"Right","label":"Right"}] }
