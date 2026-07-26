@@ -3,7 +3,7 @@
   Desktop V3: Two-column editorial layout with customizable motion controls,
   independent mobile/desktop spacing, custom content/image offsets, width controls, 
   fine-tuned mask-fade settings, and Theme Customizer motion panel.
-  Mobile V5: Fixes negative top margin clipping (margin-top: 0 on mobile) so THE ATELIER label renders cleanly.
+  Mobile V6: Perfected setting persistence with explicit Liquid default filters across all mobile properties to prevent post-save spacing collapse.
 {%- endcomment -%}
 
 {% style %}
@@ -11,15 +11,15 @@
     position: relative;
     overflow: hidden;
     background: {{ section.settings.background_color }};
-    margin-top: {{ section.settings.margin_top }}px;
-    margin-bottom: {{ section.settings.margin_bottom }}px;
+    margin-top: {{ section.settings.margin_top | default: 0 }}px;
+    margin-bottom: {{ section.settings.margin_bottom | default: 0 }}px;
   }
 
   /* ---------- Media (image) ---------- */
   #shopify-section-{{ section.id }} .ma-atelier__media {
     position: relative;
     width: 100%;
-    height: {{ section.settings.mobile_image_height }}px;
+    height: {{ section.settings.mobile_image_height | default: 480 }}px;
     overflow: hidden;
   }
   #shopify-section-{{ section.id }} .ma-atelier__media img {
@@ -58,7 +58,7 @@
     position: absolute;
     inset: 0;
     background: {{ section.settings.fade_color }};
-    opacity: {{ section.settings.mobile_fade_strength | times: 1.0 | divided_by: 100 }};
+    opacity: {{ section.settings.mobile_fade_strength | default: 60 | times: 1.0 | divided_by: 100 }};
     pointer-events: none;
     {% if section.settings.fade_blur > 0 %}
       filter: blur({{ section.settings.fade_blur }}px);
@@ -68,13 +68,13 @@
     mask-image: linear-gradient(to bottom, transparent 0%, black 100%);
   }
 
-  /* ---------- Content (mobile: margin-top 0 to prevent clipping label) ---------- */
+  /* ---------- Content (mobile: margin-top 0 to prevent clipping label, explicit defaults to prevent collapse) ---------- */
   #shopify-section-{{ section.id }} .ma-atelier__content {
     position: relative;
     z-index: 2;
     margin-top: 0;
-    padding: {{ section.settings.mobile_padding_top }}px {{ section.settings.mobile_padding_x }}px {{ section.settings.mobile_padding_bottom }}px;
-    text-align: {{ section.settings.mobile_content_align }};
+    padding: {{ section.settings.mobile_padding_top | default: 30 }}px {{ section.settings.mobile_padding_x | default: 24 }}px {{ section.settings.mobile_padding_bottom | default: 45 }}px;
+    text-align: {{ section.settings.mobile_content_align | default: 'left' }};
     max-width: none;
   }
 
@@ -115,30 +115,30 @@
   #shopify-section-{{ section.id }} .ma-atelier__label {
     font-family: {{ section.settings.label_font.family }}, sans-serif;
     font-weight: {{ section.settings.label_weight }};
-    font-size: {{ section.settings.label_size_mobile }}px;
+    font-size: {{ section.settings.label_size_mobile | default: 11 }}px;
     color: {{ section.settings.label_color }};
     letter-spacing: {{ section.settings.label_letter_spacing }}px;
     text-transform: {{ section.settings.label_transform }};
-    margin: 0 0 {{ section.settings.label_bottom_margin | default: section.settings.content_spacing }}px;
+    margin: 0 0 {{ section.settings.label_bottom_margin | default: section.settings.content_spacing | default: 20 }}px;
   }
 
   #shopify-section-{{ section.id }} .ma-atelier__headline {
     font-family: {{ section.settings.headline_font.family }}, serif;
     font-weight: {{ section.settings.headline_weight }};
-    font-size: {{ section.settings.headline_size_mobile }}px;
+    font-size: {{ section.settings.headline_size_mobile | default: 30 }}px;
     color: {{ section.settings.headline_color }};
     letter-spacing: {{ section.settings.headline_letter_spacing }}px;
     line-height: {{ section.settings.headline_line_height }};
-    margin: 0 0 {{ section.settings.heading_bottom_margin | default: section.settings.content_spacing }}px;
+    margin: 0 0 {{ section.settings.heading_bottom_margin | default: section.settings.content_spacing | default: 20 }}px;
     max-width: 100%;
   }
 
   #shopify-section-{{ section.id }} .ma-atelier__paragraph {
     font-family: {{ section.settings.paragraph_font.family }}, sans-serif;
-    font-size: {{ section.settings.paragraph_size_mobile }}px;
+    font-size: {{ section.settings.paragraph_size_mobile | default: 14 }}px;
     color: {{ section.settings.paragraph_color }};
     line-height: {{ section.settings.paragraph_line_height }};
-    margin: 0 0 {{ section.settings.paragraph_bottom_margin | default: section.settings.content_spacing }}px;
+    margin: 0 0 {{ section.settings.paragraph_bottom_margin | default: section.settings.content_spacing | default: 20 }}px;
     max-width: 100%;
   }
 
