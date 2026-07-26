@@ -291,7 +291,7 @@
         "fade_direction_mob": "none",
         "fade_width_mob": 0,
         "fade_strength_mob": 0,
-        "enable_hover_zoom": false,
+        "enable_hover_zoom": true,
         "hover_scale": 102,
         "hover_duration": 800,
         "hover_easing": "luxury_smooth",
