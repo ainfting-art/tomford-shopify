@@ -135,6 +135,7 @@
         "desktop_layout_style": "01",
         "mobile_layout_style": "01",
         "bottle_image": "shopify://shop_images/8K_cinematic_macro__202604281849_1.jpg",
+        "mobile_image": "shopify://shop_images/8K_cinematic_macro__202604281849_1.jpg",
         "img_object_fit_dt": "cover",
         "img_object_pos_dt": "center",
         "img_object_fit_mob": "cover",
