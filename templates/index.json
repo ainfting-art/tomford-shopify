@@ -232,6 +232,8 @@
         "texture_opacity": 4,
         "noise_amount": 4,
         "enable_editorial_reveal": true,
+        "card_animation_duration": 800,
+        "card_stagger_delay": 140,
         "enable_card_hover": true,
         "enable_hover_zoom": true,
         "hover_scale": 102,
