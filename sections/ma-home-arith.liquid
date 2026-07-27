@@ -439,6 +439,7 @@
     width: 100%; height: 100%; display: block;
     transform: scale({{ section.settings.image_scale | default: 100 | times: 1.0 | divided_by: 100 }}) translate({{ section.settings.image_offset_x | default: 0 }}px, {{ section.settings.image_offset_y | default: 0 }}px);
     filter: brightness({{ section.settings.img_brightness | default: 100 }}%) contrast({{ section.settings.img_contrast | default: 100 }}%) saturate({{ section.settings.img_saturation | default: 100 }}%) sepia({{ section.settings.img_warmth | default: 0 | at_least: 0 | times: 1.0 | divided_by: 100 }});
+    transition: transform {{ section.settings.hover_duration | default: 800 }}ms cubic-bezier(0.16, 1, 0.3, 1);
   }
   #ma-ar-{{ sid }} .ma-ar__img--dt {
     object-fit: cover; object-position: center; display: block;
@@ -446,6 +447,12 @@
   #ma-ar-{{ sid }} .ma-ar__img--mob {
     object-fit: cover; object-position: center; display: none;
   }
+
+  {% if section.settings.enable_hover_zoom %}
+  #ma-ar-{{ sid }} .ma-ar__photo:hover .ma-ar__img{
+    transform: scale({% assign base_scale = section.settings.image_scale | default: 100 | times: 1.0 %}{% assign hover_mult = section.settings.hover_scale | default: 102 | times: 1.0 %}{{ base_scale | times: hover_mult | divided_by: 10000 }}) translate({{ section.settings.image_offset_x | default: 0 }}px, {{ section.settings.image_offset_y | default: 0 }}px);
+  }
+  {% endif %}
 
   /* ---- MOBILE (< 900px): Stacked Layout ---- */
   @media (max-width: 899px){
