@@ -483,24 +483,16 @@
     #ma-ar-{{ sid }}.ma-ar{
       display: grid !important;
       grid-template-columns: {{ split_left }}% {{ split_right }}% !important;
-      {% if section.settings.dt_height == '100vh' %}
-        height: calc(100vh - var(--ma-hdr)) !important;
-        max-height: calc(100vh - var(--ma-hdr)) !important;
-      {% elsif section.settings.dt_height == 'auto' %}
-        height: auto !important;
-        min-height: 600px !important;
-      {% else %}
-        height: {{ section.settings.dt_height }}px !important;
-        max-height: {{ section.settings.dt_height }}px !important;
-      {% endif %}
-      overflow: {{ section.settings.overflow_mode | default: 'hidden' }} !important;
+      height: auto !important;
+      min-height: {{ section.settings.dt_height | default: 720 }}px !important;
+      overflow: visible !important;
       max-width: {{ section.settings.dt_max_w | default: 1440 }}px;
       margin-left: auto; margin-right: auto;
     }
     #ma-ar-{{ sid }} .ma-ar__left-col{
-      height: 100% !important; max-height: 100% !important;
+      height: auto !important; max-height: none !important;
       padding: {{ section.settings.padding_top | default: 24 }}px {{ section.settings.padding_x | default: 48 }}px {{ section.settings.padding_bottom | default: 24 }}px {{ section.settings.padding_x | default: 48 | times: 1.1 }}px !important;
-      overflow: {% if section.settings.overflow_mode == 'auto' %}auto{% else %}hidden{% endif %} !important;
+      overflow: visible !important;
       box-sizing: border-box !important;
     }
     #ma-ar-{{ sid }} .ma-ar__proof{
@@ -512,7 +504,7 @@
     #ma-ar-{{ sid }} .ma-ar__photo{
       height: 100% !important; width: 100% !important; position: relative !important; overflow: hidden !important; display: block !important;
     }
-    #ma-ar-{{ sid }} .ma-ar__img--dt { display: block !important; }
+    #ma-ar-{{ sid }} .ma-ar__img--dt { display: block !important; height: 100% !important; width: 100% !important; }
     #ma-ar-{{ sid }} .ma-ar__img--mob { display: none !important; }
 
     {%- if melt > 0 -%}
