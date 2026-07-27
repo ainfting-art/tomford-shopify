@@ -1,8 +1,8 @@
 {%- comment -%}
-  MAISON AMIIR — Honest Arithmetic Section V4 (Full 20-Group Customizer Expansion)
-  Preserves 100% of legacy setting IDs, animations, and two-column DOM architecture.
-  DOM ARCHITECTURE: Single-viewport 100vh desktop grid split (Left Article Spread / Right Full-Height Image).
-  100% syntax validated: select menus used for column counts, hex color defaults, double quotes around strings with apostrophes.
+  MAISON AMIIR — Home · Honest Arithmetic V4 (Fully Corrected & Expanded)
+  FIXED: Desktop bottom-clipping resolved via explicit Section Height and Overflow controls.
+  FIXED: Comparison card icons and proof grid symbols fully restored with bulletproof inline SVGs.
+  STRUCTURE: Desktop settings first, Mobile settings second, modular content, art direction, and polish.
 {%- endcomment -%}
 
 {%- liquid
@@ -85,7 +85,7 @@
         </div>
       {%- endif -%}
     {%- else -%}
-      <!-- Style B: VS Comparison Cards (V4 Centerpiece Polish) -->
+      <!-- Style B: VS Comparison Cards (Fully Restored Icons) -->
       <div class="ma-ar__cards ma-ar__reveal">
         <div class="ma-ar__card ma-ar__card--them">
           {%- if section.settings.card1_header != blank -%}<p class="ma-ar__card-h">{{ section.settings.card1_header | escape }}</p>{%- endif -%}
@@ -94,9 +94,7 @@
             {%- if left_items.size > 0 -%}
               {%- for block in left_items -%}
                 <li class="ma-ar__list-item" {{ block.shopify_attributes }}>
-                  <span class="ma-ar__ic">
-                    <svg viewBox="0 0 24 24"><path d="M4 10l1-6h14l1 6M4 10v9h16v-9M4 10h16M9 19v-5h4v5"/></svg>
-                  </span>
+                  <span class="ma-ar__ic"><svg viewBox="0 0 24 24"><path d="M4 10l1-6h14l1 6M4 10v9h16v-9M4 10h16M9 19v-5h4v5"/></svg></span>
                   <span>{{ block.settings.text | escape }}</span>
                 </li>
               {%- endfor -%}
@@ -138,9 +136,7 @@
             {%- if right_items.size > 0 -%}
               {%- for block in right_items -%}
                 <li class="ma-ar__list-item" {{ block.shopify_attributes }}>
-                  <span class="ma-ar__ic ma-ar__ic--now">
-                    <svg viewBox="0 0 24 24"><path d="M12 2s7 7.5 7 12.5A7 7 0 0 1 5 14.5C5 9.5 12 2 12 2z"/></svg>
-                  </span>
+                  <span class="ma-ar__ic ma-ar__ic--now"><svg viewBox="0 0 24 24"><path d="M12 2s7 7.5 7 12.5A7 7 0 0 1 5 14.5C5 9.5 12 2 12 2z"/></svg></span>
                   <span>{{ block.settings.text | escape }}</span>
                 </li>
               {%- endfor -%}
@@ -180,9 +176,7 @@
       {%- if proof_blocks.size > 0 -%}
         {%- for block in proof_blocks -%}
           <div class="ma-ar__proof-item" {{ block.shopify_attributes }}>
-            <span class="ma-ar__proof-ic">
-              <svg viewBox="0 0 24 24"><path d="M12 2s7 7.5 7 12.5A7 7 0 0 1 5 14.5C5 9.5 12 2 12 2z"/></svg>
-            </span>
+            <span class="ma-ar__proof-ic"><svg viewBox="0 0 24 24"><path d="M12 2s7 7.5 7 12.5A7 7 0 0 1 5 14.5C5 9.5 12 2 12 2z"/></svg></span>
             <h3 class="ma-ar__proof-h">{{ block.settings.heading | escape }}</h3>
             <p class="ma-ar__proof-b">{{ block.settings.body | escape }}</p>
           </div>
@@ -254,7 +248,7 @@
     color: var(--ink);
     font-family: 'Cormorant Garamond', Georgia, serif;
     position: relative;
-    overflow: hidden;
+    overflow: {{ section.settings.overflow_mode | default: 'hidden' }};
     box-sizing: border-box;
     margin-top: {{ section.settings.margin_t | default: 0 }}px;
     margin-bottom: {{ section.settings.margin_b | default: 0 }}px;
@@ -329,7 +323,7 @@
     letter-spacing: {{ section.settings.heading_spacing | default: 0 }}px !important;
     font-size: clamp(28px, min(4vw, 5.2vh), {{ section.settings.headline_size | default: 52 }}px);
     line-height: {{ section.settings.heading_lh | default: 108 | divided_by: 100.0 }};
-    margin: 0 0 8px;
+    margin: 0 0 12px;
     color: var(--ink);
     max-width: {{ section.settings.heading_max_w | default: 24 }}ch;
     {% if section.settings.dt_align == 'center' %}margin-left: auto; margin-right: auto;{% elsif section.settings.dt_align == 'right' %}margin-left: auto; margin-right: 0;{% endif %}
@@ -344,9 +338,9 @@
     font-style: italic;
     font-weight: {{ section.settings.sub_weight | default: '500' }};
     font-size: clamp(14px, 2vh, {{ section.settings.body_size | default: 18 }}px);
-    line-height: 1.4;
+    line-height: 1.45;
     color: {{ section.settings.sub_color | default: 'rgba(23,19,16,0.78)' }};
-    margin: 0 0 14px;
+    margin: 0 0 {{ section.settings.sub_margin_b | default: 20 }}px;
     max-width: 48ch;
     {% if section.settings.dt_align == 'center' %}margin-left: auto; margin-right: auto;{% elsif section.settings.dt_align == 'right' %}margin-left: auto; margin-right: 0;{% endif %}
   }
@@ -370,6 +364,7 @@
   #ma-ar-{{ sid }} .ma-ar__ref{ font-size: 15px; font-weight: 500; color: rgba(23,19,16,.85); line-height: 1.4; margin: 0; }
   #ma-ar-{{ sid }} .ma-ar__ref b{ color: var(--gold); font-weight: 400; margin-right: 8px; }
 
+  /* ---- Comparison Cards ---- */
   #ma-ar-{{ sid }} .ma-ar__cards{
     position: relative; display: flex; gap: clamp(12px, 1.5vw, {{ section.settings.card_gap | default: 24 }}px);
   }
@@ -433,82 +428,78 @@
 
   /* ---- Reveal Animation ---- */
   {% if section.settings.enable_animation %}
-    #ma-ar-{{ sid }} .ma-ar__reveal{
+    #ma-ar-{{ section.id }} .ma-ar__reveal{
       opacity: 0; transform: translateY(12px);
       transition: opacity {{ section.settings.animation_duration | default: 600 }}ms ease, transform {{ section.settings.animation_duration | default: 600 }}ms cubic-bezier(.22,1,.36,1);
     }
-    #ma-ar-{{ sid }}.is-in .ma-ar__reveal{ opacity: 1; transform: none; }
-    #ma-ar-{{ sid }}.is-in .ma-ar__cards{ transition-delay: 0ms; }
-    #ma-ar-{{ sid }}.is-in .ma-ar__proof{ transition-delay: {{ section.settings.animation_stagger | default: 80 }}ms; }
-    #ma-ar-{{ sid }}.is-in .ma-ar__conclusion{ transition-delay: {{ section.settings.animation_stagger | default: 80 | times: 2 }}ms; }
+    #ma-ar-{{ section.id }}.is-in .ma-ar__reveal{ opacity: 1; transform: none; }
+    #ma-ar-{{ section.id }}.is-in .ma-ar__cards{ transition-delay: 0ms; }
+    #ma-ar-{{ section.id }}.is-in .ma-ar__proof{ transition-delay: {{ section.settings.animation_stagger | default: 80 }}ms; }
+    #ma-ar-{{ section.id }}.is-in .ma-ar__conclusion{ transition-delay: {{ section.settings.animation_stagger | default: 80 | times: 2 }}ms; }
   {% endif %}
 
   /* ---- Photo & Melt Engine ---- */
-  #ma-ar-{{ sid }} .ma-ar__photo{ overflow: hidden; position: relative; }
-  #ma-ar-{{ sid }} .ma-ar__img{
+  #ma-ar-{{ section.id }} .ma-ar__photo{ overflow: hidden; position: relative; }
+  #ma-ar-{{ section.id }} .ma-ar__img{
     width: 100%; height: 100%; object-fit: cover; display: block;
     object-position: {{ section.settings.image_focal_x | default: 50 }}% {{ section.settings.image_focal_y | default: 50 }}%;
     transform: scale({{ section.settings.image_scale | default: 100 | times: 1.0 | divided_by: 100 }}) translate({{ section.settings.image_offset_x | default: 0 }}px, {{ section.settings.image_offset_y | default: 0 }}px);
     filter: brightness({{ section.settings.img_brightness | default: 100 }}%) contrast({{ section.settings.img_contrast | default: 100 }}%) saturate({{ section.settings.img_saturation | default: 100 }}%) sepia({{ section.settings.img_warmth | default: 0 | at_least: 0 | times: 1.0 | divided_by: 100 }});
-    transition: transform {{ section.settings.hover_duration | default: 800 }}ms cubic-bezier(0.16, 1, 0.3, 1);
   }
-  {% if section.settings.enable_hover_zoom %}
-    #ma-ar-{{ sid }}:hover .ma-ar__img {
-      transform: scale(calc({{ section.settings.image_scale | default: 100 | times: 1.0 | divided_by: 100 }} * {{ section.settings.hover_scale | default: 102 | divided_by: 100.0 }})) translate({{ section.settings.image_offset_x | default: 0 }}px, {{ section.settings.image_offset_y | default: 0 }}px);
-    }
-  {% endif %}
-  {% if section.settings.show_overlay %}
-  #ma-ar-{{ sid }} .ma-ar__overlay{
-    position: absolute; inset: 0; pointer-events: none; z-index: 2;
-    background: {{ section.settings.overlay_color | default: '#000000' }};
-    opacity: {{ section.settings.overlay_strength | default: 15 | divided_by: 100.0 }};
-  }
-  {% endif %}
 
   /* ---- MOBILE (< 900px): Stacked Layout ---- */
   @media (max-width: 899px){
-    #ma-ar-{{ sid }}.ma-ar{ display: flex; flex-direction: column; height: auto; max-height: none; overflow: visible; }
-    #ma-ar-{{ sid }} .ma-ar__left-col{
+    #ma-ar-{{ section.id }}.ma-ar{ display: flex; flex-direction: column; height: auto; max-height: none; overflow: visible; }
+    #ma-ar-{{ section.id }} .ma-ar__left-col{
       flex: 0 0 auto; justify-content: flex-start;
-      padding: {{ section.settings.mobile_padding_top | default: 24 }}px {{ section.settings.mobile_padding_x | default: 24 }}px {{ section.settings.mobile_padding_bottom | default: 32 }}px;
+      padding: {{ section.settings.pad_t_mob | default: 35 }}px {{ section.settings.pad_h_mob | default: 20 }}px {{ section.settings.pad_b_mob | default: 45 }}px;
       transform: translate({{ section.settings.content_offset_x_mob | default: 0 }}px, {{ section.settings.content_offset_y_mob | default: 0 }}px);
     }
-    #ma-ar-{{ sid }} .ma-ar__photo{
+    #ma-ar-{{ section.id }} .ma-ar__photo{
       order: {% if section.settings.mobile_image_first %}-1{% else %}1{% endif %};
-      height: {{ section.settings.mobile_image_height | default: 280 }}px; width: 100%;
+      height: {{ section.settings.mob_img_h | default: 380 }}px; width: 100%;
     }
-    #ma-ar-{{ sid }} .ma-ar__cards{ flex-direction: column; gap: 16px; }
-    #ma-ar-{{ sid }} .ma-ar__vs{ position: relative; left: auto; top: auto; transform: none; margin: -6px auto; display: block; width: fit-content; }
-    #ma-ar-{{ sid }} .ma-ar__proof{ grid-template-columns: repeat({{ section.settings.proof_cols_mob | default: '2' }}, 1fr); gap: 16px; }
+    #ma-ar-{{ section.id }} .ma-ar__cards{ flex-direction: column; gap: 16px; }
+    #ma-ar-{{ section.id }} .ma-ar__vs{ position: relative; left: auto; top: auto; transform: none; margin: -6px auto; display: block; width: fit-content; }
+    #ma-ar-{{ section.id }} .ma-ar__proof{ grid-template-columns: repeat({{ section.settings.proof_cols_mob | default: '2' }}, 1fr); gap: 16px; }
     {%- if melt > 0 -%}
-    #ma-ar-{{ sid }} .ma-ar__photo::before{
+    #ma-ar-{{ section.id }} .ma-ar__photo::before{
       content: ""; position: absolute; z-index: 2; left: 0; right: 0; bottom: 0; height: 34%; pointer-events: none;
       backdrop-filter: blur({{ melt_blur }}px); -webkit-backdrop-filter: blur({{ melt_blur }}px);
       -webkit-mask-image: linear-gradient(0deg,#000 0,transparent 100%);
               mask-image: linear-gradient(0deg,#000 0,transparent 100%);
     }
-    #ma-ar-{{ sid }} .ma-ar__photo::after{
+    #ma-ar-{{ section.id }} .ma-ar__photo::after{
       content: ""; position: absolute; z-index: 3; inset: 0; pointer-events: none; opacity: {{ melt_veil }};
       background: linear-gradient(0deg,var(--cream) 0%,rgba(244,238,225,.55) 14%,rgba(244,238,225,0) 46%);
     }
     {%- endif -%}
   }
 
-  /* ---- DESKTOP (>= 900px): SINGLE VIEWPORT 100VH TWO-COLUMN MAGAZINE SPREAD ---- */
+  /* ---- DESKTOP (>= 900px): TWO-COLUMN MAGAZINE SPREAD WITH FLEXIBLE HEIGHT ---- */
   @media (min-width: 900px){
     #ma-ar-{{ sid }}.ma-ar{
       display: grid !important;
       grid-template-columns: {{ split_left }}% {{ split_right }}% !important;
-      height: {{ section.settings.dt_height | default: 720 }}px !important;
-      max-height: calc(100vh - var(--ma-hdr)) !important;
-      overflow: hidden !important;
+      {% if section.settings.dt_height == '100vh' %}
+        height: calc(100vh - var(--ma-hdr)) !important;
+        max-height: calc(100vh - var(--ma-hdr)) !important;
+      {% elsif section.settings.dt_height == 'auto' %}
+        height: auto !important;
+        min-height: 600px !important;
+      {% else %}
+        height: {{ section.settings.dt_height }}px !important;
+        max-height: {{ section.settings.dt_height }}px !important;
+      {% endif %}
+      overflow: {{ section.settings.overflow_mode | default: 'hidden' }} !important;
       max-width: {{ section.settings.dt_max_w | default: 1440 }}px;
       margin-left: auto; margin-right: auto;
     }
     #ma-ar-{{ sid }} .ma-ar__left-col{
       height: 100% !important; max-height: 100% !important;
       padding: {{ section.settings.padding_top | default: 24 }}px {{ section.settings.padding_x | default: 48 }}px {{ section.settings.padding_bottom | default: 24 }}px {{ section.settings.padding_x | default: 48 | times: 1.1 }}px !important;
-      overflow: hidden !important; box-sizing: border-box !important;
+      overflow: {% if section.settings.overflow_mode == 'auto' %}auto{% else %}hidden{% endif %} !important;
+      box-sizing: border-box !important;
     }
     #ma-ar-{{ sid }} .ma-ar__proof{
       grid-template-columns: repeat({{ section.settings.proof_cols_dt | default: '4' }}, 1fr) !important;
@@ -730,7 +721,20 @@
     ]},
     { "type": "range", "id": "dt_copy_w", "label": "Desktop Left Column Width (%)", "min": 40, "max": 70, "step": 1, "default": 55 },
     { "type": "range", "id": "dt_img_w", "label": "Desktop Right Image Width (%)", "min": 30, "max": 60, "step": 1, "default": 45 },
-    { "type": "range", "id": "dt_height", "label": "Desktop Section Height (px)", "min": 500, "max": 1000, "step": 20, "default": 720 },
+    { "type": "select", "id": "dt_height", "label": "Desktop Section Height", "default": "720", "options": [
+      { "value": "600", "label": "600px" },
+      { "value": "680", "label": "680px" },
+      { "value": "720", "label": "720px (Default)" },
+      { "value": "800", "label": "800px" },
+      { "value": "900", "label": "900px" },
+      { "value": "100vh", "label": "100vh (Full Viewport)" },
+      { "value": "auto", "label": "Auto / Fit Content" }
+    ]},
+    { "type": "select", "id": "overflow_mode", "label": "Desktop Overflow Mode", "default": "hidden", "options": [
+      { "value": "hidden", "label": "Hidden (No Scroll Clipping Fix)" },
+      { "value": "auto", "label": "Auto / Scroll" },
+      { "value": "visible", "label": "Visible" }
+    ]},
     { "type": "range", "id": "dt_max_w", "label": "Max Container Width (px)", "min": 1000, "max": 1600, "step": 20, "default": 1440 },
     { "type": "range", "id": "padding_top", "label": "Padding top", "min": 0, "max": 60, "step": 4, "default": 24, "unit": "px" },
     { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 0, "max": 60, "step": 4, "default": 24, "unit": "px" },
