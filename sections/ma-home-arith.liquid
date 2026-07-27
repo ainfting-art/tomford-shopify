@@ -1,7 +1,7 @@
 {%- comment -%}
-  MAISON AMIIR — Home · Honest Arithmetic V4 (Fully Corrected & Expanded)
+  MAISON AMIIR — Home · Honest Arithmetic V4 (Fully Corrected & Polished)
   FIXED: Desktop bottom-clipping resolved via explicit Section Height and Overflow controls.
-  FIXED: Comparison card icons and proof grid symbols fully restored with bulletproof inline SVGs.
+  FIXED: Comparison card icons and proof grid symbols fully restored with inline SVGs.
   STRUCTURE: Desktop settings first, Mobile settings second, modular content, art direction, and polish.
 {%- endcomment -%}
 
@@ -94,7 +94,7 @@
             {%- if left_items.size > 0 -%}
               {%- for block in left_items -%}
                 <li class="ma-ar__list-item" {{ block.shopify_attributes }}>
-                  <span class="ma-ar__ic"><svg viewBox="0 0 24 24"><path d="M4 10l1-6h14l1 6M4 10v9h16v-9M4 10h16M9 19v-5h4v5"/></svg></span>
+                  <span class="ma-ar__list-icon"><svg viewBox="0 0 24 24"><path d="M4 10l1-6h14l1 6M4 10v9h16v-9M4 10h16M9 19v-5h4v5"/></svg></span>
                   <span>{{ block.settings.text | escape }}</span>
                 </li>
               {%- endfor -%}
@@ -106,7 +106,7 @@
                 {%- if trimmed != blank -%}
                   {%- assign icon_key = c1_icons[forloop.index0] | default: 'arrow-up' -%}
                   <li class="ma-ar__list-item">
-                    <span class="ma-ar__ic">
+                    <span class="ma-ar__list-icon">
                       {%- case icon_key -%}
                         {%- when 'store' -%}<svg viewBox="0 0 24 24"><path d="M4 10l1-6h14l1 6M4 10v9h16v-9M4 10h16M9 19v-5h4v5"/></svg>
                         {%- when 'megaphone' -%}<svg viewBox="0 0 24 24"><path d="M3 10v4l14 4V6L3 10z"/><path d="M17 9v6"/><path d="M7 14v4a2 2 0 0 0 2 2h1v-6"/></svg>
@@ -122,8 +122,8 @@
             {%- endif -%}
           </ul>
           <div class="ma-ar__card-foot">
-            <span class="ma-ar__price ma-ar__price--typ">{{ section.settings.left_value | default: "₹20,000+" }}</span>
-            <span class="ma-ar__caption">{{ section.settings.left_label | default: "Typical Luxury Perfume" }}</span>
+            <span class="ma-ar__card-price">{{ section.settings.left_value | default: "₹20,000+" }}</span>
+            <span class="ma-ar__card-sub">{{ section.settings.left_label | default: "Typical Luxury Perfume" }}</span>
           </div>
         </div>
 
@@ -136,7 +136,7 @@
             {%- if right_items.size > 0 -%}
               {%- for block in right_items -%}
                 <li class="ma-ar__list-item" {{ block.shopify_attributes }}>
-                  <span class="ma-ar__ic ma-ar__ic--now"><svg viewBox="0 0 24 24"><path d="M12 2s7 7.5 7 12.5A7 7 0 0 1 5 14.5C5 9.5 12 2 12 2z"/></svg></span>
+                  <span class="ma-ar__list-icon ma-ar__ic--now"><svg viewBox="0 0 24 24"><path d="M12 2s7 7.5 7 12.5A7 7 0 0 1 5 14.5C5 9.5 12 2 12 2z"/></svg></span>
                   <span>{{ block.settings.text | escape }}</span>
                 </li>
               {%- endfor -%}
@@ -148,7 +148,7 @@
                 {%- if trimmed != blank -%}
                   {%- assign icon_key = c2_icons[forloop.index0] | default: 'arrow-up' -%}
                   <li class="ma-ar__list-item">
-                    <span class="ma-ar__ic ma-ar__ic--now">
+                    <span class="ma-ar__list-icon ma-ar__ic--now">
                       {%- case icon_key -%}
                         {%- when 'droplet' -%}<svg viewBox="0 0 24 24"><path d="M12 2s7 7.5 7 12.5A7 7 0 0 1 5 14.5C5 9.5 12 2 12 2z"/></svg>
                         {%- when 'leaf' -%}<svg viewBox="0 0 24 24"><path d="M4 19c8 1 15-4 16-15-9 0-16 4-16 15z"/><path d="M4 19c3-5 7-8 12-10"/></svg>
@@ -164,8 +164,8 @@
             {%- endif -%}
           </ul>
           <div class="ma-ar__card-foot">
-            <span class="ma-ar__price ma-ar__price--now">{{ now_value }}</span>
-            <span class="ma-ar__caption">{{ section.settings.right_label | default: "Maison Amiir" }}</span>
+            <span class="ma-ar__card-price">{{ now_value }}</span>
+            <span class="ma-ar__card-sub">{{ section.settings.right_label | default: "Maison Amiir" }}</span>
           </div>
         </div>
       </div>
@@ -428,19 +428,19 @@
 
   /* ---- Reveal Animation ---- */
   {% if section.settings.enable_animation %}
-    #ma-ar-{{ section.id }} .ma-ar__reveal{
+    #ma-ar-{{ sid }} .ma-ar__reveal{
       opacity: 0; transform: translateY(12px);
       transition: opacity {{ section.settings.animation_duration | default: 600 }}ms ease, transform {{ section.settings.animation_duration | default: 600 }}ms cubic-bezier(.22,1,.36,1);
     }
-    #ma-ar-{{ section.id }}.is-in .ma-ar__reveal{ opacity: 1; transform: none; }
-    #ma-ar-{{ section.id }}.is-in .ma-ar__cards{ transition-delay: 0ms; }
-    #ma-ar-{{ section.id }}.is-in .ma-ar__proof{ transition-delay: {{ section.settings.animation_stagger | default: 80 }}ms; }
-    #ma-ar-{{ section.id }}.is-in .ma-ar__conclusion{ transition-delay: {{ section.settings.animation_stagger | default: 80 | times: 2 }}ms; }
+    #ma-ar-{{ sid }}.is-in .ma-ar__reveal{ opacity: 1; transform: none; }
+    #ma-ar-{{ sid }}.is-in .ma-ar__cards{ transition-delay: 0ms; }
+    #ma-ar-{{ sid }}.is-in .ma-ar__proof{ transition-delay: {{ section.settings.animation_stagger | default: 80 }}ms; }
+    #ma-ar-{{ sid }}.is-in .ma-ar__conclusion{ transition-delay: {{ section.settings.animation_stagger | default: 80 | times: 2 }}ms; }
   {% endif %}
 
   /* ---- Photo & Melt Engine ---- */
-  #ma-ar-{{ section.id }} .ma-ar__photo{ overflow: hidden; position: relative; }
-  #ma-ar-{{ section.id }} .ma-ar__img{
+  #ma-ar-{{ sid }} .ma-ar__photo{ overflow: hidden; position: relative; }
+  #ma-ar-{{ sid }} .ma-ar__img{
     width: 100%; height: 100%; object-fit: cover; display: block;
     object-position: {{ section.settings.image_focal_x | default: 50 }}% {{ section.settings.image_focal_y | default: 50 }}%;
     transform: scale({{ section.settings.image_scale | default: 100 | times: 1.0 | divided_by: 100 }}) translate({{ section.settings.image_offset_x | default: 0 }}px, {{ section.settings.image_offset_y | default: 0 }}px);
@@ -449,27 +449,27 @@
 
   /* ---- MOBILE (< 900px): Stacked Layout ---- */
   @media (max-width: 899px){
-    #ma-ar-{{ section.id }}.ma-ar{ display: flex; flex-direction: column; height: auto; max-height: none; overflow: visible; }
-    #ma-ar-{{ section.id }} .ma-ar__left-col{
+    #ma-ar-{{ sid }}.ma-ar{ display: flex; flex-direction: column; height: auto; max-height: none; overflow: visible; }
+    #ma-ar-{{ sid }} .ma-ar__left-col{
       flex: 0 0 auto; justify-content: flex-start;
       padding: {{ section.settings.pad_t_mob | default: 35 }}px {{ section.settings.pad_h_mob | default: 20 }}px {{ section.settings.pad_b_mob | default: 45 }}px;
       transform: translate({{ section.settings.content_offset_x_mob | default: 0 }}px, {{ section.settings.content_offset_y_mob | default: 0 }}px);
     }
-    #ma-ar-{{ section.id }} .ma-ar__photo{
+    #ma-ar-{{ sid }} .ma-ar__photo{
       order: {% if section.settings.mobile_image_first %}-1{% else %}1{% endif %};
       height: {{ section.settings.mob_img_h | default: 380 }}px; width: 100%;
     }
-    #ma-ar-{{ section.id }} .ma-ar__cards{ flex-direction: column; gap: 16px; }
-    #ma-ar-{{ section.id }} .ma-ar__vs{ position: relative; left: auto; top: auto; transform: none; margin: -6px auto; display: block; width: fit-content; }
-    #ma-ar-{{ section.id }} .ma-ar__proof{ grid-template-columns: repeat({{ section.settings.proof_cols_mob | default: '2' }}, 1fr); gap: 16px; }
+    #ma-ar-{{ sid }} .ma-ar__cards{ flex-direction: column; gap: 16px; }
+    #ma-ar-{{ sid }} .ma-ar__vs{ position: relative; left: auto; top: auto; transform: none; margin: -6px auto; display: block; width: fit-content; }
+    #ma-ar-{{ sid }} .ma-ar__proof{ grid-template-columns: repeat({{ section.settings.proof_cols_mob | default: '2' }}, 1fr); gap: 16px; }
     {%- if melt > 0 -%}
-    #ma-ar-{{ section.id }} .ma-ar__photo::before{
+    #ma-ar-{{ sid }} .ma-ar__photo::before{
       content: ""; position: absolute; z-index: 2; left: 0; right: 0; bottom: 0; height: 34%; pointer-events: none;
       backdrop-filter: blur({{ melt_blur }}px); -webkit-backdrop-filter: blur({{ melt_blur }}px);
       -webkit-mask-image: linear-gradient(0deg,#000 0,transparent 100%);
               mask-image: linear-gradient(0deg,#000 0,transparent 100%);
     }
-    #ma-ar-{{ section.id }} .ma-ar__photo::after{
+    #ma-ar-{{ sid }} .ma-ar__photo::after{
       content: ""; position: absolute; z-index: 3; inset: 0; pointer-events: none; opacity: {{ melt_veil }};
       background: linear-gradient(0deg,var(--cream) 0%,rgba(244,238,225,.55) 14%,rgba(244,238,225,0) 46%);
     }
@@ -722,20 +722,24 @@
     { "type": "range", "id": "dt_copy_w", "label": "Desktop Left Column Width (%)", "min": 40, "max": 70, "step": 1, "default": 55 },
     { "type": "range", "id": "dt_img_w", "label": "Desktop Right Image Width (%)", "min": 30, "max": 60, "step": 1, "default": 45 },
     { "type": "select", "id": "dt_height", "label": "Desktop Section Height", "default": "720", "options": [
+      { "value": "520", "label": "520px" },
+      { "value": "560", "label": "560px" },
       { "value": "600", "label": "600px" },
+      { "value": "640", "label": "640px" },
       { "value": "680", "label": "680px" },
       { "value": "720", "label": "720px (Default)" },
+      { "value": "760", "label": "760px" },
       { "value": "800", "label": "800px" },
       { "value": "900", "label": "900px" },
       { "value": "100vh", "label": "100vh (Full Viewport)" },
       { "value": "auto", "label": "Auto / Fit Content" }
     ]},
     { "type": "select", "id": "overflow_mode", "label": "Desktop Overflow Mode", "default": "hidden", "options": [
-      { "value": "hidden", "label": "Hidden (No Scroll Clipping Fix)" },
-      { "value": "auto", "label": "Auto / Scroll" },
+      { "value": "hidden", "label": "Hidden" },
+      { "value": "auto", "label": "Auto / Scroll (Fixes Clipping)" },
       { "value": "visible", "label": "Visible" }
     ]},
-    { "type": "range", "id": "dt_max_w", "label": "Max Container Width (px)", "min": 1000, "max": 1600, "step": 20, "default": 1440 },
+    { "type": "range", "id": "dt_max_w", "label": "Max Container Width (px)", "min": 1000, "max": 1800, "step": 20, "default": 1440 },
     { "type": "range", "id": "padding_top", "label": "Padding top", "min": 0, "max": 60, "step": 4, "default": 24, "unit": "px" },
     { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 0, "max": 60, "step": 4, "default": 24, "unit": "px" },
     { "type": "range", "id": "padding_x", "label": "Padding left/right", "min": 24, "max": 100, "step": 4, "default": 48, "unit": "px" },
