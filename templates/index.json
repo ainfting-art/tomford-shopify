@@ -255,7 +255,7 @@
         "mob_focal_y": 50,
         "enable_animations": true,
         "anim_type": "fade_up",
-        "anim_speed": 700,
+        "anim_speed": 800,
         "anim_delay": 125,
         "show_divider": true,
         "divider_style": "crown",
