@@ -315,7 +315,7 @@
     font-weight: {{ section.settings.heading_weight | default: '600' }} !important;
     text-transform: none !important;
     letter-spacing: {{ section.settings.heading_spacing | default: 0 }}px !important;
-    font-size: clamp(28px, min(4vw, 5.2vh), {{ section.settings.headline_size | default: 52 }}px);
+    font-size: clamp(52px, min(4vw, 5.2vh), {{ section.settings.headline_size | default: 52 }}px);
     line-height: {{ section.settings.heading_lh | default: 108 | divided_by: 100.0 }};
     margin: 0 0 12px;
     color: var(--ink);
@@ -387,7 +387,7 @@
   }
   #ma-ar-{{ sid }} .ma-ar__card--us .ma-ar__card-h { color: var(--burg2); border-color: rgba(198,161,91,0.28); }
   #ma-ar-{{ sid }} .ma-ar__list{ list-style: none; margin: 0 0 10px; padding: 0; display: flex; flex-direction: column; gap: 6px; }
-  #ma-ar-{{ sid }} .ma-ar__list-item{ display: flex; align-items: center; gap: 8px; font-size: clamp(12px, 1.4vh, 13.5px); color: rgba(23,19,16,.85); }
+  #ma-ar-{{ sid }} .ma-ar__list-item{ display: flex; align-items: center; gap: 8px; font-size: clamp(14px, 1.8vh, 16px); color: rgba(23,19,16,.85); }
   #ma-ar-{{ sid }} .ma-ar__list-icon{ flex: 0 0 auto; width: 15px; height: 15px; color: var(--gold); display: flex; align-items: center; }
   #ma-ar-{{ sid }} .ma-ar__card--them .ma-ar__list-icon{ color: rgba(23,19,16,0.4); }
   #ma-ar-{{ sid }} .ma-ar__list-icon svg{ width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
