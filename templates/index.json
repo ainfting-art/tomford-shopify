@@ -136,7 +136,7 @@
         "mobile_layout_style": "01",
         "bottle_image": "shopify://shop_images/ATTACH__bottle_PNG_202604230348_6efe2071-4b3a-4b80-bb7a-4f21fd120703.jpg",
         "mobile_image": "shopify://shop_images/ATTACH__bottle_PNG_202604230348_6efe2071-4b3a-4b80-bb7a-4f21fd120703.jpg",
-        "image_scale": 115,
+        "image_scale": 100,
         "image_offset_x": 0,
         "image_offset_y": 30,
         "image_focal_x": 40,
