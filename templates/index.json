@@ -1326,7 +1326,7 @@
         "mobile_image_bottom_spacing": 32,
         "mobile_story_top_offset": 0,
         "content_spacing": 26,
-        "label_bottom_margin": 60,
+        "label_bottom_margin": 20,
         "heading_bottom_margin": 20,
         "paragraph_bottom_margin": 20,
         "cta_top_margin": 8,
