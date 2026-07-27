@@ -50,8 +50,8 @@
   assign now_value  = section.settings.right_value | escape | replace: 'from ', '<em>from</em> '
   assign cmp_style  = section.settings.comparison_style | default: 'cards'
   
-  assign split_left  = section.settings.dt_copy_w | default: 55
-  assign split_right = section.settings.dt_img_w  | default: 45
+  assign split_left  = section.settings.dt_copy_w | default: 70
+  assign split_right = section.settings.dt_img_w  | default: 30
 
   assign value_blocks = section.blocks | where: 'type', 'value_item'
   assign proof_blocks = section.blocks | where: 'type', 'proof_item'
