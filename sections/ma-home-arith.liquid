@@ -425,12 +425,12 @@
   {% if section.settings.enable_editorial_reveal %}
     #ma-ar-{{ sid }} .ma-ar__reveal{
       opacity: 0; transform: translateY(12px);
-      transition: opacity 600ms ease, transform 600ms cubic-bezier(.22,1,.36,1);
+      transition: opacity {{ section.settings.card_animation_duration | default: 600 }}ms ease, transform {{ section.settings.card_animation_duration | default: 600 }}ms cubic-bezier(.22,1,.36,1);
     }
     #ma-ar-{{ sid }}.is-in .ma-ar__reveal{ opacity: 1; transform: none; }
     #ma-ar-{{ sid }}.is-in .ma-ar__cards{ transition-delay: 0ms; }
-    #ma-ar-{{ sid }}.is-in .ma-ar__proof{ transition-delay: 80ms; }
-    #ma-ar-{{ sid }}.is-in .ma-ar__conclusion{ transition-delay: 160ms; }
+    #ma-ar-{{ sid }}.is-in .ma-ar__proof{ transition-delay: {{ section.settings.card_stagger_delay | default: 80 }}ms; }
+    #ma-ar-{{ sid }}.is-in .ma-ar__conclusion{ transition-delay: {{ section.settings.card_stagger_delay | default: 80 | times: 2 }}ms; }
   {% endif %}
 
   /* ---- Photo & Melt Engine with Explicit Visibility Rules ---- */
