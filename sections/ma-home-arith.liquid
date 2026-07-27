@@ -26,7 +26,7 @@
 
 <section class="ma-ar {% if has_img %}ma-ar--split{% endif %}" id="ma-ar-{{ section.id }}">
   <!-- LEFT COLUMN (~55% DESKTOP): EDITORIAL ARTICLE SPREAD -->
-  <div class="ma-ar__copy">
+  <div class="ma-ar__left-col">
     <div class="ma-ar__head-group">
       {%- if section.settings.eyebrow != blank -%}
         <p class="ma-ar__k ma-ar__reveal">{{ section.settings.eyebrow | escape }}</p>
@@ -193,7 +193,7 @@
   {% endif %}
 
   /* ---- Copy / Left Column Styling ---- */
-  #ma-ar-{{ section.id }} .ma-ar__copy{
+  #ma-ar-{{ section.id }} .ma-ar__left-col{
     box-sizing:border-box; position:relative; z-index:1;
     display:flex; flex-direction:column; justify-content:space-between;
   }
@@ -210,7 +210,7 @@
   }
   #ma-ar-{{ section.id }} .ma-ar__h em{ font-style:italic; color:var(--burg); }
   #ma-ar-{{ section.id }} .ma-ar__sub{
-    font-style:italic; font-weight:500; font-size:clamp(14px, 2svh, {{ section.settings.body_size | default: 18 }}px); line-height:1.4;
+    font-style:italic; font-weight:500; font-size:clamp(14px, 2vh, {{ section.settings.body_size | default: 18 }}px); line-height:1.4;
     color:rgba(23,19,16,.78); margin:0 0 14px; max-width:48ch;
   }
 
@@ -305,7 +305,7 @@
   /* ---- MOBILE (< 900px): Stacked Layout ---- */
   @media (max-width:899px){
     #ma-ar-{{ section.id }}.ma-ar{ display:flex; flex-direction:column; height:auto; max-height:none; overflow:visible; }
-    #ma-ar-{{ section.id }} .ma-ar__copy{
+    #ma-ar-{{ section.id }} .ma-ar__left-col{
       flex:0 0 auto; justify-content:flex-start;
       padding:{{ section.settings.mobile_padding_top | default: 24 }}px {{ section.settings.mobile_padding_x | default: 24 }}px {{ section.settings.mobile_padding_bottom | default: 32 }}px;
     }
@@ -339,7 +339,7 @@
       max-height:calc(100vh - var(--ma-hdr)) !important;
       overflow:hidden !important;
     }
-    #ma-ar-{{ section.id }} .ma-ar__copy{
+    #ma-ar-{{ section.id }} .ma-ar__left-col{
       height:100% !important; max-height:100% !important;
       padding:{{ section.settings.padding_top | default: 24 }}px {{ section.settings.padding_x | default: 48 }}px {{ section.settings.padding_bottom | default: 24 }}px {{ section.settings.padding_x | default: 48 | times: 1.1 }}px !important;
       overflow:hidden !important; box-sizing:border-box !important;
