@@ -716,7 +716,7 @@
         "cta_text_color": "#171310",
         "cta_border_color": "#C9A24B",
         "cta_hover_bg_color": "#C9A24B",
-        "cta_hover_text_color": "#171310",
+        "cta_hover_text_color": "#151515",
         "hover_style": "lift",
         "hover_speed": 350,
         "button_radius": 0,
