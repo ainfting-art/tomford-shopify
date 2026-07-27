@@ -320,6 +320,18 @@
         "sig_align": "Center"
       }
     },
+    "ma_most_wanted_edUXRw": {
+      "type": "ma-most-wanted",
+      "custom_css": [],
+      "name": "FOR HER",
+      "settings": {
+        "eyebrow": "Feminine",
+        "heading": "For Her",
+        "collection": "womens-collection",
+        "cta_link": "shopify://collections/womens-collection",
+        "cta_label": "View all"
+      }
+    },
     "ma_home_arith": {
       "type": "ma-home-arith",
       "settings": {
@@ -449,15 +461,14 @@
         "anchor_id": ""
       }
     },
-    "ma_most_wanted_edUXRw": {
+    "ma_most_wanted_JMH4Mt": {
       "type": "ma-most-wanted",
-      "custom_css": [],
-      "name": "FOR HER",
+      "name": "FOR HIM",
       "settings": {
-        "eyebrow": "Feminine",
-        "heading": "For Her",
-        "collection": "womens-collection",
-        "cta_link": "shopify://collections/womens-collection",
+        "eyebrow": "Masculine",
+        "heading": "For Him",
+        "collection": "mens-collection",
+        "cta_link": "shopify://collections/mens-collection",
         "cta_label": "View all"
       }
     },
@@ -611,17 +622,6 @@
         "valign_mob": "center"
       }
     },
-    "ma_most_wanted_JMH4Mt": {
-      "type": "ma-most-wanted",
-      "name": "FOR HIM",
-      "settings": {
-        "eyebrow": "Masculine",
-        "heading": "For Him",
-        "collection": "mens-collection",
-        "cta_link": "shopify://collections/mens-collection",
-        "cta_label": "View all"
-      }
-    },
     "ma_unboxing": {
       "type": "ma-unboxing",
       "disabled": true,
@@ -673,16 +673,61 @@
         "bg_video": "shopify://files/videos/0626 (1)(1).mp4",
         "media_opacity": 50,
         "brand_line": "Maison Amiir",
-        "eyebrow": "too many fragrances?",
+        "eyebrow": "A PERSONAL FRAGRANCE CONCIERGE",
         "headline": "Find the one made for you",
         "subtext": "Answer six quick questions and receive personalised fragrance recommendations based on what you already love.",
         "pill1": "6 Questions",
         "pill2": "Under 2 Minutes",
         "pill3": "",
-        "hint": "No account required",
-        "cta_label": "Find Your Signature",
+        "hint": "Complimentary • No account required",
+        "cta_label": "BEGIN YOUR FRAGRANCE JOURNEY",
         "quiz_url": "/pages/find-your-signature",
-        "accent_color": "#000000"
+        "accent_color": "#000000",
+        "brand_line_size": 12,
+        "brand_line_letter_spacing": 6,
+        "brand_line_color": "#c9ab79",
+        "eyebrow_size": 12,
+        "eyebrow_letter_spacing": 6,
+        "headline_size": 60,
+        "headline_line_height": 1,
+        "headline_letter_spacing": 0.5,
+        "headline_max_width": 560,
+        "body_size": 17,
+        "body_line_height": 1.7,
+        "body_max_width": 520,
+        "body_color": "#F2EEE7",
+        "content_max_width": 640,
+        "content_alignment": "center",
+        "vertical_offset": 20,
+        "horizontal_offset": 0,
+        "overlay_color": "#000000",
+        "overlay_strength": 70,
+        "overlay_gradient_strength": 35,
+        "overlay_blur": 2,
+        "background_scale": 108,
+        "video_zoom_strength": 0.5,
+        "info_style": "editorial_divider",
+        "info_gap": 18,
+        "info_font_size": 12,
+        "info_letter_spacing": 3,
+        "divider_color": "#ffffff",
+        "button_style": "filled",
+        "cta_bg_color": "#f4eee1",
+        "cta_text_color": "#171310",
+        "cta_border_color": "#c9ab79",
+        "cta_hover_bg_color": "#c9ab79",
+        "cta_hover_text_color": "#171310",
+        "hover_style": "lift",
+        "hover_speed": 350,
+        "button_radius": 0,
+        "button_padding_x": 56,
+        "button_padding_y": 18,
+        "button_shadow_strength": 5,
+        "reveal_distance": 20,
+        "reveal_duration": 1000,
+        "reveal_delay": 100,
+        "hover_easing": "ease",
+        "video_speed_multiplier": 50
       }
     },
     "ma_editorial_social_proof_6tWRTb": {
