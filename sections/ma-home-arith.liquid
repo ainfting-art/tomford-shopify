@@ -22,8 +22,8 @@
   assign now_value = section.settings.right_value | escape | replace: 'from ', '<em>from</em> '
   assign cmp_style = section.settings.comparison_style | default: 'cards'
   
-  assign split_left = section.settings.dt_copy_w | default: 55
-  assign split_right = section.settings.dt_img_w | default: 45
+  assign split_left = section.settings.dt_copy_w | default: 70
+  assign split_right = section.settings.dt_img_w | default: 30
 
   assign value_blocks = section.blocks | where: 'type', 'value_item'
   assign proof_blocks = section.blocks | where: 'type', 'proof_item'
@@ -42,7 +42,7 @@
   {%- if section.settings.enable_safe_area -%}<div class="ma-ar__safe-area" aria-hidden="true"></div>{%- endif -%}
   {%- if section.settings.enable_baseline_grid -%}<div class="ma-ar__baseline-grid" aria-hidden="true"></div>{%- endif -%}
 
-  <!-- LEFT COLUMN (~55% DESKTOP): EDITORIAL ARTICLE SPREAD -->
+  <!-- LEFT COLUMN (~70% DESKTOP): EDITORIAL ARTICLE SPREAD -->
   <div class="ma-ar__left-col">
     <div class="ma-ar__head-group">
       {%- if section.settings.eyebrow != blank -%}
@@ -217,7 +217,7 @@
     {%- endif -%}
   </div>
 
-  <!-- RIGHT COLUMN (~45% DESKTOP): FULL HEIGHT PHOTOGRAPHY -->
+  <!-- RIGHT COLUMN (~30% DESKTOP): FULL HEIGHT PHOTOGRAPHY -->
   {%- if has_img -%}
     <div class="ma-ar__photo">
       {{ desk_img | image_url: width: 1600 | image_tag: loading: 'lazy', class: 'ma-ar__img ma-ar__img--dt', alt: desk_img.alt | default: shop.name }}
@@ -711,13 +711,13 @@
 
     { "type": "header", "content": "15. SPACING & SIZING" },
     { "type": "select", "id": "split_ratio", "label": "Content / image split", "default": "70/30", "options": [
-      { "value": "70/30", "label": "55% / 45%" },
+      { "value": "70/30", "label": "70% / 30%" },
       { "value": "54/46", "label": "54% / 46%" },
       { "value": "53/47", "label": "53% / 47%" },
       { "value": "52/48", "label": "52% / 48%" }
     ]},
-    { "type": "range", "id": "dt_copy_w", "label": "Desktop Left Column Width (%)", "min": 40, "max": 70, "step": 1, "default": 55 },
-    { "type": "range", "id": "dt_img_w", "label": "Desktop Right Image Width (%)", "min": 30, "max": 60, "step": 1, "default": 45 },
+    { "type": "range", "id": "dt_copy_w", "label": "Desktop Left Column Width (%)", "min": 40, "max": 70, "step": 1, "default": 70 },
+    { "type": "range", "id": "dt_img_w", "label": "Desktop Right Image Width (%)", "min": 30, "max": 60, "step": 1, "default": 30 },
     { "type": "select", "id": "dt_height", "label": "Desktop Section Height", "default": "720", "options": [
       { "value": "520", "label": "520px" },
       { "value": "560", "label": "560px" },
