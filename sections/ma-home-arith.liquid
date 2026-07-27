@@ -360,8 +360,7 @@
 
   /* ---- Comparison Cards ---- */
   #ma-ar-{{ sid }} .ma-ar__cards{
-    position: relative; display: flex; gap: clamp(12px, 1.5vw, {{ section.settings.card_gap | default: 24 }}px);
-  }
+  position: relative; display: flex; gap: clamp(32px, 4vw, 56px);  }
   #ma-ar-{{ sid }} .ma-ar__card{
     flex: 1 1 0; min-width: 0; padding: clamp(28px, 3.5vh, 40px); /* Increased block padding */
     border-radius: {{ section.settings.card_radius | default: 8 }}px;
