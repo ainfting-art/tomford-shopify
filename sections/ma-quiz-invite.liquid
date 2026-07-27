@@ -95,7 +95,7 @@
   }
 
   .qi__eyebrow {
-    font-family: var(--font-body--family, sans-serif);
+    font-family: {{ section.settings.eyebrow_font.family | default: 'sans-serif' }}, sans-serif;
     font-size: {{ section.settings.eyebrow_size | default: 13 }}px;
     letter-spacing: {{ section.settings.eyebrow_letter_spacing | default: 4.5 }}px;
     text-transform: uppercase;
