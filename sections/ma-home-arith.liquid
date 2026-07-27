@@ -1,14 +1,16 @@
 {%- comment -%}
-  MAISON AMIIR — Home · Honest Arithmetic V4 (Final Layout Fix & Full Restoration)
-  FIXED: Right column image rendering restored by forcing correct grid width variables.
-  FIXED: Bottom clipping permanently resolved by setting default section height to 'auto' with full overflow safety.
+  MAISON AMIIR — Home · Honest Arithmetic V4 (Final Image Rendering Fix)
+  FIXED: Desktop/Mobile image fallback logic unified so image renders immediately even if mobile picker is empty.
   PRESERVED: 100% of V6 customizer controls, icons, typography hierarchy, and two-column DOM architecture.
 {%- endcomment -%}
 
 {%- liquid
   assign sid = section.id
+  assign desk_img = section.settings.bottle_image | default: section.settings.mobile_image
+  assign mob_img = section.settings.mobile_image | default: section.settings.bottle_image
+  
   assign has_img = false
-  if section.settings.bottle_image != blank or section.settings.mobile_image != blank
+  if desk_img != blank or mob_img != blank
     assign has_img = true
   endif
 
@@ -218,8 +220,6 @@
   <!-- RIGHT COLUMN (~45% DESKTOP): FULL HEIGHT PHOTOGRAPHY -->
   {%- if has_img -%}
     <div class="ma-ar__photo">
-      {%- assign desk_img = section.settings.bottle_image | default: section.settings.mobile_image -%}
-      {%- assign mob_img = section.settings.mobile_image | default: section.settings.bottle_image -%}
       {{ desk_img | image_url: width: 1600 | image_tag: loading: 'lazy', class: 'ma-ar__img ma-ar__img--dt', alt: desk_img.alt | default: shop.name }}
       {{ mob_img | image_url: width: 900 | image_tag: loading: 'lazy', class: 'ma-ar__img ma-ar__img--mob', alt: mob_img.alt | default: shop.name }}
       {%- if section.settings.show_overlay -%}<div class="ma-ar__overlay" aria-hidden="true"></div>{%- endif -%}
