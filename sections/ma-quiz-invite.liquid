@@ -170,7 +170,7 @@
   /* ── CTA: luxury button, configurable style ── */
   .qi__cta {
     position: relative; overflow: hidden; display: inline-block;
-    font-family: var(--font-body--family, sans-serif);
+    font-family: {{ section.settings.cta_font.family | default: 'sans-serif' }}, sans-serif;
     font-size: 12px; font-weight: 500; letter-spacing: 0.26em; text-transform: uppercase;
     text-decoration: none; cursor: pointer; border-style: solid; border-width: 1px;
     padding: {{ section.settings.button_padding_y | default: 16 }}px {{ section.settings.button_padding_x | default: 44 }}px;
