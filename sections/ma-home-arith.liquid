@@ -321,7 +321,7 @@
     font-weight: {{ section.settings.heading_weight | default: '600' }} !important;
     text-transform: none !important;
     letter-spacing: {{ section.settings.heading_spacing | default: 0 }}px !important;
-    font-size: clamp(28px, min(4vw, 5.2vh), {{ section.settings.headline_size | default: 52 }}px);
+    font-size: clamp(42px, min(4vw, 5.2vh), {{ section.settings.headline_size | default: 52 }}px);
     line-height: {{ section.settings.heading_lh | default: 108 | divided_by: 100.0 }};
     margin: 0 0 12px;
     color: var(--ink);
@@ -417,8 +417,8 @@
   #ma-ar-{{ sid }} .ma-ar__proof-item{ display: flex; flex-direction: column; gap: 3px; padding-right: 6px; }
   #ma-ar-{{ sid }} .ma-ar__proof-ic{ display: block; width: {{ section.settings.proof_icon_size | default: 22 }}px; height: {{ section.settings.proof_icon_size | default: 22 }}px; color: var(--gold); margin-bottom: 6px; }
   #ma-ar-{{ sid }} .ma-ar__proof-ic svg{ width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
-  #ma-ar-{{ sid }} .ma-ar__proof-h{ font-family: 'Cormorant Garamond',Georgia,serif; font-weight: 600; font-size: clamp(14px, 1.8vh, 16px); margin: 0 0 2px; color: var(--ink); line-height: 1.2; }
-  #ma-ar-{{ sid }} .ma-ar__proof-b{ font-size: clamp(11.5px, 1.3vh, 12.5px); line-height: 1.35; color: rgba(23,19,16,.7); margin: 0; }
+  #ma-ar-{{ sid }} .ma-ar__proof-h{ font-family: 'Cormorant Garamond',Georgia,serif; font-weight: 600; font-size: clamp(17px, 2.2vh, 20px); margin: 0 0 4px; color: var(--ink); line-height: 1.2; }
+  #ma-ar-{{ sid }} .ma-ar__proof-b{ font-size: clamp(13.5px, 1.6vh, 15px); line-height: 1.4; color: rgba(23,19,16,.75); margin: 0; }
 
   /* ---- Conclusion ---- */
   #ma-ar-{{ sid }} .ma-ar__conclusion{ text-align: center; padding-top: 10px; border-top: 1px solid rgba(23,19,16,.12); }
