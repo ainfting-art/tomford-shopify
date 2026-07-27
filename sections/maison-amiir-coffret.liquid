@@ -6,7 +6,6 @@
   All content and controls editable from Theme Customizer.
   Desktop and mobile styles are fully independent — changing one does not affect the other.
   EXTENDED: Added 8 optional art-direction control groups (Fully Backward Compatible).
-  FIXED: Ghost CTA shrink-wrap and centering to prevent flex column border-bottom stretching.
 {%- endcomment -%}
 
 {%- liquid
@@ -178,13 +177,11 @@
 #shopify-section-{{ sid }} .ma-cof__body p { margin-bottom: 6px; }
 
 /* ═══════════════════════════════════════════════
-   CTA BUTTON (SHRINK-WRAPPED AGAINST STRETCHING)
+   CTA BUTTON
 ═══════════════════════════════════════════════ */
 #shopify-section-{{ sid }} .ma-cof__cta {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  text-align: center;
   gap: 10px;
   font-family: {{ section.settings.cta_font.family }}, sans-serif;
   font-size: {{ section.settings.cta_size }}px;
@@ -196,12 +193,7 @@
   border-radius: {{ section.settings.btn_radius }}px;
   transition: background 0.35s ease, color 0.35s ease, border-color 0.35s ease;
   cursor: pointer;
-  max-width: max-content;
-  {% if section.settings.btn_width == 'full' %}
-    width: 100%;
-    max-width: 100%;
-    align-self: stretch;
-  {% endif %}
+  {% if section.settings.btn_width == 'full' %}width: 100%; justify-content: center;{% endif %}
   {% if section.settings.btn_style == 'outline' %}
     background: transparent;
     color: {{ section.settings.btn_text_color }};
@@ -214,8 +206,7 @@
     background: transparent;
     color: {{ section.settings.btn_text_color }};
     border: none;
-    padding-left: {{ section.settings.btn_padding_h | default: 36 }}px;
-    padding-right: {{ section.settings.btn_padding_h | default: 36 }}px;
+    padding-left: 0; padding-right: 0;
     border-bottom: 1px solid {{ section.settings.btn_text_color }};
     border-radius: 0;
   {% endif %}
@@ -498,22 +489,12 @@
     }
   {% endif %}
 
-  /* ── 7. SECTION RHYTHM & BUTTON ALIGNMENT (DESKTOP) ── */
+  /* ── 7. SECTION RHYTHM (DESKTOP) ── */
   #shopify-section-{{ sid }} .ma-cof__content,
   #shopify-section-{{ sid }} .ma-cof__book-right {
     display: flex; flex-direction: column;
     {% assign v_dist_dt = section.settings.valign_dt | default: 'center' %}
     {% if v_dist_dt == 'top' %}justify-content: flex-start;{% elsif v_dist_dt == 'bottom' %}justify-content: flex-end;{% else %}justify-content: center;{% endif %}
-  }
-  #shopify-section-{{ sid }} .ma-cof__cta {
-    {% if section.settings.btn_width == 'full' %}
-      width: 100%;
-      max-width: 100%;
-      align-self: stretch;
-    {% else %}
-      align-self: {% if section.settings.dt_text_align == 'left' %}flex-start{% elsif section.settings.dt_text_align == 'right' %}flex-end{% else %}center{% endif %};
-      {% if section.settings.dt_text_align == 'center' %}margin-left: auto; margin-right: auto;{% elsif section.settings.dt_text_align == 'right' %}margin-left: auto; margin-right: 0;{% else %}margin-left: 0; margin-right: auto;{% endif %}
-    {% endif %}
   }
 }
 
@@ -744,22 +725,12 @@
     }
   {% endif %}
 
-  /* ── 7. SECTION RHYTHM & BUTTON ALIGNMENT (MOBILE) ── */
+  /* ── 7. SECTION RHYTHM (MOBILE) ── */
   #shopify-section-{{ sid }} .ma-cof__mob-content,
   #shopify-section-{{ sid }} .ma-cof__mob-journal {
     display: flex; flex-direction: column;
     {% assign v_dist_mob = section.settings.valign_mob | default: 'center' %}
     {% if v_dist_mob == 'top' %}justify-content: flex-start;{% elsif v_dist_mob == 'bottom' %}justify-content: flex-end;{% else %}justify-content: center;{% endif %}
-  }
-  #shopify-section-{{ sid }} .ma-cof__cta {
-    {% if section.settings.btn_width == 'full' %}
-      width: 100%;
-      max-width: 100%;
-      align-self: stretch;
-    {% else %}
-      align-self: {% if section.settings.mob_text_align == 'left' %}flex-start{% elsif section.settings.mob_text_align == 'right' %}flex-end{% else %}center{% endif %};
-      {% if section.settings.mob_text_align == 'center' %}margin-left: auto; margin-right: auto;{% elsif section.settings.mob_text_align == 'right' %}margin-left: auto; margin-right: 0;{% else %}margin-left: 0; margin-right: auto;{% endif %}
-    {% endif %}
   }
 }
 
