@@ -116,7 +116,7 @@
   .qi__headline em { font-style: italic; color: var(--qi-gold); }
 
   .qi__sub {
-    font-family: var(--font-body--family, sans-serif);
+    font-family: {{ section.settings.subtext_font.family | default: 'sans-serif' }}, sans-serif;
     font-weight: 400;
     font-size: {{ section.settings.body_size | default: 14 }}px;
     line-height: {{ section.settings.body_line_height | default: 1.6 }};
