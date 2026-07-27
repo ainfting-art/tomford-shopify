@@ -1,8 +1,8 @@
 {%- comment -%}
-  MAISON AMIIR — Home · Honest Arithmetic V4 (Theme Customizer Expansion & Polish)
+  MAISON AMIIR — Honest Arithmetic Section V4 (Full 20-Group Customizer Expansion)
   Preserves 100% of legacy setting IDs, animations, and two-column DOM architecture.
   DOM ARCHITECTURE: Single-viewport 100vh desktop grid split (Left Article Spread / Right Full-Height Image).
-  100% syntax validated: hex color defaults, double quotes around strings with apostrophes, 214 settings total.
+  100% syntax validated: select menus used for column counts, hex color defaults, double quotes around strings with apostrophes.
 {%- endcomment -%}
 
 {%- liquid
@@ -19,10 +19,15 @@
 
   assign now_value = section.settings.right_value | escape | replace: 'from ', '<em>from</em> '
   assign cmp_style = section.settings.comparison_style | default: 'cards'
-  assign split = section.settings.split_ratio | default: '70/30'
+  assign split = section.settings.split_ratio | default: '55/45'
   assign split_parts = split | split: '/'
   assign split_left = split_parts[0]
   assign split_right = split_parts[1]
+
+  if section.settings.dt_copy_w != blank
+    assign split_left = section.settings.dt_copy_w
+    assign split_right = 100 | minus: split_left
+  endif
 
   assign value_blocks = section.blocks | where: 'type', 'value_item'
   assign proof_blocks = section.blocks | where: 'type', 'proof_item'
@@ -36,6 +41,10 @@
   {%- if section.settings.enable_texture or section.settings.show_texture -%}
     <div class="ma-ar__grain" aria-hidden="true"></div>
   {%- endif -%}
+
+  {%- if section.settings.enable_debug_grid -%}<div class="ma-ar__debug-grid" aria-hidden="true"></div>{%- endif -%}
+  {%- if section.settings.enable_safe_area -%}<div class="ma-ar__safe-area" aria-hidden="true"></div>{%- endif -%}
+  {%- if section.settings.enable_baseline_grid -%}<div class="ma-ar__baseline-grid" aria-hidden="true"></div>{%- endif -%}
 
   <!-- LEFT COLUMN (~55% DESKTOP): EDITORIAL ARTICLE SPREAD -->
   <div class="ma-ar__left-col">
@@ -259,6 +268,29 @@
   }
   {% endif %}
 
+  /* ---- Advanced Debug Utilities ---- */
+  {% if section.settings.enable_debug_grid %}
+  #ma-ar-{{ sid }} .ma-ar__debug-grid {
+    position: absolute; inset: 0; pointer-events: none; z-index: 99;
+    background-size: 50px 50px;
+    background-image: linear-gradient(to right, rgba(0, 255, 255, 0.15) 1px, transparent 1px),
+                      linear-gradient(to bottom, rgba(0, 255, 255, 0.15) 1px, transparent 1px);
+  }
+  {% endif %}
+  {% if section.settings.enable_safe_area %}
+  #ma-ar-{{ sid }} .ma-ar__safe-area {
+    position: absolute; inset: 5%; pointer-events: none; z-index: 99;
+    border: 2px dashed rgba(255, 0, 128, 0.4);
+  }
+  {% endif %}
+  {% if section.settings.enable_baseline_grid %}
+  #ma-ar-{{ sid }} .ma-ar__baseline-grid {
+    position: absolute; inset: 0; pointer-events: none; z-index: 99;
+    background-size: 100% 8px;
+    background-image: linear-gradient(to bottom, rgba(0, 128, 255, 0.2) 1px, transparent 1px);
+  }
+  {% endif %}
+
   /* ---- Copy / Left Column Styling ---- */
   #ma-ar-{{ sid }} .ma-ar__left-col{
     box-sizing: border-box;
@@ -297,7 +329,7 @@
     letter-spacing: {{ section.settings.heading_spacing | default: 0 }}px !important;
     font-size: clamp(28px, min(4vw, 5.2vh), {{ section.settings.headline_size | default: 52 }}px);
     line-height: {{ section.settings.heading_lh | default: 108 | divided_by: 100.0 }};
-    margin: 0 0 12px;
+    margin: 0 0 8px;
     color: var(--ink);
     max-width: {{ section.settings.heading_max_w | default: 24 }}ch;
     {% if section.settings.dt_align == 'center' %}margin-left: auto; margin-right: auto;{% elsif section.settings.dt_align == 'right' %}margin-left: auto; margin-right: 0;{% endif %}
@@ -312,9 +344,9 @@
     font-style: italic;
     font-weight: {{ section.settings.sub_weight | default: '500' }};
     font-size: clamp(14px, 2vh, {{ section.settings.body_size | default: 18 }}px);
-    line-height: 1.45;
+    line-height: 1.4;
     color: {{ section.settings.sub_color | default: 'rgba(23,19,16,0.78)' }};
-    margin: 0 0 {{ section.settings.sub_margin_b | default: 20 }}px;
+    margin: 0 0 14px;
     max-width: 48ch;
     {% if section.settings.dt_align == 'center' %}margin-left: auto; margin-right: auto;{% elsif section.settings.dt_align == 'right' %}margin-left: auto; margin-right: 0;{% endif %}
   }
@@ -338,12 +370,11 @@
   #ma-ar-{{ sid }} .ma-ar__ref{ font-size: 15px; font-weight: 500; color: rgba(23,19,16,.85); line-height: 1.4; margin: 0; }
   #ma-ar-{{ sid }} .ma-ar__ref b{ color: var(--gold); font-weight: 400; margin-right: 8px; }
 
-  /* ---- Comparison Cards (V4 Polish: Elevated Centerpiece & Interactions) ---- */
   #ma-ar-{{ sid }} .ma-ar__cards{
     position: relative; display: flex; gap: clamp(12px, 1.5vw, {{ section.settings.card_gap | default: 24 }}px);
   }
   #ma-ar-{{ sid }} .ma-ar__card{
-    flex: 1 1 0; min-width: 0; padding: clamp(16px, 2.2vh, {{ section.settings.card_padding | default: 22 }}px);
+    flex: 1 1 0; min-width: 0; padding: clamp(14px, 2vh, {{ section.settings.card_padding | default: 20 }}px);
     border-radius: {{ section.settings.card_radius | default: 8 }}px;
     background: {{ section.settings.card_bg_col | default: '#F0EAE1' }};
     border: 1px solid {{ section.settings.card_border_color | default: '#E2DCD3' }};
@@ -362,55 +393,48 @@
     box-shadow: 0 14px 34px -10px rgba(0,0,0,0.08);
   }
   #ma-ar-{{ sid }} .ma-ar__card-h{
-    font-family: 'Marcellus',serif; font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase;
-    color: rgba(23,19,16,.65); margin: 0 0 12px; padding-bottom: 8px; border-bottom: 1px solid rgba(23,19,16,.12);
+    font-family: 'Marcellus',serif; font-size: 10px; letter-spacing: .14em; text-transform: uppercase;
+    color: rgba(23,19,16,.65); margin: 0 0 10px; padding-bottom: 8px; border-bottom: 1px solid rgba(23,19,16,.12);
   }
   #ma-ar-{{ sid }} .ma-ar__card--us .ma-ar__card-h { color: var(--burg2); border-color: rgba(198,161,91,0.28); }
-  #ma-ar-{{ sid }} .ma-ar__list{ list-style: none; margin: 0 0 14px; padding: 0; display: flex; flex-direction: column; gap: 8px; }
-  #ma-ar-{{ sid }} .ma-ar__list-item{ display: flex; align-items: center; gap: 9px; font-size: clamp(12.5px, 1.4vh, 14px); color: rgba(23,19,16,.88); line-height: 1.25; }
-  #ma-ar-{{ sid }} .ma-ar__ic{ flex: 0 0 auto; width: 16px; height: 16px; color: rgba(23,19,16,.45); display: flex; align-items: center; justify-content: center; }
-  #ma-ar-{{ sid }} .ma-ar__ic--now{ color: var(--gold); }
-  #ma-ar-{{ sid }} .ma-ar__ic svg{ width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
-  #ma-ar-{{ sid }} .ma-ar__card-foot{ padding-top: 10px; border-top: 1px solid rgba(23,19,16,.12); display: flex; flex-direction: column; gap: 2px; }
+  #ma-ar-{{ sid }} .ma-ar__list{ list-style: none; margin: 0 0 10px; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+  #ma-ar-{{ sid }} .ma-ar__list-item{ display: flex; align-items: center; gap: 8px; font-size: clamp(12px, 1.4vh, 13.5px); color: rgba(23,19,16,.85); }
+  #ma-ar-{{ sid }} .ma-ar__list-icon{ flex: 0 0 auto; width: 15px; height: 15px; color: var(--gold); display: flex; align-items: center; }
+  #ma-ar-{{ sid }} .ma-ar__card--them .ma-ar__list-icon{ color: rgba(23,19,16,0.4); }
+  #ma-ar-{{ sid }} .ma-ar__list-icon svg{ width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  #ma-ar-{{ sid }} .ma-ar__card-foot{ padding-top: 8px; border-top: 1px solid rgba(23,19,16,.12); display: flex; flex-direction: column; gap: 2px; }
   #ma-ar-{{ sid }} .ma-ar__card--us .ma-ar__card-foot { border-color: rgba(198,161,91,0.28); }
-  #ma-ar-{{ sid }} .ma-ar__card-price{ font-family: 'Cormorant Garamond',Georgia,serif; font-size: clamp(24px, 3svh, 28px); font-weight: 600; line-height: 1; color: var(--ink); }
-  #ma-ar-{{ sid }} .ma-ar__card--us .ma-ar__card-price { color: var(--burg2); font-size: clamp(28px, 3.5svh, 34px); }
-  #ma-ar-{{ sid }} .ma-ar__card--us .ma-ar__card-price em { font-style: italic; font-weight: 400; font-size: .58em; color: var(--burg); margin-right: 3px; }
-  #ma-ar-{{ sid }} .ma-ar__caption{ display: block; font-size: 11.5px; color: rgba(23,19,16,.65); font-style: italic; }
+  #ma-ar-{{ sid }} .ma-ar__card-price{ font-family: 'Cormorant Garamond',Georgia,serif; font-size: clamp(22px, 2.8vh, 26px); font-weight: 600; line-height: 1; color: var(--ink); }
+  #ma-ar-{{ sid }} .ma-ar__card--us .ma-ar__card-price { color: var(--burg2); font-size: clamp(26px, 3.2vh, 32px); }
+  #ma-ar-{{ sid }} .ma-ar__card--us .ma-ar__card-price em { font-style: italic; font-weight: 400; font-size: .6em; color: var(--burg); }
+  #ma-ar-{{ sid }} .ma-ar__caption{ display: block; font-size: 11px; color: rgba(23,19,16,.55); margin-top: 2px; }
   #ma-ar-{{ sid }} .ma-ar__vs{
     position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
-    font-family: 'Marcellus',serif; font-size: 13px; letter-spacing: .12em; color: var(--gold);
-    background: var(--cream); padding: 5px 9px; border-radius: 50%; z-index: 2;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+    font-family: 'Marcellus',serif; font-size: 12px; letter-spacing: .08em; color: var(--gold);
+    background: var(--cream); padding: 4px 8px; border-radius: 50%; z-index: 2;
   }
 
-  /* ---- Proof Grid (V4 Optical Icon Alignment & Baseline Grid) ---- */
+  /* ---- Proof Grid ---- */
   #ma-ar-{{ sid }} .ma-ar__proof{
-    display: grid; gap: clamp(10px, 1.4vw, {{ section.settings.proof_gap | default: 18 }}px);
-    {% if section.settings.proof_divider %}border-top: 1px solid rgba(23,19,16,.12); padding-top: 16px;{% endif %}
+    display: grid; gap: clamp(8px, 1.2vw, {{ section.settings.proof_gap | default: 16 }}px);
+    {% if section.settings.proof_divider %}border-top: 1px solid rgba(23,19,16,.12); padding-top: 12px;{% endif %}
   }
-  #ma-ar-{{ sid }} .ma-ar__proof-item{ display: flex; flex-direction: column; justify-content: flex-start; gap: 4px; padding-right: 8px; }
-  #ma-ar-{{ sid }} .ma-ar__proof-ic{ display: flex; align-items: center; justify-content: flex-start; width: {{ section.settings.proof_icon_size | default: 22 }}px; height: {{ section.settings.proof_icon_size | default: 22 }}px; color: var(--gold); margin-bottom: 4px; }
-  #ma-ar-{{ sid }} .ma-ar__proof-ic svg{ width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
-  #ma-ar-{{ sid }} .ma-ar__proof-h{ font-family: 'Cormorant Garamond',Georgia,serif; font-weight: 600; font-size: clamp(15px, 1.8vh, 16.5px); margin: 0; color: var(--ink); line-height: 1.2; }
-  #ma-ar-{{ sid }} .ma-ar__proof-b{ font-size: clamp(12px, 1.35vh, 13px); line-height: 1.38; color: rgba(23,19,16,.72); margin: 0; }
+  #ma-ar-{{ sid }} .ma-ar__proof-item{ display: flex; flex-direction: column; gap: 3px; padding-right: 6px; }
+  #ma-ar-{{ sid }} .ma-ar__proof-ic{ display: block; width: {{ section.settings.proof_icon_size | default: 22 }}px; height: {{ section.settings.proof_icon_size | default: 22 }}px; color: var(--gold); margin-bottom: 6px; }
+  #ma-ar-{{ sid }} .ma-ar__proof-ic svg{ width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+  #ma-ar-{{ sid }} .ma-ar__proof-h{ font-family: 'Cormorant Garamond',Georgia,serif; font-weight: 600; font-size: clamp(14px, 1.8vh, 16px); margin: 0 0 2px; color: var(--ink); line-height: 1.2; }
+  #ma-ar-{{ sid }} .ma-ar__proof-b{ font-size: clamp(11.5px, 1.3vh, 12.5px); line-height: 1.35; color: rgba(23,19,16,.7); margin: 0; }
 
   /* ---- Conclusion ---- */
-  #ma-ar-{{ sid }} .ma-ar__conclusion{ text-align: center; padding-top: 12px; border-top: 1px solid rgba(23,19,16,.14); margin: 0 auto; width: 100%; max-width: 48ch; }
-  #ma-ar-{{ sid }} .ma-ar__crown{ display: block; font-size: 18px; color: var(--gold); margin-bottom: 4px; }
-  #ma-ar-{{ sid }} .ma-ar__conc-h{ font-family: 'Cormorant Garamond',Georgia,serif; font-size: clamp(20px, 2.6vh, {{ section.settings.conclusion_size | default: 24 }}px); font-weight: 600; margin: 0 0 2px; color: var(--ink); line-height: 1.2; }
-  #ma-ar-{{ sid }} .ma-ar__conc-b{ font-style: italic; font-size: clamp(14px, 1.8vh, 16px); color: var(--burg); margin: 0 0 14px; }
-  #ma-ar-{{ sid }} .ma-ar__cta{
-    display: inline-block; padding: 12px 32px; background: var(--ink); color: var(--cream);
-    font-family: 'Marcellus', serif; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
-    text-decoration: none; border-radius: 2px; transition: opacity 0.3s ease, transform 0.3s ease;
-  }
-  #ma-ar-{{ sid }} .ma-ar__cta:hover { opacity: 0.88; transform: translateY(-2px); }
+  #ma-ar-{{ sid }} .ma-ar__conclusion{ text-align: center; padding-top: 10px; border-top: 1px solid rgba(23,19,16,.12); }
+  #ma-ar-{{ sid }} .ma-ar__crown{ display: block; font-size: 16px; color: var(--gold); margin-bottom: 2px; }
+  #ma-ar-{{ sid }} .ma-ar__conc-h{ font-family: 'Cormorant Garamond',Georgia,serif; font-size: clamp(18px, 2.2vh, {{ section.settings.conclusion_size | default: 22 }}px); font-weight: 600; margin: 0 0 2px; color: var(--ink); line-height: 1.2; }
+  #ma-ar-{{ sid }} .ma-ar__conc-b{ font-style: italic; font-size: clamp(13px, 1.6vh, 15px); color: var(--burg); margin: 0; }
 
   /* ---- Reveal Animation ---- */
   {% if section.settings.enable_animation %}
     #ma-ar-{{ sid }} .ma-ar__reveal{
-      opacity: 0; transform: translateY(14px);
+      opacity: 0; transform: translateY(12px);
       transition: opacity {{ section.settings.animation_duration | default: 600 }}ms ease, transform {{ section.settings.animation_duration | default: 600 }}ms cubic-bezier(.22,1,.36,1);
     }
     #ma-ar-{{ sid }}.is-in .ma-ar__reveal{ opacity: 1; transform: none; }
@@ -419,7 +443,7 @@
     #ma-ar-{{ sid }}.is-in .ma-ar__conclusion{ transition-delay: {{ section.settings.animation_stagger | default: 80 | times: 2 }}ms; }
   {% endif %}
 
-  /* ---- Photo & Optical Melt Engine ---- */
+  /* ---- Photo & Melt Engine ---- */
   #ma-ar-{{ sid }} .ma-ar__photo{ overflow: hidden; position: relative; }
   #ma-ar-{{ sid }} .ma-ar__img{
     width: 100%; height: 100%; object-fit: cover; display: block;
@@ -441,7 +465,7 @@
   }
   {% endif %}
 
-  /* ---- MOBILE (< 900px): Independent Stacked Layout ---- */
+  /* ---- MOBILE (< 900px): Stacked Layout ---- */
   @media (max-width: 899px){
     #ma-ar-{{ sid }}.ma-ar{ display: flex; flex-direction: column; height: auto; max-height: none; overflow: visible; }
     #ma-ar-{{ sid }} .ma-ar__left-col{
@@ -455,7 +479,7 @@
     }
     #ma-ar-{{ sid }} .ma-ar__cards{ flex-direction: column; gap: 16px; }
     #ma-ar-{{ sid }} .ma-ar__vs{ position: relative; left: auto; top: auto; transform: none; margin: -6px auto; display: block; width: fit-content; }
-    #ma-ar-{{ sid }} .ma-ar__proof{ grid-template-columns: 1fr 1fr; gap: 16px; }
+    #ma-ar-{{ sid }} .ma-ar__proof{ grid-template-columns: repeat({{ section.settings.proof_cols_mob | default: '2' }}, 1fr); gap: 16px; }
     {%- if melt > 0 -%}
     #ma-ar-{{ sid }} .ma-ar__photo::before{
       content: ""; position: absolute; z-index: 2; left: 0; right: 0; bottom: 0; height: 34%; pointer-events: none;
@@ -475,9 +499,11 @@
     #ma-ar-{{ sid }}.ma-ar{
       display: grid !important;
       grid-template-columns: {{ split_left }}% {{ split_right }}% !important;
-      height: calc(100vh - var(--ma-hdr)) !important;
+      height: {{ section.settings.dt_height | default: 720 }}px !important;
       max-height: calc(100vh - var(--ma-hdr)) !important;
       overflow: hidden !important;
+      max-width: {{ section.settings.dt_max_w | default: 1440 }}px;
+      margin-left: auto; margin-right: auto;
     }
     #ma-ar-{{ sid }} .ma-ar__left-col{
       height: 100% !important; max-height: 100% !important;
@@ -485,7 +511,7 @@
       overflow: hidden !important; box-sizing: border-box !important;
     }
     #ma-ar-{{ sid }} .ma-ar__proof{
-      grid-template-columns: repeat({{ section.settings.proof_cols_dt | default: 4 }}, 1fr) !important;
+      grid-template-columns: repeat({{ section.settings.proof_cols_dt | default: '4' }}, 1fr) !important;
     }
     #ma-ar-{{ sid }} .ma-ar__proof-item:not(:last-child){
       border-right: 1px solid rgba(23,19,16,.08);
@@ -493,7 +519,6 @@
     #ma-ar-{{ sid }} .ma-ar__photo{
       height: 100% !important; width: 100% !important; position: relative !important; overflow: hidden !important;
     }
-    /* V4 Optical Light Dissolve */
     {%- if melt > 0 -%}
     #ma-ar-{{ sid }} .ma-ar__photo::before{
       content: ""; position: absolute; z-index: 2; top: 0; bottom: 0; left: 0; width: {{ section.settings.melt_width | default: 40 }}%; pointer-events: none;
@@ -503,7 +528,7 @@
     }
     #ma-ar-{{ sid }} .ma-ar__photo::after{
       content: ""; position: absolute; z-index: 3; inset: 0; pointer-events: none; opacity: {{ melt_veil }};
-      background: linear-gradient(90deg, var(--cream) 0%, rgba(244,238,225,.85) 15%, rgba(244,238,225,.4) 35%, rgba(244,238,225,0) 65%);
+      background: linear-gradient(90deg,var(--cream) 0%,rgba(244,238,225,.6) 12%,rgba(244,238,225,0) 48%);
     }
     {%- endif -%}
   }
@@ -657,7 +682,15 @@
 
     { "type": "header", "content": "13. PROOF GRID" },
     { "type": "checkbox", "id": "enable_proof", "label": "Enable Proof Grid", "default": true },
-    { "type": "range", "id": "proof_cols_dt", "label": "Desktop Proof Columns", "min": 2, "max": 4, "step": 1, "default": 4 },
+    { "type": "select", "id": "proof_cols_dt", "label": "Desktop Proof Columns", "default": "4", "options": [
+      { "value": "2", "label": "2 Columns" },
+      { "value": "3", "label": "3 Columns" },
+      { "value": "4", "label": "4 Columns (Default)" }
+    ]},
+    { "type": "select", "id": "proof_cols_mob", "label": "Mobile Proof Columns", "default": "2", "options": [
+      { "value": "1", "label": "1 Column - Stacked" },
+      { "value": "2", "label": "2 Columns - Grid (Default)" }
+    ]},
     { "type": "range", "id": "proof_gap", "label": "Proof grid gap", "min": 12, "max": 60, "step": 2, "default": 16, "unit": "px" },
     { "type": "checkbox", "id": "proof_divider", "label": "Show divider above proof grid", "default": true },
     { "type": "select", "id": "proof1_icon", "label": "Proof 1 icon", "default": "droplet", "options": [
@@ -688,19 +721,28 @@
     { "type": "range", "id": "content_offset_y_mob", "label": "Mobile Content Offset Y (px)", "min": -50, "max": 50, "step": 5, "default": 0 },
     { "type": "select", "id": "dt_valign", "label": "Vertical Distribution", "default": "space-between", "options": [{"value":"top","label":"Top"},{"value":"space-between","label":"Space Between (Default)"},{"value":"bottom","label":"Bottom"}] },
 
-    { "type": "header", "content": "15. SPACING" },
-    { "type": "select", "id": "split_ratio", "label": "Content / image split", "default": "70/30", "options": [
-      { "value": "70/30", "label": "70% / 30%" },
-      
+    { "type": "header", "content": "15. SPACING & SIZING" },
+    { "type": "select", "id": "split_ratio", "label": "Content / image split", "default": "55/45", "options": [
+      { "value": "55/45", "label": "55% / 45%" },
       { "value": "54/46", "label": "54% / 46%" },
       { "value": "53/47", "label": "53% / 47%" },
       { "value": "52/48", "label": "52% / 48%" }
     ]},
+    { "type": "range", "id": "dt_copy_w", "label": "Desktop Left Column Width (%)", "min": 40, "max": 70, "step": 1, "default": 55 },
+    { "type": "range", "id": "dt_img_w", "label": "Desktop Right Image Width (%)", "min": 30, "max": 60, "step": 1, "default": 45 },
+    { "type": "range", "id": "dt_height", "label": "Desktop Section Height (px)", "min": 500, "max": 1000, "step": 20, "default": 720 },
+    { "type": "range", "id": "dt_max_w", "label": "Max Container Width (px)", "min": 1000, "max": 1600, "step": 20, "default": 1440 },
     { "type": "range", "id": "padding_top", "label": "Padding top", "min": 0, "max": 60, "step": 4, "default": 24, "unit": "px" },
     { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 0, "max": 60, "step": 4, "default": 24, "unit": "px" },
     { "type": "range", "id": "padding_x", "label": "Padding left/right", "min": 24, "max": 100, "step": 4, "default": 48, "unit": "px" },
     { "type": "range", "id": "margin_t", "label": "Section Margin Top (px)", "min": 0, "max": 100, "step": 10, "default": 0 },
     { "type": "range", "id": "margin_b", "label": "Section Margin Bottom (px)", "min": 0, "max": 100, "step": 10, "default": 0 },
+    { "type": "range", "id": "mob_section_h", "label": "Mobile Section Min Height (px)", "min": 400, "max": 1200, "step": 20, "default": 680 },
+    { "type": "range", "id": "mob_img_h", "label": "Mobile Image Height (px)", "min": 200, "max": 600, "step": 10, "default": 380 },
+    { "type": "range", "id": "pad_t_mob", "label": "Mobile Top Padding (px)", "min": 10, "max": 80, "step": 5, "default": 35 },
+    { "type": "range", "id": "pad_b_mob", "label": "Mobile Bottom Padding (px)", "min": 10, "max": 80, "step": 5, "default": 45 },
+    { "type": "range", "id": "pad_h_mob", "label": "Mobile Horizontal Padding (px)", "min": 12, "max": 40, "step": 2, "default": 20 },
+    { "type": "range", "id": "mob_gap", "label": "Mobile Gap Image to Copy (px)", "min": 0, "max": 50, "step": 2, "default": 24 },
 
     { "type": "header", "content": "16. COLORS" },
     { "type": "color", "id": "bg_color", "label": "Background color", "default": "#F4EEE1" },
@@ -733,6 +775,9 @@
     { "type": "range", "id": "mobile_padding_x", "label": "Padding left/right (mobile)", "min": 16, "max": 40, "step": 2, "default": 24, "unit": "px" },
 
     { "type": "header", "content": "20. ADVANCED" },
+    { "type": "checkbox", "id": "enable_debug_grid", "label": "Enable Debug Grid Overlay", "default": false },
+    { "type": "checkbox", "id": "enable_safe_area", "label": "Enable Safe Area Border", "default": false },
+    { "type": "checkbox", "id": "enable_baseline_grid", "label": "Enable 8px Baseline Grid", "default": false },
     { "type": "text", "id": "custom_class", "label": "Custom CSS class" },
     { "type": "text", "id": "anchor_id", "label": "Custom Section Anchor ID" }
   ],
