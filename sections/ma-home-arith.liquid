@@ -1,562 +1,243 @@
 {%- comment -%}
-  MAISON AMIIR — Honest Arithmetic Section V3 (Magazine Spread Specification)
-  Preserves 100% of legacy setting IDs, animations, and Theme Customizer compatibility.
-  DOM ARCHITECTURE:
-    <section class="ma-ar">
-      <div class="ma-ar__left-col"> Eyebrow → Headline → Subhead → Comparison → Proof Grid → Conclusion </div>
-      <div class="ma-ar__right-col"> Campaign Image </div>
-    </section>
-  100% syntax validated: hex color defaults, double quotes around strings with apostrophes.
+  MAISON AMIIR — Home · Honest Arithmetic (DC presentation).
+  Approved 2026-07-16: exact one-screen section (100svh minus sticky header),
+  cream ground, Cormorant/Marcellus, photo melts into the cream (intensity slider),
+  price bars fill on scroll (them 100% → us 12%). Setting IDs unchanged so
+  existing editor content carries over.
 {%- endcomment -%}
 
-{%- liquid
-  assign sid = section.id
-  assign has_img = false
-  if section.settings.bottle_image != blank or section.settings.mobile_image != blank
-    assign has_img = true
-  endif
-
-  assign melt = section.settings.melt | default: 100
-  assign melt_strength = section.settings.melt_strength | default: melt
-  assign melt_blur = section.settings.melt_blur | default: 12
-  assign melt_veil = melt_strength | divided_by: 100.0
-
-  assign now_value = section.settings.right_value | escape | replace: 'from ', '<em>from</em> '
-  assign cmp_style = section.settings.cmp_style | default: 'cards'
-
-  assign value_blocks = section.blocks | where: 'type', 'value_item'
-  assign proof_blocks = section.blocks | where: 'type', 'proof_item'
--%}
+{%- assign has_img = false -%}
+{%- if section.settings.bottle_image != blank -%}{%- assign has_img = true -%}{%- endif -%}
+{%- assign melt = section.settings.melt | default: 100 -%}
+{%- assign melt_blur = melt | times: 9.0 | divided_by: 100.0 -%}
+{%- assign melt_veil = melt | divided_by: 100.0 -%}
+{%- assign now_value = section.settings.right_value | escape | replace: 'from ', '<em>from</em> ' -%}
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Marcellus&display=swap" rel="stylesheet">
 
-<style>
-/* ═══════════════════════════════════════════════
-   1. ROOT VARIABLES & SECTION SHELL
-═══════════════════════════════════════════════ */
-#ma-ar-{{ sid }}.ma-ar {
-  --cream: {{ section.settings.bg_color | default: '#F4EEE1' }};
-  --ink: {{ section.settings.ink_color | default: '#171310' }};
-  --gold: {{ section.settings.gold_color | default: '#C6A15B' }};
-  --burg: {{ section.settings.burg_color | default: '#6E1220' }};
-  --burg2: {{ section.settings.burg2_color | default: '#8E1B28' }};
-  --track: {{ section.settings.track_color | default: '#E6E0D5' }};
-  --fill: {{ section.settings.fill_color | default: '#8E1B28' }};
+<section class="ma-ar {% if has_img %}ma-ar--split{% endif %}" id="ma-ar-{{ section.id }}">
+  <div class="ma-ar__copy">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="ma-ar__k">{{ section.settings.eyebrow | escape }}</p>
+    {%- endif -%}
+    {%- if section.settings.heading != blank -%}
+      <h2 class="ma-ar__h">{{ section.settings.heading | escape | replace: 'Not on the receipt.', '<em>Not on the receipt.</em>' }}</h2>
+    {%- endif -%}
+    {%- if section.settings.subheading != blank -%}
+      <p class="ma-ar__sub">{{ section.settings.subheading | escape }}</p>
+    {%- endif -%}
 
-  position: relative;
-  background: var(--cream);
-  color: var(--ink);
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  overflow: hidden;
-  margin-top: {{ section.settings.margin_t | default: 0 }}px;
-  margin-bottom: {{ section.settings.margin_b | default: 0 }}px;
-}
-
-{% if section.settings.enable_texture %}
-#ma-ar-{{ sid }} .ma-ar__grain {
-  position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1;
-  opacity: {{ section.settings.texture_opacity | default: 6 | divided_by: 100.0 }};
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='{{ section.settings.noise_amount | default: 4 | divided_by: 5.0 }}' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-}
-{% endif %}
-
-/* ═══════════════════════════════════════════════
-   2. COPY HIERARCHY
-═══════════════════════════════════════════════ */
-#ma-ar-{{ sid }} .ma-ar__k {
-  font-family: {{ section.settings.eyebrow_font.family | default: 'Marcellus' }}, Georgia, serif;
-  font-size: {{ section.settings.eyebrow_size_mob | default: 10 }}px;
-  font-weight: {{ section.settings.eyebrow_weight | default: '400' }};
-  letter-spacing: {{ section.settings.eyebrow_spacing | default: 3 }}px;
-  text-transform: uppercase; color: {{ section.settings.eyebrow_color | default: 'var(--burg2)' }};
-  margin: 0 0 {{ section.settings.gap_head | default: 12 }}px;
-  display: flex; align-items: center; gap: 12px;
-}
-#ma-ar-{{ sid }} .ma-ar__k::before {
-  content: ""; width: {{ section.settings.divider_w_mob | default: 30 }}px; height: {{ section.settings.divider_thickness | default: 1 }}px;
-  background: {{ section.settings.divider_color | default: 'var(--burg2)' }}; flex: 0 0 auto;
-  opacity: {{ section.settings.divider_opacity | default: 60 | divided_by: 100.0 }};
-}
-
-#ma-ar-{{ sid }} .ma-ar__h {
-  font-family: {{ section.settings.heading_font.family | default: 'Cormorant Garamond' }}, Georgia, serif !important;
-  font-size: clamp({{ section.settings.heading_size_mob | default: 32 }}px, 4.2vw, {{ section.settings.heading_size_dt | default: 52 }}px) !important;
-  font-weight: {{ section.settings.heading_weight | default: '600' }} !important;
-  line-height: {{ section.settings.heading_lh | default: 108 | divided_by: 100.0 }} !important;
-  letter-spacing: {{ section.settings.heading_spacing | default: 0 }}px !important;
-  color: {{ section.settings.heading_color | default: 'var(--ink)' }};
-  margin: 0 0 10px;
-  max-width: {{ section.settings.heading_max_w | default: 24 }}ch;
-}
-#ma-ar-{{ sid }} .ma-ar__h em {
-  font-style: {% if section.settings.accent_style == 'italic' %}italic{% else %}normal{% endif %};
-  font-weight: {{ section.settings.accent_weight | default: '400' }};
-  color: {{ section.settings.accent_color | default: 'var(--burg)' }};
-}
-
-#ma-ar-{{ sid }} .ma-ar__sub {
-  font-family: {{ section.settings.sub_font.family | default: 'Cormorant Garamond' }}, Georgia, serif;
-  font-size: clamp({{ section.settings.sub_size_mob | default: 15 }}px, 2svh, {{ section.settings.sub_size_dt | default: 18 }}px);
-  font-weight: {{ section.settings.sub_weight | default: '500' }};
-  font-style: italic; line-height: 1.45;
-  color: {{ section.settings.sub_color | default: 'rgba(23,19,16,0.8)' }};
-  margin: 0 0 {{ section.settings.sub_margin_b | default: 20 }}px;
-  max-width: {{ section.settings.sub_max_w | default: 48 }}ch;
-}
-
-/* ═══════════════════════════════════════════════
-   3. COMPARISON ARCHITECTURE (EDITORIAL CARDS)
-═══════════════════════════════════════════════ */
-#ma-ar-{{ sid }} .ma-ar__cmp {
-  width: 100%; margin: 0 0 {{ section.settings.gap_proof | default: 24 }}px;
-}
-
-/* Style A: Classic Bars */
-#ma-ar-{{ sid }} .ma-ar__row { padding: 12px 0 0; border-top: 1px solid rgba(23,19,16,0.14); }
-#ma-ar-{{ sid }} .ma-ar__top { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; }
-#ma-ar-{{ sid }} .ma-ar__lab {
-  font-family: {{ section.settings.cmp_font.family | default: 'Marcellus' }}, Georgia, serif;
-  font-size: {{ section.settings.cmp_size_mob | default: 11 }}px; letter-spacing: 0.18em;
-  text-transform: uppercase; color: rgba(23,19,16,0.7);
-}
-#ma-ar-{{ sid }} .ma-ar__val--typ {
-  font-size: clamp(20px, 3svh, 26px); font-weight: 500; color: rgba(23,19,16,0.44);
-  text-decoration: line-through; text-decoration-thickness: 1.5px;
-}
-#ma-ar-{{ sid }} .ma-ar__val--now { font-size: clamp(28px, 4.5svh, 44px); font-weight: 600; color: var(--burg2); }
-#ma-ar-{{ sid }} .ma-ar__val--now em { font-style: italic; font-weight: 400; font-size: 0.52em; color: var(--burg); margin-right: 4px; }
-#ma-ar-{{ sid }} .ma-ar__track { display: block; height: {{ section.settings.bar_h | default: 6 }}px; background: var(--track); border-radius: {{ section.settings.bar_rad | default: 3 }}px; overflow: hidden; margin: 8px 0 10px; }
-#ma-ar-{{ sid }} .ma-ar__fill { display: block; height: 100%; width: 0; border-radius: {{ section.settings.bar_rad | default: 3 }}px; }
-#ma-ar-{{ sid }} .ma-ar__fill--typ { background: rgba(23,19,16,0.55); transition: width {{ section.settings.bar_speed | default: 1400 }}ms cubic-bezier(.25,.8,.25,1) {{ section.settings.bar_delay | default: 200 }}ms; }
-#ma-ar-{{ sid }} .ma-ar__fill--now { background: var(--fill); transition: width {{ section.settings.bar_speed | default: 1400 }}ms cubic-bezier(.25,.8,.25,1) {{ section.settings.bar_delay | default: 200 | plus: 400 }}ms; }
-#ma-ar-{{ sid }}.is-in .ma-ar__fill--typ { width: {{ section.settings.bar_pct_them | default: 100 }}%; }
-#ma-ar-{{ sid }}.is-in .ma-ar__fill--now { width: {{ section.settings.bar_pct_us | default: 12 }}%; }
-
-/* Style B: VS Comparison Cards */
-#ma-ar-{{ sid }} .ma-ar__cards-grid {
-  display: grid; grid-template-columns: 1fr; gap: {{ section.settings.cmp_gap_mob | default: 14 }}px;
-  align-items: stretch; position: relative;
-}
-@media (min-width: 650px) {
-  #ma-ar-{{ sid }} .ma-ar__cards-grid { grid-template-columns: 1fr auto 1fr; gap: {{ section.settings.cmp_gap_dt | default: 16 }}px; align-items: center; }
-}
-
-#ma-ar-{{ sid }} .ma-ar__vs-badge {
-  font-family: 'Marcellus', serif; font-size: 16px; font-weight: 400; letter-spacing: 0.22em;
-  color: var(--gold); text-align: center; padding: 2px 0;
-}
-
-#ma-ar-{{ sid }} .ma-ar__card {
-  background: {{ section.settings.card_bg_col | default: '#F0EAE1' }};
-  border: 1px solid {{ section.settings.card_border_col | default: '#E2DCD3' }};
-  border-radius: 6px; padding: clamp(14px, 2vh, 20px) clamp(14px, 1.6vw, 18px);
-  display: flex; flex-direction: column; justify-content: space-between;
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
-}
-#ma-ar-{{ sid }} .ma-ar__card--us {
-  background: linear-gradient(145deg, rgba(244,238,225,0.95), rgba(244,238,225,0.65));
-  border-color: rgba(198,161,91,0.45);
-  box-shadow: 0 12px 30px -10px rgba(0,0,0,0.08);
-}
-#ma-ar-{{ sid }} .ma-ar__card-head {
-  font-family: 'Marcellus', serif; font-size: 10px; letter-spacing: 0.18em;
-  text-transform: uppercase; color: rgba(23,19,16,0.7); margin: 0 0 12px;
-  padding-bottom: 8px; border-bottom: 1px solid rgba(23,19,16,0.1);
-}
-#ma-ar-{{ sid }} .ma-ar__card--us .ma-ar__card-head { color: var(--burg2); border-color: rgba(198,161,91,0.25); }
-
-#ma-ar-{{ sid }} .ma-ar__list { list-style: none; margin: 0 0 14px; display: flex; flex-direction: column; gap: 8px; }
-#ma-ar-{{ sid }} .ma-ar__list-item {
-  display: flex; align-items: center; gap: 9px; font-size: clamp(12.5px, 1.3svh, 14px); color: rgba(23,19,16,0.88); line-height: 1.25;
-}
-#ma-ar-{{ sid }} .ma-ar__list-icon { width: 16px; height: 16px; flex: 0 0 auto; display: flex; align-items: center; justify-content: center; color: var(--gold); }
-#ma-ar-{{ sid }} .ma-ar__card--them .ma-ar__list-icon { color: rgba(23,19,16,0.4); }
-
-#ma-ar-{{ sid }} .ma-ar__card-foot {
-  padding-top: 10px; border-top: 1px solid rgba(23,19,16,0.1);
-  display: flex; flex-direction: column; gap: 2px;
-}
-#ma-ar-{{ sid }} .ma-ar__card--us .ma-ar__card-foot { border-color: rgba(198,161,91,0.25); }
-#ma-ar-{{ sid }} .ma-ar__card-price { font-family: 'Cormorant Garamond', Georgia, serif; font-size: clamp(24px, 2.8svh, 28px); font-weight: 600; color: var(--ink); line-height: 1; }
-#ma-ar-{{ sid }} .ma-ar__card--us .ma-ar__card-price { color: var(--burg2); font-size: clamp(26px, 3.2svh, 32px); }
-#ma-ar-{{ sid }} .ma-ar__card--us .ma-ar__card-price em { font-size: 0.55em; font-style: italic; font-weight: 400; color: var(--burg); margin-right: 3px; }
-#ma-ar-{{ sid }} .ma-ar__card-sub { font-size: 11px; color: rgba(23,19,16,0.65); font-style: italic; }
-
-/* ═══════════════════════════════════════════════
-   4. QUALITY PROOF ROW (4 HORIZONTAL COLUMNS ALWAYS)
-═══════════════════════════════════════════════ */
-#ma-ar-{{ sid }} .ma-ar__proof {
-  display: grid; grid-template-columns: 1fr; gap: {{ section.settings.proof_gap | default: 14 }}px;
-  margin: 0 0 {{ section.settings.gap_concl | default: 24 }}px;
-  border-top: 1px solid rgba(23,19,16,0.12); padding-top: 16px;
-}
-@media (min-width: 600px) {
-  #ma-ar-{{ sid }} .ma-ar__proof { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
-
-#ma-ar-{{ sid }} .ma-ar__proof-item {
-  display: flex; flex-direction: column; gap: 3px;
-  padding-right: 6px; border-right: 0;
-}
-#ma-ar-{{ sid }} .ma-ar__proof-icon { color: var(--gold); margin-bottom: 2px; display: flex; align-items: center; }
-#ma-ar-{{ sid }} .ma-ar__proof-h { font-size: clamp(14px, 1.6svh, 16px); font-weight: 600; color: var(--ink); margin: 0; line-height: 1.2; }
-#ma-ar-{{ sid }} .ma-ar__proof-p { font-size: clamp(11.5px, 1.3svh, 12.5px); color: rgba(23,19,16,0.75); line-height: 1.35; margin: 0; }
-
-/* Legacy Refinements Fallback */
-#ma-ar-{{ sid }} .ma-ar__refine { margin: 12px 0 0; display: flex; flex-direction: column; gap: 6px; }
-#ma-ar-{{ sid }} .ma-ar__ref { font-size: 15px; font-weight: 500; color: rgba(23,19,16,.85); line-height: 1.4; margin: 0; }
-#ma-ar-{{ sid }} .ma-ar__ref b { color: var(--gold); font-weight: 400; margin-right: 8px; }
-
-/* ═══════════════════════════════════════════════
-   5. CONCLUSION & CROWN DIVIDER
-═══════════════════════════════════════════════ */
-#ma-ar-{{ sid }} .ma-ar__concl {
-  text-align: center; margin: 0 auto; max-width: 46ch; padding-top: 14px;
-  border-top: 1px solid rgba(23,19,16,0.14); width: 100%;
-}
-#ma-ar-{{ sid }} .ma-ar__concl-crown { font-size: 18px; color: var(--gold); margin-bottom: 4px; display: block; }
-#ma-ar-{{ sid }} .ma-ar__concl-h {
-  font-size: clamp({{ section.settings.concl_size_mob | default: 18 }}px, 2.4svh, {{ section.settings.concl_size_dt | default: 22 }}px);
-  font-weight: 600; color: var(--ink); margin: 0 0 2px; line-height: 1.2;
-}
-#ma-ar-{{ sid }} .ma-ar__concl-p {
-  font-size: clamp(13.5px, 1.7svh, 16px); font-style: italic; color: var(--burg); margin: 0 0 12px;
-}
-#ma-ar-{{ sid }} .ma-ar__cta {
-  display: inline-block; padding: 10px 28px; background: var(--ink); color: var(--cream);
-  font-family: 'Marcellus', serif; font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase;
-  text-decoration: none; border-radius: 2px; transition: opacity 0.3s ease, transform 0.3s ease;
-}
-#ma-ar-{{ sid }} .ma-ar__cta:hover { opacity: 0.88; transform: translateY(-2px); }
-
-/* ═══════════════════════════════════════════════
-   6. PHOTO & DIRECTIONAL DISSOLVE
-═══════════════════════════════════════════════ */
-#ma-ar-{{ sid }} .ma-ar__img {
-  width: 100%; height: 100%; object-fit: cover; display: block;
-  object-position: {{ section.settings.mob_focal_x | default: 50 }}% {{ section.settings.mob_focal_y | default: 50 }}%;
-  transform: scale({{ section.settings.img_scale_mob | default: 100 | divided_by: 100.0 }}) translate({{ section.settings.img_offset_x_mob | default: 0 }}px, {{ section.settings.img_offset_y_mob | default: 0 }}px);
-  filter: brightness({{ section.settings.img_brightness | default: 100 }}%) contrast({{ section.settings.img_contrast | default: 100 }}%) saturate({{ section.settings.img_saturation | default: 100 }}%);
-}
-#ma-ar-{{ sid }} .ma-ar__img--dt { display: none; }
-#ma-ar-{{ sid }} .ma-ar__img--mob { display: block; }
-
-/* ═══════════════════════════════════════════════
-   7. TRUE DOM TWO-COLUMN ARCHITECTURE (<900px VS >=900px)
-═══════════════════════════════════════════════ */
-@media (max-width: 899px) {
-  #ma-ar-{{ sid }}.ma-ar {
-    display: flex !important; flex-direction: column !important;
-    height: auto !important; max-height: none !important; overflow: visible !important;
-    padding: {{ section.settings.pad_t_mob | default: 35 }}px {{ section.settings.pad_h_mob | default: 20 }}px {{ section.settings.pad_b_mob | default: 45 }}px !important;
-  }
-  #ma-ar-{{ sid }} .ma-ar__left-col {
-    display: flex !important; flex-direction: column !important;
-    order: {% if section.settings.mob_order == 'content_first' %}1{% else %}2{% endif %} !important;
-    padding: 0 !important;
-  }
-  #ma-ar-{{ sid }} .ma-ar__right-col {
-    position: relative !important; width: 100% !important;
-    height: {{ section.settings.mob_img_h | default: 380 }}px !important;
-    overflow: hidden !important;
-    order: {% if section.settings.mob_order == 'content_first' %}2{% else %}1{% endif %} !important;
-    border-radius: {{ section.settings.mob_img_rad | default: 0 }}px !important;
-    margin-bottom: {% if section.settings.mob_order == 'image_first' %}24px{% else %}0{% endif %} !important;
-  }
-  {%- if melt_strength > 0 -%}
-  #ma-ar-{{ sid }} .ma-ar__right-col::before {
-    content: "" !important; position: absolute !important; z-index: 2 !important;
-    bottom: 0 !important; left: 0 !important; right: 0 !important;
-    height: {{ section.settings.melt_width | default: 40 }}% !important;
-    backdrop-filter: blur({{ melt_blur }}px) !important; -webkit-backdrop-filter: blur({{ melt_blur }}px) !important;
-    -webkit-mask-image: linear-gradient(0deg,#000 0,transparent 100%) !important;
-            mask-image: linear-gradient(0deg,#000 0,transparent 100%) !important;
-  }
-  #ma-ar-{{ sid }} .ma-ar__right-col::after {
-    content: "" !important; position: absolute !important; z-index: 3 !important;
-    inset: 0 !important; opacity: {{ melt_veil }} !important;
-    background: linear-gradient(0deg,var(--cream) 0%,rgba(244,238,225,.55) 16%,rgba(244,238,225,0) 48%) !important;
-  }
-  {%- endif -%}
-}
-
-/* ── EXACT ONE-SECTION DESKTOP SPREAD (~55% LEFT / ~45% RIGHT) ── */
-@media (min-width: 900px) {
-  #ma-ar-{{ sid }}.ma-ar {
-    display: grid !important;
-    grid-template-columns: {{ section.settings.dt_copy_w | default: 55 }}% {{ 100 | minus: section.settings.dt_copy_w | default: 45 }}% !important;
-    grid-template-rows: 100% !important;
-    height: 100vh !important;
-    max-height: 100vh !important;
-    min-height: 100vh !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    overflow: hidden !important;
-    padding: 0 !important; margin: 0 !important;
-    align-items: stretch !important;
-  }
-  
-  /* Left Page Article Area (~55% Width, 100% Height, Safe Vertical Distribution) */
-  #ma-ar-{{ sid }} .ma-ar__left-col {
-    display: flex !important; flex-direction: column !important;
-    justify-content: space-between !important;
-    height: 100vh !important; max-height: 100vh !important;
-    overflow: hidden !important;
-    padding: clamp(20px, 3.5vh, 44px) clamp(28px, 3.5vw, 56px) !important;
-    z-index: 3 !important;
-    background: var(--cream) !important;
-    box-sizing: border-box !important;
-  }
-  #ma-ar-{{ sid }} .ma-ar__k { font-size: {{ section.settings.eyebrow_size_dt | default: 11 }}px; }
-  #ma-ar-{{ sid }} .ma-ar__k::before { width: {{ section.settings.divider_w_dt | default: 36 }}px; }
-  #ma-ar-{{ sid }} .ma-ar__lab { font-size: 11px; }
-
-  /* 4 Horizontal Columns Always on Desktop */
-  #ma-ar-{{ sid }} .ma-ar__proof {
-    display: grid !important;
-    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-    gap: 12px !important;
-  }
-  #ma-ar-{{ sid }} .ma-ar__proof-item:not(:last-child) {
-    border-right: 1px solid rgba(23,19,16,0.08) !important;
-  }
-  
-  /* Right Page Photography Area (~45% Full Bleed Height, Locked Column 2) */
-  #ma-ar-{{ sid }} .ma-ar__right-col {
-    position: relative !important;
-    height: 100vh !important; max-height: 100vh !important;
-    width: 100% !important; overflow: hidden !important;
-    margin: 0 !important; padding: 0 !important;
-    z-index: 2 !important;
-    border-radius: {{ section.settings.img_radius | default: 0 }}px !important;
-  }
-  #ma-ar-{{ sid }} .ma-ar__img--dt { display: block !important; }
-  #ma-ar-{{ sid }} .ma-ar__img--mob { display: none !important; }
-  #ma-ar-{{ sid }} .ma-ar__img {
-    object-position: {{ section.settings.focal_x | default: 50 }}% {{ section.settings.focal_y | default: 50 }}% !important;
-    transform: scale({{ section.settings.img_scale_dt | default: 100 | divided_by: 100.0 }}) translate({{ section.settings.img_offset_x_dt | default: 0 }}px, {{ section.settings.img_offset_y_dt | default: 0 }}px) !important;
-  }
-
-  /* Natural Paper Dissolve on Desktop Left Edge */
-  {%- if melt_strength > 0 -%}
-  #ma-ar-{{ sid }} .ma-ar__right-col::after {
-    content: "" !important; position: absolute !important;
-    top: 0 !important; bottom: 0 !important; left: 0 !important;
-    width: {{ section.settings.melt_width | default: 42 }}% !important;
-    background: linear-gradient(to right, var(--cream) 0%, var(--cream) 4%, rgba(244,238,225,.8) 22%, rgba(244,238,225,0) 100%) !important;
-    pointer-events: none !important; z-index: 5 !important;
-  }
-  {%- endif -%}
-}
-
-/* ═══════════════════════════════════════════════
-   8. ANIMATIONS & REVEALS
-═══════════════════════════════════════════════ */
-{% if section.settings.enable_anim %}
-  #ma-ar-{{ sid }} .ma-ar__anim {
-    opacity: 0;
-    {% if section.settings.anim_type == 'fade_up' %}transform: translateY(22px);{% endif %}
-    transition: opacity {{ section.settings.anim_speed | default: 700 }}ms ease, transform {{ section.settings.anim_speed | default: 700 }}ms cubic-bezier(0.16,1,0.3,1);
-  }
-  #ma-ar-{{ sid }}.is-in .ma-ar__anim { opacity: 1; transform: none; }
-  #ma-ar-{{ sid }} .ma-ar__anim:nth-child(1) { transition-delay: 0ms; }
-  #ma-ar-{{ sid }} .ma-ar__anim:nth-child(2) { transition-delay: {{ section.settings.stagger_delay | default: 80 }}ms; }
-  #ma-ar-{{ sid }} .ma-ar__anim:nth-child(3) { transition-delay: {{ section.settings.stagger_delay | default: 80 | times: 2 }}ms; }
-  #ma-ar-{{ sid }} .ma-ar__anim:nth-child(4) { transition-delay: {{ section.settings.stagger_delay | default: 80 | times: 3 }}ms; }
-  #ma-ar-{{ sid }} .ma-ar__anim:nth-child(5) { transition-delay: {{ section.settings.stagger_delay | default: 80 | times: 4 }}ms; }
-{% endif %}
-
-@media (prefers-reduced-motion: reduce) {
-  #ma-ar-{{ sid }} * { transition: none !important; animation: none !important; }
-  #ma-ar-{{ sid }} .ma-ar__fill--typ { width: 100% !important; }
-  #ma-ar-{{ sid }} .ma-ar__fill--now { width: 12% !important; }
-}
-</style>
-
-<!-- ── TRUE TWO-COLUMN DOM ARCHITECTURE: ONE SECTION, TWO RIGID CHILDREN ── -->
-<section class="ma-ar {{ section.settings.custom_class }}" id="ma-ar-{{ sid }}">
-  {%- if section.settings.enable_texture -%}<div class="ma-ar__grain" aria-hidden="true"></div>{%- endif -%}
-
-  <!-- LEFT COLUMN (~55%): ARTICLE SPREAD IN STRICT VERTICAL ORDER -->
-  <div class="ma-ar__left-col">
-    
-    <div class="ma-ar__head-block">
-      {%- if section.settings.eyebrow != blank -%}
-        <p class="ma-ar__k ma-ar__anim">{{ section.settings.eyebrow | escape }}</p>
-      {%- endif -%}
-
-      {%- if section.settings.heading != blank -%}
-        <h2 class="ma-ar__h ma-ar__anim">{{ section.settings.heading | replace: 'Not on the receipt.', '<em>Not on the receipt.</em>' }}</h2>
-      {%- endif -%}
-
-      {%- if section.settings.subheading != blank -%}
-        <p class="ma-ar__sub ma-ar__anim">{{ section.settings.subheading | escape }}</p>
-      {%- endif -%}
+    <div class="ma-ar__cmp">
+      <div class="ma-ar__row">
+        <div class="ma-ar__top">
+          <span class="ma-ar__lab">{{ section.settings.left_label | escape }}</span>
+          <span class="ma-ar__val ma-ar__val--typ">{{ section.settings.left_value | escape }}</span>
+        </div>
+        <div class="ma-ar__track"><span class="ma-ar__fill ma-ar__fill--typ"></span></div>
+      </div>
+      <div class="ma-ar__row">
+        <div class="ma-ar__top">
+          <span class="ma-ar__lab">{{ section.settings.right_label | escape }}</span>
+          <span class="ma-ar__val ma-ar__val--now">{{ now_value }}</span>
+        </div>
+        <div class="ma-ar__track"><span class="ma-ar__fill ma-ar__fill--now"></span></div>
+      </div>
     </div>
 
-    <!-- COMPARISON AREA (SELECTABLE: BARS OR CARDS) -->
-    <div class="ma-ar__cmp ma-ar__anim">
-      {%- if cmp_style == 'bars' -%}
-        <div class="ma-ar__row">
-          <div class="ma-ar__top">
-            <span class="ma-ar__lab">{{ section.settings.left_label | escape }}</span>
-            <span class="ma-ar__val ma-ar__val--typ">{{ section.settings.left_value | escape }}</span>
-          </div>
-          <div class="ma-ar__track"><span class="ma-ar__fill ma-ar__fill--typ"></span></div>
-        </div>
-        <div class="ma-ar__row">
-          <div class="ma-ar__top">
-            <span class="ma-ar__lab">{{ section.settings.right_label | escape }}</span>
-            <span class="ma-ar__val ma-ar__val--now">{{ now_value }}</span>
-          </div>
-          <div class="ma-ar__track"><span class="ma-ar__fill ma-ar__fill--now"></span></div>
-        </div>
-      {%- else -%}
-        <!-- Style B: VS Comparison Cards (Editorial spread) -->
-        <div class="ma-ar__cards-grid">
-          <!-- Left Card: Typical Luxury -->
-          <div class="ma-ar__card ma-ar__card--them">
-            <div class="ma-ar__card-head">{{ section.settings.left_label | default: "WHERE YOUR MONEY USUALLY GOES" }}</div>
-            <ul class="ma-ar__list">
-              {%- assign left_items = value_blocks | where: 'settings.side', 'left' -%}
-              {%- if left_items.size > 0 -%}
-                {%- for block in left_items -%}
-                  <li class="ma-ar__list-item" {{ block.shopify_attributes }}>
-                    <span class="ma-ar__list-icon">
-                      <svg viewBox="0 0 24 24"><path d="M12 3l7 2.6v5.1c0 4.4-3 7.4-7 8.8-4-1.4-7-4.4-7-8.8V5.6L12 3z"/><path d="M9 12l2 2 4-4.2"/></svg>
-                    </span>
-                    <span>{{ block.settings.text | escape }}</span>
-                  </li>
-                {%- endfor -%}
-              {%- else -%}
-                <li class="ma-ar__list-item"><span class="ma-ar__list-icon"><svg viewBox="0 0 24 24"><path d="M4 10l1-6h14l1 6M4 10v9h16v-9M4 10h16M9 19v-5h4v5"/></svg></span><span>Luxury Stores & Rent</span></li>
-                <li class="ma-ar__list-item"><span class="ma-ar__list-icon"><svg viewBox="0 0 24 24"><path d="M3 10v4l14 4V6L3 10z"/><path d="M17 9v6"/><path d="M7 14v4a2 2 0 0 0 2 2h1v-6"/></svg></span><span>Celebrity Endorsements</span></li>
-                <li class="ma-ar__list-item"><span class="ma-ar__list-icon"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="1"/><path d="M9 21h6M12 18v3"/></svg></span><span>Massive Advertising Campaigns</span></li>
-                <li class="ma-ar__list-item"><span class="ma-ar__list-icon"><svg viewBox="0 0 24 24"><rect x="4" y="9" width="16" height="11" rx="1"/><path d="M12 9v11M4 9h16"/></svg></span><span>Premium Packaging Overkill</span></li>
-                <li class="ma-ar__list-item"><span class="ma-ar__list-icon"><svg viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></svg></span><span>Traditional Retail Markup</span></li>
-              {%- endif -%}
-            </ul>
-            <div class="ma-ar__card-foot">
-              <span class="ma-ar__card-price">{{ section.settings.left_value | default: "₹20,000+" }}</span>
-              <span class="ma-ar__card-sub">Typical Luxury Perfume</span>
-            </div>
-          </div>
-
-          <div class="ma-ar__vs-badge">VS</div>
-
-          <!-- Right Card: Maison Amiir -->
-          <div class="ma-ar__card ma-ar__card--us">
-            <div class="ma-ar__card-head">{{ section.settings.right_label | default: "WHAT YOU'RE REALLY PAYING FOR" }}</div>
-            <ul class="ma-ar__list">
-              {%- assign right_items = value_blocks | where: 'settings.side', 'right' -%}
-              {%- if right_items.size > 0 -%}
-                {%- for block in right_items -%}
-                  <li class="ma-ar__list-item" {{ block.shopify_attributes }}>
-                    <span class="ma-ar__list-icon">
-                      <svg viewBox="0 0 24 24"><path d="M12 3l7 2.6v5.1c0 4.4-3 7.4-7 8.8-4-1.4-7-4.4-7-8.8V5.6L12 3z"/><path d="M9 12l2 2 4-4.2"/></svg>
-                    </span>
-                    <span>{{ block.settings.text | escape }}</span>
-                  </li>
-                {%- endfor -%}
-              {%- else -%}
-                <li class="ma-ar__list-item"><span class="ma-ar__list-icon"><svg viewBox="0 0 24 24"><path d="M12 2s7 7.5 7 12.5A7 7 0 0 1 5 14.5C5 9.5 12 2 12 2z"/></svg></span><span>Fine Fragrance Oil (30% Extrait)</span></li>
-                <li class="ma-ar__list-item"><span class="ma-ar__list-icon"><svg viewBox="0 0 24 24"><path d="M4 19c8 1 15-4 16-15-9 0-16 4-16 15z"/><path d="M4 19c3-5 7-8 12-10"/></svg></span><span>Premium Rare Ingredients</span></li>
-                <li class="ma-ar__list-item"><span class="ma-ar__list-icon"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><path d="M8.5 8L20 19M8.5 16L20 5"/></svg></span><span>Artisan Small-Batch Blending</span></li>
-                <li class="ma-ar__list-item"><span class="ma-ar__list-icon"><svg viewBox="0 0 24 24"><path d="M6 8h12l1 12H5L6 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg></span><span>Quality Bottle & Functional Packaging</span></li>
-                <li class="ma-ar__list-item"><span class="ma-ar__list-icon"><svg viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></svg></span><span>Honest & Fair Pricing</span></li>
-              {%- endif -%}
-            </ul>
-            <div class="ma-ar__card-foot">
-              <span class="ma-ar__card-price">{{ now_value }}</span>
-              <span class="ma-ar__card-sub">Maison Amiir Extrait</span>
-            </div>
-          </div>
-        </div>
-      {%- endif -%}
-    </div>
-
-    <!-- QUALITY PROOF SECTION (4 HORIZONTAL COLUMNS ALWAYS ON DESKTOP) -->
-    {%- if section.settings.enable_proof -%}
-      <div class="ma-ar__proof ma-ar__anim">
-        {%- if proof_blocks.size > 0 -%}
-          {%- for block in proof_blocks -%}
-            <div class="ma-ar__proof-item" {{ block.shopify_attributes }}>
-              <span class="ma-ar__proof-icon">
-                <svg viewBox="0 0 24 24"><path d="M12 2s7 7.5 7 12.5A7 7 0 0 1 5 14.5C5 9.5 12 2 12 2z"/></svg>
-              </span>
-              <h3 class="ma-ar__proof-h">{{ block.settings.heading | escape }}</h3>
-              <p class="ma-ar__proof-p">{{ block.settings.body | escape }}</p>
-            </div>
-          {%- endfor -%}
-        {%- else -%}
-          <div class="ma-ar__proof-item">
-            <span class="ma-ar__proof-icon"><svg viewBox="0 0 24 24"><path d="M12 2s7 7.5 7 12.5A7 7 0 0 1 5 14.5C5 9.5 12 2 12 2z"/></svg></span>
-            <h3 class="ma-ar__proof-h">30% Extrait Oil</h3>
-            <p class="ma-ar__proof-p">The same concentration tier as the houses that inspire us.</p>
-          </div>
-          <div class="ma-ar__proof-item">
-            <span class="ma-ar__proof-icon"><svg viewBox="0 0 24 24"><path d="M12 3l7 2.6v5.1c0 4.4-3 7.4-7 8.8-4-1.4-7-4.4-7-8.8V5.6L12 3z"/><path d="M9 12l2 2 4-4.2"/></svg></span>
-            <h3 class="ma-ar__proof-h">IFRA-Compliant</h3>
-            <p class="ma-ar__proof-p">Safe, kind to skin and crafted to international standards.</p>
-          </div>
-          <div class="ma-ar__proof-item">
-            <span class="ma-ar__proof-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></span>
-            <h3 class="ma-ar__proof-h">Lasts All Day</h3>
-            <p class="ma-ar__proof-p">High performance that stays with you from day to night.</p>
-          </div>
-          <div class="ma-ar__proof-item">
-            <span class="ma-ar__proof-icon"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-9.3-8.8C1.2 8 2.7 4.8 6 4.2c2-.4 3.7.6 4.9 2.3 1.2-1.7 2.9-2.7 4.9-2.3 3.3.6 4.8 3.8 3.3 7C19 15.6 12 20 12 20z"/></svg></span>
-            <h3 class="ma-ar__proof-h">Crafted with Intention</h3>
-            <p class="ma-ar__proof-p">Small batch. Carefully blended. No shortcuts. Just great fragrance.</p>
-          </div>
+    {%- if section.settings.refine_1 != blank or section.settings.refine_2 != blank -%}
+      <div class="ma-ar__refine">
+        {%- if section.settings.refine_1 != blank -%}
+          <p class="ma-ar__ref"><b>◆</b>{{ section.settings.refine_1 | escape }}</p>
+        {%- endif -%}
+        {%- if section.settings.refine_2 != blank -%}
+          <p class="ma-ar__ref"><b>◆</b>{{ section.settings.refine_2 | escape }}</p>
         {%- endif -%}
       </div>
     {%- endif -%}
-
-    <!-- CONCLUSION & CROWN DIVIDER -->
-    {%- if section.settings.concl_heading != blank -%}
-      <div class="ma-ar__concl ma-ar__anim">
-        <span class="ma-ar__concl-crown">♛</span>
-        <h3 class="ma-ar__concl-h">{{ section.settings.concl_heading | escape }}</h3>
-        {%- if section.settings.concl_body != blank -%}
-          <p class="ma-ar__concl-p">{{ section.settings.concl_body | escape }}</p>
-        {%- endif -%}
-        {%- if section.settings.show_cta and section.settings.cta_text != blank -%}
-          <a href="{{ section.settings.cta_link | default: '#' }}" class="ma-ar__cta">{{ section.settings.cta_text | escape }}</a>
-        {%- endif -%}
-      </div>
-    {%- endif -%}
-
   </div>
 
-  <!-- RIGHT COLUMN (~45%): FULL-HEIGHT CAMPAIGN IMAGE ONLY -->
   {%- if has_img -%}
-    <div class="ma-ar__right-col">
-      {%- assign desk_img = section.settings.bottle_image | default: section.settings.mobile_image -%}
-      {%- assign mob_img = section.settings.mobile_image | default: section.settings.bottle_image -%}
-      {{ desk_img | image_url: width: 1600 | image_tag: loading: 'lazy', class: 'ma-ar__img ma-ar__img--dt', alt: desk_img.alt | default: shop.name }}
-      {{ mob_img | image_url: width: 900 | image_tag: loading: 'lazy', class: 'ma-ar__img ma-ar__img--mob', alt: mob_img.alt | default: shop.name }}
+    <div class="ma-ar__photo">
+      {{ section.settings.bottle_image | image_url: width: 1600 | image_tag: loading: 'lazy', class: 'ma-ar__img', alt: section.settings.bottle_image.alt | default: shop.name }}
     </div>
   {%- endif -%}
 </section>
 
-<script>
-(function(){
-  var s = document.getElementById('ma-ar-{{ sid }}');
-  if(!s) return;
+<style>
+  #ma-ar-{{ section.id }}.ma-ar{
+    --cream:#F4EEE1; --ink:#171310; --gold:#C6A15B; --burg:#6E1220; --burg2:#8E1B28;
+    --ma-hdr:0px;
+    height:calc(100svh - var(--ma-hdr));
+    max-height:calc(100svh - var(--ma-hdr));
+    overflow:hidden;
+    display:flex; flex-direction:column;
+    background:var(--cream); color:var(--ink);
+    font-family:'Cormorant Garamond',Georgia,serif;
+  }
 
-  {% if request.design_mode %}s.classList.add('is-in'); return;{% endif %}
-  if(!('IntersectionObserver' in window)){ s.classList.add('is-in'); return; }
-  var io = new IntersectionObserver(function(entries){
-    entries.forEach(function(e){
-      if(e.isIntersecting){ s.classList.add('is-in'); }
-      else { s.classList.remove('is-in'); }
-    });
-  }, { threshold: 0.2 });
-  io.observe(s);
-})();
+  /* ---- copy ---- */
+  #ma-ar-{{ section.id }} .ma-ar__copy{
+    flex:1 1 auto; min-height:0; box-sizing:border-box;
+    display:flex; flex-direction:column;
+    justify-content:center; justify-content:safe center; /* never clip the eyebrow/refinements */
+    padding:18px 24px 14px;
+  }
+  #ma-ar-{{ section.id }} .ma-ar__k{
+    font-family:'Marcellus',serif; font-size:11px; letter-spacing:.26em;
+    text-transform:uppercase; color:var(--burg2); margin:0 0 14px;
+    display:flex; align-items:center; gap:12px;
+  }
+  #ma-ar-{{ section.id }} .ma-ar__k::before{ content:""; width:34px; height:2px; background:var(--burg2); flex:0 0 auto; }
+  #ma-ar-{{ section.id }} .ma-ar__h{
+    /* base.css locks case/tracking/weight with !important — counter all three.
+       Size follows BOTH width and height so short windows never clip. */
+    font-family:'Cormorant Garamond',Georgia,serif;
+    font-weight:600 !important; text-transform:none !important; letter-spacing:0 !important;
+    font-size:clamp(26px, min(9.2vw, 5.2svh), 42px); line-height:1.12; margin:0 0 10px; color:var(--ink);
+  }
+  #ma-ar-{{ section.id }} .ma-ar__h em{ font-style:italic; color:var(--burg); }
+  #ma-ar-{{ section.id }} .ma-ar__sub{
+    font-style:italic; font-weight:500; font-size:clamp(14px, 2.4svh, 17.5px); line-height:1.45;
+    color:rgba(23,19,16,.74); margin:0 0 clamp(8px,2svh,18px); max-width:40ch;
+  }
+
+  /* ---- comparison rows + bars ---- */
+  #ma-ar-{{ section.id }} .ma-ar__cmp{ margin:0; width:100%; }
+  #ma-ar-{{ section.id }} .ma-ar__row{ padding:13px 0 0; border-top:1px solid rgba(23,19,16,.14); }
+  #ma-ar-{{ section.id }} .ma-ar__top{ display:flex; justify-content:space-between; align-items:baseline; gap:14px; }
+  #ma-ar-{{ section.id }} .ma-ar__lab{
+    font-family:'Marcellus',serif; font-size:10px; letter-spacing:.18em;
+    text-transform:uppercase; color:rgba(23,19,16,.7);
+  }
+  #ma-ar-{{ section.id }} .ma-ar__val{ font-family:'Cormorant Garamond',Georgia,serif; white-space:nowrap; }
+  #ma-ar-{{ section.id }} .ma-ar__val--typ{
+    font-size:clamp(20px, 3.2svh, 27px); font-weight:500; color:rgba(23,19,16,.44);
+    text-decoration:line-through; text-decoration-thickness:1.5px;
+  }
+  #ma-ar-{{ section.id }} .ma-ar__val--now{ font-size:clamp(30px, min(10.5vw, 5.6svh), 48px); font-weight:600; color:var(--burg2); }
+  #ma-ar-{{ section.id }} .ma-ar__val--now em{ font-style:italic; font-weight:400; font-size:.52em; color:var(--burg); margin-right:2px; }
+  #ma-ar-{{ section.id }} .ma-ar__track{ display:block; height:4px; background:rgba(23,19,16,.08); border-radius:2px; overflow:hidden; margin:10px 0 12px; }
+  #ma-ar-{{ section.id }} .ma-ar__fill{ display:block; height:100%; width:0; border-radius:2px; }
+  #ma-ar-{{ section.id }} .ma-ar__fill--typ{ background:rgba(23,19,16,.55); transition:width 1.4s cubic-bezier(.25,.8,.25,1) .1s; }
+  #ma-ar-{{ section.id }} .ma-ar__fill--now{ background:var(--burg2); transition:width 1.1s cubic-bezier(.25,.8,.25,1) .7s; }
+  #ma-ar-{{ section.id }}.is-in .ma-ar__fill--typ{ width:100%; }
+  #ma-ar-{{ section.id }}.is-in .ma-ar__fill--now{ width:12%; }
+
+  /* ---- refinements ---- */
+  #ma-ar-{{ section.id }} .ma-ar__refine{ margin:16px 0 0; display:flex; flex-direction:column; gap:8px; }
+  #ma-ar-{{ section.id }} .ma-ar__ref{
+    font-size:16.5px; font-weight:500; color:rgba(23,19,16,.85); line-height:1.5; margin:0;
+  }
+  #ma-ar-{{ section.id }} .ma-ar__ref b{ color:var(--gold); font-weight:400; margin-right:8px; }
+
+  /* ---- photo, melted into the cream ---- */
+  #ma-ar-{{ section.id }} .ma-ar__photo{
+    flex:0 0 29svh; min-height:0; overflow:hidden; position:relative;
+  }
+  #ma-ar-{{ section.id }} .ma-ar__img{
+    width:100%; height:100%; object-fit:cover; object-position:center; display:block;
+  }
+  {%- if melt > 0 -%}
+  #ma-ar-{{ section.id }} .ma-ar__photo::before{
+    content:""; position:absolute; z-index:2; left:0; right:0; top:0; height:34%;
+    backdrop-filter:blur({{ melt_blur }}px); -webkit-backdrop-filter:blur({{ melt_blur }}px);
+    -webkit-mask-image:linear-gradient(180deg,#000 0,transparent 100%);
+            mask-image:linear-gradient(180deg,#000 0,transparent 100%);
+  }
+  #ma-ar-{{ section.id }} .ma-ar__photo::after{
+    content:""; position:absolute; z-index:3; inset:0; opacity:{{ melt_veil }};
+    background:linear-gradient(180deg,var(--cream) 0%,rgba(244,238,225,.55) 14%,rgba(244,238,225,0) 46%);
+  }
+  {%- endif -%}
+
+  /* ---- mobile only: photo on top, copy below (desktop <900px untouched) ---- */
+  @media (max-width:899px){
+    /* photo-on-top makes the stacked copy taller than one locked screen —
+       release the height cap so mobile grows to fit and nothing clips at the bottom */
+    #ma-ar-{{ section.id }}.ma-ar{ height:auto; max-height:none; overflow:visible; }
+    #ma-ar-{{ section.id }} .ma-ar__copy{ flex:0 0 auto; justify-content:flex-start; padding:22px 24px 34px; }
+    #ma-ar-{{ section.id }} .ma-ar__photo{ order:-1; }
+    {%- if melt > 0 -%}
+    /* melt now blends the photo's BOTTOM edge into the copy beneath it */
+    #ma-ar-{{ section.id }} .ma-ar__photo::before{
+      top:auto; bottom:0; height:34%;
+      -webkit-mask-image:linear-gradient(0deg,#000 0,transparent 100%);
+              mask-image:linear-gradient(0deg,#000 0,transparent 100%);
+    }
+    #ma-ar-{{ section.id }} .ma-ar__photo::after{
+      background:linear-gradient(0deg,var(--cream) 0%,rgba(244,238,225,.55) 14%,rgba(244,238,225,0) 46%);
+    }
+    {%- endif -%}
+  }
+
+  /* ---- desktop: split, still exactly one screen ---- */
+  @media (min-width:900px){
+    #ma-ar-{{ section.id }}.ma-ar--split{ flex-direction:row; }
+    #ma-ar-{{ section.id }} .ma-ar__copy{ width:54%; padding:0 56px 0 64px; }
+    #ma-ar-{{ section.id }} .ma-ar__k{ margin-bottom:clamp(10px,2svh,18px); font-size:12px; }
+    #ma-ar-{{ section.id }} .ma-ar__h{ font-size:clamp(30px, min(4vw, 6svh), 54px); max-width:16ch; margin-bottom:12px; }
+    #ma-ar-{{ section.id }} .ma-ar__sub{ font-size:clamp(15px, 2.5svh, 19px); margin-bottom:clamp(12px,3svh,28px); }
+    #ma-ar-{{ section.id }} .ma-ar__row{ padding:clamp(10px,2svh,17px) 0 0; }
+    #ma-ar-{{ section.id }} .ma-ar__lab{ font-size:11px; }
+    #ma-ar-{{ section.id }} .ma-ar__val--typ{ font-size:clamp(22px, 3.4svh, 30px); }
+    #ma-ar-{{ section.id }} .ma-ar__val--now{ font-size:clamp(34px, min(4.2vw, 6.4svh), 58px); }
+    #ma-ar-{{ section.id }} .ma-ar__refine{ margin-top:24px; flex-direction:row; gap:34px; flex-wrap:wrap; }
+    #ma-ar-{{ section.id }} .ma-ar__ref{ font-size:17px; }
+    #ma-ar-{{ section.id }} .ma-ar__photo{ flex:0 0 46%; height:100%; }
+    {%- if melt > 0 -%}
+    #ma-ar-{{ section.id }} .ma-ar__photo::before{
+      top:0; bottom:0; left:0; right:auto; width:44%; height:auto;
+      -webkit-mask-image:linear-gradient(90deg,#000 0,transparent 100%);
+              mask-image:linear-gradient(90deg,#000 0,transparent 100%);
+    }
+    #ma-ar-{{ section.id }} .ma-ar__photo::after{
+      background:linear-gradient(90deg,var(--cream) 0%,rgba(244,238,225,.6) 12%,rgba(244,238,225,0) 48%);
+    }
+    {%- endif -%}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    #ma-ar-{{ section.id }} .ma-ar__fill{ transition:none !important; }
+    #ma-ar-{{ section.id }} .ma-ar__fill--typ{ width:100% !important; }
+    #ma-ar-{{ section.id }} .ma-ar__fill--now{ width:12% !important; }
+  }
+</style>
+
+<script>
+  (function(){
+    var s = document.getElementById('ma-ar-{{ section.id }}');
+    if(!s) return;
+
+    /* exact one-screen: subtract any sticky/fixed header from the section height */
+    function fitHeader(){
+      var off = 0;
+      ['sticky-header','.shopify-section-group-header-group','.section-header','header'].some(function(sel){
+        var el = document.querySelector(sel);
+        if(!el) return false;
+        var cs = getComputedStyle(el);
+        if(cs.position === 'sticky' || cs.position === 'fixed'){ off = el.getBoundingClientRect().height; return true; }
+        return false;
+      });
+      s.style.setProperty('--ma-hdr', off + 'px');
+    }
+    fitHeader();
+    window.addEventListener('resize', fitHeader);
+
+    /* bars fill when the customer actually arrives — and replay on every visit */
+    {% if request.design_mode %}
+      s.classList.add('is-in'); return;
+    {% endif %}
+    if(!('IntersectionObserver' in window)){ s.classList.add('is-in'); return; }
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ s.classList.add('is-in'); }
+        else { s.classList.remove('is-in'); }   /* reset off-screen so it replays */
+      });
+    }, { threshold: 0.55 });
+    io.observe(s);
+  })();
 </script>
 
 {% schema %}
@@ -565,150 +246,22 @@
   "tag": "section",
   "class": "ma-arith-section",
   "settings": [
-    { "type": "header", "content": "1. CONTENT" },
-    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "LUXURY, WITHOUT THE MARKUP PRICE" },
+    { "type": "paragraph", "content": "Exact one-screen section. Photo melts into the cream — tune it below." },
+    { "type": "image_picker", "id": "bottle_image", "label": "Bottle photo" },
+    { "type": "range", "id": "melt", "label": "Photo melt intensity", "min": 0, "max": 100, "step": 10, "unit": "%", "default": 100 },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The Honest Arithmetic" },
     { "type": "textarea", "id": "heading", "label": "Headline", "default": "Luxury belongs inside the bottle. Not on the receipt." },
-    { "type": "text", "id": "subheading", "label": "Sub-line", "default": "Great fragrance is mostly oil and intention — not the marble store or the magazine." },
-    { "type": "text", "id": "left_label", "label": "Left label", "default": "WHERE YOUR MONEY USUALLY GOES" },
-    { "type": "text", "id": "left_value", "label": "Left value", "default": "₹20,000+" },
-    { "type": "text", "id": "right_label", "label": "Right label", "default": "WHAT YOU'RE REALLY PAYING FOR" },
+    { "type": "text", "id": "subheading", "label": "Sub-line", "default": "Only the scent should define the experience." },
+    { "type": "header", "content": "Comparison" },
+    { "type": "text", "id": "left_label", "label": "Left label", "default": "Typical luxury pricing" },
+    { "type": "text", "id": "left_value", "label": "Left value", "default": "₹20,000" },
+    { "type": "text", "id": "right_label", "label": "Right label", "default": "Maison Amiir" },
     { "type": "text", "id": "right_value", "label": "Right value", "default": "from ₹2,200" },
-    { "type": "text", "id": "concl_heading", "label": "Conclusion Heading", "default": "Same luxury. Better value." },
-    { "type": "text", "id": "concl_body", "label": "Conclusion Body", "default": "Because you deserve the fragrance, not the markup." },
-    { "type": "checkbox", "id": "show_cta", "label": "Show CTA Button", "default": false },
-    { "type": "text", "id": "cta_text", "label": "CTA Text", "default": "Explore Collection" },
-    { "type": "url", "id": "cta_link", "label": "CTA Link" },
-
-    { "type": "header", "content": "2. IMAGE" },
-    { "type": "image_picker", "id": "bottle_image", "label": "Desktop Bottle Photo" },
-    { "type": "image_picker", "id": "mobile_image", "label": "Mobile Bottle Photo" },
-    { "type": "range", "id": "focal_x", "label": "Desktop Focal X (%)", "min": 0, "max": 100, "step": 5, "default": 50 },
-    { "type": "range", "id": "focal_y", "label": "Desktop Focal Y (%)", "min": 0, "max": 100, "step": 5, "default": 50 },
-    { "type": "range", "id": "mob_focal_x", "label": "Mobile Focal X (%)", "min": 0, "max": 100, "step": 5, "default": 50 },
-    { "type": "range", "id": "mob_focal_y", "label": "Mobile Focal Y (%)", "min": 0, "max": 100, "step": 5, "default": 50 },
-
-    { "type": "header", "content": "3. IMAGE ART DIRECTION" },
-    { "type": "range", "id": "img_scale_dt", "label": "Desktop Image Scale (%)", "min": 80, "max": 140, "step": 5, "default": 100 },
-    { "type": "range", "id": "img_scale_mob", "label": "Mobile Image Scale (%)", "min": 80, "max": 140, "step": 5, "default": 100 },
-    { "type": "range", "id": "img_offset_x_dt", "label": "Desktop Image Offset X (px)", "min": -200, "max": 200, "step": 10, "default": 0 },
-    { "type": "range", "id": "img_offset_y_dt", "label": "Desktop Image Offset Y (px)", "min": -200, "max": 200, "step": 10, "default": 0 },
-    { "type": "range", "id": "img_offset_x_mob", "label": "Mobile Image Offset X (px)", "min": -150, "max": 150, "step": 10, "default": 0 },
-    { "type": "range", "id": "img_offset_y_mob", "label": "Mobile Image Offset Y (px)", "min": -150, "max": 150, "step": 10, "default": 0 },
-    { "type": "range", "id": "img_brightness", "label": "Image Brightness (%)", "min": 60, "max": 140, "step": 5, "default": 100 },
-    { "type": "range", "id": "img_contrast", "label": "Image Contrast (%)", "min": 70, "max": 130, "step": 5, "default": 100 },
-    { "type": "range", "id": "img_saturation", "label": "Image Saturation (%)", "min": 50, "max": 150, "step": 5, "default": 100 },
-
-    { "type": "header", "content": "4. PHOTO MELT" },
-    { "type": "range", "id": "melt", "label": "Legacy Melt Fallback (%)", "min": 0, "max": 100, "step": 10, "default": 100 },
-    { "type": "checkbox", "id": "enable_melt", "label": "Enable Photo Melt Effect", "default": true },
-    { "type": "range", "id": "melt_width", "label": "Maison Fade Width (%)", "min": 10, "max": 90, "step": 2, "default": 42 },
-    { "type": "range", "id": "melt_strength", "label": "Maison Fade Strength (%)", "min": 10, "max": 100, "step": 5, "default": 95 },
-    { "type": "range", "id": "melt_blur", "label": "Edge Blur Radius (px)", "min": 0, "max": 30, "step": 2, "default": 12 },
-
-    { "type": "header", "content": "5. DESKTOP LAYOUT" },
-    { "type": "range", "id": "dt_copy_w", "label": "Article Width (%)", "min": 40, "max": 70, "step": 1, "default": 55 },
-    { "type": "select", "id": "dt_align", "label": "Text Alignment", "default": "left", "options": [{"value":"left","label":"Left"},{"value":"center","label":"Center"},{"value":"right","label":"Right"}] },
-    { "type": "select", "id": "dt_valign", "label": "Vertical Alignment", "default": "center", "options": [{"value":"top","label":"Top"},{"value":"center","label":"Center"},{"value":"bottom","label":"Bottom"}] },
-
-    { "type": "header", "content": "6. MOBILE LAYOUT" },
-    { "type": "select", "id": "mob_order", "label": "Mobile Layer Order", "default": "image_first", "options": [{"value":"image_first","label":"Image First (Top)"},{"value":"content_first","label":"Content First (Top)"}] },
-    { "type": "range", "id": "mob_img_h", "label": "Mobile Image Height (px)", "min": 250, "max": 600, "step": 10, "default": 380 },
-    { "type": "range", "id": "mob_img_rad", "label": "Mobile Image Radius (px)", "min": 0, "max": 30, "step": 2, "default": 0 },
-
-    { "type": "header", "content": "7. TYPOGRAPHY" },
-    { "type": "font_picker", "id": "eyebrow_font", "label": "Eyebrow Font", "default": "helvetica_n4" },
-    { "type": "range", "id": "eyebrow_size_dt", "label": "Desktop Eyebrow Size (px)", "min": 9, "max": 16, "step": 1, "default": 11 },
-    { "type": "range", "id": "eyebrow_size_mob", "label": "Mobile Eyebrow Size (px)", "min": 8, "max": 14, "step": 1, "default": 10 },
-    { "type": "range", "id": "eyebrow_spacing", "label": "Eyebrow Spacing (px)", "min": 0, "max": 6, "step": 0.5, "default": 3 },
-    { "type": "font_picker", "id": "heading_font", "label": "Heading Font", "default": "playfair_display_n4" },
-    { "type": "range", "id": "heading_size_dt", "label": "Desktop Heading Size (px)", "min": 32, "max": 64, "step": 2, "default": 52 },
-    { "type": "range", "id": "heading_size_mob", "label": "Mobile Heading Size (px)", "min": 24, "max": 44, "step": 2, "default": 34 },
-    { "type": "select", "id": "heading_weight", "label": "Heading Weight", "default": "600", "options": [{"value":"400","label":"Regular"},{"value":"500","label":"Medium"},{"value":"600","label":"Semibold"}] },
-    { "type": "range", "id": "heading_lh", "label": "Heading Line Height (%)", "min": 90, "max": 140, "step": 2, "default": 108 },
-    { "type": "range", "id": "heading_max_w", "label": "Heading Max Width (ch)", "min": 15, "max": 40, "step": 1, "default": 24 },
-    { "type": "select", "id": "accent_style", "label": "Accent Style", "default": "italic", "options": [{"value":"italic","label":"Italic"},{"value":"normal","label":"Normal"}] },
-    { "type": "font_picker", "id": "sub_font", "label": "Subheading Font", "default": "playfair_display_n4" },
-    { "type": "range", "id": "sub_size_dt", "label": "Desktop Subheading Size (px)", "min": 14, "max": 26, "step": 1, "default": 18 },
-    { "type": "range", "id": "sub_size_mob", "label": "Mobile Subheading Size (px)", "min": 13, "max": 20, "step": 1, "default": 16 },
-    { "type": "range", "id": "sub_margin_b", "label": "Subheading Bottom Margin (px)", "min": 10, "max": 40, "step": 2, "default": 20 },
-    { "type": "font_picker", "id": "cmp_font", "label": "Comparison Font", "default": "helvetica_n4" },
-    { "type": "range", "id": "concl_size_dt", "label": "Desktop Conclusion Size (px)", "min": 18, "max": 36, "step": 2, "default": 22 },
-    { "type": "range", "id": "concl_size_mob", "label": "Mobile Conclusion Size (px)", "min": 16, "max": 28, "step": 2, "default": 18 },
-
-    { "type": "header", "content": "8. COMPARISON" },
-    { "type": "select", "id": "cmp_style", "label": "Comparison Presentation Style", "default": "cards", "options": [{"value":"bars","label":"Classic Bars (V1 Legacy)"},{"value":"cards","label":"VS Comparison Cards (V2 Editorial)"}] },
-    { "type": "range", "id": "bar_h", "label": "Track Height (px)", "min": 2, "max": 12, "step": 1, "default": 6 },
-    { "type": "range", "id": "bar_rad", "label": "Track Radius (px)", "min": 0, "max": 10, "step": 1, "default": 3 },
-    { "type": "range", "id": "bar_pct_us", "label": "Our Bar Percentage (%)", "min": 10, "max": 50, "step": 2, "default": 12 },
-    { "type": "range", "id": "bar_pct_them", "label": "Their Bar Percentage (%)", "min": 50, "max": 100, "step": 5, "default": 100 },
-    { "type": "range", "id": "bar_speed", "label": "Bar Fill Duration (ms)", "min": 500, "max": 2500, "step": 100, "default": 1400 },
-    { "type": "range", "id": "bar_delay", "label": "Bar Animation Delay (ms)", "min": 0, "max": 1000, "step": 100, "default": 200 },
-    { "type": "range", "id": "cmp_gap_dt", "label": "Desktop VS Cards Gap (px)", "min": 10, "max": 60, "step": 2, "default": 16 },
-    { "type": "range", "id": "cmp_gap_mob", "label": "Mobile VS Cards Gap (px)", "min": 10, "max": 50, "step": 2, "default": 14 },
-
-    { "type": "header", "content": "9. QUALITY PROOF" },
-    { "type": "checkbox", "id": "enable_proof", "label": "Show Quality Proof Grid", "default": true },
-    { "type": "text", "id": "refine_1", "label": "Legacy Refine 1 (Fallback)", "default": "Lasts all day · 30% extrait" },
-    { "type": "text", "id": "refine_2", "label": "Legacy Refine 2 (Fallback)", "default": "Kind to skin · IFRA-compliant oils" },
-    { "type": "range", "id": "proof_gap", "label": "Proof Grid Gap (px)", "min": 12, "max": 48, "step": 2, "default": 14 },
-
-    { "type": "header", "content": "10. COLORS" },
-    { "type": "color", "id": "bg_color", "label": "Background Color", "default": "#F4EEE1" },
-    { "type": "color", "id": "ink_color", "label": "Ink Color", "default": "#171310" },
-    { "type": "color", "id": "gold_color", "label": "Gold Accent Color", "default": "#C6A15B" },
-    { "type": "color", "id": "burg_color", "label": "Burgundy Accent Color", "default": "#6E1220" },
-    { "type": "color", "id": "burg2_color", "label": "Dark Burgundy Color", "default": "#8E1B28" },
-    { "type": "color", "id": "track_color", "label": "Bar Track Color", "default": "#E6E0D5" },
-    { "type": "color", "id": "fill_color", "label": "Our Bar Fill Color", "default": "#8E1B28" },
-    { "type": "color", "id": "card_bg_col", "label": "Their Card Background", "default": "#F0EAE1" },
-    { "type": "color", "id": "card_border_col", "label": "Their Card Border", "default": "#E2DCD3" },
-
-    { "type": "header", "content": "11. DIVIDERS" },
-    { "type": "range", "id": "divider_w_dt", "label": "Desktop Divider Width (px)", "min": 30, "max": 200, "step": 10, "default": 90 },
-    { "type": "range", "id": "divider_w_mob", "label": "Mobile Divider Width (px)", "min": 20, "max": 140, "step": 10, "default": 60 },
-    { "type": "range", "id": "divider_thickness", "label": "Divider Thickness (px)", "min": 1, "max": 3, "step": 1, "default": 1 },
-    { "type": "range", "id": "divider_opacity", "label": "Divider Opacity (%)", "min": 0, "max": 100, "step": 5, "default": 25 },
-
-    { "type": "header", "content": "12. SPACING" },
-    { "type": "range", "id": "margin_t", "label": "Section Margin Top (px)", "min": 0, "max": 100, "step": 10, "default": 0 },
-    { "type": "range", "id": "margin_b", "label": "Section Margin Bottom (px)", "min": 0, "max": 100, "step": 10, "default": 0 },
-    { "type": "range", "id": "gap_head", "label": "Eyebrow Bottom Gap (px)", "min": 8, "max": 40, "step": 2, "default": 12 },
-    { "type": "range", "id": "gap_proof", "label": "Proof Section Bottom Gap (px)", "min": 16, "max": 80, "step": 4, "default": 24 },
-    { "type": "range", "id": "gap_concl", "label": "Conclusion Bottom Gap (px)", "min": 16, "max": 80, "step": 4, "default": 24 },
-    { "type": "range", "id": "pad_t_mob", "label": "Mobile Top Padding (px)", "min": 10, "max": 80, "step": 5, "default": 35 },
-    { "type": "range", "id": "pad_b_mob", "label": "Mobile Bottom Padding (px)", "min": 10, "max": 80, "step": 5, "default": 45 },
-    { "type": "range", "id": "pad_h_mob", "label": "Mobile Horizontal Padding (px)", "min": 12, "max": 40, "step": 2, "default": 20 },
-
-    { "type": "header", "content": "13. ANIMATIONS" },
-    { "type": "checkbox", "id": "enable_anim", "label": "Enable Reveal Motion", "default": true },
-    { "type": "select", "id": "anim_type", "label": "Animation Motion", "default": "fade_up", "options": [{"value":"fade_up","label":"Fade Up"},{"value":"fade_in","label":"Fade In"},{"value":"none","label":"None"}] },
-    { "type": "range", "id": "anim_speed", "label": "Animation Speed (ms)", "min": 300, "max": 1500, "step": 50, "default": 700 },
-    { "type": "range", "id": "stagger_delay", "label": "Stagger Delay (ms)", "min": 20, "max": 200, "step": 10, "default": 80 },
-
-    { "type": "header", "content": "14. ADVANCED" },
-    { "type": "checkbox", "id": "enable_texture", "label": "Enable Paper Grain Texture", "default": false },
-    { "type": "range", "id": "noise_amount", "label": "Noise Amount", "min": 0, "max": 20, "step": 1, "default": 4 },
-    { "type": "range", "id": "texture_opacity", "label": "Texture Opacity (%)", "min": 0, "max": 30, "step": 2, "default": 6 },
-    { "type": "text", "id": "custom_class", "label": "Custom CSS Class" }
-  ],
-  "blocks": [
-    {
-      "type": "value_item",
-      "name": "VS Comparison Item",
-      "settings": [
-        { "type": "select", "id": "side", "label": "Card Side", "default": "left", "options": [{"value":"left","label":"Left (Where Your Money Goes)"},{"value":"right","label":"Right (What You're Really Paying For)"}] },
-        { "type": "text", "id": "text", "label": "Item Label", "default": "Fine Fragrance Oil (30% Extrait)" }
-      ]
-    },
-    {
-      "type": "proof_item",
-      "name": "Quality Proof Card",
-      "settings": [
-        { "type": "text", "id": "heading", "label": "Heading", "default": "30% Extrait Oil" },
-        { "type": "textarea", "id": "body", "label": "Description", "default": "The same concentration tier as the houses that inspire us." }
-      ]
-    }
+    { "type": "header", "content": "Refinements (kept honest)" },
+    { "type": "text", "id": "refine_1", "label": "Refinement 1", "default": "Lasts all day · 30% extrait" },
+    { "type": "text", "id": "refine_2", "label": "Refinement 2", "default": "Kind to skin · IFRA-compliant oils" }
   ],
   "presets": [{ "name": "MA — Honest Arithmetic" }]
 }
 {% endschema %}
+
