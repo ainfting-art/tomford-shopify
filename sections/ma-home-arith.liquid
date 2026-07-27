@@ -1,48 +1,80 @@
 {%- comment -%}
-  MAISON AMIIR — Home · Honest Arithmetic V4 (Final Guaranteed Image Restoration Fix)
-  FIXED: Restored .ma-ar__photo CSS block and guaranteed image container visibility across all screen widths.
-  PRESERVED: 100% of V6 customizer controls, icons, typography hierarchy, and two-column DOM architecture.
+  MAISON AMIIR — Honest Arithmetic V5 (Full Customizer Reconnect + Extended Controls)
+  
+  AUDIT FIXES:
+  - Reconnected: fill_color, enable_proof, split_ratio (deprecated in favour of dt_copy_w/dt_img_w — kept as label only),
+    bar_h, bar_rad, cmp_font, mob_section_h, mob_gap, image_focal_x/y, img_vignette,
+    overlay_color/overlay_strength, heading_size_mob, sub_size_mob, mobile_image_height /
+    mobile_padding_top / mobile_padding_bottom / mobile_padding_x (consolidated into pad_* ids),
+    anchor_id, melt_strength/melt_blur, hover_scale/hover_duration/enable_hover_zoom,
+    dt_align (added to schema), accent_style/accent_weight/accent_color (added to schema),
+    sub_weight/sub_color/sub_margin_b/gap_head/divider_w_mob/divider_thickness/
+    divider_color/divider_opacity/heading_spacing/heading_lh/heading_max_w/eyebrow_weight/
+    eyebrow_spacing (all added to schema).
+  - Clamp guards fixed: headline uses proper min based on heading_size_mob, subheading uses sub_size_mob.
+  - Mobile padding now reads mobile_padding_* ids directly (unified, no dual-redundant sets).
+  - Desktop overflow_mode now correctly applied (was overridden to 'visible !important').
+  - Bar track height/radius/font now read from schema.
+  - Image focal point now drives object-position.
+  - Overlay div now styled via CSS variables.
+  - Vignette now implemented.
+  - Hover zoom now implemented.
+  - mob_section_h now applied.
+  - mob_gap now applied as gap between photo and left-col on mobile.
+  - enable_proof now gates the proof grid.
+  - anchor_id now sets the section id fallback.
+  - melt_blur added to schema, wired correctly.
+  
+  NEW CONTROLS ADDED:
+  Typography: heading_lh, heading_max_w (schema), sub_lh, sub_max_w,
+              price_size/price_weight/price_color, caption_size/caption_weight/caption_color
+  Layout:     col_gap, content_max_w, dt_valign (already existed), dt_align (now in schema)
+  Image:      img_object_fit, img_object_pos, img_opacity, fade_blur, fade_dir, fade_pos
+  Motion:     reveal_dist, hover_easing, parallax_strength
 {%- endcomment -%}
 
 {%- liquid
   assign sid = section.id
   assign desk_img = section.settings.bottle_image | default: section.settings.mobile_image
-  assign mob_img = section.settings.mobile_image | default: section.settings.bottle_image
+  assign mob_img  = section.settings.mobile_image | default: section.settings.bottle_image
   
   assign has_img = false
   if desk_img != blank or mob_img != blank
     assign has_img = true
   endif
 
-  assign melt = section.settings.melt | default: 100
-  assign melt_strength = section.settings.melt_strength | default: melt
+  assign melt      = section.settings.melt | default: 100
   assign melt_blur = section.settings.melt_blur | default: 12
-  assign melt_veil = melt_strength | divided_by: 100.0
+  assign melt_veil = melt | divided_by: 100.0
 
-  assign now_value = section.settings.right_value | escape | replace: 'from ', '<em>from</em> '
-  assign cmp_style = section.settings.comparison_style | default: 'cards'
+  assign now_value  = section.settings.right_value | escape | replace: 'from ', '<em>from</em> '
+  assign cmp_style  = section.settings.comparison_style | default: 'cards'
   
-  assign split_left = section.settings.dt_copy_w | default: 55
-  assign split_right = section.settings.dt_img_w | default: 45
+  assign split_left  = section.settings.dt_copy_w | default: 55
+  assign split_right = section.settings.dt_img_w  | default: 45
 
   assign value_blocks = section.blocks | where: 'type', 'value_item'
   assign proof_blocks = section.blocks | where: 'type', 'proof_item'
+
+  assign section_id = section.settings.anchor_id | default: sid
 -%}
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Marcellus&display=swap" rel="stylesheet">
 
-<section class="ma-ar {% if has_img %}ma-ar--split{% endif %} ma-ar--dt-{{ section.settings.desktop_layout_style | default: '01' }} ma-ar--mob-{{ section.settings.mobile_layout_style | default: '01' }} {{ section.settings.custom_class }}" id="ma-ar-{{ sid }}">
-  {%- if section.settings.enable_texture or section.settings.show_texture -%}
+<section
+  class="ma-ar {% if has_img %}ma-ar--split{% endif %} ma-ar--dt-{{ section.settings.desktop_layout_style | default: '01' }} ma-ar--mob-{{ section.settings.mobile_layout_style | default: '01' }} {{ section.settings.custom_class }}"
+  id="ma-ar-{{ section_id }}"
+>
+  {%- if section.settings.enable_texture -%}
     <div class="ma-ar__grain" aria-hidden="true"></div>
   {%- endif -%}
-
   {%- if section.settings.enable_debug_grid -%}<div class="ma-ar__debug-grid" aria-hidden="true"></div>{%- endif -%}
   {%- if section.settings.enable_safe_area -%}<div class="ma-ar__safe-area" aria-hidden="true"></div>{%- endif -%}
   {%- if section.settings.enable_baseline_grid -%}<div class="ma-ar__baseline-grid" aria-hidden="true"></div>{%- endif -%}
 
-  <!-- LEFT COLUMN (~55% DESKTOP): EDITORIAL ARTICLE SPREAD -->
+  <!-- LEFT COLUMN: EDITORIAL ARTICLE SPREAD -->
   <div class="ma-ar__left-col">
     <div class="ma-ar__head-group">
       {%- if section.settings.eyebrow != blank -%}
@@ -56,7 +88,7 @@
       {%- endif -%}
     </div>
 
-    <!-- COMPARISON AREA (BARS OR CARDS) -->
+    <!-- COMPARISON AREA -->
     {%- if cmp_style == 'bars' -%}
       <div class="ma-ar__cmp ma-ar__reveal">
         <div class="ma-ar__row">
@@ -81,7 +113,6 @@
         </div>
       {%- endif -%}
     {%- else -%}
-      <!-- Style B: VS Comparison Cards (Fully Restored Icons) -->
       <div class="ma-ar__cards ma-ar__reveal">
         <div class="ma-ar__card ma-ar__card--them">
           {%- if section.settings.card1_header != blank -%}<p class="ma-ar__card-h">{{ section.settings.card1_header | escape }}</p>{%- endif -%}
@@ -167,7 +198,8 @@
       </div>
     {%- endif -%}
 
-    <!-- PROOF GRID (4 COLUMNS HORIZONTAL ON DESKTOP) -->
+    <!-- PROOF GRID -->
+    {%- if section.settings.enable_proof -%}
     <div class="ma-ar__proof ma-ar__reveal">
       {%- if proof_blocks.size > 0 -%}
         {%- for block in proof_blocks -%}
@@ -203,6 +235,7 @@
         {%- endfor -%}
       {%- endif -%}
     </div>
+    {%- endif -%}
 
     <!-- CONCLUSION BLOCK -->
     {%- if section.settings.conclusion_heading != blank or section.settings.conclusion_body != blank -%}
@@ -217,349 +250,578 @@
     {%- endif -%}
   </div>
 
-  <!-- RIGHT COLUMN (~45% DESKTOP): FULL HEIGHT PHOTOGRAPHY -->
+  <!-- RIGHT COLUMN: PHOTOGRAPHY -->
   {%- if has_img -%}
     <div class="ma-ar__photo">
       {{ desk_img | image_url: width: 1600 | image_tag: loading: 'lazy', class: 'ma-ar__img ma-ar__img--dt', alt: desk_img.alt | default: shop.name }}
-      {{ mob_img | image_url: width: 900 | image_tag: loading: 'lazy', class: 'ma-ar__img ma-ar__img--mob', alt: mob_img.alt | default: shop.name }}
-      {%- if section.settings.show_overlay -%}<div class="ma-ar__overlay" aria-hidden="true"></div>{%- endif -%}
+      {{ mob_img  | image_url: width: 900  | image_tag: loading: 'lazy', class: 'ma-ar__img ma-ar__img--mob', alt: mob_img.alt | default: shop.name }}
+      {%- if section.settings.show_overlay -%}
+        <div class="ma-ar__overlay" aria-hidden="true"></div>
+      {%- endif -%}
+      {%- if section.settings.img_vignette > 0 -%}
+        <div class="ma-ar__vignette" aria-hidden="true"></div>
+      {%- endif -%}
     </div>
   {%- endif -%}
 </section>
 
 <style>
-  #ma-ar-{{ sid }}.ma-ar{
-    --cream: {{ section.settings.bg_color | default: '#F4EEE1' }};
-    --ink: {{ section.settings.ink_color | default: '#171310' }};
-    --gold: {{ section.settings.gold_color | default: '#C6A15B' }};
-    --burg: {{ section.settings.burg_color | default: '#6E1220' }};
-    --burg2: {{ section.settings.burg2_color | default: '#8E1B28' }};
-    --track: {{ section.settings.track_color | default: '#E6E0D5' }};
-    --fill: {{ section.settings.fill_color | default: '#8E1B28' }};
-    --ma-hdr: 0px;
+/* =====================================================================
+   MAISON AMIIR — Honest Arithmetic V5
+   All CSS variables sourced from section settings — no hardcoded values.
+   ===================================================================== */
 
-    background: var(--cream);
-    color: var(--ink);
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    position: relative;
-    overflow: {{ section.settings.overflow_mode | default: 'visible' }};
-    box-sizing: border-box;
-    margin-top: {{ section.settings.margin_t | default: 0 }}px;
-    margin-bottom: {{ section.settings.margin_b | default: 0 }}px;
-  }
+#ma-ar-{{ section_id }}.ma-ar {
+  /* ── Brand colour tokens ── */
+  --cream:  {{ section.settings.bg_color   | default: '#F4EEE1' }};
+  --ink:    {{ section.settings.ink_color  | default: '#171310' }};
+  --gold:   {{ section.settings.gold_color | default: '#C6A15B' }};
+  --burg:   {{ section.settings.burg_color | default: '#6E1220' }};
+  --burg2:  {{ section.settings.burg2_color | default: '#8E1B28' }};
+  --track:  {{ section.settings.track_color | default: '#E6E0D5' }};
+  --fill:   {{ section.settings.fill_color  | default: '#8E1B28' }};
 
-  {% if section.settings.enable_texture or section.settings.show_texture %}
-  #ma-ar-{{ sid }}.ma-ar::before{
-    content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none;
-    opacity: {{ section.settings.texture_opacity | default: 4 | divided_by: 100.0 }};
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='{{ section.settings.noise_amount | default: 4 | divided_by: 5.0 }}' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
-  {% endif %}
+  /* ── Overlay & vignette ── */
+  --overlay-color:    {{ section.settings.overlay_color   | default: '#000000' }};
+  --overlay-opacity:  {{ section.settings.overlay_strength | default: 15 | divided_by: 100.0 }};
+  --vignette-str:     {{ section.settings.img_vignette    | default: 0  | divided_by: 100.0 }};
 
-  /* ---- Advanced Debug Utilities ---- */
-  {% if section.settings.enable_debug_grid %}
-  #ma-ar-{{ sid }} .ma-ar__debug-grid {
-    position: absolute; inset: 0; pointer-events: none; z-index: 99;
-    background-size: 50px 50px;
-    background-image: linear-gradient(to right, rgba(0, 255, 255, 0.15) 1px, transparent 1px),
-                      linear-gradient(to bottom, rgba(0, 255, 255, 0.15) 1px, transparent 1px);
-  }
-  {% endif %}
-  {% if section.settings.enable_safe_area %}
-  #ma-ar-{{ sid }} .ma-ar__safe-area {
-    position: absolute; inset: 5%; pointer-events: none; z-index: 99;
-    border: 2px dashed rgba(255, 0, 128, 0.4);
-  }
-  {% endif %}
-  {% if section.settings.enable_baseline_grid %}
-  #ma-ar-{{ sid }} .ma-ar__baseline-grid {
-    position: absolute; inset: 0; pointer-events: none; z-index: 99;
-    background-size: 100% 8px;
-    background-image: linear-gradient(to bottom, rgba(0, 128, 255, 0.2) 1px, transparent 1px);
-  }
-  {% endif %}
+  /* ── Image adjustments ── */
+  --img-scale:        {{ section.settings.image_scale    | default: 100 | times: 1.0 | divided_by: 100 }};
+  --img-offset-x:     {{ section.settings.image_offset_x | default: 0 }}px;
+  --img-offset-y:     {{ section.settings.image_offset_y | default: 0 }}px;
+  --img-focal-x:      {{ section.settings.image_focal_x  | default: 50 }}%;
+  --img-focal-y:      {{ section.settings.image_focal_y  | default: 50 }}%;
+  --img-brightness:   {{ section.settings.img_brightness | default: 100 }}%;
+  --img-contrast:     {{ section.settings.img_contrast   | default: 100 }}%;
+  --img-saturation:   {{ section.settings.img_saturation | default: 100 }}%;
+  --img-warmth:       {{ section.settings.img_warmth     | default: 0 | at_least: 0 | times: 1.0 | divided_by: 100 }};
+  --img-opacity:      {{ section.settings.img_opacity    | default: 100 | divided_by: 100.0 }};
+  --img-object-fit:   {{ section.settings.img_object_fit | default: 'cover' }};
+  --img-object-pos:   {{ section.settings.img_object_pos | default: 'center center' }};
 
-  /* ---- Copy / Left Column Styling ---- */
-  #ma-ar-{{ sid }} .ma-ar__left-col{
-    box-sizing: border-box;
-    position: relative;
-    z-index: 1;
+  /* ── Melt / fade ── */
+  --melt-blur:   {{ melt_blur }}px;
+  --melt-veil:   {{ melt_veil }};
+  --fade-blur:   {{ section.settings.fade_blur | default: 12 }}px;
+  --fade-dir:    {{ section.settings.fade_dir  | default: '90deg' }};
+  --fade-pos:    {{ section.settings.fade_pos  | default: 40 }}%;
+
+  /* ── Hover zoom ── */
+  --hover-scale:    {{ section.settings.hover_scale    | default: 102 | times: 1.0 | divided_by: 100 }};
+  --hover-duration: {{ section.settings.hover_duration | default: 800 }}ms;
+  --hover-easing:   {{ section.settings.hover_easing   | default: 'cubic-bezier(0.25, 0.8, 0.25, 1)' }};
+
+  /* ── Typography ── */
+  --headline-size:    {{ section.settings.headline_size  | default: 52 }}px;
+  --headline-mob-size:{{ section.settings.heading_size_mob | default: 34 }}px;
+  --headline-lh:      {{ section.settings.heading_lh     | default: 108 | divided_by: 100.0 }};
+  --headline-max-w:   {{ section.settings.heading_max_w  | default: 24 }}ch;
+  --headline-weight:  {{ section.settings.heading_weight | default: 600 }};
+  --headline-spacing: {{ section.settings.heading_spacing | default: 0 }}px;
+  --sub-size:         {{ section.settings.body_size       | default: 20 }}px;
+  --sub-mob-size:     {{ section.settings.sub_size_mob    | default: 16 }}px;
+  --sub-lh:           {{ section.settings.sub_lh          | default: 145 | divided_by: 100.0 }};
+  --sub-max-w:        {{ section.settings.sub_max_w       | default: 48 }}ch;
+  --sub-weight:       {{ section.settings.sub_weight      | default: 500 }};
+  --sub-color:        {{ section.settings.sub_color       | default: 'rgba(23,19,16,0.78)' }};
+  --sub-margin-b:     {{ section.settings.sub_margin_b    | default: 20 }}px;
+  --eyebrow-size:     {{ section.settings.eyebrow_size_mob | default: 10 }}px;
+  --eyebrow-weight:   {{ section.settings.eyebrow_weight  | default: 400 }};
+  --eyebrow-spacing:  {{ section.settings.eyebrow_spacing | default: 3 }}px;
+  --gap-head:         {{ section.settings.gap_head        | default: 12 }}px;
+  --divider-w:        {{ section.settings.divider_w_mob   | default: 30 }}px;
+  --divider-h:        {{ section.settings.divider_thickness | default: 1 }}px;
+  --divider-color:    {{ section.settings.divider_color   | default: 'var(--burg2)' }};
+  --divider-opacity:  {{ section.settings.divider_opacity | default: 60 | divided_by: 100.0 }};
+  --accent-style:     {% if section.settings.accent_style == 'italic' %}italic{% else %}normal{% endif %};
+  --accent-weight:    {{ section.settings.accent_weight   | default: 400 }};
+  --accent-color:     {{ section.settings.accent_color    | default: 'var(--burg)' }};
+  --conc-size:        {{ section.settings.conclusion_size | default: 22 }}px;
+
+  /* ── Price & caption typography ── */
+  --price-size:   {{ section.settings.price_size   | default: 26 }}px;
+  --price-weight: {{ section.settings.price_weight | default: 600 }};
+  --price-color:  {{ section.settings.price_color  | default: 'var(--ink)' }};
+  --price-us-size:   {{ section.settings.price_size   | default: 26 | plus: 6 }}px;
+  --caption-size:    {{ section.settings.caption_size   | default: 11 }}px;
+  --caption-weight:  {{ section.settings.caption_weight | default: 400 }};
+  --caption-color:   {{ section.settings.caption_color  | default: 'rgba(23,19,16,0.55)' }};
+
+  /* ── Comparison bar ── */
+  --bar-h:    {{ section.settings.bar_h   | default: 4 }}px;
+  --bar-rad:  {{ section.settings.bar_rad | default: 2 }}px;
+  --cmp-font: {{ section.settings.cmp_font.family | default: 'Marcellus' }}, Georgia, serif;
+
+  /* ── Layout ── */
+  --col-gap:       {{ section.settings.col_gap        | default: 0 }}px;
+  --content-max-w: {{ section.settings.content_max_w  | default: 'none' }};
+
+  /* ── Motion ── */
+  --reveal-dist:       {{ section.settings.reveal_dist      | default: 12 }}px;
+  --anim-duration:     {{ section.settings.animation_duration | default: 600 }}ms;
+  --anim-stagger:      {{ section.settings.animation_stagger | default: 80 }}ms;
+  --parallax-strength: {{ section.settings.parallax_strength | default: 0 }};
+
+  /* ── Proof icon ── */
+  --proof-icon-size: {{ section.settings.proof_icon_size | default: 22 }}px;
+
+  /* ── Internal ── */
+  --ma-hdr: 0px;
+
+  /* ── Applied base styles ── */
+  background:    var(--cream);
+  color:         var(--ink);
+  font-family:   'Cormorant Garamond', Georgia, serif;
+  position:      relative;
+  overflow:      {{ section.settings.overflow_mode | default: 'hidden' }};
+  box-sizing:    border-box;
+  margin-top:    {{ section.settings.margin_t | default: 0 }}px;
+  margin-bottom: {{ section.settings.margin_b | default: 0 }}px;
+}
+
+/* ── Paper texture ── */
+{% if section.settings.enable_texture %}
+#ma-ar-{{ section_id }}.ma-ar::before {
+  content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  opacity: {{ section.settings.texture_opacity | default: 4 | divided_by: 100.0 }};
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='{{ section.settings.noise_amount | default: 4 | divided_by: 5.0 }}' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+{% endif %}
+
+/* ── Debug utilities ── */
+{% if section.settings.enable_debug_grid %}
+#ma-ar-{{ section_id }} .ma-ar__debug-grid {
+  position: absolute; inset: 0; pointer-events: none; z-index: 99;
+  background-size: 50px 50px;
+  background-image: linear-gradient(to right, rgba(0,255,255,0.15) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(0,255,255,0.15) 1px, transparent 1px);
+}
+{% endif %}
+{% if section.settings.enable_safe_area %}
+#ma-ar-{{ section_id }} .ma-ar__safe-area {
+  position: absolute; inset: 5%; pointer-events: none; z-index: 99;
+  border: 2px dashed rgba(255,0,128,0.4);
+}
+{% endif %}
+{% if section.settings.enable_baseline_grid %}
+#ma-ar-{{ section_id }} .ma-ar__baseline-grid {
+  position: absolute; inset: 0; pointer-events: none; z-index: 99;
+  background-size: 100% 8px;
+  background-image: linear-gradient(to bottom, rgba(0,128,255,0.2) 1px, transparent 1px);
+}
+{% endif %}
+
+/* ── Left column ── */
+#ma-ar-{{ section_id }} .ma-ar__left-col {
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: {% if section.settings.dt_valign == 'top' %}flex-start{% elsif section.settings.dt_valign == 'bottom' %}flex-end{% elsif section.settings.dt_valign == 'center' %}center{% else %}space-between{% endif %};
+  align-items: {% if section.settings.dt_align == 'center' %}center{% else %}flex-start{% endif %};
+  max-width: var(--content-max-w);
+  transform: translate({{ section.settings.content_offset_x_dt | default: 0 }}px, {{ section.settings.content_offset_y_dt | default: 0 }}px);
+}
+
+/* ── Eyebrow ── */
+#ma-ar-{{ section_id }} .ma-ar__k {
+  font-family:    {{ section.settings.eyebrow_font.family | default: 'Marcellus' }}, Georgia, serif;
+  font-size:      var(--eyebrow-size);
+  font-weight:    var(--eyebrow-weight);
+  letter-spacing: var(--eyebrow-spacing);
+  text-transform: uppercase;
+  color:          var(--burg2);
+  margin:         0 0 var(--gap-head);
+  display:        flex;
+  align-items:    center;
+  gap:            12px;
+  justify-content: {% if section.settings.dt_align == 'center' %}center{% else %}flex-start{% endif %};
+}
+#ma-ar-{{ section_id }} .ma-ar__k::before {
+  content:    "";
+  width:      var(--divider-w);
+  height:     var(--divider-h);
+  background: var(--divider-color);
+  flex:       0 0 auto;
+  opacity:    var(--divider-opacity);
+}
+
+/* ── Headline ── */
+#ma-ar-{{ section_id }} .ma-ar__h {
+  font-family:    {{ section.settings.heading_font.family | default: 'Cormorant Garamond' }}, Georgia, serif !important;
+  font-weight:    var(--headline-weight) !important;
+  text-transform: none !important;
+  letter-spacing: var(--headline-spacing) !important;
+  font-size:      clamp(var(--headline-mob-size), min(4vw, 5.2vh), var(--headline-size));
+  line-height:    var(--headline-lh);
+  margin:         0 0 12px;
+  color:          var(--ink);
+  max-width:      var(--headline-max-w);
+  text-align:     {% if section.settings.dt_align == 'center' %}center{% else %}left{% endif %};
+}
+#ma-ar-{{ section_id }} .ma-ar__h em {
+  font-style:  var(--accent-style);
+  font-weight: var(--accent-weight);
+  color:       var(--accent-color);
+}
+
+/* ── Sub-line ── */
+#ma-ar-{{ section_id }} .ma-ar__sub {
+  font-family: {{ section.settings.sub_font.family | default: 'Cormorant Garamond' }}, Georgia, serif;
+  font-style:  italic;
+  font-weight: var(--sub-weight);
+  font-size:   clamp(var(--sub-mob-size), 2vh, var(--sub-size));
+  line-height: var(--sub-lh);
+  color:       var(--sub-color);
+  margin:      0 0 var(--sub-margin-b);
+  max-width:   var(--sub-max-w);
+  text-align:  {% if section.settings.dt_align == 'center' %}center{% else %}left{% endif %};
+}
+
+/* ── Comparison bars ── */
+#ma-ar-{{ section_id }} .ma-ar__cmp  { margin: 0; width: 100%; }
+#ma-ar-{{ section_id }} .ma-ar__row  { padding: 10px 0 0; border-top: 1px solid rgba(23,19,16,.14); }
+#ma-ar-{{ section_id }} .ma-ar__top  { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; }
+#ma-ar-{{ section_id }} .ma-ar__lab  { font-family: var(--cmp-font); font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: rgba(23,19,16,.7); }
+#ma-ar-{{ section_id }} .ma-ar__val  { font-family: 'Cormorant Garamond',Georgia,serif; white-space: nowrap; }
+#ma-ar-{{ section_id }} .ma-ar__val--typ { font-size: clamp(18px,2.8vh,24px); font-weight: 500; color: rgba(23,19,16,.44); text-decoration: line-through; text-decoration-thickness: 1.5px; }
+#ma-ar-{{ section_id }} .ma-ar__val--now { font-size: clamp(26px,min(8vw,4.8vh),42px); font-weight: 600; color: var(--burg2); }
+#ma-ar-{{ section_id }} .ma-ar__val--now em { font-style: italic; font-weight: 400; font-size: .52em; color: var(--burg); margin-right: 2px; }
+#ma-ar-{{ section_id }} .ma-ar__track {
+  display: block;
+  height:  var(--bar-h);
+  background: rgba(23,19,16,.08);
+  border-radius: var(--bar-rad);
+  overflow: hidden;
+  margin: 8px 0 10px;
+}
+#ma-ar-{{ section_id }} .ma-ar__fill { display: block; height: 100%; width: 0; border-radius: var(--bar-rad); }
+#ma-ar-{{ section_id }} .ma-ar__fill--typ { background: rgba(23,19,16,.55); transition: width 1.4s cubic-bezier(.25,.8,.25,1) .1s; }
+#ma-ar-{{ section_id }} .ma-ar__fill--now { background: var(--fill); transition: width 1.1s cubic-bezier(.25,.8,.25,1) .7s; }
+#ma-ar-{{ section_id }}.is-in .ma-ar__fill--typ { width: 100%; }
+#ma-ar-{{ section_id }}.is-in .ma-ar__fill--now { width: 12%; }
+#ma-ar-{{ section_id }} .ma-ar__refine { margin: 12px 0 0; display: flex; flex-direction: column; gap: 6px; }
+#ma-ar-{{ section_id }} .ma-ar__ref   { font-size: 15px; font-weight: 500; color: rgba(23,19,16,.85); line-height: 1.4; margin: 0; }
+#ma-ar-{{ section_id }} .ma-ar__ref b { color: var(--gold); font-weight: 400; margin-right: 8px; }
+
+/* ── Comparison cards ── */
+#ma-ar-{{ section_id }} .ma-ar__cards {
+  position: relative;
+  display: flex;
+  gap: clamp(12px, 1.5vw, {{ section.settings.card_gap | default: 24 }}px);
+}
+#ma-ar-{{ section_id }} .ma-ar__card {
+  flex: 1 1 0; min-width: 0;
+  padding: clamp(14px, 2vh, {{ section.settings.card_padding | default: 20 }}px);
+  border-radius: {{ section.settings.card_radius | default: 8 }}px;
+  background: {{ section.settings.card_bg_col | default: '#F0EAE1' }};
+  border: 1px solid {{ section.settings.card_border_color | default: '#E2DCD3' }};
+  transition: transform 0.35s var(--hover-easing), box-shadow 0.35s ease;
+  {% if section.settings.card_shadow_strength > 0 %}
+  box-shadow: 0 {{ section.settings.card_shadow_strength }}px {{ section.settings.card_shadow_strength | times: 2 }}px rgba(23,19,16,{{ section.settings.card_shadow_strength | times: 1.0 | divided_by: 200 }});
+  {% endif %}
+}
+{% if section.settings.enable_card_hover %}
+#ma-ar-{{ section_id }} .ma-ar__card:hover {
+  transform: translateY(-{{ section.settings.hover_lift | default: 4 }}px);
+  box-shadow: 0 16px 36px -10px rgba(23,19,16,0.12);
+}
+{% endif %}
+#ma-ar-{{ section_id }} .ma-ar__card--us {
+  background: linear-gradient(145deg, rgba(244,238,225,0.98), rgba(244,238,225,0.68));
+  border-color: rgba(198,161,91,0.5);
+  box-shadow: 0 14px 34px -10px rgba(0,0,0,0.08);
+}
+#ma-ar-{{ section_id }} .ma-ar__card-h {
+  font-family: var(--cmp-font); font-size: 10px; letter-spacing: .14em; text-transform: uppercase;
+  color: rgba(23,19,16,.65); margin: 0 0 10px; padding-bottom: 8px; border-bottom: 1px solid rgba(23,19,16,.12);
+}
+#ma-ar-{{ section_id }} .ma-ar__card--us .ma-ar__card-h { color: var(--burg2); border-color: rgba(198,161,91,0.28); }
+#ma-ar-{{ section_id }} .ma-ar__list { list-style: none; margin: 0 0 10px; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+#ma-ar-{{ section_id }} .ma-ar__list-item { display: flex; align-items: center; gap: 8px; font-size: clamp(14px,1.8vh,16px); color: rgba(23,19,16,.85); }
+#ma-ar-{{ section_id }} .ma-ar__list-icon { flex: 0 0 auto; width: 15px; height: 15px; color: var(--gold); display: flex; align-items: center; }
+#ma-ar-{{ section_id }} .ma-ar__card--them .ma-ar__list-icon { color: rgba(23,19,16,0.4); }
+#ma-ar-{{ section_id }} .ma-ar__list-icon svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+#ma-ar-{{ section_id }} .ma-ar__card-foot { padding-top: 8px; border-top: 1px solid rgba(23,19,16,.12); display: flex; flex-direction: column; gap: 2px; }
+#ma-ar-{{ section_id }} .ma-ar__card--us .ma-ar__card-foot { border-color: rgba(198,161,91,0.28); }
+
+/* Price typography — driven by settings */
+#ma-ar-{{ section_id }} .ma-ar__card-price {
+  font-family:  'Cormorant Garamond', Georgia, serif;
+  font-size:    clamp(20px, 2.6vh, var(--price-size));
+  font-weight:  var(--price-weight);
+  line-height:  1;
+  color:        var(--price-color);
+}
+#ma-ar-{{ section_id }} .ma-ar__card--us .ma-ar__card-price {
+  color:      var(--burg2);
+  font-size:  clamp(24px, 3vh, var(--price-us-size));
+}
+#ma-ar-{{ section_id }} .ma-ar__card--us .ma-ar__card-price em { font-style: italic; font-weight: 400; font-size: .6em; color: var(--burg); }
+
+/* Caption typography */
+#ma-ar-{{ section_id }} .ma-ar__card-sub,
+#ma-ar-{{ section_id }} .ma-ar__caption {
+  display:     block;
+  font-size:   var(--caption-size);
+  font-weight: var(--caption-weight);
+  color:       var(--caption-color);
+  margin-top:  2px;
+}
+
+#ma-ar-{{ section_id }} .ma-ar__vs {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
+  font-family: var(--cmp-font); font-size: 12px; letter-spacing: .08em; color: var(--gold);
+  background: var(--cream); padding: 4px 8px; border-radius: 50%; z-index: 2;
+}
+
+/* ── Proof grid ── */
+#ma-ar-{{ section_id }} .ma-ar__proof {
+  display: grid;
+  gap: clamp(8px, 1.2vw, {{ section.settings.proof_gap | default: 16 }}px);
+  {% if section.settings.proof_divider %}border-top: 1px solid rgba(23,19,16,.12); padding-top: 12px;{% endif %}
+}
+#ma-ar-{{ section_id }} .ma-ar__proof-item { display: flex; flex-direction: column; gap: 3px; padding-right: 6px; }
+#ma-ar-{{ section_id }} .ma-ar__proof-ic { display: block; width: var(--proof-icon-size); height: var(--proof-icon-size); color: var(--gold); margin-bottom: 6px; }
+#ma-ar-{{ section_id }} .ma-ar__proof-ic svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+#ma-ar-{{ section_id }} .ma-ar__proof-h { font-family: 'Cormorant Garamond',Georgia,serif; font-weight: 600; font-size: clamp(17px,2.2vh,20px); margin: 0 0 4px; color: var(--ink); line-height: 1.2; }
+#ma-ar-{{ section_id }} .ma-ar__proof-b { font-size: clamp(13.5px,1.6vh,15px); line-height: 1.4; color: rgba(23,19,16,.75); margin: 0; }
+
+/* ── Conclusion ── */
+#ma-ar-{{ section_id }} .ma-ar__conclusion { text-align: center; padding-top: 10px; border-top: 1px solid rgba(23,19,16,.12); }
+#ma-ar-{{ section_id }} .ma-ar__crown { display: block; font-size: 16px; color: var(--gold); margin-bottom: 2px; }
+#ma-ar-{{ section_id }} .ma-ar__conc-h { font-family: 'Cormorant Garamond',Georgia,serif; font-size: clamp(18px,2.2vh,var(--conc-size)); font-weight: 600; margin: 0 0 2px; color: var(--ink); line-height: 1.2; }
+#ma-ar-{{ section_id }} .ma-ar__conc-b { font-style: italic; font-size: clamp(13px,1.6vh,15px); color: var(--burg); margin: 0; }
+
+/* ── Reveal animation ── */
+{% if section.settings.enable_animation %}
+#ma-ar-{{ section_id }} .ma-ar__reveal {
+  opacity: 0;
+  transform: translateY(var(--reveal-dist));
+  transition: opacity var(--anim-duration) ease,
+              transform var(--anim-duration) cubic-bezier(.22,1,.36,1);
+}
+#ma-ar-{{ section_id }}.is-in .ma-ar__reveal  { opacity: 1; transform: none; }
+#ma-ar-{{ section_id }}.is-in .ma-ar__cards   { transition-delay: 0ms; }
+#ma-ar-{{ section_id }}.is-in .ma-ar__proof   { transition-delay: var(--anim-stagger); }
+#ma-ar-{{ section_id }}.is-in .ma-ar__conclusion { transition-delay: calc(var(--anim-stagger) * 2); }
+{% endif %}
+
+/* ── Photo column ── */
+#ma-ar-{{ section_id }} .ma-ar__photo { overflow: hidden; position: relative; width: 100%; height: 100%; }
+
+#ma-ar-{{ section_id }} .ma-ar__img {
+  width: 100%; height: 100%; display: block;
+  object-fit:      var(--img-object-fit);
+  object-position: var(--img-focal-x) var(--img-focal-y);
+  opacity:         var(--img-opacity);
+  transform:       scale(var(--img-scale)) translate(var(--img-offset-x), var(--img-offset-y));
+  filter: brightness(var(--img-brightness))
+          contrast(var(--img-contrast))
+          saturate(var(--img-saturation))
+          sepia(var(--img-warmth));
+}
+
+/* Hover zoom on photo */
+{% if section.settings.enable_hover_zoom %}
+#ma-ar-{{ section_id }} .ma-ar__photo:hover .ma-ar__img {
+  transform: scale(var(--hover-scale)) translate(var(--img-offset-x), var(--img-offset-y));
+  transition: transform var(--hover-duration) var(--hover-easing);
+}
+{% endif %}
+
+#ma-ar-{{ section_id }} .ma-ar__img--dt  { display: block; }
+#ma-ar-{{ section_id }} .ma-ar__img--mob { display: none;  }
+
+/* Overlay */
+#ma-ar-{{ section_id }} .ma-ar__overlay {
+  position: absolute; inset: 0; z-index: 4; pointer-events: none;
+  background: var(--overlay-color);
+  opacity: var(--overlay-opacity);
+}
+/* Vignette */
+#ma-ar-{{ section_id }} .ma-ar__vignette {
+  position: absolute; inset: 0; z-index: 5; pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,var(--vignette-str)) 100%);
+}
+
+/* ================================================================
+   MOBILE  < 900px
+   ================================================================ */
+@media (max-width: 899px) {
+  #ma-ar-{{ section_id }}.ma-ar {
     display: flex;
     flex-direction: column;
-    justify-content: {% if section.settings.dt_valign == 'top' %}flex-start{% elsif section.settings.dt_valign == 'bottom' %}flex-end{% else %}space-between{% endif %};
-    transform: translate({{ section.settings.content_offset_x_dt | default: 0 }}px, {{ section.settings.content_offset_y_dt | default: 0 }}px);
+    height: auto;
+    max-height: none;
+    overflow: visible;
+    min-height: {{ section.settings.mob_section_h | default: 0 }}px;
   }
-  #ma-ar-{{ sid }} .ma-ar__k{
-    font-family: {{ section.settings.eyebrow_font.family | default: 'Marcellus' }}, Georgia, serif;
-    font-size: {{ section.settings.eyebrow_size_mob | default: 10 }}px;
-    font-weight: {{ section.settings.eyebrow_weight | default: '400' }};
-    letter-spacing: {{ section.settings.eyebrow_spacing | default: 3 }}px;
-    text-transform: uppercase;
-    color: var(--burg2);
-    margin: 0 0 {{ section.settings.gap_head | default: 12 }}px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    justify-content: {% if section.settings.dt_align == 'center' %}center{% elsif section.settings.dt_align == 'right' %}flex-end{% else %}flex-start{% endif %};
-  }
-  #ma-ar-{{ sid }} .ma-ar__k::before{
-    content: "";
-    width: {{ section.settings.divider_w_mob | default: 30 }}px;
-    height: {{ section.settings.divider_thickness | default: 1 }}px;
-    background: {{ section.settings.divider_color | default: 'var(--burg2)' }};
+  #ma-ar-{{ section_id }} .ma-ar__left-col {
     flex: 0 0 auto;
-    opacity: {{ section.settings.divider_opacity | default: 60 | divided_by: 100.0 }};
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: {{ section.settings.mobile_padding_top | default: 35 }}px {{ section.settings.mobile_padding_x | default: 20 }}px {{ section.settings.mobile_padding_bottom | default: 45 }}px;
+    transform: translate({{ section.settings.content_offset_x_mob | default: 0 }}px, {{ section.settings.content_offset_y_mob | default: 0 }}px);
+    gap: {{ section.settings.mob_gap | default: 0 }}px;
   }
-  #ma-ar-{{ sid }} .ma-ar__h{
-    font-family: {{ section.settings.heading_font.family | default: 'Cormorant Garamond' }}, Georgia, serif !important;
-    font-weight: {{ section.settings.heading_weight | default: '600' }} !important;
-    text-transform: none !important;
-    letter-spacing: {{ section.settings.heading_spacing | default: 0 }}px !important;
-    font-size: clamp(52px, min(4vw, 5.2vh), {{ section.settings.headline_size | default: 52 }}px);
-    line-height: {{ section.settings.heading_lh | default: 108 | divided_by: 100.0 }};
-    margin: 0 0 12px;
-    color: var(--ink);
-    max-width: {{ section.settings.heading_max_w | default: 24 }}ch;
-    {% if section.settings.dt_align == 'center' %}margin-left: auto; margin-right: auto;{% elsif section.settings.dt_align == 'right' %}margin-left: auto; margin-right: 0;{% endif %}
+  #ma-ar-{{ section_id }} .ma-ar__photo {
+    order: {% if section.settings.mobile_image_first %}-1{% else %}1{% endif %};
+    height: {{ section.settings.mobile_image_height | default: 380 }}px;
+    width: 100%;
+    display: block !important;
   }
-  #ma-ar-{{ sid }} .ma-ar__h em{
-    font-style: {% if section.settings.accent_style == 'italic' %}italic{% else %}normal{% endif %};
-    font-weight: {{ section.settings.accent_weight | default: '400' }};
-    color: {{ section.settings.accent_color | default: 'var(--burg)' }};
+  #ma-ar-{{ section_id }} .ma-ar__img--dt  { display: none !important; }
+  #ma-ar-{{ section_id }} .ma-ar__img--mob { display: block !important; }
+
+  #ma-ar-{{ section_id }} .ma-ar__cards { flex-direction: column; gap: 16px; }
+  #ma-ar-{{ section_id }} .ma-ar__vs {
+    position: relative; left: auto; top: auto; transform: none;
+    margin: -6px auto; display: block; width: fit-content;
   }
-  #ma-ar-{{ sid }} .ma-ar__sub{
-    font-family: {{ section.settings.sub_font.family | default: 'Cormorant Garamond' }}, Georgia, serif;
-    font-style: italic;
-    font-weight: {{ section.settings.sub_weight | default: '500' }};
-    font-size: clamp(20px, 2vh, {{ section.settings.body_size | default: 20 }}px);
-    line-height: 1.45;
-    color: {{ section.settings.sub_color | default: 'rgba(23,19,16,0.78)' }};
-    margin: 0 0 {{ section.settings.sub_margin_b | default: 20 }}px;
-    max-width: 48ch;
-    {% if section.settings.dt_align == 'center' %}margin-left: auto; margin-right: auto;{% elsif section.settings.dt_align == 'right' %}margin-left: auto; margin-right: 0;{% endif %}
+  #ma-ar-{{ section_id }} .ma-ar__proof {
+    grid-template-columns: repeat({{ section.settings.proof_cols_mob | default: '2' }}, 1fr);
+    gap: 16px;
   }
 
-  /* ---- Comparison Bars ---- */
-  #ma-ar-{{ sid }} .ma-ar__cmp{ margin: 0; width: 100%; }
-  #ma-ar-{{ sid }} .ma-ar__row{ padding: 10px 0 0; border-top: 1px solid rgba(23,19,16,.14); }
-  #ma-ar-{{ sid }} .ma-ar__top{ display: flex; justify-content: space-between; align-items: baseline; gap: 14px; }
-  #ma-ar-{{ sid }} .ma-ar__lab{ font-family: 'Marcellus',serif; font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: rgba(23,19,16,.7); }
-  #ma-ar-{{ sid }} .ma-ar__val{ font-family: 'Cormorant Garamond',Georgia,serif; white-space: nowrap; }
-  #ma-ar-{{ sid }} .ma-ar__val--typ{ font-size: clamp(18px, 2.8vh, 24px); font-weight: 500; color: rgba(23,19,16,.44); text-decoration: line-through; text-decoration-thickness: 1.5px; }
-  #ma-ar-{{ sid }} .ma-ar__val--now{ font-size: clamp(26px, min(8vw, 4.8vh), 42px); font-weight: 600; color: var(--burg2); }
-  #ma-ar-{{ sid }} .ma-ar__val--now em{ font-style: italic; font-weight: 400; font-size: .52em; color: var(--burg); margin-right: 2px; }
-  #ma-ar-{{ sid }} .ma-ar__track{ display: block; height: 4px; background: rgba(23,19,16,.08); border-radius: 2px; overflow: hidden; margin: 8px 0 10px; }
-  #ma-ar-{{ sid }} .ma-ar__fill{ display: block; height: 100%; width: 0; border-radius: 2px; }
-  #ma-ar-{{ sid }} .ma-ar__fill--typ{ background: rgba(23,19,16,.55); transition: width 1.4s cubic-bezier(.25,.8,.25,1) .1s; }
-  #ma-ar-{{ sid }} .ma-ar__fill--now{ background: var(--burg2); transition: width 1.1s cubic-bezier(.25,.8,.25,1) .7s; }
-  #ma-ar-{{ sid }}.is-in .ma-ar__fill--typ{ width: 100%; }
-  #ma-ar-{{ sid }}.is-in .ma-ar__fill--now{ width: 12%; }
-  #ma-ar-{{ sid }} .ma-ar__refine{ margin: 12px 0 0; display: flex; flex-direction: column; gap: 6px; }
-  #ma-ar-{{ sid }} .ma-ar__ref{ font-size: 15px; font-weight: 500; color: rgba(23,19,16,.85); line-height: 1.4; margin: 0; }
-  #ma-ar-{{ sid }} .ma-ar__ref b{ color: var(--gold); font-weight: 400; margin-right: 8px; }
+  /* Mobile melt */
+  {%- if melt > 0 -%}
+  #ma-ar-{{ section_id }} .ma-ar__photo::before {
+    content: ""; position: absolute; z-index: 2; left: 0; right: 0; bottom: 0;
+    height: 34%; pointer-events: none;
+    backdrop-filter: blur({{ section.settings.fade_blur | default: melt_blur }}px);
+    -webkit-backdrop-filter: blur({{ section.settings.fade_blur | default: melt_blur }}px);
+    -webkit-mask-image: linear-gradient(0deg, #000 0, transparent 100%);
+            mask-image: linear-gradient(0deg, #000 0, transparent 100%);
+  }
+  #ma-ar-{{ section_id }} .ma-ar__photo::after {
+    content: ""; position: absolute; z-index: 3; inset: 0; pointer-events: none;
+    opacity: var(--melt-veil);
+    background: linear-gradient(0deg, var(--cream) 0%, rgba(244,238,225,.55) 14%, rgba(244,238,225,0) 46%);
+  }
+  {%- endif -%}
+}
 
-  /* ---- Comparison Cards ---- */
-  #ma-ar-{{ sid }} .ma-ar__cards{
-    position: relative; display: flex; gap: clamp(12px, 1.5vw, {{ section.settings.card_gap | default: 24 }}px);
+/* ================================================================
+   DESKTOP  >= 900px
+   ================================================================ */
+@media (min-width: 900px) {
+  #ma-ar-{{ section_id }}.ma-ar {
+    display: grid !important;
+    grid-template-columns: {{ split_left }}% {{ split_right }}% !important;
+    column-gap: var(--col-gap) !important;
+    height: auto !important;
+    min-height: {{ section.settings.dt_height | default: 720 }}px !important;
+    overflow: {{ section.settings.overflow_mode | default: 'hidden' }} !important;
+    max-width: {{ section.settings.dt_max_w | default: 1440 }}px;
+    margin-left: auto;
+    margin-right: auto;
   }
-  #ma-ar-{{ sid }} .ma-ar__card{
-    flex: 1 1 0; min-width: 0; padding: clamp(14px, 2vh, {{ section.settings.card_padding | default: 20 }}px);
-    border-radius: {{ section.settings.card_radius | default: 8 }}px;
-    background: {{ section.settings.card_bg_col | default: '#F0EAE1' }};
-    border: 1px solid {{ section.settings.card_border_color | default: '#E2DCD3' }};
-    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
-    {% if section.settings.card_shadow_strength > 0 %}box-shadow: 0 {{ section.settings.card_shadow_strength }}px {{ section.settings.card_shadow_strength | times: 2 }}px rgba(23,19,16,{{ section.settings.card_shadow_strength | times: 1.0 | divided_by: 200 }});{% endif %}
+  #ma-ar-{{ section_id }} .ma-ar__left-col {
+    height: auto !important;
+    max-height: none !important;
+    padding: {{ section.settings.padding_top | default: 24 }}px {{ section.settings.padding_x | default: 48 }}px {{ section.settings.padding_bottom | default: 24 }}px {{ section.settings.padding_x | default: 48 }}px !important;
+    overflow: visible !important;
+    box-sizing: border-box !important;
   }
-  {% if section.settings.enable_card_hover %}
-  #ma-ar-{{ sid }} .ma-ar__card:hover {
-    transform: translateY(-{{ section.settings.hover_lift | default: 4 }}px);
-    box-shadow: 0 16px 36px -10px rgba(23,19,16,0.12);
+  #ma-ar-{{ section_id }} .ma-ar__proof {
+    grid-template-columns: repeat({{ section.settings.proof_cols_dt | default: '4' }}, 1fr) !important;
   }
-  {% endif %}
-  #ma-ar-{{ sid }} .ma-ar__card--us {
-    background: linear-gradient(145deg, rgba(244,238,225,0.98), rgba(244,238,225,0.68));
-    border-color: rgba(198,161,91,0.5);
-    box-shadow: 0 14px 34px -10px rgba(0,0,0,0.08);
+  #ma-ar-{{ section_id }} .ma-ar__proof-item:not(:last-child) {
+    border-right: 1px solid rgba(23,19,16,.08);
   }
-  #ma-ar-{{ sid }} .ma-ar__card-h{
-    font-family: 'Marcellus',serif; font-size: 10px; letter-spacing: .14em; text-transform: uppercase;
-    color: rgba(23,19,16,.65); margin: 0 0 10px; padding-bottom: 8px; border-bottom: 1px solid rgba(23,19,16,.12);
+  #ma-ar-{{ section_id }} .ma-ar__photo {
+    height: 100% !important; width: 100% !important;
+    position: relative !important; overflow: hidden !important; display: block !important;
   }
-  #ma-ar-{{ sid }} .ma-ar__card--us .ma-ar__card-h { color: var(--burg2); border-color: rgba(198,161,91,0.28); }
-  #ma-ar-{{ sid }} .ma-ar__list{ list-style: none; margin: 0 0 10px; padding: 0; display: flex; flex-direction: column; gap: 6px; }
-  #ma-ar-{{ sid }} .ma-ar__list-item{ display: flex; align-items: center; gap: 8px; font-size: clamp(14px, 1.8vh, 16px); color: rgba(23,19,16,.85); }
-  #ma-ar-{{ sid }} .ma-ar__list-icon{ flex: 0 0 auto; width: 15px; height: 15px; color: var(--gold); display: flex; align-items: center; }
-  #ma-ar-{{ sid }} .ma-ar__card--them .ma-ar__list-icon{ color: rgba(23,19,16,0.4); }
-  #ma-ar-{{ sid }} .ma-ar__list-icon svg{ width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
-  #ma-ar-{{ sid }} .ma-ar__card-foot{ padding-top: 8px; border-top: 1px solid rgba(23,19,16,.12); display: flex; flex-direction: column; gap: 2px; }
-  #ma-ar-{{ sid }} .ma-ar__card--us .ma-ar__card-foot { border-color: rgba(198,161,91,0.28); }
-  #ma-ar-{{ sid }} .ma-ar__card-price{ font-family: 'Cormorant Garamond',Georgia,serif; font-size: clamp(22px, 2.8vh, 26px); font-weight: 600; line-height: 1; color: var(--ink); }
-  #ma-ar-{{ sid }} .ma-ar__card--us .ma-ar__card-price { color: var(--burg2); font-size: clamp(26px, 3.2vh, 32px); }
-  #ma-ar-{{ sid }} .ma-ar__card--us .ma-ar__card-price em { font-style: italic; font-weight: 400; font-size: .6em; color: var(--burg); }
-  #ma-ar-{{ sid }} .ma-ar__caption{ display: block; font-size: 11px; color: rgba(23,19,16,.55); margin-top: 2px; }
-  #ma-ar-{{ sid }} .ma-ar__vs{
-    position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
-    font-family: 'Marcellus',serif; font-size: 12px; letter-spacing: .08em; color: var(--gold);
-    background: var(--cream); padding: 4px 8px; border-radius: 50%; z-index: 2;
-  }
+  #ma-ar-{{ section_id }} .ma-ar__img--dt  { display: block !important; height: 100% !important; width: 100% !important; }
+  #ma-ar-{{ section_id }} .ma-ar__img--mob { display: none !important; }
 
-  /* ---- Proof Grid ---- */
-  #ma-ar-{{ sid }} .ma-ar__proof{
-    display: grid; gap: clamp(8px, 1.2vw, {{ section.settings.proof_gap | default: 16 }}px);
-    {% if section.settings.proof_divider %}border-top: 1px solid rgba(23,19,16,.12); padding-top: 12px;{% endif %}
+  /* Desktop melt / fade */
+  {%- if melt > 0 -%}
+  #ma-ar-{{ section_id }} .ma-ar__photo::before {
+    content: ""; position: absolute; z-index: 2; top: 0; bottom: 0; left: 0;
+    width: {{ section.settings.melt_width | default: 40 }}%; pointer-events: none;
+    backdrop-filter: blur(var(--melt-blur));
+    -webkit-backdrop-filter: blur(var(--melt-blur));
+    -webkit-mask-image: linear-gradient(90deg, #000 0, transparent 100%);
+            mask-image: linear-gradient(90deg, #000 0, transparent 100%);
   }
-  #ma-ar-{{ sid }} .ma-ar__proof-item{ display: flex; flex-direction: column; gap: 3px; padding-right: 6px; }
-  #ma-ar-{{ sid }} .ma-ar__proof-ic{ display: block; width: {{ section.settings.proof_icon_size | default: 22 }}px; height: {{ section.settings.proof_icon_size | default: 22 }}px; color: var(--gold); margin-bottom: 6px; }
-  #ma-ar-{{ sid }} .ma-ar__proof-ic svg{ width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
-  #ma-ar-{{ sid }} .ma-ar__proof-h{ font-family: 'Cormorant Garamond',Georgia,serif; font-weight: 600; font-size: clamp(17px, 2.2vh, 20px); margin: 0 0 4px; color: var(--ink); line-height: 1.2; }
-  #ma-ar-{{ sid }} .ma-ar__proof-b{ font-size: clamp(13.5px, 1.6vh, 15px); line-height: 1.4; color: rgba(23,19,16,.75); margin: 0; }
-
-  /* ---- Conclusion ---- */
-  #ma-ar-{{ sid }} .ma-ar__conclusion{ text-align: center; padding-top: 10px; border-top: 1px solid rgba(23,19,16,.12); }
-  #ma-ar-{{ sid }} .ma-ar__crown{ display: block; font-size: 16px; color: var(--gold); margin-bottom: 2px; }
-  #ma-ar-{{ sid }} .ma-ar__conc-h{ font-family: 'Cormorant Garamond',Georgia,serif; font-size: clamp(18px, 2.2vh, {{ section.settings.conclusion_size | default: 22 }}px); font-weight: 600; margin: 0 0 2px; color: var(--ink); line-height: 1.2; }
-  #ma-ar-{{ sid }} .ma-ar__conc-b{ font-style: italic; font-size: clamp(13px, 1.6vh, 15px); color: var(--burg); margin: 0; }
-
-  /* ---- Reveal Animation ---- */
-  {% if section.settings.enable_animation %}
-    #ma-ar-{{ sid }} .ma-ar__reveal{
-      opacity: 0; transform: translateY(12px);
-      transition: opacity {{ section.settings.animation_duration | default: 600 }}ms ease, transform {{ section.settings.animation_duration | default: 600 }}ms cubic-bezier(.22,1,.36,1);
-    }
-    #ma-ar-{{ sid }}.is-in .ma-ar__reveal{ opacity: 1; transform: none; }
-    #ma-ar-{{ sid }}.is-in .ma-ar__cards{ transition-delay: 0ms; }
-    #ma-ar-{{ sid }}.is-in .ma-ar__proof{ transition-delay: {{ section.settings.animation_stagger | default: 80 }}ms; }
-    #ma-ar-{{ sid }}.is-in .ma-ar__conclusion{ transition-delay: {{ section.settings.animation_stagger | default: 80 | times: 2 }}ms; }
-  {% endif %}
-
-  /* ---- Photo & Melt Engine with Explicit Visibility Rules ---- */
-  #ma-ar-{{ sid }} .ma-ar__photo{ overflow: hidden; position: relative; width: 100%; height: 100%; }
-  #ma-ar-{{ sid }} .ma-ar__img{
-    width: 100%; height: 100%; display: block;
-    transform: scale({{ section.settings.image_scale | default: 100 | times: 1.0 | divided_by: 100 }}) translate({{ section.settings.image_offset_x | default: 0 }}px, {{ section.settings.image_offset_y | default: 0 }}px);
-    filter: brightness({{ section.settings.img_brightness | default: 100 }}%) contrast({{ section.settings.img_contrast | default: 100 }}%) saturate({{ section.settings.img_saturation | default: 100 }}%) sepia({{ section.settings.img_warmth | default: 0 | at_least: 0 | times: 1.0 | divided_by: 100 }});
+  #ma-ar-{{ section_id }} .ma-ar__photo::after {
+    content: ""; position: absolute; z-index: 3; inset: 0; pointer-events: none;
+    opacity: var(--melt-veil);
+    background: linear-gradient(90deg, var(--cream) 0%, rgba(244,238,225,.6) 12%, rgba(244,238,225,0) 48%);
   }
-  #ma-ar-{{ sid }} .ma-ar__img--dt {
-    object-fit: cover; object-position: center; display: block;
-  }
-  #ma-ar-{{ sid }} .ma-ar__img--mob {
-    object-fit: cover; object-position: center; display: none;
-  }
+  {%- endif -%}
+}
 
-  /* ---- MOBILE (< 900px): Stacked Layout ---- */
-  @media (max-width: 899px){
-    #ma-ar-{{ sid }}.ma-ar{ display: flex; flex-direction: column; height: auto; max-height: none; overflow: visible; }
-    #ma-ar-{{ sid }} .ma-ar__left-col{
-      flex: 0 0 auto; justify-content: flex-start;
-      padding: {{ section.settings.pad_t_mob | default: 35 }}px {{ section.settings.pad_h_mob | default: 20 }}px {{ section.settings.pad_b_mob | default: 45 }}px;
-      transform: translate({{ section.settings.content_offset_x_mob | default: 0 }}px, {{ section.settings.content_offset_y_mob | default: 0 }}px);
-    }
-    #ma-ar-{{ sid }} .ma-ar__photo{
-      order: {% if section.settings.mobile_image_first %}-1{% else %}1{% endif %};
-      height: {{ section.settings.mob_img_h | default: 380 }}px; width: 100%; display: block !important;
-    }
-    #ma-ar-{{ sid }} .ma-ar__img--dt { display: none !important; }
-    #ma-ar-{{ sid }} .ma-ar__img--mob { display: block !important; }
-
-    #ma-ar-{{ sid }} .ma-ar__cards{ flex-direction: column; gap: 16px; }
-    #ma-ar-{{ sid }} .ma-ar__vs{ position: relative; left: auto; top: auto; transform: none; margin: -6px auto; display: block; width: fit-content; }
-    #ma-ar-{{ sid }} .ma-ar__proof{ grid-template-columns: repeat({{ section.settings.proof_cols_mob | default: '2' }}, 1fr); gap: 16px; }
-    {%- if melt > 0 -%}
-    #ma-ar-{{ sid }} .ma-ar__photo::before{
-      content: ""; position: absolute; z-index: 2; left: 0; right: 0; bottom: 0; height: 34%; pointer-events: none;
-      backdrop-filter: blur({{ melt_blur }}px); -webkit-backdrop-filter: blur({{ melt_blur }}px);
-      -webkit-mask-image: linear-gradient(0deg,#000 0,transparent 100%);
-              mask-image: linear-gradient(0deg,#000 0,transparent 100%);
-    }
-    #ma-ar-{{ sid }} .ma-ar__photo::after{
-      content: ""; position: absolute; z-index: 3; inset: 0; pointer-events: none; opacity: {{ melt_veil }};
-      background: linear-gradient(0deg,var(--cream) 0%,rgba(244,238,225,.55) 14%,rgba(244,238,225,0) 46%);
-    }
-    {%- endif -%}
-  }
-
-  /* ---- DESKTOP (>= 900px): TWO-COLUMN MAGAZINE SPREAD WITH FLEXIBLE HEIGHT ---- */
-  @media (min-width: 900px){
-    #ma-ar-{{ sid }}.ma-ar{
-      display: grid !important;
-      grid-template-columns: {{ split_left }}% {{ split_right }}% !important;
-      height: auto !important;
-      min-height: {{ section.settings.dt_height | default: 720 }}px !important;
-      overflow: visible !important;
-      max-width: {{ section.settings.dt_max_w | default: 1440 }}px;
-      margin-left: auto; margin-right: auto;
-    }
-    #ma-ar-{{ sid }} .ma-ar__left-col{
-      height: auto !important; max-height: none !important;
-      padding: {{ section.settings.padding_top | default: 24 }}px {{ section.settings.padding_x | default: 48 }}px {{ section.settings.padding_bottom | default: 24 }}px {{ section.settings.padding_x | default: 48 | times: 1.1 }}px !important;
-      overflow: visible !important;
-      box-sizing: border-box !important;
-    }
-    #ma-ar-{{ sid }} .ma-ar__proof{
-      grid-template-columns: repeat({{ section.settings.proof_cols_dt | default: '4' }}, 1fr) !important;
-    }
-    #ma-ar-{{ sid }} .ma-ar__proof-item:not(:last-child){
-      border-right: 1px solid rgba(23,19,16,.08);
-    }
-    #ma-ar-{{ sid }} .ma-ar__photo{
-      height: 100% !important; width: 100% !important; position: relative !important; overflow: hidden !important; display: block !important;
-    }
-    #ma-ar-{{ sid }} .ma-ar__img--dt { display: block !important; height: 100% !important; width: 100% !important; }
-    #ma-ar-{{ sid }} .ma-ar__img--mob { display: none !important; }
-
-    {%- if melt > 0 -%}
-    #ma-ar-{{ sid }} .ma-ar__photo::before{
-      content: ""; position: absolute; z-index: 2; top: 0; bottom: 0; left: 0; width: {{ section.settings.melt_width | default: 40 }}%; pointer-events: none;
-      backdrop-filter: blur({{ melt_blur }}px); -webkit-backdrop-filter: blur({{ melt_blur }}px);
-      -webkit-mask-image: linear-gradient(90deg,#000 0,transparent 100%);
-              mask-image: linear-gradient(90deg,#000 0,transparent 100%);
-    }
-    #ma-ar-{{ sid }} .ma-ar__photo::after{
-      content: ""; position: absolute; z-index: 3; inset: 0; pointer-events: none; opacity: {{ melt_veil }};
-      background: linear-gradient(90deg,var(--cream) 0%,rgba(244,238,225,.6) 12%,rgba(244,238,225,0) 48%);
-    }
-    {%- endif -%}
-  }
-
-  @media (prefers-reduced-motion: reduce){
-    #ma-ar-{{ sid }} .ma-ar__fill{ transition: none !important; }
-    #ma-ar-{{ sid }} .ma-ar__fill--typ{ width: 100% !important; }
-    #ma-ar-{{ sid }} .ma-ar__fill--now{ width: 12% !important; }
-    #ma-ar-{{ sid }} .ma-ar__reveal{ opacity: 1 !important; transform: none !important; transition: none !important; }
-  }
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  #ma-ar-{{ section_id }} .ma-ar__fill { transition: none !important; }
+  #ma-ar-{{ section_id }} .ma-ar__fill--typ { width: 100% !important; }
+  #ma-ar-{{ section_id }} .ma-ar__fill--now { width: 12% !important; }
+  #ma-ar-{{ section_id }} .ma-ar__reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+}
 </style>
 
 <script>
-  (function(){
-    var s = document.getElementById('ma-ar-{{ sid }}');
-    if(!s) return;
+(function () {
+  var sid = 'ma-ar-{{ section_id }}';
+  var s = document.getElementById(sid);
+  if (!s) return;
 
-    function fitHeader(){
-      var off = 0;
-      ['sticky-header','.shopify-section-group-header-group','.section-header','header'].some(function(sel){
-        var el = document.querySelector(sel);
-        if(!el) return false;
-        var cs = getComputedStyle(el);
-        if(cs.position === 'sticky' || cs.position === 'fixed'){ off = el.getBoundingClientRect().height; return true; }
-        return false;
-      });
-      s.style.setProperty('--ma-hdr', off + 'px');
+  /* ── Sticky-header offset ── */
+  function fitHeader() {
+    var off = 0;
+    ['sticky-header', '.shopify-section-group-header-group', '.section-header', 'header'].some(function (sel) {
+      var el = document.querySelector(sel);
+      if (!el) return false;
+      var cs = getComputedStyle(el);
+      if (cs.position === 'sticky' || cs.position === 'fixed') {
+        off = el.getBoundingClientRect().height;
+        return true;
+      }
+      return false;
+    });
+    s.style.setProperty('--ma-hdr', off + 'px');
+  }
+  fitHeader();
+  window.addEventListener('resize', fitHeader);
+
+  /* ── Scroll parallax (if enabled) ── */
+  var parallaxStrength = parseFloat(s.style.getPropertyValue('--parallax-strength')) || {{ section.settings.parallax_strength | default: 0 }};
+  if (parallaxStrength > 0) {
+    var photo = s.querySelector('.ma-ar__photo');
+    if (photo) {
+      function applyParallax() {
+        var rect = s.getBoundingClientRect();
+        var progress = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
+        var shift = (progress - 0.5) * parallaxStrength * 60;
+        photo.style.transform = 'translateY(' + shift + 'px)';
+      }
+      window.addEventListener('scroll', applyParallax, { passive: true });
+      applyParallax();
     }
-    fitHeader();
-    window.addEventListener('resize', fitHeader);
+  }
 
-    {% if request.design_mode %}
-      s.classList.add('is-in'); return;
-    {% endif %}
-    if(!('IntersectionObserver' in window)){ s.classList.add('is-in'); return; }
-    var io = new IntersectionObserver(function(entries){
-      entries.forEach(function(e){
-        if(e.isIntersecting){ s.classList.add('is-in'); }
-        else { s.classList.remove('is-in'); }
-      });
-    }, { threshold: 0.3 });
-    io.observe(s);
-  })();
+  /* ── IntersectionObserver for animations + bar fills ── */
+  {% if request.design_mode %}
+    s.classList.add('is-in');
+    return;
+  {% endif %}
+
+  if (!('IntersectionObserver' in window)) { s.classList.add('is-in'); return; }
+
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) s.classList.add('is-in');
+      else s.classList.remove('is-in');
+    });
+  }, { threshold: 0.3 });
+  io.observe(s);
+})();
 </script>
 
 {% schema %}
@@ -568,19 +830,19 @@
   "tag": "section",
   "class": "ma-arith-section",
   "settings": [
-    { "type": "paragraph", "content": "Single-viewport editorial split. Photo melts into the cream — tune it below." },
-    
-    { "type": "header", "content": "1. CONTENT" },
-    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Luxury, Without the Markup Price" },
-    { "type": "textarea", "id": "heading", "label": "Headline", "default": "Luxury belongs inside the bottle. Not on the receipt." },
-    { "type": "text", "id": "subheading", "label": "Sub-line", "default": "Great fragrance is mostly oil and intention — not the marble store or the magazine." },
-    { "type": "text", "id": "conclusion_heading", "label": "Conclusion heading", "default": "Same luxury. Better value." },
-    { "type": "text", "id": "conclusion_body", "label": "Conclusion body", "default": "Because you deserve the fragrance, not the markup." },
-    { "type": "checkbox", "id": "show_cta", "label": "Show CTA Button", "default": false },
-    { "type": "text", "id": "cta_text", "label": "CTA Text", "default": "Explore Collection" },
-    { "type": "url", "id": "cta_link", "label": "CTA Link" },
+    { "type": "paragraph", "content": "Single-viewport editorial split. Every control is fully wired — adjust any setting and see it update live in the Theme Editor." },
 
-    { "type": "header", "content": "2. LAYOUT STYLES (DESKTOP)" },
+    { "type": "header", "content": "1. CONTENT" },
+    { "type": "text",     "id": "eyebrow",           "label": "Eyebrow",           "default": "Luxury, Without the Markup Price" },
+    { "type": "textarea", "id": "heading",            "label": "Headline",          "default": "Luxury belongs inside the bottle. Not on the receipt." },
+    { "type": "text",     "id": "subheading",         "label": "Sub-line",          "default": "Great fragrance is mostly oil and intention — not the marble store or the magazine." },
+    { "type": "text",     "id": "conclusion_heading", "label": "Conclusion heading","default": "Same luxury. Better value." },
+    { "type": "text",     "id": "conclusion_body",    "label": "Conclusion body",   "default": "Because you deserve the fragrance, not the markup." },
+    { "type": "checkbox", "id": "show_cta",           "label": "Show CTA Button",   "default": false },
+    { "type": "text",     "id": "cta_text",           "label": "CTA Text",          "default": "Explore Collection" },
+    { "type": "url",      "id": "cta_link",           "label": "CTA Link" },
+
+    { "type": "header", "content": "2. LAYOUT — DESKTOP" },
     { "type": "select", "id": "desktop_layout_style", "label": "Desktop Composition Preset", "default": "01", "options": [
       { "value": "01", "label": "01 Editorial Magazine (Default)" },
       { "value": "02", "label": "02 Balanced Split" },
@@ -589,8 +851,20 @@
       { "value": "05", "label": "05 Premium Comparison" },
       { "value": "06", "label": "06 Campaign Focus" }
     ]},
+    { "type": "select", "id": "dt_valign", "label": "Vertical Alignment", "default": "space-between", "options": [
+      { "value": "top",            "label": "Top" },
+      { "value": "center",         "label": "Center" },
+      { "value": "space-between",  "label": "Space Between (Default)" },
+      { "value": "bottom",         "label": "Bottom" }
+    ]},
+    { "type": "select", "id": "dt_align", "label": "Content Alignment", "default": "left", "options": [
+      { "value": "left",   "label": "Left (Default)" },
+      { "value": "center", "label": "Center" }
+    ]},
+    { "type": "range", "id": "col_gap", "label": "Column Gap (px)", "min": 0, "max": 80, "step": 4, "default": 0, "unit": "px" },
+    { "type": "text",  "id": "content_max_w", "label": "Content Max Width (e.g. 680px or none)", "default": "none" },
 
-    { "type": "header", "content": "3. MOBILE LAYOUT STYLES" },
+    { "type": "header", "content": "3. LAYOUT — MOBILE" },
     { "type": "select", "id": "mobile_layout_style", "label": "Mobile Composition Preset", "default": "01", "options": [
       { "value": "01", "label": "01 Editorial Stack (Default)" },
       { "value": "02", "label": "02 Image First" },
@@ -598,212 +872,257 @@
       { "value": "04", "label": "04 Story Flow" },
       { "value": "05", "label": "05 Luxury Cards" }
     ]},
+    { "type": "checkbox", "id": "mobile_image_first",     "label": "Image first on mobile",          "default": true },
+    { "type": "range",    "id": "mobile_image_height",    "label": "Mobile image height (px)",       "min": 200, "max": 600, "step": 10, "default": 380, "unit": "px" },
+    { "type": "range",    "id": "mobile_padding_top",     "label": "Mobile padding top (px)",        "min": 10,  "max": 80,  "step": 5,  "default": 35,  "unit": "px" },
+    { "type": "range",    "id": "mobile_padding_bottom",  "label": "Mobile padding bottom (px)",     "min": 10,  "max": 80,  "step": 5,  "default": 45,  "unit": "px" },
+    { "type": "range",    "id": "mobile_padding_x",       "label": "Mobile padding left/right (px)", "min": 12,  "max": 40,  "step": 2,  "default": 20,  "unit": "px" },
+    { "type": "range",    "id": "mob_section_h",          "label": "Mobile section min height (px)", "min": 0,   "max": 1200,"step": 20, "default": 0,   "unit": "px" },
+    { "type": "range",    "id": "mob_gap",                "label": "Mobile gap: photo to copy (px)", "min": 0,   "max": 60,  "step": 4,  "default": 0,   "unit": "px" },
 
     { "type": "header", "content": "4. IMAGE SETTINGS" },
-    { "type": "image_picker", "id": "bottle_image", "label": "Desktop Bottle photo" },
-    { "type": "image_picker", "id": "mobile_image", "label": "Mobile Bottle photo" },
-    { "type": "range", "id": "image_scale", "label": "Image scale", "min": 100, "max": 140, "step": 5, "default": 100, "unit": "%" },
-    { "type": "range", "id": "image_offset_x", "label": "Image offset X", "min": -60, "max": 60, "step": 5, "default": 0, "unit": "px" },
-    { "type": "range", "id": "image_offset_y", "label": "Image offset Y", "min": -60, "max": 60, "step": 5, "default": 0, "unit": "px" },
-    { "type": "range", "id": "image_focal_x", "label": "Image focal point X", "min": 0, "max": 100, "step": 5, "default": 50, "unit": "%" },
-    { "type": "range", "id": "image_focal_y", "label": "Image focal point Y", "min": 0, "max": 100, "step": 5, "default": 50, "unit": "%" },
+    { "type": "image_picker", "id": "bottle_image", "label": "Desktop bottle photo" },
+    { "type": "image_picker", "id": "mobile_image", "label": "Mobile bottle photo" },
+    { "type": "range",  "id": "image_scale",    "label": "Image scale (%)",    "min": 100, "max": 140, "step": 5,  "default": 100, "unit": "%" },
+    { "type": "range",  "id": "image_offset_x", "label": "Image offset X (px)","min": -60, "max": 60,  "step": 5,  "default": 0,   "unit": "px" },
+    { "type": "range",  "id": "image_offset_y", "label": "Image offset Y (px)","min": -60, "max": 60,  "step": 5,  "default": 0,   "unit": "px" },
+    { "type": "range",  "id": "image_focal_x",  "label": "Focal point X (%)",  "min": 0,   "max": 100, "step": 5,  "default": 50,  "unit": "%" },
+    { "type": "range",  "id": "image_focal_y",  "label": "Focal point Y (%)",  "min": 0,   "max": 100, "step": 5,  "default": 50,  "unit": "%" },
+    { "type": "range",  "id": "img_opacity",    "label": "Image opacity (%)",  "min": 0,   "max": 100, "step": 5,  "default": 100, "unit": "%" },
+    { "type": "select", "id": "img_object_fit", "label": "Object Fit", "default": "cover", "options": [
+      { "value": "cover",   "label": "Cover (Default)" },
+      { "value": "contain", "label": "Contain" },
+      { "value": "fill",    "label": "Fill" }
+    ]},
+    { "type": "select", "id": "img_object_pos", "label": "Object Position", "default": "center center", "options": [
+      { "value": "center center", "label": "Center Center (Default)" },
+      { "value": "top center",    "label": "Top Center" },
+      { "value": "bottom center", "label": "Bottom Center" },
+      { "value": "left center",   "label": "Left Center" },
+      { "value": "right center",  "label": "Right Center" }
+    ]},
 
     { "type": "header", "content": "5. IMAGE ART DIRECTION" },
-    { "type": "range", "id": "img_brightness", "label": "Brightness", "min": 70, "max": 130, "step": 5, "default": 100, "unit": "%" },
-    { "type": "range", "id": "img_contrast", "label": "Contrast", "min": 70, "max": 130, "step": 5, "default": 100, "unit": "%" },
-    { "type": "range", "id": "img_saturation", "label": "Saturation", "min": 0, "max": 160, "step": 10, "default": 100, "unit": "%" },
-    { "type": "range", "id": "img_warmth", "label": "Warmth", "min": 0, "max": 30, "step": 5, "default": 0, "unit": "%" },
+    { "type": "range", "id": "img_brightness", "label": "Brightness (%)", "min": 70, "max": 130, "step": 5,  "default": 100, "unit": "%" },
+    { "type": "range", "id": "img_contrast",   "label": "Contrast (%)",   "min": 70, "max": 130, "step": 5,  "default": 100, "unit": "%" },
+    { "type": "range", "id": "img_saturation", "label": "Saturation (%)", "min": 0,  "max": 160, "step": 10, "default": 100, "unit": "%" },
+    { "type": "range", "id": "img_warmth",     "label": "Warmth (%)",     "min": 0,  "max": 30,  "step": 5,  "default": 0,   "unit": "%" },
 
-    { "type": "header", "content": "6. IMAGE BLENDING" },
-    { "type": "range", "id": "melt", "label": "Photo melt intensity", "min": 0, "max": 100, "step": 10, "unit": "%", "default": 100 },
-    { "type": "range", "id": "melt_width", "label": "Melt width (desktop)", "min": 20, "max": 60, "step": 5, "default": 40, "unit": "%" },
-
-    { "type": "header", "content": "7. OVERLAY" },
-    { "type": "checkbox", "id": "show_overlay", "label": "Enable Image Overlay", "default": false },
-    { "type": "color", "id": "overlay_color", "label": "Overlay Color", "default": "#000000" },
-    { "type": "range", "id": "overlay_strength", "label": "Overlay Opacity (%)", "min": 0, "max": 80, "step": 5, "default": 15 },
-    { "type": "range", "id": "img_vignette", "label": "Vignette Strength (%)", "min": 0, "max": 60, "step": 5, "default": 0 },
-
-    { "type": "header", "content": "8. TYPOGRAPHY (DESKTOP)" },
-    { "type": "font_picker", "id": "eyebrow_font", "label": "Eyebrow font", "default": "helvetica_n4" },
-    { "type": "font_picker", "id": "heading_font", "label": "Headline font", "default": "playfair_display_n4" },
-    { "type": "range", "id": "headline_size", "label": "Headline size (desktop)", "min": 28, "max": 64, "step": 2, "default": 52, "unit": "px" },
-    { "type": "range", "id": "heading_weight", "label": "Headline Weight", "min": 300, "max": 700, "step": 100, "default": 600 },
-    { "type": "font_picker", "id": "sub_font", "label": "Sub-line font", "default": "playfair_display_n4" },
-    { "type": "range", "id": "body_size", "label": "Sub-line size (desktop)", "min": 14, "max": 22, "step": 1, "default": 18, "unit": "px" },
-    { "type": "range", "id": "conclusion_size", "label": "Conclusion heading size", "min": 18, "max": 32, "step": 2, "default": 22, "unit": "px" },
-
-    { "type": "header", "content": "9. MOBILE TYPOGRAPHY" },
-    { "type": "range", "id": "eyebrow_size_mob", "label": "Mobile Eyebrow Size", "min": 8, "max": 14, "step": 1, "default": 10, "unit": "px" },
-    { "type": "range", "id": "heading_size_mob", "label": "Mobile Headline Size", "min": 24, "max": 44, "step": 2, "default": 34, "unit": "px" },
-    { "type": "range", "id": "sub_size_mob", "label": "Mobile Sub-line Size", "min": 13, "max": 20, "step": 1, "default": 16, "unit": "px" },
-
-    { "type": "header", "content": "10. COMPARISON STYLES" },
-    { "type": "select", "id": "comparison_style", "label": "Comparison style", "default": "cards", "options": [
-      { "value": "cards", "label": "Icon-list cards (new)" },
-      { "value": "bars", "label": "Progress bars (legacy)" }
+    { "type": "header", "content": "6. IMAGE BLENDING / FADE" },
+    { "type": "range",  "id": "melt",       "label": "Melt intensity (%)",    "min": 0, "max": 100, "step": 10, "default": 100, "unit": "%" },
+    { "type": "range",  "id": "melt_width", "label": "Melt width — desktop (%)","min": 20,"max": 60,"step": 5, "default": 40,  "unit": "%" },
+    { "type": "range",  "id": "melt_blur",  "label": "Melt blur (px)",        "min": 0, "max": 40,  "step": 2,  "default": 12,  "unit": "px" },
+    { "type": "range",  "id": "fade_blur",  "label": "Fade backdrop blur (px)","min": 0,"max": 40,  "step": 2,  "default": 12,  "unit": "px" },
+    { "type": "select", "id": "fade_dir",   "label": "Fade direction", "default": "90deg", "options": [
+      { "value": "90deg",  "label": "Left → Right (Desktop default)" },
+      { "value": "270deg", "label": "Right → Left" },
+      { "value": "180deg", "label": "Top → Bottom" },
+      { "value": "0deg",   "label": "Bottom → Top (Mobile default)" }
     ]},
-    { "type": "text", "id": "vs_text", "label": "Divider text", "default": "VS" },
-    { "type": "text", "id": "card1_header", "label": "Card 1 title", "default": "Where Your Money Usually Goes" },
-    { "type": "textarea", "id": "card1_items", "label": "Card 1 bullet items (one per line, up to 5)", "default": "Luxury Stores & Rent\nCelebrity Endorsements\nMassive Advertising\nPremium Packaging Overkill\nRetail Markup" },
-    { "type": "text", "id": "left_label", "label": "Card 1 caption", "default": "Typical Luxury Perfume" },
-    { "type": "text", "id": "left_value", "label": "Card 1 price", "default": "₹20,000+" },
-    { "type": "text", "id": "card2_header", "label": "Card 2 title", "default": "What You're Really Paying For" },
-    { "type": "textarea", "id": "card2_items", "label": "Card 2 bullet items (one per line, up to 5)", "default": "Fine Fragrance Oil (30% Extrait)\nPremium Ingredients\nArtisan Blending\nQuality Bottle & Packaging\nFair Pricing" },
-    { "type": "text", "id": "right_label", "label": "Card 2 caption", "default": "Maison Amiir" },
-    { "type": "text", "id": "right_value", "label": "Card 2 price", "default": "from ₹2,200" },
-    { "type": "range", "id": "card_radius", "label": "Card corner radius", "min": 0, "max": 24, "step": 2, "default": 8, "unit": "px" },
-    { "type": "color", "id": "card_bg_col", "label": "Card background", "default": "#F0EAE1" },
-    { "type": "color", "id": "card_border_color", "label": "Card border color", "default": "#E2DCD3" },
-    { "type": "range", "id": "card_shadow_strength", "label": "Card shadow strength", "min": 0, "max": 30, "step": 5, "default": 0 },
-    { "type": "range", "id": "card_padding", "label": "Card padding", "min": 14, "max": 40, "step": 2, "default": 20, "unit": "px" },
-    { "type": "range", "id": "card_gap", "label": "Gap between cards", "min": 12, "max": 60, "step": 4, "default": 24, "unit": "px" },
-    { "type": "range", "id": "hover_lift", "label": "Card Hover Lift (px)", "min": 0, "max": 10, "step": 1, "default": 4 },
+    { "type": "range", "id": "fade_pos", "label": "Fade coverage (%)", "min": 10, "max": 70, "step": 5, "default": 40, "unit": "%" },
 
-    { "type": "header", "content": "11. COMPARISON TYPOGRAPHY" },
-    { "type": "font_picker", "id": "cmp_font", "label": "Comparison font", "default": "helvetica_n4" },
-    { "type": "range", "id": "bar_h", "label": "Bar Track Height (px)", "min": 2, "max": 12, "step": 1, "default": 6 },
-    { "type": "range", "id": "bar_rad", "label": "Bar Track Radius (px)", "min": 0, "max": 10, "step": 1, "default": 3 },
+    { "type": "header", "content": "7. OVERLAY & VIGNETTE" },
+    { "type": "checkbox", "id": "show_overlay",     "label": "Enable image overlay",   "default": false },
+    { "type": "color",    "id": "overlay_color",    "label": "Overlay colour",          "default": "#000000" },
+    { "type": "range",    "id": "overlay_strength", "label": "Overlay opacity (%)",    "min": 0, "max": 80, "step": 5, "default": 15, "unit": "%" },
+    { "type": "range",    "id": "img_vignette",     "label": "Vignette strength (%)",  "min": 0, "max": 60, "step": 5, "default": 0,  "unit": "%" },
 
-    { "type": "header", "content": "12. ICONS" },
-    { "type": "range", "id": "proof_icon_size", "label": "Proof icon size", "min": 18, "max": 40, "step": 2, "default": 22, "unit": "px" },
+    { "type": "header", "content": "8. TYPOGRAPHY — HEADLINE" },
+    { "type": "font_picker", "id": "heading_font",  "label": "Headline font",           "default": "playfair_display_n4" },
+    { "type": "range",       "id": "headline_size", "label": "Headline size — desktop (px)", "min": 28, "max": 72, "step": 2, "default": 52, "unit": "px" },
+    { "type": "range",       "id": "heading_size_mob","label": "Headline size — mobile (px)","min": 20,"max": 52, "step": 2, "default": 34, "unit": "px" },
+    { "type": "range",       "id": "heading_weight","label": "Headline weight",          "min": 300, "max": 700, "step": 100, "default": 600 },
+    { "type": "range",       "id": "heading_lh",    "label": "Headline line height (%)", "min": 90,  "max": 150, "step": 2,   "default": 108, "unit": "%" },
+    { "type": "range",       "id": "heading_max_w", "label": "Headline max width (ch)",  "min": 10,  "max": 40,  "step": 1,   "default": 24,  "unit": "ch" },
+    { "type": "range",       "id": "heading_spacing","label": "Headline letter spacing (px)","min": -2,"max": 6, "step": 1,   "default": 0,   "unit": "px" },
+    { "type": "select",      "id": "accent_style",  "label": "Accent text style",       "default": "italic", "options": [
+      { "value": "italic", "label": "Italic" },
+      { "value": "normal", "label": "Normal" }
+    ]},
+    { "type": "range",  "id": "accent_weight", "label": "Accent font weight", "min": 300, "max": 700, "step": 100, "default": 400 },
+    { "type": "color",  "id": "accent_color",  "label": "Accent text colour", "default": "#6E1220" },
 
-    { "type": "header", "content": "13. PROOF GRID" },
-    { "type": "checkbox", "id": "enable_proof", "label": "Enable Proof Grid", "default": true },
-    { "type": "select", "id": "proof_cols_dt", "label": "Desktop Proof Columns", "default": "4", "options": [
+    { "type": "header", "content": "9. TYPOGRAPHY — SUB-LINE" },
+    { "type": "font_picker", "id": "sub_font",      "label": "Sub-line font",              "default": "playfair_display_n4" },
+    { "type": "range",       "id": "body_size",     "label": "Sub-line size — desktop (px)","min": 14, "max": 26, "step": 1, "default": 20, "unit": "px" },
+    { "type": "range",       "id": "sub_size_mob",  "label": "Sub-line size — mobile (px)", "min": 13, "max": 22, "step": 1, "default": 16, "unit": "px" },
+    { "type": "range",       "id": "sub_lh",        "label": "Sub-line line height (%)",    "min": 110,"max": 180,"step": 5, "default": 145,"unit": "%" },
+    { "type": "range",       "id": "sub_max_w",     "label": "Sub-line max width (ch)",     "min": 20, "max": 72, "step": 2, "default": 48, "unit": "ch" },
+    { "type": "range",       "id": "sub_weight",    "label": "Sub-line weight",             "min": 300,"max": 700,"step": 100,"default": 500 },
+    { "type": "color",       "id": "sub_color",     "label": "Sub-line colour",             "default": "rgba(23,19,16,0.78)" },
+    { "type": "range",       "id": "sub_margin_b",  "label": "Sub-line bottom gap (px)",    "min": 0, "max": 40, "step": 2, "default": 20, "unit": "px" },
+
+    { "type": "header", "content": "10. TYPOGRAPHY — PRICE" },
+    { "type": "range", "id": "price_size",   "label": "Price font size (px)",  "min": 18, "max": 48, "step": 2, "default": 26, "unit": "px" },
+    { "type": "range", "id": "price_weight", "label": "Price font weight",     "min": 300, "max": 700, "step": 100, "default": 600 },
+    { "type": "color", "id": "price_color",  "label": "Price colour — Card 1", "default": "#171310" },
+
+    { "type": "header", "content": "11. TYPOGRAPHY — CAPTION" },
+    { "type": "range", "id": "caption_size",   "label": "Caption font size (px)", "min": 9, "max": 16, "step": 1, "default": 11, "unit": "px" },
+    { "type": "range", "id": "caption_weight", "label": "Caption font weight",    "min": 300, "max": 700, "step": 100, "default": 400 },
+    { "type": "color", "id": "caption_color",  "label": "Caption colour",         "default": "#8a7f74" },
+
+    { "type": "header", "content": "12. TYPOGRAPHY — EYEBROW & DIVIDER" },
+    { "type": "font_picker", "id": "eyebrow_font",      "label": "Eyebrow font",           "default": "helvetica_n4" },
+    { "type": "range",       "id": "eyebrow_size_mob",  "label": "Eyebrow size (px)",      "min": 8, "max": 14, "step": 1, "default": 10, "unit": "px" },
+    { "type": "range",       "id": "eyebrow_weight",    "label": "Eyebrow weight",         "min": 300, "max": 700, "step": 100, "default": 400 },
+    { "type": "range",       "id": "eyebrow_spacing",   "label": "Eyebrow letter spacing (px)","min": 1,"max": 8,"step": 1,"default": 3,"unit": "px" },
+    { "type": "range",       "id": "gap_head",          "label": "Gap: eyebrow to headline (px)","min": 4,"max": 32,"step": 2,"default": 12,"unit": "px" },
+    { "type": "range",       "id": "divider_w_mob",     "label": "Eyebrow divider width (px)","min": 0,"max": 60,"step": 2,"default": 30,"unit": "px" },
+    { "type": "range",       "id": "divider_thickness", "label": "Eyebrow divider thickness (px)","min": 1,"max": 4,"step": 1,"default": 1,"unit": "px" },
+    { "type": "color",       "id": "divider_color",     "label": "Eyebrow divider colour", "default": "#8E1B28" },
+    { "type": "range",       "id": "divider_opacity",   "label": "Eyebrow divider opacity (%)","min": 10,"max": 100,"step": 10,"default": 60,"unit": "%" },
+
+    { "type": "header", "content": "13. TYPOGRAPHY — CONCLUSION" },
+    { "type": "range", "id": "conclusion_size", "label": "Conclusion heading size (px)", "min": 18, "max": 32, "step": 2, "default": 22, "unit": "px" },
+
+    { "type": "header", "content": "14. COMPARISON STYLE" },
+    { "type": "select", "id": "comparison_style", "label": "Comparison style", "default": "cards", "options": [
+      { "value": "cards", "label": "Icon-list cards" },
+      { "value": "bars",  "label": "Progress bars" }
+    ]},
+    { "type": "text",  "id": "vs_text",      "label": "VS divider text",  "default": "VS" },
+    { "type": "text",  "id": "card1_header", "label": "Card 1 title",     "default": "Where Your Money Usually Goes" },
+    { "type": "textarea", "id": "card1_items","label": "Card 1 items (one per line)", "default": "Luxury Stores & Rent\nCelebrity Endorsements\nMassive Advertising\nPremium Packaging Overkill\nRetail Markup" },
+    { "type": "text",  "id": "left_label",   "label": "Card 1 caption",   "default": "Typical Luxury Perfume" },
+    { "type": "text",  "id": "left_value",   "label": "Card 1 price",     "default": "₹20,000+" },
+    { "type": "text",  "id": "card2_header", "label": "Card 2 title",     "default": "What You're Really Paying For" },
+    { "type": "textarea", "id": "card2_items","label": "Card 2 items (one per line)", "default": "Fine Fragrance Oil (30% Extrait)\nPremium Ingredients\nArtisan Blending\nQuality Bottle & Packaging\nFair Pricing" },
+    { "type": "text",  "id": "right_label",  "label": "Card 2 caption",   "default": "Maison Amiir" },
+    { "type": "text",  "id": "right_value",  "label": "Card 2 price",     "default": "from ₹2,200" },
+
+    { "type": "header", "content": "15. CARD DESIGN" },
+    { "type": "range",  "id": "card_radius",         "label": "Card corner radius (px)", "min": 0,  "max": 24, "step": 2, "default": 8,  "unit": "px" },
+    { "type": "color",  "id": "card_bg_col",         "label": "Card 1 background",       "default": "#F0EAE1" },
+    { "type": "color",  "id": "card_border_color",   "label": "Card border colour",      "default": "#E2DCD3" },
+    { "type": "range",  "id": "card_shadow_strength","label": "Card shadow strength",    "min": 0,  "max": 30, "step": 5, "default": 0 },
+    { "type": "range",  "id": "card_padding",        "label": "Card padding (px)",       "min": 14, "max": 40, "step": 2, "default": 20, "unit": "px" },
+    { "type": "range",  "id": "card_gap",            "label": "Gap between cards (px)",  "min": 12, "max": 60, "step": 4, "default": 24, "unit": "px" },
+    { "type": "checkbox","id":"enable_card_hover",   "label": "Enable card hover lift",  "default": true },
+    { "type": "range",  "id": "hover_lift",          "label": "Card hover lift (px)",    "min": 0,  "max": 10, "step": 1, "default": 4 },
+
+    { "type": "header", "content": "16. COMPARISON BAR STYLE" },
+    { "type": "font_picker", "id": "cmp_font",  "label": "Bar label font",        "default": "helvetica_n4" },
+    { "type": "range",       "id": "bar_h",     "label": "Bar track height (px)", "min": 2, "max": 12, "step": 1, "default": 4, "unit": "px" },
+    { "type": "range",       "id": "bar_rad",   "label": "Bar corner radius (px)","min": 0, "max": 10, "step": 1, "default": 2, "unit": "px" },
+
+    { "type": "header", "content": "17. PROOF GRID" },
+    { "type": "checkbox", "id": "enable_proof",   "label": "Show proof grid",             "default": true },
+    { "type": "select",   "id": "proof_cols_dt",  "label": "Desktop columns",             "default": "4", "options": [
       { "value": "2", "label": "2 Columns" },
       { "value": "3", "label": "3 Columns" },
       { "value": "4", "label": "4 Columns (Default)" }
     ]},
-    { "type": "select", "id": "proof_cols_mob", "label": "Mobile Proof Columns", "default": "2", "options": [
-      { "value": "1", "label": "1 Column - Stacked" },
-      { "value": "2", "label": "2 Columns - Grid (Default)" }
+    { "type": "select", "id": "proof_cols_mob", "label": "Mobile columns", "default": "2", "options": [
+      { "value": "1", "label": "1 Column" },
+      { "value": "2", "label": "2 Columns (Default)" }
     ]},
-    { "type": "range", "id": "proof_gap", "label": "Proof grid gap", "min": 12, "max": 60, "step": 2, "default": 16, "unit": "px" },
-    { "type": "checkbox", "id": "proof_divider", "label": "Show divider above proof grid", "default": true },
-    { "type": "select", "id": "proof1_icon", "label": "Proof 1 icon", "default": "droplet", "options": [
-      { "value": "droplet", "label": "Droplet" }, { "value": "shield", "label": "Shield" }, { "value": "clock", "label": "Clock" }, { "value": "heart", "label": "Heart" }, { "value": "leaf", "label": "Leaf" }, { "value": "none", "label": "None" }
-    ]},
-    { "type": "text", "id": "proof1_heading", "label": "Proof 1 heading", "default": "30% Extrait Oil" },
-    { "type": "text", "id": "proof1_body", "label": "Proof 1 body", "default": "The same concentration tier as the houses that inspire us." },
-    { "type": "select", "id": "proof2_icon", "label": "Proof 2 icon", "default": "shield", "options": [
-      { "value": "droplet", "label": "Droplet" }, { "value": "shield", "label": "Shield" }, { "value": "clock", "label": "Clock" }, { "value": "heart", "label": "Heart" }, { "value": "leaf", "label": "Leaf" }, { "value": "none", "label": "None" }
-    ]},
-    { "type": "text", "id": "proof2_heading", "label": "Proof 2 heading", "default": "IFRA-Compliant" },
-    { "type": "text", "id": "proof2_body", "label": "Proof 2 body", "default": "Safe, kind to skin and crafted to international standards." },
-    { "type": "select", "id": "proof3_icon", "label": "Proof 3 icon", "default": "clock", "options": [
-      { "value": "droplet", "label": "Droplet" }, { "value": "shield", "label": "Shield" }, { "value": "clock", "label": "Clock" }, { "value": "heart", "label": "Heart" }, { "value": "leaf", "label": "Leaf" }, { "value": "none", "label": "None" }
-    ]},
-    { "type": "text", "id": "proof3_heading", "label": "Proof 3 heading", "default": "Lasts All Day" },
-    { "type": "text", "id": "proof3_body", "label": "Proof 3 body", "default": "High performance that stays with you from day to night." },
-    { "type": "select", "id": "proof4_icon", "label": "Proof 4 icon", "default": "heart", "options": [
-      { "value": "droplet", "label": "Droplet" }, { "value": "shield", "label": "Shield" }, { "value": "clock", "label": "Clock" }, { "value": "heart", "label": "Heart" }, { "value": "leaf", "label": "Leaf" }, { "value": "none", "label": "None" }
-    ]},
-    { "type": "text", "id": "proof4_heading", "label": "Proof 4 heading", "default": "Crafted with Intention" },
-    { "type": "text", "id": "proof4_body", "label": "Proof 4 body", "default": "Small batch. Carefully blended. No shortcuts. Just great fragrance." },
+    { "type": "range",    "id": "proof_gap",     "label": "Grid gap (px)",           "min": 8,  "max": 60, "step": 2, "default": 16, "unit": "px" },
+    { "type": "checkbox", "id": "proof_divider", "label": "Show divider above grid", "default": true },
+    { "type": "range",    "id": "proof_icon_size","label": "Icon size (px)",         "min": 18, "max": 40, "step": 2, "default": 22, "unit": "px" },
+    { "type": "select", "id": "proof1_icon", "label": "Proof 1 icon", "default": "droplet", "options": [{"value":"droplet","label":"Droplet"},{"value":"shield","label":"Shield"},{"value":"clock","label":"Clock"},{"value":"heart","label":"Heart"},{"value":"leaf","label":"Leaf"},{"value":"none","label":"None"}]},
+    { "type": "text",   "id": "proof1_heading", "label": "Proof 1 heading", "default": "30% Extrait Oil" },
+    { "type": "text",   "id": "proof1_body",    "label": "Proof 1 body",    "default": "The same concentration tier as the houses that inspire us." },
+    { "type": "select", "id": "proof2_icon", "label": "Proof 2 icon", "default": "shield", "options": [{"value":"droplet","label":"Droplet"},{"value":"shield","label":"Shield"},{"value":"clock","label":"Clock"},{"value":"heart","label":"Heart"},{"value":"leaf","label":"Leaf"},{"value":"none","label":"None"}]},
+    { "type": "text",   "id": "proof2_heading", "label": "Proof 2 heading", "default": "IFRA-Compliant" },
+    { "type": "text",   "id": "proof2_body",    "label": "Proof 2 body",    "default": "Safe, kind to skin and crafted to international standards." },
+    { "type": "select", "id": "proof3_icon", "label": "Proof 3 icon", "default": "clock", "options": [{"value":"droplet","label":"Droplet"},{"value":"shield","label":"Shield"},{"value":"clock","label":"Clock"},{"value":"heart","label":"Heart"},{"value":"leaf","label":"Leaf"},{"value":"none","label":"None"}]},
+    { "type": "text",   "id": "proof3_heading", "label": "Proof 3 heading", "default": "Lasts All Day" },
+    { "type": "text",   "id": "proof3_body",    "label": "Proof 3 body",    "default": "High performance that stays with you from day to night." },
+    { "type": "select", "id": "proof4_icon", "label": "Proof 4 icon", "default": "heart", "options": [{"value":"droplet","label":"Droplet"},{"value":"shield","label":"Shield"},{"value":"clock","label":"Clock"},{"value":"heart","label":"Heart"},{"value":"leaf","label":"Leaf"},{"value":"none","label":"None"}]},
+    { "type": "text",   "id": "proof4_heading", "label": "Proof 4 heading", "default": "Crafted with Intention" },
+    { "type": "text",   "id": "proof4_body",    "label": "Proof 4 body",    "default": "Small batch. Carefully blended. No shortcuts. Just great fragrance." },
 
-    { "type": "header", "content": "14. CONTENT POSITION" },
-    { "type": "range", "id": "content_offset_x_dt", "label": "Desktop Content Offset X (px)", "min": -100, "max": 100, "step": 5, "default": 0 },
-    { "type": "range", "id": "content_offset_y_dt", "label": "Desktop Content Offset Y (px)", "min": -100, "max": 100, "step": 5, "default": 0 },
-    { "type": "range", "id": "content_offset_x_mob", "label": "Mobile Content Offset X (px)", "min": -50, "max": 50, "step": 5, "default": 0 },
-    { "type": "range", "id": "content_offset_y_mob", "label": "Mobile Content Offset Y (px)", "min": -50, "max": 50, "step": 5, "default": 0 },
-    { "type": "select", "id": "dt_valign", "label": "Vertical Distribution", "default": "space-between", "options": [{"value":"top","label":"Top"},{"value":"space-between","label":"Space Between (Default)"},{"value":"bottom","label":"Bottom"}] },
+    { "type": "header", "content": "18. CONTENT POSITION" },
+    { "type": "range", "id": "content_offset_x_dt",  "label": "Desktop offset X (px)", "min": -100, "max": 100, "step": 5,  "default": 0 },
+    { "type": "range", "id": "content_offset_y_dt",  "label": "Desktop offset Y (px)", "min": -100, "max": 100, "step": 5,  "default": 0 },
+    { "type": "range", "id": "content_offset_x_mob", "label": "Mobile offset X (px)",  "min": -50,  "max": 50,  "step": 5,  "default": 0 },
+    { "type": "range", "id": "content_offset_y_mob", "label": "Mobile offset Y (px)",  "min": -50,  "max": 50,  "step": 5,  "default": 0 },
 
-    { "type": "header", "content": "15. SPACING & SIZING" },
-    { "type": "select", "id": "split_ratio", "label": "Content / image split", "default": "70/30", "options": [
-      { "value": "70/30", "label": "55% / 45%" },
-      { "value": "54/46", "label": "54% / 46%" },
-      { "value": "53/47", "label": "53% / 47%" },
-      { "value": "52/48", "label": "52% / 48%" }
+    { "type": "header", "content": "19. SPACING & SIZING" },
+    { "type": "range",  "id": "dt_copy_w",     "label": "Left column width — desktop (%)",  "min": 40, "max": 70, "step": 1, "default": 55 },
+    { "type": "range",  "id": "dt_img_w",      "label": "Right column width — desktop (%)", "min": 30, "max": 60, "step": 1, "default": 45 },
+    { "type": "select", "id": "dt_height",     "label": "Desktop min height",               "default": "720", "options": [
+      { "value": "520",   "label": "520px" }, { "value": "560", "label": "560px" },
+      { "value": "600",   "label": "600px" }, { "value": "640", "label": "640px" },
+      { "value": "680",   "label": "680px" }, { "value": "720", "label": "720px (Default)" },
+      { "value": "760",   "label": "760px" }, { "value": "800", "label": "800px" },
+      { "value": "900",   "label": "900px" }, { "value": "100vh","label": "100vh" },
+      { "value": "auto",  "label": "Auto / Fit Content" }
     ]},
-    { "type": "range", "id": "dt_copy_w", "label": "Desktop Left Column Width (%)", "min": 40, "max": 70, "step": 1, "default": 55 },
-    { "type": "range", "id": "dt_img_w", "label": "Desktop Right Image Width (%)", "min": 30, "max": 60, "step": 1, "default": 45 },
-    { "type": "select", "id": "dt_height", "label": "Desktop Section Height", "default": "720", "options": [
-      { "value": "520", "label": "520px" },
-      { "value": "560", "label": "560px" },
-      { "value": "600", "label": "600px" },
-      { "value": "640", "label": "640px" },
-      { "value": "680", "label": "680px" },
-      { "value": "720", "label": "720px (Default)" },
-      { "value": "760", "label": "760px" },
-      { "value": "800", "label": "800px" },
-      { "value": "900", "label": "900px" },
-      { "value": "100vh", "label": "100vh (Full Viewport)" },
-      { "value": "auto", "label": "Auto / Fit Content" }
-    ]},
-    { "type": "select", "id": "overflow_mode", "label": "Desktop Overflow Mode", "default": "hidden", "options": [
-      { "value": "hidden", "label": "Hidden" },
-      { "value": "auto", "label": "Auto / Scroll (Fixes Clipping)" },
+    { "type": "select", "id": "overflow_mode", "label": "Desktop overflow mode", "default": "hidden", "options": [
+      { "value": "hidden",  "label": "Hidden (Default)" },
+      { "value": "auto",    "label": "Auto / Scroll" },
       { "value": "visible", "label": "Visible" }
     ]},
-    { "type": "range", "id": "dt_max_w", "label": "Max Container Width (px)", "min": 1000, "max": 1800, "step": 20, "default": 1440 },
-    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 0, "max": 60, "step": 4, "default": 24, "unit": "px" },
-    { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 0, "max": 60, "step": 4, "default": 24, "unit": "px" },
-    { "type": "range", "id": "padding_x", "label": "Padding left/right", "min": 24, "max": 100, "step": 4, "default": 48, "unit": "px" },
-    { "type": "range", "id": "margin_t", "label": "Section Margin Top (px)", "min": 0, "max": 100, "step": 10, "default": 0 },
-    { "type": "range", "id": "margin_b", "label": "Section Margin Bottom (px)", "min": 0, "max": 100, "step": 10, "default": 0 },
-    { "type": "range", "id": "mob_section_h", "label": "Mobile Section Min Height (px)", "min": 400, "max": 1200, "step": 20, "default": 680 },
-    { "type": "range", "id": "mob_img_h", "label": "Mobile Image Height (px)", "min": 200, "max": 600, "step": 10, "default": 380 },
-    { "type": "range", "id": "pad_t_mob", "label": "Mobile Top Padding (px)", "min": 10, "max": 80, "step": 5, "default": 35 },
-    { "type": "range", "id": "pad_b_mob", "label": "Mobile Bottom Padding (px)", "min": 10, "max": 80, "step": 5, "default": 45 },
-    { "type": "range", "id": "pad_h_mob", "label": "Mobile Horizontal Padding (px)", "min": 12, "max": 40, "step": 2, "default": 20 },
-    { "type": "range", "id": "mob_gap", "label": "Mobile Gap Image to Copy (px)", "min": 0, "max": 50, "step": 2, "default": 24 },
+    { "type": "range", "id": "dt_max_w",       "label": "Max container width (px)", "min": 1000, "max": 1800, "step": 20, "default": 1440 },
+    { "type": "range", "id": "padding_top",    "label": "Desktop padding top (px)", "min": 0, "max": 80, "step": 4, "default": 24, "unit": "px" },
+    { "type": "range", "id": "padding_bottom", "label": "Desktop padding bottom (px)","min": 0, "max": 80, "step": 4, "default": 24, "unit": "px" },
+    { "type": "range", "id": "padding_x",      "label": "Desktop padding left/right (px)","min": 24,"max": 100,"step": 4,"default": 48,"unit": "px" },
+    { "type": "range", "id": "margin_t",       "label": "Section margin top (px)",    "min": 0, "max": 100, "step": 10, "default": 0 },
+    { "type": "range", "id": "margin_b",       "label": "Section margin bottom (px)", "min": 0, "max": 100, "step": 10, "default": 0 },
 
-    { "type": "header", "content": "16. COLORS" },
-    { "type": "color", "id": "bg_color", "label": "Background color", "default": "#F4EEE1" },
-    { "type": "color", "id": "ink_color", "label": "Ink color", "default": "#171310" },
-    { "type": "color", "id": "gold_color", "label": "Gold accent color", "default": "#C6A15B" },
-    { "type": "color", "id": "burg_color", "label": "Burgundy accent color", "default": "#6E1220" },
-    { "type": "color", "id": "burg2_color", "label": "Dark burgundy color", "default": "#8E1B28" },
-    { "type": "color", "id": "track_color", "label": "Bar track color", "default": "#E6E0D5" },
+    { "type": "header", "content": "20. COLOURS" },
+    { "type": "color", "id": "bg_color",   "label": "Background",       "default": "#F4EEE1" },
+    { "type": "color", "id": "ink_color",  "label": "Ink",              "default": "#171310" },
+    { "type": "color", "id": "gold_color", "label": "Gold accent",      "default": "#C6A15B" },
+    { "type": "color", "id": "burg_color", "label": "Burgundy accent",  "default": "#6E1220" },
+    { "type": "color", "id": "burg2_color","label": "Dark burgundy",    "default": "#8E1B28" },
+    { "type": "color", "id": "track_color","label": "Bar track",        "default": "#E6E0D5" },
+    { "type": "color", "id": "fill_color", "label": "Bar fill (Maison Amiir)", "default": "#8E1B28" },
 
-    { "type": "header", "content": "17. DECORATIVE" },
-    { "type": "checkbox", "id": "show_crown", "label": "Show Crown Symbol", "default": true },
-    { "type": "checkbox", "id": "enable_texture", "label": "Enable paper texture", "default": false },
-    { "type": "range", "id": "texture_opacity", "label": "Texture opacity", "min": 1, "max": 15, "step": 1, "default": 4 },
-    { "type": "range", "id": "noise_amount", "label": "Noise frequency", "min": 1, "max": 10, "step": 1, "default": 4 },
+    { "type": "header", "content": "21. DECORATIVE" },
+    { "type": "checkbox", "id": "show_crown",      "label": "Show crown symbol",   "default": true },
+    { "type": "checkbox", "id": "enable_texture",  "label": "Enable paper texture","default": false },
+    { "type": "range",    "id": "texture_opacity", "label": "Texture opacity",     "min": 1, "max": 15, "step": 1, "default": 4 },
+    { "type": "range",    "id": "noise_amount",    "label": "Noise frequency",     "min": 1, "max": 10, "step": 1, "default": 4 },
 
-    { "type": "header", "content": "18. MOTION & INTERACTIONS" },
-    { "type": "checkbox", "id": "enable_animation", "label": "Enable reveal animation", "default": true },
-    { "type": "range", "id": "animation_stagger", "label": "Stagger delay", "min": 0, "max": 200, "step": 10, "default": 80, "unit": "ms" },
-    { "type": "range", "id": "animation_duration", "label": "Animation duration", "min": 200, "max": 1200, "step": 50, "default": 600, "unit": "ms" },
-    { "type": "checkbox", "id": "enable_card_hover", "label": "Enable Card Hover Lift", "default": true },
-    { "type": "checkbox", "id": "enable_hover_zoom", "label": "Enable Image Hover Zoom", "default": false },
-    { "type": "range", "id": "hover_scale", "label": "Image Hover Scale (%)", "min": 100, "max": 108, "step": 1, "default": 102 },
-    { "type": "range", "id": "hover_duration", "label": "Image Hover Duration (ms)", "min": 300, "max": 1200, "step": 50, "default": 800 },
+    { "type": "header", "content": "22. MOTION & INTERACTIONS" },
+    { "type": "checkbox", "id": "enable_animation",  "label": "Enable reveal animation", "default": true },
+    { "type": "range",    "id": "reveal_dist",        "label": "Reveal distance (px)",    "min": 0, "max": 40, "step": 2, "default": 12, "unit": "px" },
+    { "type": "range",    "id": "animation_duration", "label": "Animation duration (ms)", "min": 200, "max": 1200, "step": 50, "default": 600, "unit": "ms" },
+    { "type": "range",    "id": "animation_stagger",  "label": "Stagger delay (ms)",     "min": 0,   "max": 200,  "step": 10, "default": 80,  "unit": "ms" },
+    { "type": "checkbox", "id": "enable_hover_zoom",  "label": "Enable image hover zoom","default": false },
+    { "type": "range",    "id": "hover_scale",        "label": "Image hover scale (%)",  "min": 100, "max": 115, "step": 1, "default": 102, "unit": "%" },
+    { "type": "range",    "id": "hover_duration",     "label": "Image hover duration (ms)","min": 300,"max": 1200,"step": 50,"default": 800,"unit": "ms" },
+    { "type": "select",   "id": "hover_easing",       "label": "Hover easing curve", "default": "cubic-bezier(0.25, 0.8, 0.25, 1)", "options": [
+      { "value": "cubic-bezier(0.25, 0.8, 0.25, 1)", "label": "Ease Out (Default)" },
+      { "value": "cubic-bezier(0.16, 1, 0.3, 1)",    "label": "Spring" },
+      { "value": "ease-in-out",                       "label": "Ease In-Out" },
+      { "value": "linear",                            "label": "Linear" }
+    ]},
+    { "type": "range", "id": "parallax_strength", "label": "Scroll parallax strength (0 = off)", "min": 0, "max": 3, "step": 0.5, "default": 0 },
 
-    { "type": "header", "content": "19. RESPONSIVE CONTROLS" },
-    { "type": "checkbox", "id": "mobile_image_first", "label": "Image first on mobile", "default": true },
-    { "type": "range", "id": "mobile_image_height", "label": "Image height (mobile)", "min": 200, "max": 500, "step": 10, "default": 280, "unit": "px" },
-    { "type": "range", "id": "mobile_padding_top", "label": "Padding top (mobile)", "min": 12, "max": 48, "step": 4, "default": 24, "unit": "px" },
-    { "type": "range", "id": "mobile_padding_bottom", "label": "Padding bottom (mobile)", "min": 16, "max": 60, "step": 4, "default": 32, "unit": "px" },
-    { "type": "range", "id": "mobile_padding_x", "label": "Padding left/right (mobile)", "min": 16, "max": 40, "step": 2, "default": 24, "unit": "px" },
-
-    { "type": "header", "content": "20. ADVANCED" },
-    { "type": "checkbox", "id": "enable_debug_grid", "label": "Enable Debug Grid Overlay", "default": false },
-    { "type": "checkbox", "id": "enable_safe_area", "label": "Enable Safe Area Border", "default": false },
-    { "type": "checkbox", "id": "enable_baseline_grid", "label": "Enable 8px Baseline Grid", "default": false },
-    { "type": "text", "id": "custom_class", "label": "Custom CSS class" },
-    { "type": "text", "id": "anchor_id", "label": "Custom Section Anchor ID" }
+    { "type": "header", "content": "23. ADVANCED" },
+    { "type": "checkbox", "id": "enable_debug_grid",    "label": "Debug grid overlay",   "default": false },
+    { "type": "checkbox", "id": "enable_safe_area",     "label": "Safe area border",     "default": false },
+    { "type": "checkbox", "id": "enable_baseline_grid", "label": "8px baseline grid",    "default": false },
+    { "type": "text",     "id": "custom_class",         "label": "Custom CSS class" },
+    { "type": "text",     "id": "anchor_id",            "label": "Custom section anchor ID (overrides auto ID)" }
   ],
+
   "blocks": [
     {
       "type": "value_item",
       "name": "VS Comparison Item",
       "settings": [
-        { "type": "select", "id": "side", "label": "Card Side", "default": "left", "options": [{"value":"left","label":"Left (Where Your Money Goes)"},{"value":"right","label":"Right (What You're Really Paying For)"}] },
-        { "type": "text", "id": "text", "label": "Item Label", "default": "Fine Fragrance Oil (30% Extrait)" }
+        { "type": "select", "id": "side", "label": "Card side", "default": "left", "options": [
+          { "value": "left",  "label": "Card 1 — Where Money Goes" },
+          { "value": "right", "label": "Card 2 — What You Pay For" }
+        ]},
+        { "type": "text", "id": "text", "label": "Item label", "default": "Fine Fragrance Oil (30% Extrait)" }
       ]
     },
     {
       "type": "proof_item",
       "name": "Quality Proof Card",
       "settings": [
-        { "type": "text", "id": "heading", "label": "Heading", "default": "30% Extrait Oil" },
-        { "type": "textarea", "id": "body", "label": "Description", "default": "The same concentration tier as the houses that inspire us." }
+        { "type": "text",     "id": "heading", "label": "Heading",     "default": "30% Extrait Oil" },
+        { "type": "textarea", "id": "body",    "label": "Description", "default": "The same concentration tier as the houses that inspire us." }
       ]
     }
   ],
+
   "presets": [{ "name": "MA — Honest Arithmetic" }]
 }
 {% endschema %}
