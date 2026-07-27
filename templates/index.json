@@ -273,7 +273,7 @@
         "content_offset_x_dt": -50,
         "content_offset_y_dt": 0,
         "content_offset_x_mob": 0,
-        "content_offset_y_mob": -50,
+        "content_offset_y_mob": -40,
         "heading_max_width_dt": 610,
         "body_max_width_dt": 520,
         "heading_max_width_mob": 320,
