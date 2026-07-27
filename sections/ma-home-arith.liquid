@@ -1,7 +1,7 @@
 {%- comment -%}
   MAISON AMIIR — Home · Honest Arithmetic V6 (Master Art-Direction Implementation)
   UPDATED: Added fully controllable Card Animation Duration (ms) and Card Stagger Delay (ms) controls.
-  PRESERVED: 65/35 split, editorial reveal motion toggle, validated mobile padding steps, icons, and typography.
+  PRESERVED: 60/30 split, editorial reveal motion toggle, validated mobile padding steps, icons, and typography.
 {%- endcomment -%}
 
 {%- liquid
@@ -22,8 +22,8 @@
   assign now_value = section.settings.right_value | escape | replace: 'from ', '<em>from</em> '
   assign cmp_style = section.settings.comparison_style | default: 'cards'
   
-  assign split_left = 65
-  assign split_right = 35
+  assign split_left = 60
+  assign split_right = 40
 
   assign value_blocks = section.blocks | where: 'type', 'value_item'
   assign proof_blocks = section.blocks | where: 'type', 'proof_item'
@@ -490,7 +490,7 @@
   @media (min-width: 900px){
     #ma-ar-{{ sid }}.ma-ar{
       display: grid !important;
-      grid-template-columns: 65% 35% !important;
+      grid-template-columns: 60% 40% !important;
       height: auto !important;
       min-height: {{ section.settings.dt_height | default: 720 }}px !important;
       overflow: visible !important;
@@ -722,8 +722,8 @@
     { "type": "select", "id": "dt_valign", "label": "Vertical Distribution", "default": "space-between", "options": [{"value":"top","label":"Top"},{"value":"space-between","label":"Space Between (Default)"},{"value":"bottom","label":"Bottom"}] },
 
     { "type": "header", "content": "15. SPACING & SIZING" },
-    { "type": "select", "id": "split_ratio", "label": "Content / image split", "default": "65/35", "options": [
-      { "value": "65/35", "label": "65% / 35%"},
+    { "type": "select", "id": "split_ratio", "label": "Content / image split", "default": "60/30", "options": [
+      { "value": "60/30", "label": "60% / 40%"},
       { "value": "54/46", "label": "54% / 46%" },
       { "value": "53/47", "label": "53% / 47%" },
       { "value": "52/48", "label": "52% / 48%" }
