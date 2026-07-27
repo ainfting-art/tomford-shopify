@@ -104,7 +104,7 @@
   }
 
   .qi__headline {
-    font-family: var(--font-heading--family, serif);
+    font-family: {{ section.settings.headline_font.family | default: 'serif' }}, serif;
     font-weight: 400;
     font-size: clamp(28px, 4.5vw, {{ section.settings.headline_size | default: 52 }}px);
     line-height: {{ section.settings.headline_line_height | default: 1.1 }};
