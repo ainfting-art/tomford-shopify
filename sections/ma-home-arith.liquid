@@ -382,8 +382,9 @@
     box-shadow: 0 14px 34px -10px rgba(0,0,0,0.08);
   }
   #ma-ar-{{ sid }} .ma-ar__card-h{
-    font-family: 'Marcellus',serif; font-size: 10px; letter-spacing: .14em; text-transform: uppercase;
-    color: rgba(23,19,16,.65); margin: 0 0 10px; padding-bottom: 8px; border-bottom: 1px solid rgba(23,19,16,.12);
+    font-family: 'Marcellus',serif; font-size: 12px; font-weight: {{ section.settings.card_title_weight | default: 400 }}; letter-spacing: {{ section.settings.card_title_spacing | default: 0.16 }}em; text-transform: uppercase;
+    color: rgba(23,19,16,.65); margin: 0 0 16px; padding-bottom: 10px; border-bottom: {{ section.settings.card_divider_thickness | default: 1 }}px solid rgba(23,19,16,.12);
+    width: {{ section.settings.card_divider_width | default: 100 }}%;
   }
   #ma-ar-{{ sid }} .ma-ar__card--us .ma-ar__card-h { color: var(--burg2); border-color: rgba(198,161,91,0.28); }
   #ma-ar-{{ sid }} .ma-ar__list{ list-style: none; margin: 0 0 10px; padding: 0; display: flex; flex-direction: column; gap: 6px; }
