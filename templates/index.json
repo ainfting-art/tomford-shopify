@@ -233,7 +233,7 @@
         "noise_amount": 4,
         "enable_editorial_reveal": true,
         "enable_card_hover": true,
-        "enable_hover_zoom": false,
+        "enable_hover_zoom": true,
         "hover_scale": 102,
         "hover_duration": 800,
         "mobile_image_first": true,
