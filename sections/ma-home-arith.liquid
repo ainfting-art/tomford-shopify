@@ -363,11 +363,11 @@
     position: relative; display: flex; gap: clamp(12px, 1.5vw, {{ section.settings.card_gap | default: 24 }}px);
   }
   #ma-ar-{{ sid }} .ma-ar__card{
-    flex: 1 1 0; min-width: 0; padding: clamp(14px, 2vh, {{ section.settings.card_padding | default: 20 }}px);
+    flex: 1 1 0; min-width: 0; padding: clamp(24px, 3vh, 32px); /* Increased padding for a larger card block feel */
     border-radius: {{ section.settings.card_radius | default: 8 }}px;
     background: {{ section.settings.card_bg_col | default: '#F0EAE1' }};
-    border: 1px solid {{ section.settings.card_border_color | default: '#E2DCD3' }};
-    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
+    border: {{ section.settings.card_border_width | default: 1 }}px solid {{ section.settings.card_border_color | default: '#E2DCD3' }};
+    transition: transform 0.35s {{ section.settings.hover_easing | default: 'cubic-bezier(0.16, 1, 0.3, 1)' }}, box-shadow 0.35s ease;
     {% if section.settings.card_shadow_strength > 0 %}box-shadow: 0 {{ section.settings.card_shadow_strength }}px {{ section.settings.card_shadow_strength | times: 2 }}px rgba(23,19,16,{{ section.settings.card_shadow_strength | times: 1.0 | divided_by: 200 }});{% endif %}
   }
   {% if section.settings.enable_card_hover %}
