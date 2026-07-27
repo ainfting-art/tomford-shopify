@@ -22,8 +22,8 @@
   assign now_value = section.settings.right_value | escape | replace: 'from ', '<em>from</em> '
   assign cmp_style = section.settings.comparison_style | default: 'cards'
   
-  assign split_left = 70
-  assign split_right = 30
+  assign split_left = 65
+  assign split_right = 35
 
   assign value_blocks = section.blocks | where: 'type', 'value_item'
   assign proof_blocks = section.blocks | where: 'type', 'proof_item'
@@ -42,7 +42,7 @@
   {%- if section.settings.enable_safe_area -%}<div class="ma-ar__safe-area" aria-hidden="true"></div>{%- endif -%}
   {%- if section.settings.enable_baseline_grid -%}<div class="ma-ar__baseline-grid" aria-hidden="true"></div>{%- endif -%}
 
-  <!-- LEFT COLUMN (~70% DESKTOP): EDITORIAL ARTICLE SPREAD -->
+  <!-- LEFT COLUMN (~75% DESKTOP): EDITORIAL ARTICLE SPREAD -->
   <div class="ma-ar__left-col">
     <div class="ma-ar__head-group">
       {%- if section.settings.eyebrow != blank -%}
@@ -217,7 +217,7 @@
     {%- endif -%}
   </div>
 
-  <!-- RIGHT COLUMN (~30% DESKTOP): FULL HEIGHT PHOTOGRAPHY -->
+  <!-- RIGHT COLUMN (~35% DESKTOP): FULL HEIGHT PHOTOGRAPHY -->
   {%- if has_img -%}
     <div class="ma-ar__photo">
       {{ desk_img | image_url: width: 1600 | image_tag: loading: 'lazy', class: 'ma-ar__img ma-ar__img--dt', alt: desk_img.alt | default: shop.name }}
@@ -490,7 +490,7 @@
   @media (min-width: 900px){
     #ma-ar-{{ sid }}.ma-ar{
       display: grid !important;
-      grid-template-columns: 70% 30% !important;
+      grid-template-columns: 65% 35% !important;
       height: auto !important;
       min-height: {{ section.settings.dt_height | default: 720 }}px !important;
       overflow: visible !important;
