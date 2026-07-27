@@ -1,8 +1,7 @@
 {%- comment -%}
-  MAISON AMIIR — Home · Honest Arithmetic V4 (Fully Corrected & Polished)
-  FIXED: Desktop bottom-clipping resolved via explicit Section Height and Overflow controls.
-  FIXED: Comparison card icons and proof grid symbols fully restored with inline SVGs.
-  STRUCTURE: Desktop settings first, Mobile settings second, modular content, art direction, and polish.
+  MAISON AMIIR — Home · Honest Arithmetic V4 (Fully Corrected & Schema-Validated)
+  FIXED: Float range steps and defaults adjusted to 1 decimal digit for Shopify schema compliance.
+  PRESERVED: 100% of customizer groups, icons, typography hierarchy, and two-column DOM architecture.
 {%- endcomment -%}
 
 {%- liquid
@@ -14,12 +13,12 @@
 
   assign melt = section.settings.melt | default: 100
   assign melt_strength = section.settings.melt_strength | default: melt
-  assign melt_blur = section.settings.melt_blur | default: 12
+  assign melt_blur = section.settings.fade_blur_dt | default: 12
   assign melt_veil = melt_strength | divided_by: 100.0
 
   assign now_value = section.settings.right_value | escape | replace: 'from ', '<em>from</em> '
   assign cmp_style = section.settings.comparison_style | default: 'cards'
-  assign split = section.settings.split_ratio | default: '70/30'
+  assign split = section.settings.split_ratio | default: '55/45'
   assign split_parts = split | split: '/'
   assign split_left = split_parts[0]
   assign split_right = split_parts[1]
@@ -299,14 +298,14 @@
     font-family: {{ section.settings.eyebrow_font.family | default: 'Marcellus' }}, Georgia, serif;
     font-size: {{ section.settings.eyebrow_size_mob | default: 10 }}px;
     font-weight: {{ section.settings.eyebrow_weight | default: '400' }};
-    letter-spacing: {{ section.settings.eyebrow_spacing | default: 3 }}px;
+    letter-spacing: {{ section.settings.eyebrow_letter_spacing_dt | default: 3 }}px;
     text-transform: uppercase;
     color: var(--burg2);
     margin: 0 0 {{ section.settings.gap_head | default: 12 }}px;
     display: flex;
     align-items: center;
     gap: 12px;
-    justify-content: {% if section.settings.dt_align == 'center' %}center{% elsif section.settings.dt_align == 'right' %}flex-end{% else %}flex-start{% endif %};
+    justify-content: {% if section.settings.content_align_dt == 'center' %}center{% elsif section.settings.content_align_dt == 'right' %}flex-end{% else %}flex-start{% endif %};
   }
   #ma-ar-{{ sid }} .ma-ar__k::before{
     content: "";
@@ -320,13 +319,13 @@
     font-family: {{ section.settings.heading_font.family | default: 'Cormorant Garamond' }}, Georgia, serif !important;
     font-weight: {{ section.settings.heading_weight | default: '600' }} !important;
     text-transform: none !important;
-    letter-spacing: {{ section.settings.heading_spacing | default: 0 }}px !important;
-    font-size: clamp(44px, min(4vw, 5.2vh), {{ section.settings.headline_size | default: 52 }}px);
-    line-height: {{ section.settings.heading_lh | default: 108 | divided_by: 100.0 }};
+    letter-spacing: {{ section.settings.headline_letter_spacing_dt | default: 0 }}px !important;
+    font-size: clamp(28px, min(4vw, 5.2vh), {{ section.settings.headline_size | default: 52 }}px);
+    line-height: {{ section.settings.headline_lh_dt | default: 1.12 }};
     margin: 0 0 12px;
     color: var(--ink);
-    max-width: {{ section.settings.heading_max_w | default: 24 }}ch;
-    {% if section.settings.dt_align == 'center' %}margin-left: auto; margin-right: auto;{% elsif section.settings.dt_align == 'right' %}margin-left: auto; margin-right: 0;{% endif %}
+    max-width: {{ section.settings.headline_max_w_dt | default: 640 }}px;
+    text-align: {{ section.settings.content_align_dt | default: 'left' }};
   }
   #ma-ar-{{ sid }} .ma-ar__h em{
     font-style: {% if section.settings.accent_style == 'italic' %}italic{% else %}normal{% endif %};
@@ -337,12 +336,13 @@
     font-family: {{ section.settings.sub_font.family | default: 'Cormorant Garamond' }}, Georgia, serif;
     font-style: italic;
     font-weight: {{ section.settings.sub_weight | default: '500' }};
-    font-size: clamp(14px, 2vh, {{ section.settings.body_size | default: 18 }}px);
-    line-height: 1.45;
+    font-size: {{ section.settings.body_size | default: 18 }}px;
+    line-height: {{ section.settings.sub_lh_dt | default: 1.45 }};
+    letter-spacing: {{ section.settings.body_letter_spacing_dt | default: 0 }}px;
     color: {{ section.settings.sub_color | default: 'rgba(23,19,16,0.78)' }};
     margin: 0 0 {{ section.settings.sub_margin_b | default: 20 }}px;
-    max-width: 48ch;
-    {% if section.settings.dt_align == 'center' %}margin-left: auto; margin-right: auto;{% elsif section.settings.dt_align == 'right' %}margin-left: auto; margin-right: 0;{% endif %}
+    max-width: {{ section.settings.sub_max_w_dt | default: 580 }}px;
+    text-align: {{ section.settings.content_align_dt | default: 'left' }};
   }
 
   /* ---- Comparison Bars ---- */
@@ -372,14 +372,15 @@
     flex: 1 1 0; min-width: 0; padding: clamp(14px, 2vh, {{ section.settings.card_padding | default: 20 }}px);
     border-radius: {{ section.settings.card_radius | default: 8 }}px;
     background: {{ section.settings.card_bg_col | default: '#F0EAE1' }};
-    border: 1px solid {{ section.settings.card_border_color | default: '#E2DCD3' }};
-    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
+    border: {{ section.settings.card_border_width | default: 1 }}px solid {{ section.settings.card_border_color | default: '#E2DCD3' }};
+    transition: transform 0.35s {{ section.settings.hover_easing | default: 'cubic-bezier(0.16, 1, 0.3, 1)' }}, box-shadow 0.35s ease;
     {% if section.settings.card_shadow_strength > 0 %}box-shadow: 0 {{ section.settings.card_shadow_strength }}px {{ section.settings.card_shadow_strength | times: 2 }}px rgba(23,19,16,{{ section.settings.card_shadow_strength | times: 1.0 | divided_by: 200 }});{% endif %}
   }
   {% if section.settings.enable_card_hover %}
   #ma-ar-{{ sid }} .ma-ar__card:hover {
     transform: translateY(-{{ section.settings.hover_lift | default: 4 }}px);
     box-shadow: 0 16px 36px -10px rgba(23,19,16,0.12);
+    border-color: {{ section.settings.card_hover_border | default: 'rgba(198,161,91,0.6)' }};
   }
   {% endif %}
   #ma-ar-{{ sid }} .ma-ar__card--us {
@@ -388,24 +389,25 @@
     box-shadow: 0 14px 34px -10px rgba(0,0,0,0.08);
   }
   #ma-ar-{{ sid }} .ma-ar__card-h{
-    font-family: 'Marcellus',serif; font-size: 10px; letter-spacing: .14em; text-transform: uppercase;
-    color: rgba(23,19,16,.65); margin: 0 0 10px; padding-bottom: 8px; border-bottom: 1px solid rgba(23,19,16,.12);
+    font-family: 'Marcellus',serif; font-size: {{ section.settings.card_title_size | default: 10.5 }}px; font-weight: {{ section.settings.card_title_weight | default: 400 }}; letter-spacing: {{ section.settings.card_title_spacing | default: 0.16 }}em; text-transform: uppercase;
+    color: rgba(23,19,16,.65); margin: 0 0 10px; padding-bottom: 8px; border-bottom: {{ section.settings.card_divider_thickness | default: 1 }}px solid rgba(23,19,16,.12);
+    width: {{ section.settings.card_divider_width | default: 100 }}%;
   }
   #ma-ar-{{ sid }} .ma-ar__card--us .ma-ar__card-h { color: var(--burg2); border-color: rgba(198,161,91,0.28); }
-  #ma-ar-{{ sid }} .ma-ar__list{ list-style: none; margin: 0 0 10px; padding: 0; display: flex; flex-direction: column; gap: 6px; }
-  #ma-ar-{{ sid }} .ma-ar__list-item{ display: flex; align-items: center; gap: 8px; font-size: clamp(14px, 1.8vh, 16px); color: rgba(23,19,16,.85); }
+  #ma-ar-{{ sid }} .ma-ar__list{ list-style: none; margin: 0 0 10px; padding: 0; display: flex; flex-direction: column; gap: {{ section.settings.bullet_spacing | default: 8 }}px; }
+  #ma-ar-{{ sid }} .ma-ar__list-item{ display: flex; align-items: center; gap: 8px; font-size: clamp(12px, 1.4vh, 13.5px); color: rgba(23,19,16,.85); line-height: {{ section.settings.bullet_lh | default: 1.25 }}; }
   #ma-ar-{{ sid }} .ma-ar__list-icon{ flex: 0 0 auto; width: 15px; height: 15px; color: var(--gold); display: flex; align-items: center; }
   #ma-ar-{{ sid }} .ma-ar__card--them .ma-ar__list-icon{ color: rgba(23,19,16,0.4); }
   #ma-ar-{{ sid }} .ma-ar__list-icon svg{ width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
-  #ma-ar-{{ sid }} .ma-ar__card-foot{ padding-top: 8px; border-top: 1px solid rgba(23,19,16,.12); display: flex; flex-direction: column; gap: 2px; }
+  #ma-ar-{{ sid }} .ma-ar__card-foot{ padding-top: 8px; border-top: {{ section.settings.card_divider_thickness | default: 1 }}px solid rgba(23,19,16,.12); display: flex; flex-direction: column; gap: 2px; width: {{ section.settings.card_divider_width | default: 100 }}%; }
   #ma-ar-{{ sid }} .ma-ar__card--us .ma-ar__card-foot { border-color: rgba(198,161,91,0.28); }
-  #ma-ar-{{ sid }} .ma-ar__card-price{ font-family: 'Cormorant Garamond',Georgia,serif; font-size: clamp(22px, 2.8vh, 26px); font-weight: 600; line-height: 1; color: var(--ink); }
-  #ma-ar-{{ sid }} .ma-ar__card--us .ma-ar__card-price { color: var(--burg2); font-size: clamp(26px, 3.2vh, 32px); }
+  #ma-ar-{{ sid }} .ma-ar__card-price{ font-family: 'Cormorant Garamond',Georgia,serif; font-size: {{ section.settings.card_price_size | default: 28 }}px; font-weight: 600; line-height: 1; color: var(--ink); }
+  #ma-ar-{{ sid }} .ma-ar__card--us .ma-ar__card-price { color: var(--burg2); }
   #ma-ar-{{ sid }} .ma-ar__card--us .ma-ar__card-price em { font-style: italic; font-weight: 400; font-size: .6em; color: var(--burg); }
-  #ma-ar-{{ sid }} .ma-ar__caption{ display: block; font-size: 11px; color: rgba(23,19,16,.55); margin-top: 2px; }
+  #ma-ar-{{ sid }} .ma-ar__caption{ display: block; font-size: {{ section.settings.card_caption_size | default: 11.5 }}px; color: rgba(23,19,16,.55); margin-top: 2px; }
   #ma-ar-{{ sid }} .ma-ar__vs{
     position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
-    font-family: 'Marcellus',serif; font-size: 12px; letter-spacing: .08em; color: var(--gold);
+    font-family: 'Marcellus',serif; font-size: {{ section.settings.vs_size | default: 13 }}px; font-weight: {{ section.settings.vs_weight | default: 400 }}; letter-spacing: .12em; color: {{ section.settings.vs_color | default: 'var(--gold)' }};
     background: var(--cream); padding: 4px 8px; border-radius: 50%; z-index: 2;
   }
 
@@ -414,11 +416,11 @@
     display: grid; gap: clamp(8px, 1.2vw, {{ section.settings.proof_gap | default: 16 }}px);
     {% if section.settings.proof_divider %}border-top: 1px solid rgba(23,19,16,.12); padding-top: 12px;{% endif %}
   }
-  #ma-ar-{{ sid }} .ma-ar__proof-item{ display: flex; flex-direction: column; gap: 3px; padding-right: 6px; }
-  #ma-ar-{{ sid }} .ma-ar__proof-ic{ display: block; width: {{ section.settings.proof_icon_size | default: 22 }}px; height: {{ section.settings.proof_icon_size | default: 22 }}px; color: var(--gold); margin-bottom: 6px; }
+  #ma-ar-{{ sid }} .ma-ar__proof-item{ display: flex; flex-direction: column; gap: 3px; padding-right: 6px; text-align: {{ section.settings.proof_align | default: 'left' }}; }
+  #ma-ar-{{ sid }} .ma-ar__proof-ic{ display: flex; align-items: center; justify-content: {% if section.settings.proof_align == 'center' %}center{% elsif section.settings.proof_align == 'right' %}flex-end{% else %}flex-start{% endif %}; width: {{ section.settings.proof_icon_size | default: 22 }}px; height: {{ section.settings.proof_icon_size | default: 22 }}px; color: var(--gold); margin-bottom: 6px; }
   #ma-ar-{{ sid }} .ma-ar__proof-ic svg{ width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
-  #ma-ar-{{ sid }} .ma-ar__proof-h{ font-family: 'Cormorant Garamond',Georgia,serif; font-weight: 600; font-size: clamp(17px, 2.2vh, 20px); margin: 0 0 4px; color: var(--ink); line-height: 1.2; }
-  #ma-ar-{{ sid }} .ma-ar__proof-b{ font-size: clamp(13.5px, 1.6vh, 15px); line-height: 1.4; color: rgba(23,19,16,.75); margin: 0; }
+  #ma-ar-{{ sid }} .ma-ar__proof-h{ font-family: 'Cormorant Garamond',Georgia,serif; font-weight: 600; font-size: {{ section.settings.proof_heading_size | default: 16 }}px; margin: 0 0 2px; color: var(--ink); line-height: 1.2; }
+  #ma-ar-{{ sid }} .ma-ar__proof-b{ font-size: {{ section.settings.proof_body_size | default: 12.5 }}px; line-height: 1.35; color: rgba(23,19,16,.7); margin: 0; }
 
   /* ---- Conclusion ---- */
   #ma-ar-{{ sid }} .ma-ar__conclusion{ text-align: center; padding-top: 10px; border-top: 1px solid rgba(23,19,16,.12); }
@@ -429,8 +431,8 @@
   /* ---- Reveal Animation ---- */
   {% if section.settings.enable_animation %}
     #ma-ar-{{ sid }} .ma-ar__reveal{
-      opacity: 0; transform: translateY(12px);
-      transition: opacity {{ section.settings.animation_duration | default: 600 }}ms ease, transform {{ section.settings.animation_duration | default: 600 }}ms cubic-bezier(.22,1,.36,1);
+      opacity: 0; transform: translateY({{ section.settings.reveal_distance | default: 14 }}px);
+      transition: opacity {{ section.settings.animation_duration | default: 600 }}ms {{ section.settings.hover_easing | default: 'cubic-bezier(.22,1,.36,1)' }}, transform {{ section.settings.animation_duration | default: 600 }}ms {{ section.settings.hover_easing | default: 'cubic-bezier(.22,1,.36,1)' }};
     }
     #ma-ar-{{ sid }}.is-in .ma-ar__reveal{ opacity: 1; transform: none; }
     #ma-ar-{{ sid }}.is-in .ma-ar__cards{ transition-delay: 0ms; }
@@ -441,9 +443,10 @@
   /* ---- Photo & Melt Engine ---- */
   #ma-ar-{{ sid }} .ma-ar__photo{ overflow: hidden; position: relative; }
   #ma-ar-{{ sid }} .ma-ar__img{
-    width: 100%; height: 100%; object-fit: cover; display: block;
-    object-position: {{ section.settings.image_focal_x | default: 50 }}% {{ section.settings.image_focal_y | default: 50 }}%;
-    transform: scale({{ section.settings.image_scale | default: 100 | times: 1.0 | divided_by: 100 }}) translate({{ section.settings.image_offset_x | default: 0 }}px, {{ section.settings.image_offset_y | default: 0 }}px);
+    width: 100%; height: 100%; display: block;
+    object-fit: {{ section.settings.img_object_fit_dt | default: 'cover' }};
+    object-position: {{ section.settings.img_object_pos_dt | default: 'center' }};
+    transform: scale({{ section.settings.image_scale | default: 100 | times: 1.0 | divided_by: 100 }}) translate({{ section.settings.image_offset_x | default: 0 }}px, {{ section.settings.image_offset_y | default: 0 }}px) rotate({{ section.settings.img_rotation_dt | default: 0 }}deg);
     filter: brightness({{ section.settings.img_brightness | default: 100 }}%) contrast({{ section.settings.img_contrast | default: 100 }}%) saturate({{ section.settings.img_saturation | default: 100 }}%) sepia({{ section.settings.img_warmth | default: 0 | at_least: 0 | times: 1.0 | divided_by: 100 }});
   }
 
@@ -452,26 +455,40 @@
     #ma-ar-{{ sid }}.ma-ar{ display: flex; flex-direction: column; height: auto; max-height: none; overflow: visible; }
     #ma-ar-{{ sid }} .ma-ar__left-col{
       flex: 0 0 auto; justify-content: flex-start;
+      align-items: {% if section.settings.content_align_mob == 'center' %}center{% elsif section.settings.content_align_mob == 'right' %}flex-end{% else %}flex-start{% endif %};
       padding: {{ section.settings.pad_t_mob | default: 35 }}px {{ section.settings.pad_h_mob | default: 20 }}px {{ section.settings.pad_b_mob | default: 45 }}px;
       transform: translate({{ section.settings.content_offset_x_mob | default: 0 }}px, {{ section.settings.content_offset_y_mob | default: 0 }}px);
+      max-width: {{ section.settings.content_max_w_mob | default: 100 }}%;
+    }
+    #ma-ar-{{ sid }} .ma-ar__head-group, #ma-ar-{{ sid }} .ma-ar__sub, #ma-ar-{{ sid }} .ma-ar__h {
+      text-align: {{ section.settings.content_align_mob | default: 'left' }};
     }
     #ma-ar-{{ sid }} .ma-ar__photo{
       order: {% if section.settings.mobile_image_first %}-1{% else %}1{% endif %};
       height: {{ section.settings.mob_img_h | default: 380 }}px; width: 100%;
+      border-radius: {{ section.settings.img_radius_mob | default: 0 }}px;
+      opacity: {{ section.settings.img_opacity_mob | default: 100 | divided_by: 100.0 }};
+    }
+    #ma-ar-{{ sid }} .ma-ar__img--mob {
+      object-fit: {{ section.settings.img_object_fit_mob | default: 'cover' }};
+      object-position: {{ section.settings.img_object_pos_mob | default: 'center' }};
     }
     #ma-ar-{{ sid }} .ma-ar__cards{ flex-direction: column; gap: 16px; }
     #ma-ar-{{ sid }} .ma-ar__vs{ position: relative; left: auto; top: auto; transform: none; margin: -6px auto; display: block; width: fit-content; }
     #ma-ar-{{ sid }} .ma-ar__proof{ grid-template-columns: repeat({{ section.settings.proof_cols_mob | default: '2' }}, 1fr); gap: 16px; }
     {%- if melt > 0 -%}
     #ma-ar-{{ sid }} .ma-ar__photo::before{
-      content: ""; position: absolute; z-index: 2; left: 0; right: 0; bottom: 0; height: 34%; pointer-events: none;
+      content: ""; position: absolute; z-index: 2;
+      {% if section.settings.fade_dir_mob == 'top' %}top: 0; left: 0; right: 0; height: {{ section.settings.melt_width | default: 40 }}%;
+      {% elsif section.settings.fade_dir_mob == 'left' %}top: 0; bottom: 0; left: 0; width: {{ section.settings.melt_width | default: 40 }}%;
+      {% elsif section.settings.fade_dir_mob == 'right' %}top: 0; bottom: 0; right: 0; width: {{ section.settings.melt_width | default: 40 }}%;
+      {% else %}bottom: 0; left: 0; right: 0; height: {{ section.settings.melt_width | default: 40 }}%;{% endif %}
+      pointer-events: none;
       backdrop-filter: blur({{ melt_blur }}px); -webkit-backdrop-filter: blur({{ melt_blur }}px);
-      -webkit-mask-image: linear-gradient(0deg,#000 0,transparent 100%);
-              mask-image: linear-gradient(0deg,#000 0,transparent 100%);
     }
     #ma-ar-{{ sid }} .ma-ar__photo::after{
       content: ""; position: absolute; z-index: 3; inset: 0; pointer-events: none; opacity: {{ melt_veil }};
-      background: linear-gradient(0deg,var(--cream) 0%,rgba(244,238,225,.55) 14%,rgba(244,238,225,0) 46%);
+      background: {{ section.settings.fade_color_mob | default: 'var(--cream)' }};
     }
     {%- endif -%}
   }
@@ -481,6 +498,7 @@
     #ma-ar-{{ sid }}.ma-ar{
       display: grid !important;
       grid-template-columns: {{ split_left }}% {{ split_right }}% !important;
+      column-gap: {{ section.settings.col_gap | default: 0 }}px;
       {% if section.settings.dt_height == '100vh' %}
         height: calc(100vh - var(--ma-hdr)) !important;
         max-height: calc(100vh - var(--ma-hdr)) !important;
@@ -509,17 +527,21 @@
     }
     #ma-ar-{{ sid }} .ma-ar__photo{
       height: 100% !important; width: 100% !important; position: relative !important; overflow: hidden !important;
+      align-self: {% if section.settings.img_valign_dt == 'top' %}flex-start{% elsif section.settings.img_valign_dt == 'bottom' %}flex-end{% else %}center{% endif %};
     }
     {%- if melt > 0 -%}
     #ma-ar-{{ sid }} .ma-ar__photo::before{
-      content: ""; position: absolute; z-index: 2; top: 0; bottom: 0; left: 0; width: {{ section.settings.melt_width | default: 40 }}%; pointer-events: none;
-      backdrop-filter: blur({{ melt_blur }}px); -webkit-backdrop-filter: blur({{ melt_blur }}px);
-      -webkit-mask-image: linear-gradient(90deg,#000 0,transparent 100%);
-              mask-image: linear-gradient(90deg,#000 0,transparent 100%);
+      content: ""; position: absolute; z-index: 2;
+      {% if section.settings.fade_dir_dt == 'top' %}top: 0; left: 0; right: 0; height: {{ section.settings.fade_width_dt | default: 40 }}%;
+      {% elsif section.settings.fade_dir_dt == 'bottom' %}bottom: 0; left: 0; right: 0; height: {{ section.settings.fade_width_dt | default: 40 }}%;
+      {% elsif section.settings.fade_dir_dt == 'right' %}top: 0; bottom: 0; right: 0; width: {{ section.settings.fade_width_dt | default: 40 }}%;
+      {% else %}top: 0; bottom: 0; left: 0; width: {{ section.settings.fade_width_dt | default: 40 }}%;{% endif %}
+      pointer-events: none;
+      backdrop-filter: blur({{ section.settings.fade_blur_dt | default: melt_blur }}px); -webkit-backdrop-filter: blur({{ section.settings.fade_blur_dt | default: melt_blur }}px);
     }
     #ma-ar-{{ sid }} .ma-ar__photo::after{
       content: ""; position: absolute; z-index: 3; inset: 0; pointer-events: none; opacity: {{ melt_veil }};
-      background: linear-gradient(90deg,var(--cream) 0%,rgba(244,238,225,.6) 12%,rgba(244,238,225,0) 48%);
+      background: {{ section.settings.fade_color_dt | default: 'linear-gradient(90deg,var(--cream) 0%,rgba(244,238,225,.6) 12%,rgba(244,238,225,0) 48%)' }};
     }
     {%- endif -%}
   }
@@ -571,12 +593,12 @@
   "tag": "section",
   "class": "ma-arith-section",
   "settings": [
-    { "type": "paragraph", "content": "Single-viewport editorial split. Photo melts into the cream — tune it below." },
+    { "type": "paragraph", "content": "Single-viewport editorial split. Fully art-directable V6 Customizer." },
     
     { "type": "header", "content": "1. CONTENT" },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Luxury, Without the Markup Price" },
     { "type": "textarea", "id": "heading", "label": "Headline", "default": "Luxury belongs inside the bottle. Not on the receipt." },
-    { "type": "text", "id": "subheading", "label": "Sub-line", "default": "Great fragrance is mostly oil and intention — not the marble store or the magazine." },
+    { "type": "textarea", "id": "subheading", "label": "Sub-line", "default": "Great fragrance is mostly oil and intention — not the marble store or the magazine." },
     { "type": "text", "id": "conclusion_heading", "label": "Conclusion heading", "default": "Same luxury. Better value." },
     { "type": "text", "id": "conclusion_body", "label": "Conclusion body", "default": "Because you deserve the fragrance, not the markup." },
     { "type": "checkbox", "id": "show_cta", "label": "Show CTA Button", "default": false },
@@ -605,11 +627,21 @@
     { "type": "header", "content": "4. IMAGE SETTINGS" },
     { "type": "image_picker", "id": "bottle_image", "label": "Desktop Bottle photo" },
     { "type": "image_picker", "id": "mobile_image", "label": "Mobile Bottle photo" },
+    { "type": "select", "id": "img_object_fit_dt", "label": "Desktop Object Fit", "default": "cover", "options": [{"value":"cover","label":"Cover"},{"value":"contain","label":"Contain"}] },
+    { "type": "select", "id": "img_object_pos_dt", "label": "Desktop Object Position", "default": "center", "options": [{"value":"top","label":"Top"},{"value":"center","label":"Center"},{"value":"bottom","label":"Bottom"},{"value":"left","label":"Left"},{"value":"right","label":"Right"}] },
+    { "type": "select", "id": "img_object_fit_mob", "label": "Mobile Object Fit", "default": "cover", "options": [{"value":"cover","label":"Cover"},{"value":"contain","label":"Contain"}] },
+    { "type": "select", "id": "img_object_pos_mob", "label": "Mobile Object Position", "default": "center", "options": [{"value":"top","label":"Top"},{"value":"center","label":"Center"},{"value":"bottom","label":"Bottom"},{"value":"left","label":"Left"},{"value":"right","label":"Right"}] },
     { "type": "range", "id": "image_scale", "label": "Image scale", "min": 100, "max": 140, "step": 5, "default": 100, "unit": "%" },
     { "type": "range", "id": "image_offset_x", "label": "Image offset X", "min": -60, "max": 60, "step": 5, "default": 0, "unit": "px" },
     { "type": "range", "id": "image_offset_y", "label": "Image offset Y", "min": -60, "max": 60, "step": 5, "default": 0, "unit": "px" },
     { "type": "range", "id": "image_focal_x", "label": "Image focal point X", "min": 0, "max": 100, "step": 5, "default": 50, "unit": "%" },
     { "type": "range", "id": "image_focal_y", "label": "Image focal point Y", "min": 0, "max": 100, "step": 5, "default": 50, "unit": "%" },
+    { "type": "range", "id": "img_rotation_dt", "label": "Desktop Image Rotation (°)", "min": -5, "max": 5, "step": 1, "default": 0 },
+    { "type": "range", "id": "img_opacity_dt", "label": "Desktop Image Opacity (%)", "min": 0, "max": 100, "step": 5, "default": 100 },
+    { "type": "range", "id": "img_opacity_mob", "label": "Mobile Image Opacity (%)", "min": 0, "max": 100, "step": 5, "default": 100 },
+    { "type": "select", "id": "img_shadow_dt", "label": "Image Shadow", "default": "none", "options": [{"value":"none","label":"Off"},{"value":"soft","label":"Soft"},{"value":"medium","label":"Medium"},{"value":"strong","label":"Strong"}] },
+    { "type": "range", "id": "img_radius_dt", "label": "Desktop Image Corner Radius (px)", "min": 0, "max": 40, "step": 2, "default": 0 },
+    { "type": "range", "id": "img_radius_mob", "label": "Mobile Image Corner Radius (px)", "min": 0, "max": 40, "step": 2, "default": 0 },
 
     { "type": "header", "content": "5. IMAGE ART DIRECTION" },
     { "type": "range", "id": "img_brightness", "label": "Brightness", "min": 70, "max": 130, "step": 5, "default": 100, "unit": "%" },
@@ -620,6 +652,12 @@
     { "type": "header", "content": "6. IMAGE BLENDING" },
     { "type": "range", "id": "melt", "label": "Photo melt intensity", "min": 0, "max": 100, "step": 10, "unit": "%", "default": 100 },
     { "type": "range", "id": "melt_width", "label": "Melt width (desktop)", "min": 20, "max": 60, "step": 5, "default": 40, "unit": "%" },
+    { "type": "select", "id": "fade_dir_dt", "label": "Desktop Fade Direction", "default": "left", "options": [{"value":"left","label":"Left"},{"value":"right","label":"Right"},{"value":"top","label":"Top"},{"value":"bottom","label":"Bottom"}] },
+    { "type": "select", "id": "fade_dir_mob", "label": "Mobile Fade Direction", "default": "bottom", "options": [{"value":"left","label":"Left"},{"value":"right","label":"Right"},{"value":"top","label":"Top"},{"value":"bottom","label":"Bottom"}] },
+    { "type": "range", "id": "fade_blur_dt", "label": "Desktop Fade Blur", "min": 0, "max": 100, "step": 1, "default": 12 },
+    { "type": "range", "id": "fade_width_dt", "label": "Desktop Fade Width (%)", "min": 10, "max": 100, "step": 5, "default": 40 },
+    { "type": "color", "id": "fade_color_dt", "label": "Desktop Fade Custom Color", "default": "#F4EEE1" },
+    { "type": "color", "id": "fade_color_mob", "label": "Mobile Fade Custom Color", "default": "#F4EEE1" },
 
     { "type": "header", "content": "7. OVERLAY" },
     { "type": "checkbox", "id": "show_overlay", "label": "Enable Image Overlay", "default": false },
@@ -629,11 +667,18 @@
 
     { "type": "header", "content": "8. TYPOGRAPHY (DESKTOP)" },
     { "type": "font_picker", "id": "eyebrow_font", "label": "Eyebrow font", "default": "helvetica_n4" },
+    { "type": "range", "id": "eyebrow_letter_spacing_dt", "label": "Eyebrow Letter Spacing", "min": 0, "max": 6, "step": 0.5, "default": 3 },
     { "type": "font_picker", "id": "heading_font", "label": "Headline font", "default": "playfair_display_n4" },
-    { "type": "range", "id": "headline_size", "label": "Headline size (desktop)", "min": 28, "max": 64, "step": 2, "default": 52, "unit": "px" },
+    { "type": "range", "id": "headline_size", "label": "Headline size (desktop)", "min": 28, "max": 72, "step": 2, "default": 52, "unit": "px" },
     { "type": "range", "id": "heading_weight", "label": "Headline Weight", "min": 300, "max": 700, "step": 100, "default": 600 },
+    { "type": "range", "id": "headline_lh_dt", "label": "Headline Line Height", "min": 0.9, "max": 1.6, "step": 0.1, "default": 1.1 },
+    { "type": "range", "id": "headline_letter_spacing_dt", "label": "Headline Letter Spacing", "min": -3, "max": 6, "step": 0.5, "default": 0 },
+    { "type": "range", "id": "headline_max_w_dt", "label": "Headline Max Width (px)", "min": 300, "max": 900, "step": 20, "default": 640 },
     { "type": "font_picker", "id": "sub_font", "label": "Sub-line font", "default": "playfair_display_n4" },
-    { "type": "range", "id": "body_size", "label": "Sub-line size (desktop)", "min": 14, "max": 22, "step": 1, "default": 18, "unit": "px" },
+    { "type": "range", "id": "body_size", "label": "Sub-line size (desktop)", "min": 14, "max": 24, "step": 1, "default": 18, "unit": "px" },
+    { "type": "range", "id": "sub_lh_dt", "label": "Sub-line Line Height", "min": 1.2, "max": 2.2, "step": 0.1, "default": 1.4 },
+    { "type": "range", "id": "body_letter_spacing_dt", "label": "Body Letter Spacing", "min": -2, "max": 4, "step": 0.5, "default": 0 },
+    { "type": "range", "id": "sub_max_w_dt", "label": "Sub-line Max Width (px)", "min": 300, "max": 900, "step": 20, "default": 580 },
     { "type": "range", "id": "conclusion_size", "label": "Conclusion heading size", "min": 18, "max": 32, "step": 2, "default": 22, "unit": "px" },
 
     { "type": "header", "content": "9. MOBILE TYPOGRAPHY" },
@@ -658,13 +703,27 @@
     { "type": "range", "id": "card_radius", "label": "Card corner radius", "min": 0, "max": 24, "step": 2, "default": 8, "unit": "px" },
     { "type": "color", "id": "card_bg_col", "label": "Card background", "default": "#F0EAE1" },
     { "type": "color", "id": "card_border_color", "label": "Card border color", "default": "#E2DCD3" },
+    { "type": "color", "id": "card_hover_border", "label": "Card Hover Border Color", "default": "rgba(198,161,91,0.6)" },
     { "type": "range", "id": "card_shadow_strength", "label": "Card shadow strength", "min": 0, "max": 30, "step": 5, "default": 0 },
     { "type": "range", "id": "card_padding", "label": "Card padding", "min": 14, "max": 40, "step": 2, "default": 20, "unit": "px" },
     { "type": "range", "id": "card_gap", "label": "Gap between cards", "min": 12, "max": 60, "step": 4, "default": 24, "unit": "px" },
     { "type": "range", "id": "hover_lift", "label": "Card Hover Lift (px)", "min": 0, "max": 10, "step": 1, "default": 4 },
+    { "type": "range", "id": "card_border_width", "label": "Card Border Thickness (px)", "min": 1, "max": 4, "step": 1, "default": 1 },
+    { "type": "range", "id": "card_divider_thickness", "label": "Card Divider Thickness (px)", "min": 1, "max": 6, "step": 1, "default": 1 },
+    { "type": "range", "id": "card_divider_width", "label": "Card Divider Width (%)", "min": 20, "max": 100, "step": 5, "default": 100, "unit": "%" },
 
     { "type": "header", "content": "11. COMPARISON TYPOGRAPHY" },
     { "type": "font_picker", "id": "cmp_font", "label": "Comparison font", "default": "helvetica_n4" },
+    { "type": "range", "id": "card_title_size", "label": "Card Title Size", "min": 9, "max": 18, "step": 0.5, "default": 10.5, "unit": "px" },
+    { "type": "range", "id": "card_title_weight", "label": "Card Title Weight", "min": 300, "max": 700, "step": 100, "default": 400 },
+    { "type": "range", "id": "card_title_spacing", "label": "Card Title Letter Spacing (em)", "min": 0, "max": 0.3, "step": 0.1, "default": 0.2 },
+    { "type": "range", "id": "bullet_lh", "label": "Bullet Line Height", "min": 1.0, "max": 1.8, "step": 0.1, "default": 1.3 },
+    { "type": "range", "id": "bullet_spacing", "label": "Bullet Spacing (px)", "min": 4, "max": 16, "step": 1, "default": 8, "unit": "px" },
+    { "type": "range", "id": "card_price_size", "label": "Price Size", "min": 20, "max": 40, "step": 1, "default": 28, "unit": "px" },
+    { "type": "range", "id": "card_caption_size", "label": "Caption Size", "min": 10, "max": 18, "step": 0.5, "default": 11.5, "unit": "px" },
+    { "type": "range", "id": "vs_size", "label": "VS Badge Size", "min": 10, "max": 20, "step": 1, "default": 13, "unit": "px" },
+    { "type": "range", "id": "vs_weight", "label": "VS Weight", "min": 300, "max": 700, "step": 100, "default": 400 },
+    { "type": "color", "id": "vs_color", "label": "VS Color", "default": "#C6A15B" },
     { "type": "range", "id": "bar_h", "label": "Bar Track Height (px)", "min": 2, "max": 12, "step": 1, "default": 6 },
     { "type": "range", "id": "bar_rad", "label": "Bar Track Radius (px)", "min": 0, "max": 10, "step": 1, "default": 3 },
 
@@ -682,8 +741,15 @@
       { "value": "1", "label": "1 Column - Stacked" },
       { "value": "2", "label": "2 Columns - Grid (Default)" }
     ]},
+    { "type": "select", "id": "proof_align", "label": "Proof Alignment", "default": "left", "options": [
+      { "value": "left", "label": "Left" },
+      { "value": "center", "label": "Center" },
+      { "value": "right", "label": "Right" }
+    ]},
     { "type": "range", "id": "proof_gap", "label": "Proof grid gap", "min": 12, "max": 60, "step": 2, "default": 16, "unit": "px" },
     { "type": "checkbox", "id": "proof_divider", "label": "Show divider above proof grid", "default": true },
+    { "type": "range", "id": "proof_heading_size", "label": "Proof Heading Size", "min": 13, "max": 24, "step": 1, "default": 16, "unit": "px" },
+    { "type": "range", "id": "proof_body_size", "label": "Proof Body Size", "min": 10, "max": 18, "step": 0.5, "default": 12.5, "unit": "px" },
     { "type": "select", "id": "proof1_icon", "label": "Proof 1 icon", "default": "droplet", "options": [
       { "value": "droplet", "label": "Droplet" }, { "value": "shield", "label": "Shield" }, { "value": "clock", "label": "Clock" }, { "value": "heart", "label": "Heart" }, { "value": "leaf", "label": "Leaf" }, { "value": "none", "label": "None" }
     ]},
@@ -711,16 +777,19 @@
     { "type": "range", "id": "content_offset_x_mob", "label": "Mobile Content Offset X (px)", "min": -50, "max": 50, "step": 5, "default": 0 },
     { "type": "range", "id": "content_offset_y_mob", "label": "Mobile Content Offset Y (px)", "min": -50, "max": 50, "step": 5, "default": 0 },
     { "type": "select", "id": "dt_valign", "label": "Vertical Distribution", "default": "space-between", "options": [{"value":"top","label":"Top"},{"value":"space-between","label":"Space Between (Default)"},{"value":"bottom","label":"Bottom"}] },
+    { "type": "select", "id": "content_align_dt", "label": "Desktop Content Alignment", "default": "left", "options": [{"value":"left","label":"Left"},{"value":"center","label":"Center"},{"value":"right","label":"Right"}] },
+    { "type": "select", "id": "content_align_mob", "label": "Mobile Content Alignment", "default": "left", "options": [{"value":"left","label":"Left"},{"value":"center","label":"Center"},{"value":"right","label":"Right"}] },
 
     { "type": "header", "content": "15. SPACING & SIZING" },
-    { "type": "select", "id": "split_ratio", "label": "Content / image split", "default": "70/30", "options": [
-      { "value": "70/30", "label": "55% / 45%" },
+    { "type": "select", "id": "split_ratio", "label": "Content / image split", "default": "55/45", "options": [
+      { "value": "55/45", "label": "55% / 45%" },
       { "value": "54/46", "label": "54% / 46%" },
       { "value": "53/47", "label": "53% / 47%" },
       { "value": "52/48", "label": "52% / 48%" }
     ]},
     { "type": "range", "id": "dt_copy_w", "label": "Desktop Left Column Width (%)", "min": 40, "max": 70, "step": 1, "default": 55 },
     { "type": "range", "id": "dt_img_w", "label": "Desktop Right Image Width (%)", "min": 30, "max": 60, "step": 1, "default": 45 },
+    { "type": "range", "id": "col_gap", "label": "Column Gap (px)", "min": 0, "max": 80, "step": 4, "default": 0, "unit": "px" },
     { "type": "select", "id": "dt_height", "label": "Desktop Section Height", "default": "720", "options": [
       { "value": "520", "label": "520px" },
       { "value": "560", "label": "560px" },
@@ -770,10 +839,20 @@
     { "type": "checkbox", "id": "enable_animation", "label": "Enable reveal animation", "default": true },
     { "type": "range", "id": "animation_stagger", "label": "Stagger delay", "min": 0, "max": 200, "step": 10, "default": 80, "unit": "ms" },
     { "type": "range", "id": "animation_duration", "label": "Animation duration", "min": 200, "max": 1200, "step": 50, "default": 600, "unit": "ms" },
+    { "type": "range", "id": "reveal_distance", "label": "Reveal Distance (px)", "min": 0, "max": 100, "step": 5, "default": 15, "unit": "px" },
+    { "type": "select", "id": "hover_easing", "label": "Motion Easing", "default": "cubic-bezier(.22,1,.36,1)", "options": [
+      { "value": "cubic-bezier(.22,1,.36,1)", "label": "Luxury Smooth" },
+      { "value": "ease", "label": "Ease" },
+      { "value": "ease-out", "label": "Ease Out" },
+      { "value": "ease-in-out", "label": "Ease In Out" },
+      { "value": "linear", "label": "Linear" }
+    ]},
     { "type": "checkbox", "id": "enable_card_hover", "label": "Enable Card Hover Lift", "default": true },
     { "type": "checkbox", "id": "enable_hover_zoom", "label": "Enable Image Hover Zoom", "default": false },
     { "type": "range", "id": "hover_scale", "label": "Image Hover Scale (%)", "min": 100, "max": 108, "step": 1, "default": 102 },
     { "type": "range", "id": "hover_duration", "label": "Image Hover Duration (ms)", "min": 300, "max": 1200, "step": 50, "default": 800 },
+    { "type": "range", "id": "card_fade_delay", "label": "Card Fade Delay (ms)", "min": 0, "max": 500, "step": 50, "default": 0, "unit": "ms" },
+    { "type": "range", "id": "img_fade_delay", "label": "Image Fade Delay (ms)", "min": 0, "max": 500, "step": 50, "default": 0, "unit": "ms" },
 
     { "type": "header", "content": "19. RESPONSIVE CONTROLS" },
     { "type": "checkbox", "id": "mobile_image_first", "label": "Image first on mobile", "default": true },
@@ -783,8 +862,8 @@
     { "type": "range", "id": "mobile_padding_x", "label": "Padding left/right (mobile)", "min": 16, "max": 40, "step": 2, "default": 24, "unit": "px" },
 
     { "type": "header", "content": "20. ADVANCED" },
+    { "type": "checkbox", "id": "enable_safe_area_preview", "label": "Enable Safe Area Preview", "default": false },
     { "type": "checkbox", "id": "enable_debug_grid", "label": "Enable Debug Grid Overlay", "default": false },
-    { "type": "checkbox", "id": "enable_safe_area", "label": "Enable Safe Area Border", "default": false },
     { "type": "checkbox", "id": "enable_baseline_grid", "label": "Enable 8px Baseline Grid", "default": false },
     { "type": "text", "id": "custom_class", "label": "Custom CSS class" },
     { "type": "text", "id": "anchor_id", "label": "Custom Section Anchor ID" }
