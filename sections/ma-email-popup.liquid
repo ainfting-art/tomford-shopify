@@ -29,8 +29,8 @@
 
       <div class="ma-popup__code-wrap">
         <p class="ma-popup__code-label">Your welcome code</p>
-        <button class="ma-popup__code" type="button" data-ma-popup-code="{{ section.settings.code | default: 'WELCOME15' }}" aria-label="Copy discount code">
-          <span class="ma-popup__code-value">{{ section.settings.code | default: 'WELCOME15' }}</span>
+        <button class="ma-popup__code" type="button" data-ma-popup-code="{{ section.settings.code | default: 'WELCOME20' }}" aria-label="Copy discount code">
+          <span class="ma-popup__code-value">{{ section.settings.code | default: 'WELCOME20' }}</span>
           <span class="ma-popup__code-copy">Copy</span>
         </button>
       </div>
@@ -126,7 +126,7 @@
     { "type": "image_picker", "id": "image", "label": "Image (left panel)" },
     { "type": "text", "id": "headline", "label": "Headline", "default": "Receive 15% Off" },
     { "type": "textarea", "id": "subtext", "label": "Text", "default": "Join the Maison and enjoy 15% off your first order — with stories, launches, and private previews to follow." },
-    { "type": "text", "id": "code", "label": "Discount code", "default": "WELCOME15" },
+    { "type": "text", "id": "code", "label": "Discount code", "default": "WELCOME20" },
     { "type": "range", "id": "delay", "label": "Delay before showing (seconds)", "min": 1, "max": 30, "step": 1, "default": 5 }
   ],
   "enabled_on": { "groups": ["footer"] },
