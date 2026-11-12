@@ -27,8 +27,8 @@
       "name": "MA Email Popup",
       "settings": {
         "enabled": true,
-        "headline": "Receive 15% Off",
-        "subtext": "Join the Maison and enjoy 15% off your first order — with stories, launches, and private previews to follow.",
+        "headline": "Receive 20% Off",
+        "subtext": "Join the Maison and enjoy 20% off your first order — with stories, launches, and private previews to follow.",
         "code": "WELCOME15",
         "delay": 2
       }
