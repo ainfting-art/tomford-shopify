@@ -25,7 +25,7 @@
     <div class="ma-popup__panel">
       <p class="ma-popup__eyebrow">Maison Amiir</p>
       <h2 class="ma-popup__headline">{{ section.settings.headline | default: 'Receive 20% Off' }}</h2>
-      <p class="ma-popup__text">{{ section.settings.subtext | default: 'Join the Maison and enjoy 15% off your first order — with stories, launches, and private previews to follow.' }}</p>
+      <p class="ma-popup__text">{{ section.settings.subtext | default: 'Join the Maison and enjoy 20% off your first order — with stories, launches, and private previews to follow.' }}</p>
 
       <div class="ma-popup__code-wrap">
         <p class="ma-popup__code-label">Your welcome code</p>
@@ -124,8 +124,8 @@
   "settings": [
     { "type": "checkbox", "id": "enabled", "label": "Enable popup", "default": true },
     { "type": "image_picker", "id": "image", "label": "Image (left panel)" },
-    { "type": "text", "id": "headline", "label": "Headline", "default": "Receive 15% Off" },
-    { "type": "textarea", "id": "subtext", "label": "Text", "default": "Join the Maison and enjoy 15% off your first order — with stories, launches, and private previews to follow." },
+    { "type": "text", "id": "headline", "label": "Headline", "default": "Receive 20% Off" },
+    { "type": "textarea", "id": "subtext", "label": "Text", "default": "Join the Maison and enjoy 20% off your first order — with stories, launches, and private previews to follow." },
     { "type": "text", "id": "code", "label": "Discount code", "default": "WELCOME20" },
     { "type": "range", "id": "delay", "label": "Delay before showing (seconds)", "min": 1, "max": 30, "step": 1, "default": 5 }
   ],
