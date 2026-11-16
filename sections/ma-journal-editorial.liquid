@@ -527,8 +527,12 @@
 
       <div class="ma-j__stories ma-j__stories--{{ section.settings.mobile_layout }} ma-j__desktop--{{ section.settings.desktop_layout_style }}">
         {%- for i in (1..n) -%}
-          {%- assign step_offset = forloop.index0 | times: hop -%}
-          {%- assign idx = start | plus: step_offset | modulo: total -%}
+          {%- if section.settings.article_order == 'latest' -%}
+  {%- assign idx = forloop.index0 -%}
+{%- else -%}
+  {%- assign step_offset = forloop.index0 | times: hop -%}
+  {%- assign idx = start | plus: step_offset | modulo: total -%}
+{%- endif -%}
           {%- assign article = jblog.articles[idx] -%}
           {%- if article -%}
             <a class="ma-j__card ma-j__reveal" href="{{ article.url }}">
