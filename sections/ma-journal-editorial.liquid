@@ -527,7 +527,7 @@
 
       <div class="ma-j__stories ma-j__stories--{{ section.settings.mobile_layout }} ma-j__desktop--{{ section.settings.desktop_layout_style }}">
         {%- for i in (1..n) -%}
-          {%- if section.settings.article_order == 'latest' -%}
+          {%- if section.settings.article_order != 'rotate' -%}
   {%- assign idx = forloop.index0 -%}
 {%- else -%}
   {%- assign step_offset = forloop.index0 | times: hop -%}
@@ -828,12 +828,14 @@
     {
       "type": "header",
       "content": "Blog & Rotation"
-      
     },
+    { "type": "blog", "id": "blog", "label": "Blog source (defaults to \"Blogs\")" },
     { "type": "select", "id": "article_order", "label": "Article order", "default": "latest", "options": [
   { "value": "latest", "label": "Latest articles (newest first)" },
   { "value": "rotate", "label": "Rotate through all articles" }
 ]},
+    { "type": "range", "id": "rotation_days", "label": "Rotate stories every (days)", "min": 1, "max": 30, "step": 1, "default": 3 },
+    { "type": "range", "id": "num_articles", "label": "Number of articles displayed", "min": 3, "max": 9, "step": 1, "default": 3 },
 
     {
       "type": "header",
