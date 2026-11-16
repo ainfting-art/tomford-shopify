@@ -828,10 +828,12 @@
     {
       "type": "header",
       "content": "Blog & Rotation"
+      
     },
-    { "type": "blog", "id": "blog", "label": "Blog source (defaults to \"Blogs\")" },
-    { "type": "range", "id": "rotation_days", "label": "Rotate stories every (days)", "min": 1, "max": 30, "step": 1, "default": 3 },
-    { "type": "range", "id": "num_articles", "label": "Number of articles displayed", "min": 3, "max": 9, "step": 1, "default": 3 },
+    { "type": "select", "id": "article_order", "label": "Article order", "default": "latest", "options": [
+  { "value": "latest", "label": "Latest articles (newest first)" },
+  { "value": "rotate", "label": "Rotate through all articles" }
+]},
 
     {
       "type": "header",
