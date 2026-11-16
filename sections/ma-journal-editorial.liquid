@@ -532,7 +532,7 @@
 {%- else -%}
   {%- assign step_offset = forloop.index0 | times: hop -%}
   {%- assign idx = start | plus: step_offset | modulo: total -%}
-{%- endif -%}
+{%- endif -%}          
           {%- assign article = jblog.articles[idx] -%}
           {%- if article -%}
             <a class="ma-j__card ma-j__reveal" href="{{ article.url }}">
