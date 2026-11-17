@@ -27,6 +27,7 @@
       "name": "MA Email Popup",
       "settings": {
         "enabled": true,
+        "image": "shopify://shop_images/task____floating_edge_luxury_scene_product_swap___202603222036_2.png",
         "headline": "Receive 20% Off",
         "subtext": "Join the Maison and enjoy 20% off your first order — with stories, launches, and private previews to follow.",
         "code": "WELCOME20",
